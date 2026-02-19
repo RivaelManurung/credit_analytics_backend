@@ -3,7 +3,11 @@ package server
 import (
 	applicantV1 "credit-analytics-backend/api/applicant/v1"
 	applicationV1 "credit-analytics-backend/api/application/v1"
+	decisionV1 "credit-analytics-backend/api/decision/v1"
+	financialV1 "credit-analytics-backend/api/financial/v1"
 	v1 "credit-analytics-backend/api/helloworld/v1"
+	referenceV1 "credit-analytics-backend/api/reference/v1"
+	surveyV1 "credit-analytics-backend/api/survey/v1"
 	"credit-analytics-backend/internal/conf"
 	"credit-analytics-backend/internal/service"
 	"net/http"
@@ -21,7 +25,8 @@ import (
 var OpenApiFile embed.FS
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService, applicant *service.ApplicantService, logger log.Logger) *khttp.Server {
+func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService, applicant *service.ApplicantService,
+	reference *service.ReferenceService, survey *service.SurveyService, financial *service.FinancialService, decision *service.DecisionService, logger log.Logger) *khttp.Server {
 	var opts = []khttp.ServerOption{
 		khttp.Middleware(
 			recovery.Recovery(),
@@ -60,5 +65,9 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 	v1.RegisterGreeterHTTPServer(srv, greeter)
 	applicationV1.RegisterApplicationHTTPServer(srv, application)
 	applicantV1.RegisterApplicantHTTPServer(srv, applicant)
+	referenceV1.RegisterReferenceHTTPServer(srv, reference)
+	surveyV1.RegisterSurveyHTTPServer(srv, survey)
+	financialV1.RegisterFinancialHTTPServer(srv, financial)
+	decisionV1.RegisterDecisionHTTPServer(srv, decision)
 	return srv
 }
