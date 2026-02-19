@@ -30,7 +30,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
 			handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"}),
-			handlers.AllowCredentials(),
 		)),
 	}
 	if c.Http.Network != "" {
