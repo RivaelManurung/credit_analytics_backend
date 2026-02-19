@@ -5,6 +5,8 @@ import (
 	"credit-analytics-backend/internal/conf"
 	"credit-analytics-backend/internal/data/db"
 	"database/sql"
+	"os"
+	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -34,6 +36,37 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	if err := d.Ping(); err != nil {
 		l.Errorf("failed pinging database: %v", err)
 		return nil, nil, err
+	}
+
+	// Auto migration & Seeding if DB_AUTO_MIGRATE=true
+	if os.Getenv("DB_AUTO_MIGRATE") == "true" {
+		l.Info("Starting database migration & seeding...")
+
+		schemaFiles := []string{
+			"internal/data/schema/schema.sql",
+			"internal/data/schema/seed_dummy.sql",
+		}
+
+		for _, file := range schemaFiles {
+			path := file
+			// Check if we are running in a container where paths might be different
+			if _, err := os.Stat(path); os.IsNotExist(err) {
+				path = filepath.Join("..", "..", file) // fallback for local dev
+			}
+
+			content, err := os.ReadFile(path)
+			if err != nil {
+				l.Warnf("failed to read schema file %s: %v", path, err)
+				continue
+			}
+
+			if _, err := d.Exec(string(content)); err != nil {
+				l.Errorf("failed to execute schema %s: %v", path, err)
+				// Continue to next file even if one fails
+			} else {
+				l.Infof("successfully executed %s", path)
+			}
+		}
 	}
 
 	cleanup := func() {

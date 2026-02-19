@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /src/bin /app
 COPY --from=builder /src/configs /app/configs
+COPY --from=builder /src/internal/data/schema /app/internal/data/schema
 
 WORKDIR /app
 
