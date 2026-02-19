@@ -82,11 +82,18 @@ func main() {
 	}
 
 	// Handle Railway Database URL Override
+	foundEnv := false
 	if dbSource := os.Getenv("DATABASE_URL"); dbSource != "" {
 		bc.Data.Database.Source = dbSource
+		foundEnv = true
 	}
 	if dbSource := os.Getenv("DATA_DATABASE_SOURCE"); dbSource != "" {
 		bc.Data.Database.Source = dbSource
+		foundEnv = true
+	}
+
+	if !foundEnv {
+		log.NewHelper(logger).Warn("Database environment variables (DATABASE_URL or DATA_DATABASE_SOURCE) are NOT FOUND. Using default config.")
 	}
 
 	log.NewHelper(logger).Infof("Connecting to database: %s", bc.Data.Database.Source)
