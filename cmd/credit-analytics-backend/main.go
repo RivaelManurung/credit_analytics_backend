@@ -81,6 +81,16 @@ func main() {
 		bc.Server.Http.Addr = "0.0.0.0:" + port
 	}
 
+	// Handle Railway Database URL Override
+	if dbSource := os.Getenv("DATABASE_URL"); dbSource != "" {
+		bc.Data.Database.Source = dbSource
+	}
+	if dbSource := os.Getenv("DATA_DATABASE_SOURCE"); dbSource != "" {
+		bc.Data.Database.Source = dbSource
+	}
+
+	log.NewHelper(logger).Infof("Connecting to database: %s", bc.Data.Database.Source)
+
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
 	if err != nil {
 		panic(err)
