@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"strings"
 
 	"credit-analytics-backend/internal/conf"
 
@@ -82,9 +83,9 @@ func main() {
 	}
 
 	// Handle Railway Database URL Override
-	dbSource := os.Getenv("DATA_DATABASE_SOURCE")
+	dbSource := strings.TrimSpace(os.Getenv("DATA_DATABASE_SOURCE"))
 	if dbSource == "" {
-		dbSource = os.Getenv("DATABASE_URL")
+		dbSource = strings.TrimSpace(os.Getenv("DATABASE_URL"))
 	}
 
 	isCloud := os.Getenv("PORT") != "" || os.Getenv("RAILWAY_ENVIRONMENT") != ""
@@ -100,7 +101,9 @@ func main() {
 		log.NewHelper(logger).Warn("No database environment variable found. Falling back to local config (config.yaml).")
 	}
 
-	log.NewHelper(logger).Infof("DB Connection: %s", bc.Data.Database.Source)
+	// Double check for trailing spaces or hidden characters
+	bc.Data.Database.Source = strings.TrimSpace(bc.Data.Database.Source)
+	log.NewHelper(logger).Infof("DB Connection: [%s]", bc.Data.Database.Source)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
 	if err != nil {
