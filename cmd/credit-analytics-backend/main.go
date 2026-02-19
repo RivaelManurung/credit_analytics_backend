@@ -76,6 +76,11 @@ func main() {
 		panic(err)
 	}
 
+	// Handle Railway dynamic port
+	if port := os.Getenv("PORT"); port != "" {
+		bc.Server.Http.Addr = "0.0.0.0:" + port
+	}
+
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
 	if err != nil {
 		panic(err)
