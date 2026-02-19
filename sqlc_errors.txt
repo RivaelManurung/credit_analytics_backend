@@ -1,0 +1,113 @@
+﻿go : # package db
+At line:1 char:1
++ go run github.com/sqlc-dev/sql
+c/cmd/sqlc@v1.25.0 generate 
+2>&1 | Out- ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : N 
+   otSpecified: (# package db:  
+  String) [], RemoteException
+    + FullyQualifiedErrorId : N 
+   ativeCommandError
+ 
+internal\data\queries\decision.s
+ql:1:1: relation 
+"application_committee_session" 
+does not exist
+internal\data\queries\decision.s
+ql:7:1: relation 
+"application_committee_vote" 
+does not exist
+internal\data\queries\decision.s
+ql:12:1: relation "application_c
+ommittee_decision" does not 
+exist
+internal\data\queries\decision.s
+ql:18:1: relation 
+"application_decision" does not 
+exist
+internal\data\queries\decision.s
+ql:24:1: relation 
+"application_decision" does not 
+exist
+internal\data\queries\financial.
+sql:1:1: relation 
+"application_financial_fact" 
+does not exist
+internal\data\queries\financial.
+sql:5:1: relation 
+"application_financial_fact" 
+does not exist
+internal\data\queries\financial.
+sql:15:1: relation 
+"application_asset" does not 
+exist
+internal\data\queries\financial.
+sql:21:1: relation 
+"application_asset" does not 
+exist
+internal\data\queries\financial.
+sql:24:1: relation 
+"application_liability" does 
+not exist
+internal\data\queries\financial.
+sql:30:1: relation 
+"application_liability" does 
+not exist
+internal\data\queries\financial.
+sql:33:1: relation 
+"application_financial_ratio" 
+does not exist
+internal\data\queries\financial.
+sql:43:1: relation 
+"financial_gl_account" does not 
+exist
+internal\data\queries\reference.
+sql:1:1: relation 
+"loan_product" does not exist
+internal\data\queries\reference.
+sql:5:1: relation 
+"loan_product" does not exist
+internal\data\queries\reference.
+sql:8:1: relation "branch" does 
+not exist
+internal\data\queries\reference.
+sql:11:1: relation 
+"loan_officer" does not exist
+internal\data\queries\reference.
+sql:14:1: relation 
+"application_status_ref" does 
+not exist
+internal\data\queries\reference.
+sql:17:1: relation 
+"financial_gl_account" does not 
+exist
+internal\data\queries\survey.sql
+:1:1: relation 
+"survey_template" does not exist
+internal\data\queries\survey.sql
+:7:1: relation 
+"survey_template" does not exist
+internal\data\queries\survey.sql
+:10:1: relation 
+"survey_template" does not exist
+internal\data\queries\survey.sql
+:19:1: relation 
+"application_survey" does not 
+exist
+internal\data\queries\survey.sql
+:24:1: relation 
+"application_survey" does not 
+exist
+internal\data\queries\survey.sql
+:27:1: relation 
+"application_survey" does not 
+exist
+internal\data\queries\survey.sql
+:35:1: relation "survey_answer" 
+does not exist
+internal\data\queries\survey.sql
+:47:1: relation 
+"survey_evidence" does not exist
+exit status 1

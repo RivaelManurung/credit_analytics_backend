@@ -1,0 +1,1569 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /v1/applicants:
+        get:
+            tags:
+                - Applicant
+            operationId: Applicant_ListApplicants
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: keyword
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.ListApplicantsReply'
+        post:
+            tags:
+                - Applicant
+            operationId: Applicant_CreateApplicant
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.CreateApplicantRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.CreateApplicantReply'
+    /v1/applicants/{applicantId}/attributes:
+        post:
+            tags:
+                - Applicant
+            operationId: Applicant_UpsertApplicantAttribute
+            parameters:
+                - name: applicantId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.UpsertApplicantAttributeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+    /v1/applicants/{id}:
+        get:
+            tags:
+                - Applicant
+            operationId: Applicant_GetApplicant
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.GetApplicantReply'
+        put:
+            tags:
+                - Applicant
+            operationId: Applicant_UpdateApplicant
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.UpdateApplicantRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.UpdateApplicantReply'
+    /v1/applications:
+        get:
+            tags:
+                - Application
+            operationId: Application_ListApplications
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: status
+                  in: query
+                  schema:
+                    type: string
+                - name: applicantId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.ListApplicationsReply'
+        post:
+            tags:
+                - Application
+            operationId: Application_CreateApplication
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.application.v1.CreateApplicationRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.CreateApplicationReply'
+    /v1/applications/{applicationId}/assets:
+        get:
+            tags:
+                - Financial
+            operationId: Financial_ListAssets
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListAssetsReply'
+        post:
+            tags:
+                - Financial
+            operationId: Financial_CreateAsset
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.CreateAssetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.Asset'
+    /v1/applications/{applicationId}/decision:
+        get:
+            tags:
+                - Decision
+            operationId: Decision_GetApplicationDecision
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.FinalDecision'
+    /v1/applications/{applicationId}/final-decision:
+        post:
+            tags:
+                - Decision
+            operationId: Decision_RecordFinalDecision
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.RecordFinalDecisionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.FinalDecision'
+    /v1/applications/{applicationId}/financial-facts:
+        get:
+            tags:
+                - Financial
+            operationId: Financial_ListFinancialFacts
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListFinancialFactsReply'
+        post:
+            tags:
+                - Financial
+            operationId: Financial_UpsertFinancialFact
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.UpsertFinancialFactRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.FinancialFact'
+    /v1/applications/{applicationId}/financial-ratios:
+        post:
+            tags:
+                - Financial
+            operationId: Financial_UpsertFinancialRatio
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.UpsertFinancialRatioRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.FinancialRatio'
+    /v1/applications/{applicationId}/liabilities:
+        get:
+            tags:
+                - Financial
+            operationId: Financial_ListLiabilities
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListLiabilitiesReply'
+        post:
+            tags:
+                - Financial
+            operationId: Financial_CreateLiability
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.CreateLiabilityRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.Liability'
+    /v1/applications/{applicationId}/status-logs:
+        get:
+            tags:
+                - Application
+            operationId: Application_ListStatusLogs
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.ListStatusLogsReply'
+    /v1/applications/{applicationId}/surveys:
+        post:
+            tags:
+                - Survey
+            operationId: Survey_AssignSurvey
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.AssignSurveyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/applications/{id}:
+        get:
+            tags:
+                - Application
+            operationId: Application_GetApplication
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.GetApplicationReply'
+        put:
+            tags:
+                - Application
+            operationId: Application_UpdateApplication
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.application.v1.UpdateApplicationRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.UpdateApplicationReply'
+        delete:
+            tags:
+                - Application
+            operationId: Application_SoftDeleteApplication
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.SoftDeleteApplicationReply'
+    /v1/committee/sessions:
+        post:
+            tags:
+                - Decision
+            operationId: Decision_CreateCommitteeSession
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.CreateCommitteeSessionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeSession'
+    /v1/committee/sessions/{committeeSessionId}/finalize:
+        post:
+            tags:
+                - Decision
+            operationId: Decision_FinalizeCommitteeDecision
+            parameters:
+                - name: committeeSessionId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.FinalizeCommitteeDecisionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeDecision'
+    /v1/committee/sessions/{committeeSessionId}/votes:
+        post:
+            tags:
+                - Decision
+            operationId: Decision_SubmitCommitteeVote
+            parameters:
+                - name: committeeSessionId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.SubmitCommitteeVoteRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeVote'
+    /v1/reference/application-statuses:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListApplicationStatuses
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListApplicationStatusesReply'
+    /v1/reference/branches:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListBranches
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListBranchesReply'
+    /v1/reference/branches/{branchCode}/officers:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListLoanOfficers
+            parameters:
+                - name: branchCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListLoanOfficersReply'
+    /v1/reference/gl-accounts:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListFinancialGLAccounts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListFinancialGLAccountsReply'
+    /v1/reference/loan-products:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListLoanProducts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListLoanProductsReply'
+    /v1/reference/loan-products/{id}:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_GetLoanProduct
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.LoanProduct'
+    /v1/surveys/templates:
+        get:
+            tags:
+                - Survey
+            operationId: Survey_ListSurveyTemplates
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveyTemplatesReply'
+        post:
+            tags:
+                - Survey
+            operationId: Survey_CreateSurveyTemplate
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.CreateSurveyTemplateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyTemplate'
+    /v1/surveys/{id}:
+        get:
+            tags:
+                - Survey
+            operationId: Survey_GetSurvey
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{id}/status:
+        patch:
+            tags:
+                - Survey
+            operationId: Survey_UpdateSurveyStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.UpdateSurveyStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{surveyId}/answers:
+        post:
+            tags:
+                - Survey
+            operationId: Survey_UpsertSurveyAnswer
+            parameters:
+                - name: surveyId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.UpsertSurveyAnswerRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyAnswer'
+    /v1/surveys/{surveyId}/evidences:
+        post:
+            tags:
+                - Survey
+            operationId: Survey_CreateSurveyEvidence
+            parameters:
+                - name: surveyId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.CreateSurveyEvidenceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyEvidence'
+components:
+    schemas:
+        api.applicant.v1.ApplicantAttribute:
+            type: object
+            properties:
+                key:
+                    type: string
+                value:
+                    type: string
+                dataType:
+                    type: string
+                updatedAt:
+                    type: string
+                    format: date-time
+        api.applicant.v1.ApplicantInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+        api.applicant.v1.CreateApplicantReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                message:
+                    type: string
+        api.applicant.v1.CreateApplicantRequest:
+            type: object
+            properties:
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+        api.applicant.v1.GetApplicantReply:
+            type: object
+            properties:
+                applicant:
+                    $ref: '#/components/schemas/api.applicant.v1.ApplicantInfo'
+        api.applicant.v1.ListApplicantsReply:
+            type: object
+            properties:
+                applicants:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantInfo'
+                total:
+                    type: integer
+                    format: int32
+        api.applicant.v1.UpdateApplicantReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        api.applicant.v1.UpdateApplicantRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+        api.applicant.v1.UpsertApplicantAttributeRequest:
+            type: object
+            properties:
+                applicantId:
+                    type: string
+                key:
+                    type: string
+                value:
+                    type: string
+                dataType:
+                    type: string
+        api.application.v1.ApplicationAttribute:
+            type: object
+            properties:
+                key:
+                    type: string
+                value:
+                    type: string
+                dataType:
+                    type: string
+        api.application.v1.ApplicationInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantId:
+                    type: string
+                productId:
+                    type: string
+                aoId:
+                    type: string
+                loanAmount:
+                    type: string
+                tenorMonths:
+                    type: integer
+                    format: int32
+                interestType:
+                    type: string
+                interestRate:
+                    type: string
+                loanPurpose:
+                    type: string
+                applicationChannel:
+                    type: string
+                status:
+                    type: string
+                branchCode:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+                submittedAt:
+                    type: string
+                    format: date-time
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+        api.application.v1.CreateApplicationReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                message:
+                    type: string
+        api.application.v1.CreateApplicationRequest:
+            type: object
+            properties:
+                applicantId:
+                    type: string
+                productId:
+                    type: string
+                aoId:
+                    type: string
+                loanAmount:
+                    type: string
+                tenorMonths:
+                    type: integer
+                    format: int32
+                interestType:
+                    type: string
+                interestRate:
+                    type: string
+                loanPurpose:
+                    type: string
+                applicationChannel:
+                    type: string
+                branchCode:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+        api.application.v1.GetApplicationReply:
+            type: object
+            properties:
+                application:
+                    $ref: '#/components/schemas/api.application.v1.ApplicationInfo'
+        api.application.v1.ListApplicationsReply:
+            type: object
+            properties:
+                applications:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.ApplicationInfo'
+                total:
+                    type: integer
+                    format: int32
+        api.application.v1.ListStatusLogsReply:
+            type: object
+            properties:
+                logs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.StatusLog'
+        api.application.v1.SoftDeleteApplicationReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        api.application.v1.StatusLog:
+            type: object
+            properties:
+                id:
+                    type: string
+                fromStatus:
+                    type: string
+                toStatus:
+                    type: string
+                changedBy:
+                    type: string
+                changeReason:
+                    type: string
+                changedAt:
+                    type: string
+                    format: date-time
+        api.application.v1.UpdateApplicationReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        api.application.v1.UpdateApplicationRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantId:
+                    type: string
+                productId:
+                    type: string
+                aoId:
+                    type: string
+                loanAmount:
+                    type: string
+                tenorMonths:
+                    type: integer
+                    format: int32
+                interestType:
+                    type: string
+                interestRate:
+                    type: string
+                loanPurpose:
+                    type: string
+                status:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+        api.decision.v1.CommitteeDecision:
+            type: object
+            properties:
+                id:
+                    type: string
+                committeeSessionId:
+                    type: string
+                decision:
+                    type: string
+                decisionReason:
+                    type: string
+                approvedAmount:
+                    type: string
+                approvedTenor:
+                    type: integer
+                    format: int32
+                approvedInterestRate:
+                    type: string
+                requiresNextCommittee:
+                    type: boolean
+                decidedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CommitteeSession:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                sessionSequence:
+                    type: integer
+                    format: int32
+                status:
+                    type: string
+                scheduledAt:
+                    type: string
+                    format: date-time
+                startedAt:
+                    type: string
+                    format: date-time
+                completedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CommitteeVote:
+            type: object
+            properties:
+                id:
+                    type: string
+                committeeSessionId:
+                    type: string
+                userId:
+                    type: string
+                vote:
+                    type: string
+                voteReason:
+                    type: string
+                votedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CreateCommitteeSessionRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                sessionSequence:
+                    type: integer
+                    format: int32
+                scheduledAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.FinalDecision:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                decision:
+                    type: string
+                decisionSource:
+                    type: string
+                finalAmount:
+                    type: string
+                finalTenor:
+                    type: integer
+                    format: int32
+                finalInterestRate:
+                    type: string
+                decisionReason:
+                    type: string
+                decidedBy:
+                    type: string
+                decidedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.FinalizeCommitteeDecisionRequest:
+            type: object
+            properties:
+                committeeSessionId:
+                    type: string
+                decision:
+                    type: string
+                decisionReason:
+                    type: string
+                approvedAmount:
+                    type: string
+                approvedTenor:
+                    type: integer
+                    format: int32
+                approvedInterestRate:
+                    type: string
+                requiresNextCommittee:
+                    type: boolean
+        api.decision.v1.RecordFinalDecisionRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                decision:
+                    type: string
+                decisionSource:
+                    type: string
+                finalAmount:
+                    type: string
+                finalTenor:
+                    type: integer
+                    format: int32
+                finalInterestRate:
+                    type: string
+                decisionReason:
+                    type: string
+                decidedBy:
+                    type: string
+        api.decision.v1.SubmitCommitteeVoteRequest:
+            type: object
+            properties:
+                committeeSessionId:
+                    type: string
+                userId:
+                    type: string
+                vote:
+                    type: string
+                voteReason:
+                    type: string
+        api.financial.v1.Asset:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                assetTypeCode:
+                    type: string
+                assetName:
+                    type: string
+                ownershipStatus:
+                    type: string
+                acquisitionYear:
+                    type: integer
+                    format: int32
+                estimatedValue:
+                    type: string
+                valuationMethod:
+                    type: string
+                locationText:
+                    type: string
+                encumbered:
+                    type: boolean
+        api.financial.v1.CreateAssetRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                assetTypeCode:
+                    type: string
+                assetName:
+                    type: string
+                ownershipStatus:
+                    type: string
+                acquisitionYear:
+                    type: integer
+                    format: int32
+                estimatedValue:
+                    type: string
+                valuationMethod:
+                    type: string
+                locationText:
+                    type: string
+                encumbered:
+                    type: boolean
+        api.financial.v1.CreateLiabilityRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                creditorName:
+                    type: string
+                liabilityType:
+                    type: string
+                outstandingAmount:
+                    type: string
+                monthlyInstallment:
+                    type: string
+                interestRate:
+                    type: string
+                maturityDate:
+                    type: string
+                source:
+                    type: string
+        api.financial.v1.FinancialFact:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                glCode:
+                    type: string
+                periodType:
+                    type: string
+                periodLabel:
+                    type: string
+                amount:
+                    type: string
+                source:
+                    type: string
+                confidenceLevel:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+        api.financial.v1.FinancialRatio:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                ratioCode:
+                    type: string
+                ratioValue:
+                    type: string
+                calculationVersion:
+                    type: string
+                calculatedAt:
+                    type: string
+                    format: date-time
+        api.financial.v1.Liability:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                creditorName:
+                    type: string
+                liabilityType:
+                    type: string
+                outstandingAmount:
+                    type: string
+                monthlyInstallment:
+                    type: string
+                interestRate:
+                    type: string
+                maturityDate:
+                    type: string
+                source:
+                    type: string
+        api.financial.v1.ListAssetsReply:
+            type: object
+            properties:
+                assets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.Asset'
+        api.financial.v1.ListFinancialFactsReply:
+            type: object
+            properties:
+                facts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.FinancialFact'
+        api.financial.v1.ListLiabilitiesReply:
+            type: object
+            properties:
+                liabilities:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.Liability'
+        api.financial.v1.UpsertFinancialFactRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                glCode:
+                    type: string
+                periodType:
+                    type: string
+                periodLabel:
+                    type: string
+                amount:
+                    type: string
+                source:
+                    type: string
+                confidenceLevel:
+                    type: string
+        api.financial.v1.UpsertFinancialRatioRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                ratioCode:
+                    type: string
+                ratioValue:
+                    type: string
+                calculationVersion:
+                    type: string
+        api.reference.v1.ApplicationStatusRef:
+            type: object
+            properties:
+                statusCode:
+                    type: string
+                statusGroup:
+                    type: string
+                isTerminal:
+                    type: boolean
+                description:
+                    type: string
+        api.reference.v1.Branch:
+            type: object
+            properties:
+                branchCode:
+                    type: string
+                branchName:
+                    type: string
+                regionCode:
+                    type: string
+        api.reference.v1.FinancialGLAccount:
+            type: object
+            properties:
+                glCode:
+                    type: string
+                glName:
+                    type: string
+                statementType:
+                    type: string
+                category:
+                    type: string
+                sign:
+                    type: integer
+                    format: int32
+                isDebtService:
+                    type: boolean
+                isOperating:
+                    type: boolean
+                description:
+                    type: string
+        api.reference.v1.ListApplicationStatusesReply:
+            type: object
+            properties:
+                statuses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.ApplicationStatusRef'
+        api.reference.v1.ListBranchesReply:
+            type: object
+            properties:
+                branches:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.Branch'
+        api.reference.v1.ListFinancialGLAccountsReply:
+            type: object
+            properties:
+                accounts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.FinancialGLAccount'
+        api.reference.v1.ListLoanOfficersReply:
+            type: object
+            properties:
+                officers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.LoanOfficer'
+        api.reference.v1.ListLoanProductsReply:
+            type: object
+            properties:
+                products:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.LoanProduct'
+        api.reference.v1.LoanOfficer:
+            type: object
+            properties:
+                id:
+                    type: string
+                officerCode:
+                    type: string
+                branchCode:
+                    type: string
+        api.reference.v1.LoanProduct:
+            type: object
+            properties:
+                id:
+                    type: string
+                productCode:
+                    type: string
+                productName:
+                    type: string
+                segment:
+                    type: string
+                active:
+                    type: boolean
+        api.survey.v1.ApplicationSurvey:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                templateId:
+                    type: string
+                surveyType:
+                    type: string
+                status:
+                    type: string
+                assignedTo:
+                    type: string
+                surveyPurpose:
+                    type: string
+                startedAt:
+                    type: string
+                    format: date-time
+                submittedAt:
+                    type: string
+                    format: date-time
+                submittedBy:
+                    type: string
+        api.survey.v1.AssignSurveyRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                templateId:
+                    type: string
+                surveyType:
+                    type: string
+                assignedTo:
+                    type: string
+                surveyPurpose:
+                    type: string
+        api.survey.v1.CreateSurveyEvidenceRequest:
+            type: object
+            properties:
+                surveyId:
+                    type: string
+                evidenceType:
+                    type: string
+                fileUrl:
+                    type: string
+                description:
+                    type: string
+        api.survey.v1.CreateSurveyTemplateRequest:
+            type: object
+            properties:
+                templateCode:
+                    type: string
+                templateName:
+                    type: string
+                applicantType:
+                    type: string
+                productId:
+                    type: string
+                active:
+                    type: boolean
+        api.survey.v1.ListSurveyTemplatesReply:
+            type: object
+            properties:
+                templates:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveyTemplate'
+        api.survey.v1.SurveyAnswer:
+            type: object
+            properties:
+                id:
+                    type: string
+                surveyId:
+                    type: string
+                questionId:
+                    type: string
+                answerText:
+                    type: string
+                answerNumber:
+                    type: string
+                answerBoolean:
+                    type: boolean
+                answerDate:
+                    type: string
+                answeredAt:
+                    type: string
+                    format: date-time
+        api.survey.v1.SurveyEvidence:
+            type: object
+            properties:
+                id:
+                    type: string
+                surveyId:
+                    type: string
+                evidenceType:
+                    type: string
+                fileUrl:
+                    type: string
+                description:
+                    type: string
+                capturedAt:
+                    type: string
+                    format: date-time
+        api.survey.v1.SurveyTemplate:
+            type: object
+            properties:
+                id:
+                    type: string
+                templateCode:
+                    type: string
+                templateName:
+                    type: string
+                applicantType:
+                    type: string
+                productId:
+                    type: string
+                active:
+                    type: boolean
+        api.survey.v1.UpdateSurveyStatusRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: string
+                userId:
+                    type: string
+        api.survey.v1.UpsertSurveyAnswerRequest:
+            type: object
+            properties:
+                surveyId:
+                    type: string
+                questionId:
+                    type: string
+                answerText:
+                    type: string
+                answerNumber:
+                    type: string
+                answerBoolean:
+                    type: boolean
+                answerDate:
+                    type: string
+tags:
+    - name: Applicant
+    - name: Application
+    - name: Decision
+    - name: Financial
+    - name: Reference
+    - name: Survey

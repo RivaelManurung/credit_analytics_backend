@@ -1,0 +1,253 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Reference API
+    version: 0.0.1
+paths:
+    /v1/reference/application-statuses:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListApplicationStatuses
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListApplicationStatusesReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/reference/branches:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListBranches
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBranchesReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/reference/branches/{branchCode}/officers:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListLoanOfficers
+            parameters:
+                - name: branchCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListLoanOfficersReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/reference/gl-accounts:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListFinancialGLAccounts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListFinancialGLAccountsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/reference/loan-products:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_ListLoanProducts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListLoanProductsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/reference/loan-products/{id}:
+        get:
+            tags:
+                - Reference
+            operationId: Reference_GetLoanProduct
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoanProduct'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        ApplicationStatusRef:
+            type: object
+            properties:
+                statusCode:
+                    type: string
+                statusGroup:
+                    type: string
+                isTerminal:
+                    type: boolean
+                description:
+                    type: string
+        Branch:
+            type: object
+            properties:
+                branchCode:
+                    type: string
+                branchName:
+                    type: string
+                regionCode:
+                    type: string
+        FinancialGLAccount:
+            type: object
+            properties:
+                glCode:
+                    type: string
+                glName:
+                    type: string
+                statementType:
+                    type: string
+                category:
+                    type: string
+                sign:
+                    type: integer
+                    format: int32
+                isDebtService:
+                    type: boolean
+                isOperating:
+                    type: boolean
+                description:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ListApplicationStatusesReply:
+            type: object
+            properties:
+                statuses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ApplicationStatusRef'
+        ListBranchesReply:
+            type: object
+            properties:
+                branches:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Branch'
+        ListFinancialGLAccountsReply:
+            type: object
+            properties:
+                accounts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/FinancialGLAccount'
+        ListLoanOfficersReply:
+            type: object
+            properties:
+                officers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LoanOfficer'
+        ListLoanProductsReply:
+            type: object
+            properties:
+                products:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LoanProduct'
+        LoanOfficer:
+            type: object
+            properties:
+                id:
+                    type: string
+                officerCode:
+                    type: string
+                branchCode:
+                    type: string
+        LoanProduct:
+            type: object
+            properties:
+                id:
+                    type: string
+                productCode:
+                    type: string
+                productName:
+                    type: string
+                segment:
+                    type: string
+                active:
+                    type: boolean
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+tags:
+    - name: Reference

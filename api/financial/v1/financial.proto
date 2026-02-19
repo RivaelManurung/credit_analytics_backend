@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+package api.financial.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "credit-analytics-backend/api/financial/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.financial.v1";
+
+service Financial {
+  rpc ListFinancialFacts (ListFinancialFactsRequest) returns (ListFinancialFactsReply) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/financial-facts"
+    };
+  }
+  rpc UpsertFinancialFact (UpsertFinancialFactRequest) returns (FinancialFact) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/financial-facts",
+      body: "*"
+    };
+  }
+  rpc CreateAsset (CreateAssetRequest) returns (Asset) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/assets",
+      body: "*"
+    };
+  }
+  rpc ListAssets (ListAssetsRequest) returns (ListAssetsReply) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/assets"
+    };
+  }
+  rpc CreateLiability (CreateLiabilityRequest) returns (Liability) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/liabilities",
+      body: "*"
+    };
+  }
+  rpc ListLiabilities (ListLiabilitiesRequest) returns (ListLiabilitiesReply) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/liabilities"
+    };
+  }
+  rpc UpsertFinancialRatio (UpsertFinancialRatioRequest) returns (FinancialRatio) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/financial-ratios",
+      body: "*"
+    };
+  }
+}
+
+message FinancialFact {
+  string id = 1;
+  string application_id = 2;
+  string gl_code = 3;
+  string period_type = 4;
+  string period_label = 5;
+  string amount = 6;
+  string source = 7;
+  string confidence_level = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+message Asset {
+  string id = 1;
+  string application_id = 2;
+  string asset_type_code = 3;
+  string asset_name = 4;
+  string ownership_status = 5;
+  int32 acquisition_year = 6;
+  string estimated_value = 7;
+  string valuation_method = 8;
+  string location_text = 9;
+  bool encumbered = 10;
+}
+
+message Liability {
+  string id = 1;
+  string application_id = 2;
+  string creditor_name = 3;
+  string liability_type = 4;
+  string outstanding_amount = 5;
+  string monthly_installment = 6;
+  string interest_rate = 7;
+  string maturity_date = 8;
+  string source = 9;
+}
+
+message FinancialRatio {
+  string id = 1;
+  string application_id = 2;
+  string ratio_code = 3;
+  string ratio_value = 4;
+  string calculation_version = 5;
+  google.protobuf.Timestamp calculated_at = 6;
+}
+
+message ListFinancialFactsRequest {
+  string application_id = 1;
+}
+
+message ListFinancialFactsReply {
+  repeated FinancialFact facts = 1;
+}
+
+message UpsertFinancialFactRequest {
+  string application_id = 1;
+  string gl_code = 2;
+  string period_type = 3;
+  string period_label = 4;
+  string amount = 5;
+  string source = 6;
+  string confidence_level = 7;
+}
+
+message CreateAssetRequest {
+  string application_id = 1;
+  string asset_type_code = 2;
+  string asset_name = 3;
+  string ownership_status = 4;
+  int32 acquisition_year = 5;
+  string estimated_value = 6;
+  string valuation_method = 7;
+  string location_text = 8;
+  bool encumbered = 9;
+}
+
+message ListAssetsRequest {
+  string application_id = 1;
+}
+
+message ListAssetsReply {
+  repeated Asset assets = 1;
+}
+
+message CreateLiabilityRequest {
+  string application_id = 1;
+  string creditor_name = 2;
+  string liability_type = 3;
+  string outstanding_amount = 4;
+  string monthly_installment = 5;
+  string interest_rate = 6;
+  string maturity_date = 7;
+  string source = 8;
+}
+
+message ListLiabilitiesRequest {
+  string application_id = 1;
+}
+
+message ListLiabilitiesReply {
+  repeated Liability liabilities = 1;
+}
+
+message UpsertFinancialRatioRequest {
+  string application_id = 1;
+  string ratio_code = 2;
+  string ratio_value = 3;
+  string calculation_version = 4;
+}
