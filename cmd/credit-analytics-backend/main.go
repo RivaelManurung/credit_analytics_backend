@@ -82,21 +82,25 @@ func main() {
 	}
 
 	// Handle Railway Database URL Override
-	foundEnv := false
-	if dbSource := os.Getenv("DATABASE_URL"); dbSource != "" {
-		bc.Data.Database.Source = dbSource
-		foundEnv = true
-	}
-	if dbSource := os.Getenv("DATA_DATABASE_SOURCE"); dbSource != "" {
-		bc.Data.Database.Source = dbSource
-		foundEnv = true
+	dbSource := os.Getenv("DATA_DATABASE_SOURCE")
+	if dbSource == "" {
+		dbSource = os.Getenv("DATABASE_URL")
 	}
 
-	if !foundEnv {
-		log.NewHelper(logger).Warn("Database environment variables (DATABASE_URL or DATA_DATABASE_SOURCE) are NOT FOUND. Using default config.")
+	isCloud := os.Getenv("PORT") != "" || os.Getenv("RAILWAY_ENVIRONMENT") != ""
+
+	if dbSource != "" {
+		bc.Data.Database.Source = dbSource
+		log.NewHelper(logger).Infof("Database override detected. Using environment variable.")
+	} else if isCloud {
+		log.NewHelper(logger).Error("CRITICAL ERROR: No database environment variable found (DATA_DATABASE_SOURCE or DATABASE_URL).")
+		log.NewHelper(logger).Error("Please set DATA_DATABASE_SOURCE in Railway Variables to ${{Postgres.DATABASE_URL}}")
+		panic("missing database configuration in cloud environment")
+	} else {
+		log.NewHelper(logger).Warn("No database environment variable found. Falling back to local config (config.yaml).")
 	}
 
-	log.NewHelper(logger).Infof("Connecting to database: %s", bc.Data.Database.Source)
+	log.NewHelper(logger).Infof("DB Connection: %s", bc.Data.Database.Source)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
 	if err != nil {
