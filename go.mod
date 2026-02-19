@@ -9,6 +9,7 @@ require (
 	github.com/go-openapi/runtime v0.29.2
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/lib/pq v1.11.2
 	github.com/shopspring/decimal v1.4.0
 	go.uber.org/automaxprocs v1.5.1
@@ -43,7 +44,6 @@ require (
 	github.com/go-openapi/validate v0.25.1 // indirect
 	github.com/go-playground/form/v4 v4.2.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	go.mongodb.org/mongo-driver v1.17.6 // indirect
