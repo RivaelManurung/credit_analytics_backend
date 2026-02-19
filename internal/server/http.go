@@ -27,7 +27,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			recovery.Recovery(),
 		),
 		khttp.Filter(handlers.CORS(
-			handlers.AllowedOrigins([]string{"http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001"}),
+			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
 			handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"}),
 			handlers.AllowCredentials(),
