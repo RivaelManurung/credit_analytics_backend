@@ -129,6 +129,15 @@ type ApplicationDecisionCondition struct {
 	Mandatory             sql.NullBool   `json:"mandatory"`
 }
 
+type ApplicationDocument struct {
+	ID            uuid.UUID      `json:"id"`
+	ApplicationID uuid.UUID      `json:"application_id"`
+	DocumentName  string         `json:"document_name"`
+	FileUrl       string         `json:"file_url"`
+	DocumentType  sql.NullString `json:"document_type"`
+	UploadedAt    sql.NullTime   `json:"uploaded_at"`
+}
+
 type ApplicationFinancialFact struct {
 	ID              uuid.UUID      `json:"id"`
 	ApplicationID   uuid.UUID      `json:"application_id"`

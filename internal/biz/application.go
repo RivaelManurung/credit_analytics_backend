@@ -200,6 +200,15 @@ type ApplicationParty struct {
 	SlikRequired    bool
 }
 
+type ApplicationDocument struct {
+	ID            uuid.UUID
+	ApplicationID uuid.UUID
+	DocumentName  string
+	FileURL       string
+	DocumentType  string
+	UploadedAt    time.Time
+}
+
 // Repository Interface
 type ApplicationRepo interface {
 	Save(context.Context, *Application) (uuid.UUID, error)
@@ -214,6 +223,10 @@ type ApplicationRepo interface {
 
 	// Step 2: AO Assignment Helpers
 	ListAvailableAOs(ctx context.Context, branchCode string) ([]uuid.UUID, error)
+
+	// Document Related
+	SaveDocument(ctx context.Context, doc *ApplicationDocument) error
+	ListDocuments(ctx context.Context, appID uuid.UUID) ([]ApplicationDocument, error)
 }
 
 // Usecase
@@ -350,4 +363,18 @@ func (uc *ApplicationUsecase) AddPartyToApplication(ctx context.Context, appID, 
 
 func (uc *ApplicationUsecase) GetParties(ctx context.Context, appID uuid.UUID) ([]ApplicationParty, error) {
 	return uc.repo.GetParties(ctx, appID)
+}
+
+func (uc *ApplicationUsecase) UploadDocument(ctx context.Context, doc *ApplicationDocument) error {
+	if doc.ID == uuid.Nil {
+		doc.ID = uuid.New()
+	}
+	if doc.UploadedAt.IsZero() {
+		doc.UploadedAt = time.Now()
+	}
+	return uc.repo.SaveDocument(ctx, doc)
+}
+
+func (uc *ApplicationUsecase) ListDocuments(ctx context.Context, appID uuid.UUID) ([]ApplicationDocument, error) {
+	return uc.repo.ListDocuments(ctx, appID)
 }

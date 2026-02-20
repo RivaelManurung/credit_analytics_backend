@@ -135,6 +135,34 @@ func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListA
 	return &pb.ListApplicationsResponse{Applications: res, NextCursor: ""}, nil
 }
 
+func (s *ApplicationService) UploadApplicationDocument(ctx context.Context, req *pb.UploadApplicationDocumentRequest) (*pb.ApplicationDocument, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	doc := &biz.ApplicationDocument{
+		ApplicationID: appID,
+		DocumentName:  req.DocumentName,
+		FileURL:       req.FileUrl,
+		DocumentType:  req.DocumentType,
+	}
+	err := s.uc.UploadDocument(ctx, doc)
+	if err != nil {
+		return nil, err
+	}
+	return mapDocBizToProto(doc), nil
+}
+
+func (s *ApplicationService) ListApplicationDocuments(ctx context.Context, req *pb.ListApplicationDocumentsRequest) (*pb.ListApplicationDocumentsResponse, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	docs, err := s.uc.ListDocuments(ctx, appID)
+	if err != nil {
+		return nil, err
+	}
+	var res []*pb.ApplicationDocument
+	for _, doc := range docs {
+		res = append(res, mapDocBizToProto(&doc))
+	}
+	return &pb.ListApplicationDocumentsResponse{Documents: res}, nil
+}
+
 type PartyService struct {
 	pb.UnimplementedPartyServiceServer
 	uc  *biz.ApplicationUsecase
@@ -216,4 +244,15 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 	res.CreatedAt = timestamppb.New(app.CreatedAt)
 	res.UpdatedAt = timestamppb.New(app.UpdatedAt)
 	return res
+}
+
+func mapDocBizToProto(doc *biz.ApplicationDocument) *pb.ApplicationDocument {
+	return &pb.ApplicationDocument{
+		Id:            doc.ID.String(),
+		ApplicationId: doc.ApplicationID.String(),
+		DocumentName:  doc.DocumentName,
+		FileUrl:       doc.FileURL,
+		DocumentType:  doc.DocumentType,
+		UploadedAt:    timestamppb.New(doc.UploadedAt),
+	}
 }

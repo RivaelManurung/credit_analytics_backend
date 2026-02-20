@@ -24,8 +24,10 @@ const OperationApplicationServiceChangeApplicationStatus = "/api.application.v1.
 const OperationApplicationServiceCreateApplication = "/api.application.v1.ApplicationService/CreateApplication"
 const OperationApplicationServiceGetApplication = "/api.application.v1.ApplicationService/GetApplication"
 const OperationApplicationServiceGetApplicationAttributes = "/api.application.v1.ApplicationService/GetApplicationAttributes"
+const OperationApplicationServiceListApplicationDocuments = "/api.application.v1.ApplicationService/ListApplicationDocuments"
 const OperationApplicationServiceListApplications = "/api.application.v1.ApplicationService/ListApplications"
 const OperationApplicationServiceUpdateApplication = "/api.application.v1.ApplicationService/UpdateApplication"
+const OperationApplicationServiceUploadApplicationDocument = "/api.application.v1.ApplicationService/UploadApplicationDocument"
 const OperationApplicationServiceUpsertApplicationAttributes = "/api.application.v1.ApplicationService/UpsertApplicationAttributes"
 
 type ApplicationServiceHTTPServer interface {
@@ -33,8 +35,10 @@ type ApplicationServiceHTTPServer interface {
 	CreateApplication(context.Context, *CreateApplicationRequest) (*Application, error)
 	GetApplication(context.Context, *GetApplicationRequest) (*Application, error)
 	GetApplicationAttributes(context.Context, *GetApplicationAttributesRequest) (*ApplicationAttributes, error)
+	ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error)
 	ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsResponse, error)
 	UpdateApplication(context.Context, *UpdateApplicationRequest) (*Application, error)
+	UploadApplicationDocument(context.Context, *UploadApplicationDocumentRequest) (*ApplicationDocument, error)
 	UpsertApplicationAttributes(context.Context, *UpsertApplicationAttributesRequest) (*ApplicationAttributes, error)
 }
 
@@ -47,6 +51,8 @@ func RegisterApplicationServiceHTTPServer(s *http.Server, srv ApplicationService
 	r.GET("/v1/applications/{application_id}/attributes", _ApplicationService_GetApplicationAttributes0_HTTP_Handler(srv))
 	r.POST("/v1/applications/{application_id}/attributes", _ApplicationService_UpsertApplicationAttributes0_HTTP_Handler(srv))
 	r.POST("/v1/applications/{id}/status", _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/documents", _ApplicationService_UploadApplicationDocument0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/documents", _ApplicationService_ListApplicationDocuments0_HTTP_Handler(srv))
 }
 
 func _ApplicationService_CreateApplication0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
@@ -209,13 +215,62 @@ func _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv ApplicationSe
 	}
 }
 
+func _ApplicationService_UploadApplicationDocument0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UploadApplicationDocumentRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicationServiceUploadApplicationDocument)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UploadApplicationDocument(ctx, req.(*UploadApplicationDocumentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ApplicationDocument)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ApplicationService_ListApplicationDocuments0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListApplicationDocumentsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicationServiceListApplicationDocuments)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListApplicationDocuments(ctx, req.(*ListApplicationDocumentsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListApplicationDocumentsResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ApplicationServiceHTTPClient interface {
 	ChangeApplicationStatus(ctx context.Context, req *ChangeApplicationStatusRequest, opts ...http.CallOption) (rsp *Application, err error)
 	CreateApplication(ctx context.Context, req *CreateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
 	GetApplication(ctx context.Context, req *GetApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
 	GetApplicationAttributes(ctx context.Context, req *GetApplicationAttributesRequest, opts ...http.CallOption) (rsp *ApplicationAttributes, err error)
+	ListApplicationDocuments(ctx context.Context, req *ListApplicationDocumentsRequest, opts ...http.CallOption) (rsp *ListApplicationDocumentsResponse, err error)
 	ListApplications(ctx context.Context, req *ListApplicationsRequest, opts ...http.CallOption) (rsp *ListApplicationsResponse, err error)
 	UpdateApplication(ctx context.Context, req *UpdateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
+	UploadApplicationDocument(ctx context.Context, req *UploadApplicationDocumentRequest, opts ...http.CallOption) (rsp *ApplicationDocument, err error)
 	UpsertApplicationAttributes(ctx context.Context, req *UpsertApplicationAttributesRequest, opts ...http.CallOption) (rsp *ApplicationAttributes, err error)
 }
 
@@ -279,6 +334,19 @@ func (c *ApplicationServiceHTTPClientImpl) GetApplicationAttributes(ctx context.
 	return &out, nil
 }
 
+func (c *ApplicationServiceHTTPClientImpl) ListApplicationDocuments(ctx context.Context, in *ListApplicationDocumentsRequest, opts ...http.CallOption) (*ListApplicationDocumentsResponse, error) {
+	var out ListApplicationDocumentsResponse
+	pattern := "/v1/applications/{application_id}/documents"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationApplicationServiceListApplicationDocuments))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *ApplicationServiceHTTPClientImpl) ListApplications(ctx context.Context, in *ListApplicationsRequest, opts ...http.CallOption) (*ListApplicationsResponse, error) {
 	var out ListApplicationsResponse
 	pattern := "/v1/applications"
@@ -299,6 +367,19 @@ func (c *ApplicationServiceHTTPClientImpl) UpdateApplication(ctx context.Context
 	opts = append(opts, http.Operation(OperationApplicationServiceUpdateApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicationServiceHTTPClientImpl) UploadApplicationDocument(ctx context.Context, in *UploadApplicationDocumentRequest, opts ...http.CallOption) (*ApplicationDocument, error) {
+	var out ApplicationDocument
+	pattern := "/v1/applications/{application_id}/documents"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationApplicationServiceUploadApplicationDocument))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

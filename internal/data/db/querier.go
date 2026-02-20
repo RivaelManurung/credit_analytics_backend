@@ -14,6 +14,7 @@ type Querier interface {
 	AssignSurvey(ctx context.Context, arg AssignSurveyParams) (ApplicationSurvey, error)
 	CreateApplicant(ctx context.Context, arg CreateApplicantParams) (Applicant, error)
 	CreateApplication(ctx context.Context, arg CreateApplicationParams) (Application, error)
+	CreateApplicationDocument(ctx context.Context, arg CreateApplicationDocumentParams) (ApplicationDocument, error)
 	CreateApplicationParty(ctx context.Context, arg CreateApplicationPartyParams) (ApplicationParty, error)
 	CreateAsset(ctx context.Context, arg CreateAssetParams) (ApplicationAsset, error)
 	CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error
@@ -25,6 +26,7 @@ type Querier interface {
 	CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemplateParams) (SurveyTemplate, error)
 	DeleteApplicantAttributes(ctx context.Context, applicantID uuid.UUID) error
 	DeleteApplicationAttributes(ctx context.Context, applicationID uuid.UUID) error
+	DeleteApplicationDocument(ctx context.Context, id uuid.UUID) error
 	FinalizeCommitteeDecision(ctx context.Context, arg FinalizeCommitteeDecisionParams) (ApplicationCommitteeDecision, error)
 	GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, error)
 	GetApplicantAttributes(ctx context.Context, applicantID uuid.UUID) ([]ApplicantAttribute, error)
@@ -38,6 +40,7 @@ type Querier interface {
 	ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicantAttribute, error)
 	ListApplicants(ctx context.Context) ([]Applicant, error)
 	ListApplicationAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicationAttribute, error)
+	ListApplicationDocuments(ctx context.Context, applicationID uuid.UUID) ([]ApplicationDocument, error)
 	ListApplicationStatuses(ctx context.Context) ([]ApplicationStatusRef, error)
 	ListApplications(ctx context.Context) ([]Application, error)
 	ListAssets(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAsset, error)

@@ -51,6 +51,19 @@ service ApplicationService {
       body: "*"
     };
   }
+
+  rpc UploadApplicationDocument (UploadApplicationDocumentRequest) returns (ApplicationDocument) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/documents",
+      body: "*"
+    };
+  }
+
+  rpc ListApplicationDocuments (ListApplicationDocumentsRequest) returns (ListApplicationDocumentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/documents"
+    };
+  }
 }
 
 service PartyService {
@@ -99,6 +112,15 @@ message Application {
   google.protobuf.Timestamp submitted_at = 14;
   google.protobuf.Timestamp created_at = 15;
   google.protobuf.Timestamp updated_at = 16;
+}
+
+message ApplicationDocument {
+  string id = 1;
+  string application_id = 2;
+  string document_name = 3;
+  string file_url = 4;
+  string document_type = 5;
+  google.protobuf.Timestamp uploaded_at = 6;
 }
 
 message ApplicationParty {
@@ -188,4 +210,19 @@ message ListApplicationPartiesRequest {
 
 message ListApplicationPartiesResponse {
   repeated ApplicationParty parties = 1;
+}
+
+message UploadApplicationDocumentRequest {
+  string application_id = 1;
+  string document_name = 2;
+  string file_url = 3;
+  string document_type = 4;
+}
+
+message ListApplicationDocumentsRequest {
+  string application_id = 1;
+}
+
+message ListApplicationDocumentsResponse {
+  repeated ApplicationDocument documents = 1;
 }

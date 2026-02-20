@@ -352,6 +352,47 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.decision.v1.DecisionCondition'
+    /v1/applications/{applicationId}/documents:
+        get:
+            tags:
+                - ApplicationService
+            operationId: ApplicationService_ListApplicationDocuments
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.ListApplicationDocumentsResponse'
+        post:
+            tags:
+                - ApplicationService
+            operationId: ApplicationService_UploadApplicationDocument
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.application.v1.UploadApplicationDocumentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.ApplicationDocument'
     /v1/applications/{applicationId}/final-decision:
         post:
             tags:
@@ -1191,6 +1232,22 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+        api.application.v1.ApplicationDocument:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                documentName:
+                    type: string
+                fileUrl:
+                    type: string
+                documentType:
+                    type: string
+                uploadedAt:
+                    type: string
+                    format: date-time
         api.application.v1.ApplicationParty:
             type: object
             properties:
@@ -1247,6 +1304,13 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+        api.application.v1.ListApplicationDocumentsResponse:
+            type: object
+            properties:
+                documents:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.application.v1.ApplicationDocument'
         api.application.v1.ListApplicationPartiesResponse:
             type: object
             properties:
@@ -1291,6 +1355,17 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.application.v1.ApplicationAttribute'
+        api.application.v1.UploadApplicationDocumentRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                documentName:
+                    type: string
+                fileUrl:
+                    type: string
+                documentType:
+                    type: string
         api.application.v1.UpsertApplicationAttributesRequest:
             type: object
             properties:

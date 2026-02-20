@@ -27,6 +27,8 @@ const (
 	ApplicationService_GetApplicationAttributes_FullMethodName    = "/api.application.v1.ApplicationService/GetApplicationAttributes"
 	ApplicationService_UpsertApplicationAttributes_FullMethodName = "/api.application.v1.ApplicationService/UpsertApplicationAttributes"
 	ApplicationService_ChangeApplicationStatus_FullMethodName     = "/api.application.v1.ApplicationService/ChangeApplicationStatus"
+	ApplicationService_UploadApplicationDocument_FullMethodName   = "/api.application.v1.ApplicationService/UploadApplicationDocument"
+	ApplicationService_ListApplicationDocuments_FullMethodName    = "/api.application.v1.ApplicationService/ListApplicationDocuments"
 )
 
 // ApplicationServiceClient is the client API for ApplicationService service.
@@ -40,6 +42,8 @@ type ApplicationServiceClient interface {
 	GetApplicationAttributes(ctx context.Context, in *GetApplicationAttributesRequest, opts ...grpc.CallOption) (*ApplicationAttributes, error)
 	UpsertApplicationAttributes(ctx context.Context, in *UpsertApplicationAttributesRequest, opts ...grpc.CallOption) (*ApplicationAttributes, error)
 	ChangeApplicationStatus(ctx context.Context, in *ChangeApplicationStatusRequest, opts ...grpc.CallOption) (*Application, error)
+	UploadApplicationDocument(ctx context.Context, in *UploadApplicationDocumentRequest, opts ...grpc.CallOption) (*ApplicationDocument, error)
+	ListApplicationDocuments(ctx context.Context, in *ListApplicationDocumentsRequest, opts ...grpc.CallOption) (*ListApplicationDocumentsResponse, error)
 }
 
 type applicationServiceClient struct {
@@ -120,6 +124,26 @@ func (c *applicationServiceClient) ChangeApplicationStatus(ctx context.Context, 
 	return out, nil
 }
 
+func (c *applicationServiceClient) UploadApplicationDocument(ctx context.Context, in *UploadApplicationDocumentRequest, opts ...grpc.CallOption) (*ApplicationDocument, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplicationDocument)
+	err := c.cc.Invoke(ctx, ApplicationService_UploadApplicationDocument_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) ListApplicationDocuments(ctx context.Context, in *ListApplicationDocumentsRequest, opts ...grpc.CallOption) (*ListApplicationDocumentsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListApplicationDocumentsResponse)
+	err := c.cc.Invoke(ctx, ApplicationService_ListApplicationDocuments_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationServiceServer is the server API for ApplicationService service.
 // All implementations must embed UnimplementedApplicationServiceServer
 // for forward compatibility.
@@ -131,6 +155,8 @@ type ApplicationServiceServer interface {
 	GetApplicationAttributes(context.Context, *GetApplicationAttributesRequest) (*ApplicationAttributes, error)
 	UpsertApplicationAttributes(context.Context, *UpsertApplicationAttributesRequest) (*ApplicationAttributes, error)
 	ChangeApplicationStatus(context.Context, *ChangeApplicationStatusRequest) (*Application, error)
+	UploadApplicationDocument(context.Context, *UploadApplicationDocumentRequest) (*ApplicationDocument, error)
+	ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error)
 	mustEmbedUnimplementedApplicationServiceServer()
 }
 
@@ -161,6 +187,12 @@ func (UnimplementedApplicationServiceServer) UpsertApplicationAttributes(context
 }
 func (UnimplementedApplicationServiceServer) ChangeApplicationStatus(context.Context, *ChangeApplicationStatusRequest) (*Application, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangeApplicationStatus not implemented")
+}
+func (UnimplementedApplicationServiceServer) UploadApplicationDocument(context.Context, *UploadApplicationDocumentRequest) (*ApplicationDocument, error) {
+	return nil, status.Error(codes.Unimplemented, "method UploadApplicationDocument not implemented")
+}
+func (UnimplementedApplicationServiceServer) ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListApplicationDocuments not implemented")
 }
 func (UnimplementedApplicationServiceServer) mustEmbedUnimplementedApplicationServiceServer() {}
 func (UnimplementedApplicationServiceServer) testEmbeddedByValue()                            {}
@@ -309,6 +341,42 @@ func _ApplicationService_ChangeApplicationStatus_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_UploadApplicationDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadApplicationDocumentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).UploadApplicationDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationService_UploadApplicationDocument_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).UploadApplicationDocument(ctx, req.(*UploadApplicationDocumentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_ListApplicationDocuments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListApplicationDocumentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).ListApplicationDocuments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationService_ListApplicationDocuments_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).ListApplicationDocuments(ctx, req.(*ListApplicationDocumentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationService_ServiceDesc is the grpc.ServiceDesc for ApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,6 +411,14 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangeApplicationStatus",
 			Handler:    _ApplicationService_ChangeApplicationStatus_Handler,
+		},
+		{
+			MethodName: "UploadApplicationDocument",
+			Handler:    _ApplicationService_UploadApplicationDocument_Handler,
+		},
+		{
+			MethodName: "ListApplicationDocuments",
+			Handler:    _ApplicationService_ListApplicationDocuments_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

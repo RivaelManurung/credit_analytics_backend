@@ -234,6 +234,37 @@ func (r *applicationRepo) ListAvailableAOs(ctx context.Context, branchCode strin
 	return res, nil
 }
 
+func (r *applicationRepo) SaveDocument(ctx context.Context, doc *biz.ApplicationDocument) error {
+	_, err := r.data.db.CreateApplicationDocument(ctx, db.CreateApplicationDocumentParams{
+		ID:            doc.ID,
+		ApplicationID: doc.ApplicationID,
+		DocumentName:  doc.DocumentName,
+		FileUrl:       doc.FileURL,
+		DocumentType:  sql.NullString{String: doc.DocumentType, Valid: true},
+		UploadedAt:    sql.NullTime{Time: doc.UploadedAt, Valid: true},
+	})
+	return err
+}
+
+func (r *applicationRepo) ListDocuments(ctx context.Context, appID uuid.UUID) ([]biz.ApplicationDocument, error) {
+	rows, err := r.data.db.ListApplicationDocuments(ctx, appID)
+	if err != nil {
+		return nil, err
+	}
+	var res []biz.ApplicationDocument
+	for _, row := range rows {
+		res = append(res, biz.ApplicationDocument{
+			ID:            row.ID,
+			ApplicationID: row.ApplicationID,
+			DocumentName:  row.DocumentName,
+			FileURL:       row.FileUrl,
+			DocumentType:  row.DocumentType.String,
+			UploadedAt:    row.UploadedAt.Time,
+		})
+	}
+	return res, nil
+}
+
 func (r *applicationRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID][]biz.ApplicationAttribute, error) {
 	attrs, err := r.data.db.ListApplicationAttributesByIDs(ctx, ids)
 	if err != nil {
