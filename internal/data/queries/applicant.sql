@@ -1,6 +1,6 @@
 -- name: CreateApplicant :one
 INSERT INTO applicants (
-    applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
+    head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7
 ) RETURNING *;
@@ -10,7 +10,7 @@ SELECT * FROM applicants WHERE id = $1 LIMIT 1;
 
 -- name: UpdateApplicant :one
 UPDATE applicants SET 
-    applicant_type = $2,
+    head_type = $2,
     identity_number = $3,
     tax_id = $4,
     full_name = $5,

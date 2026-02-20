@@ -163,6 +163,17 @@ func (s *ApplicationService) ListApplicationDocuments(ctx context.Context, req *
 	return &pb.ListApplicationDocumentsResponse{Documents: res}, nil
 }
 
+func (s *ApplicationService) GetPresignedUrl(ctx context.Context, req *pb.GetPresignedUrlRequest) (*pb.GetPresignedUrlResponse, error) {
+	uploadURL, fileURL, err := s.uc.GetPresignedUrl(ctx, req.FileName, req.FileType)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetPresignedUrlResponse{
+		UploadUrl: uploadURL,
+		FileUrl:   fileURL,
+	}, nil
+}
+
 type PartyService struct {
 	pb.UnimplementedPartyServiceServer
 	uc  *biz.ApplicationUsecase

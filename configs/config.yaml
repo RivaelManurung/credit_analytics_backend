@@ -9,3 +9,9 @@ data:
   database:
     driver: postgres
     source: postgresql://postgres:postgres@localhost:5439/dots_credit_analytics_local?sslmode=disable&timezone=Asia/Jakarta
+  storage:
+    endpoint: https://your-project-id.supabase.co/storage/v1/s3
+    access_key: your-access-key
+    secret_key: your-secret-key
+    bucket: application-documents
+    region: ap-southeast-1

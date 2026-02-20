@@ -26,7 +26,7 @@ func NewApplicantRepo(data *Data, logger log.Logger) biz.ApplicantRepo {
 func (r *applicantRepo) Save(ctx context.Context, a *biz.Applicant) (uuid.UUID, error) {
 	err := r.data.InTx(ctx, func(q *db.Queries) error {
 		applicant, err := q.CreateApplicant(ctx, db.CreateApplicantParams{
-			ApplicantType:     a.ApplicantType,
+			HeadType:          a.HeadType,
 			IdentityNumber:    sql.NullString{String: a.IdentityNumber, Valid: a.IdentityNumber != ""},
 			TaxID:             sql.NullString{String: a.TaxID, Valid: a.TaxID != ""},
 			FullName:          sql.NullString{String: a.FullName, Valid: a.FullName != ""},
@@ -61,7 +61,7 @@ func (r *applicantRepo) Update(ctx context.Context, a *biz.Applicant) error {
 	return r.data.InTx(ctx, func(q *db.Queries) error {
 		_, err := q.UpdateApplicant(ctx, db.UpdateApplicantParams{
 			ID:                a.ID,
-			ApplicantType:     a.ApplicantType,
+			HeadType:          a.HeadType,
 			IdentityNumber:    sql.NullString{String: a.IdentityNumber, Valid: a.IdentityNumber != ""},
 			TaxID:             sql.NullString{String: a.TaxID, Valid: a.TaxID != ""},
 			FullName:          sql.NullString{String: a.FullName, Valid: a.FullName != ""},
@@ -160,7 +160,7 @@ func (r *applicantRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUID)
 func mapApplicantToBiz(a *db.Applicant) *biz.Applicant {
 	return &biz.Applicant{
 		ID:                a.ID,
-		ApplicantType:     a.ApplicantType,
+		HeadType:          a.HeadType,
 		IdentityNumber:    a.IdentityNumber.String,
 		TaxID:             a.TaxID.String,
 		FullName:          a.FullName.String,

@@ -11,7 +11,7 @@ import (
 // Applicant Domain Model
 type Applicant struct {
 	ID                uuid.UUID
-	ApplicantType     string
+	HeadType          string
 	IdentityNumber    string
 	TaxID             string
 	FullName          string

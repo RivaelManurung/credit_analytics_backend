@@ -29,6 +29,7 @@ const (
 	ApplicationService_ChangeApplicationStatus_FullMethodName     = "/api.application.v1.ApplicationService/ChangeApplicationStatus"
 	ApplicationService_UploadApplicationDocument_FullMethodName   = "/api.application.v1.ApplicationService/UploadApplicationDocument"
 	ApplicationService_ListApplicationDocuments_FullMethodName    = "/api.application.v1.ApplicationService/ListApplicationDocuments"
+	ApplicationService_GetPresignedUrl_FullMethodName             = "/api.application.v1.ApplicationService/GetPresignedUrl"
 )
 
 // ApplicationServiceClient is the client API for ApplicationService service.
@@ -44,6 +45,7 @@ type ApplicationServiceClient interface {
 	ChangeApplicationStatus(ctx context.Context, in *ChangeApplicationStatusRequest, opts ...grpc.CallOption) (*Application, error)
 	UploadApplicationDocument(ctx context.Context, in *UploadApplicationDocumentRequest, opts ...grpc.CallOption) (*ApplicationDocument, error)
 	ListApplicationDocuments(ctx context.Context, in *ListApplicationDocumentsRequest, opts ...grpc.CallOption) (*ListApplicationDocumentsResponse, error)
+	GetPresignedUrl(ctx context.Context, in *GetPresignedUrlRequest, opts ...grpc.CallOption) (*GetPresignedUrlResponse, error)
 }
 
 type applicationServiceClient struct {
@@ -144,6 +146,16 @@ func (c *applicationServiceClient) ListApplicationDocuments(ctx context.Context,
 	return out, nil
 }
 
+func (c *applicationServiceClient) GetPresignedUrl(ctx context.Context, in *GetPresignedUrlRequest, opts ...grpc.CallOption) (*GetPresignedUrlResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPresignedUrlResponse)
+	err := c.cc.Invoke(ctx, ApplicationService_GetPresignedUrl_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationServiceServer is the server API for ApplicationService service.
 // All implementations must embed UnimplementedApplicationServiceServer
 // for forward compatibility.
@@ -157,6 +169,7 @@ type ApplicationServiceServer interface {
 	ChangeApplicationStatus(context.Context, *ChangeApplicationStatusRequest) (*Application, error)
 	UploadApplicationDocument(context.Context, *UploadApplicationDocumentRequest) (*ApplicationDocument, error)
 	ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error)
+	GetPresignedUrl(context.Context, *GetPresignedUrlRequest) (*GetPresignedUrlResponse, error)
 	mustEmbedUnimplementedApplicationServiceServer()
 }
 
@@ -193,6 +206,9 @@ func (UnimplementedApplicationServiceServer) UploadApplicationDocument(context.C
 }
 func (UnimplementedApplicationServiceServer) ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListApplicationDocuments not implemented")
+}
+func (UnimplementedApplicationServiceServer) GetPresignedUrl(context.Context, *GetPresignedUrlRequest) (*GetPresignedUrlResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPresignedUrl not implemented")
 }
 func (UnimplementedApplicationServiceServer) mustEmbedUnimplementedApplicationServiceServer() {}
 func (UnimplementedApplicationServiceServer) testEmbeddedByValue()                            {}
@@ -377,6 +393,24 @@ func _ApplicationService_ListApplicationDocuments_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_GetPresignedUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPresignedUrlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).GetPresignedUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationService_GetPresignedUrl_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).GetPresignedUrl(ctx, req.(*GetPresignedUrlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationService_ServiceDesc is the grpc.ServiceDesc for ApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -419,6 +453,10 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListApplicationDocuments",
 			Handler:    _ApplicationService_ListApplicationDocuments_Handler,
+		},
+		{
+			MethodName: "GetPresignedUrl",
+			Handler:    _ApplicationService_GetPresignedUrl_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

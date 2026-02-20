@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -38,7 +39,7 @@ type ApplicationStatus string
 const (
 	StatusDraft     ApplicationStatus = "DRAFT"
 	StatusSubmitted ApplicationStatus = "SUBMITTED"
-	StatusIntake    ApplicationStatus = "INTAKE" // For external validation
+	StatusIntake    ApplicationStatus = "INTAKE" 
 	StatusSlikCheck ApplicationStatus = "SLIK_CHECK"
 	StatusPolicy    ApplicationStatus = "POLICY_GATE"
 	StatusAnalysis  ApplicationStatus = "ANALYSIS"
@@ -229,14 +230,19 @@ type ApplicationRepo interface {
 	ListDocuments(ctx context.Context, appID uuid.UUID) ([]ApplicationDocument, error)
 }
 
-// Usecase
-type ApplicationUsecase struct {
-	repo ApplicationRepo
-	log  *log.Helper
+type StorageService interface {
+	GeneratePresignedPutURL(ctx context.Context, fileName string, contentType string) (uploadURL string, fileURL string, err error)
 }
 
-func NewApplicationUsecase(repo ApplicationRepo, logger log.Logger) *ApplicationUsecase {
-	return &ApplicationUsecase{repo: repo, log: log.NewHelper(logger)}
+// Usecase
+type ApplicationUsecase struct {
+	repo    ApplicationRepo
+	storage StorageService
+	log     *log.Helper
+}
+
+func NewApplicationUsecase(repo ApplicationRepo, storage StorageService, logger log.Logger) *ApplicationUsecase {
+	return &ApplicationUsecase{repo: repo, storage: storage, log: log.NewHelper(logger)}
 }
 
 func (uc *ApplicationUsecase) Create(ctx context.Context, app *Application) (uuid.UUID, error) {
@@ -259,7 +265,7 @@ func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, 
 
 	// 2. Logic: Auto-add Related Party (Borrorwer as main party)
 	borID, err := uc.repo.SaveParty(ctx, &Party{
-		PartyType:   applicant.ApplicantType,
+		PartyType:   applicant.HeadType,
 		Name:        applicant.FullName,
 		Identifier:  applicant.IdentityNumber,
 		DateOfBirth: applicant.BirthDate,
@@ -269,7 +275,7 @@ func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, 
 	}
 
 	// Logic: If Individual, try to find spouse in attributes or mock spouse
-	if applicant.ApplicantType == "PERSONAL" {
+	if applicant.HeadType == "personal" {
 		// Mock: automatically add spouse if exists in attributes
 		uc.repo.AddPartyToApplication(ctx, id, uuid.New(), "SPOUSE", true)
 	}
@@ -377,4 +383,38 @@ func (uc *ApplicationUsecase) UploadDocument(ctx context.Context, doc *Applicati
 
 func (uc *ApplicationUsecase) ListDocuments(ctx context.Context, appID uuid.UUID) ([]ApplicationDocument, error) {
 	return uc.repo.ListDocuments(ctx, appID)
+}
+
+func (uc *ApplicationUsecase) GetPresignedUrl(ctx context.Context, fileName, fileType string) (uploadURL string, fileURL string, err error) {
+	// Validate file type
+	allowed := false
+	for _, t := range []string{"pdf", "png", "jpeg", "jpg"} {
+		if fileType == t {
+			allowed = true
+			break
+		}
+	}
+	if !allowed {
+		return "", "", fmt.Errorf("file type %s is not allowed (only pdf, png, jpeg)", fileType)
+	}
+
+	// Generate unique file name to avoid collisions
+	ext := filepath.Ext(fileName)
+	if ext == "" {
+		ext = "." + fileType
+	}
+	uniqueName := fmt.Sprintf("%d_%s%s", time.Now().UnixNano(), uuid.New().String(), ext)
+
+	// Map generic file types to mime types
+	contentType := "application/octet-stream"
+	switch fileType {
+	case "pdf":
+		contentType = "application/pdf"
+	case "png":
+		contentType = "image/png"
+	case "jpeg", "jpg":
+		contentType = "image/jpeg"
+	}
+
+	return uc.storage.GeneratePresignedPutURL(ctx, uniqueName, contentType)
 }

@@ -12,7 +12,7 @@ import (
 
 type Applicant struct {
 	ID                uuid.UUID      `json:"id"`
-	ApplicantType     string         `json:"applicant_type"`
+	HeadType          string         `json:"head_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
@@ -347,10 +347,10 @@ type SurveySection struct {
 }
 
 type SurveyTemplate struct {
-	ID            uuid.UUID      `json:"id"`
-	TemplateCode  sql.NullString `json:"template_code"`
-	TemplateName  sql.NullString `json:"template_name"`
-	ApplicantType sql.NullString `json:"applicant_type"`
-	ProductID     uuid.NullUUID  `json:"product_id"`
-	Active        sql.NullBool   `json:"active"`
+	ID           uuid.UUID      `json:"id"`
+	TemplateCode sql.NullString `json:"template_code"`
+	TemplateName sql.NullString `json:"template_name"`
+	HeadType     sql.NullString `json:"head_type"`
+	ProductID    uuid.NullUUID  `json:"product_id"`
+	Active       sql.NullBool   `json:"active"`
 }

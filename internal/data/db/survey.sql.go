@@ -86,23 +86,23 @@ func (q *Queries) CreateSurveyEvidence(ctx context.Context, arg CreateSurveyEvid
 
 const createSurveyTemplate = `-- name: CreateSurveyTemplate :one
 INSERT INTO survey_templates (
-    template_code, template_name, applicant_type, product_id, active
-) VALUES ($1, $2, $3, $4, $5) RETURNING id, template_code, template_name, applicant_type, product_id, active
+    template_code, template_name, head_type, product_id, active
+) VALUES ($1, $2, $3, $4, $5) RETURNING id, template_code, template_name, head_type, product_id, active
 `
 
 type CreateSurveyTemplateParams struct {
-	TemplateCode  sql.NullString `json:"template_code"`
-	TemplateName  sql.NullString `json:"template_name"`
-	ApplicantType sql.NullString `json:"applicant_type"`
-	ProductID     uuid.NullUUID  `json:"product_id"`
-	Active        sql.NullBool   `json:"active"`
+	TemplateCode sql.NullString `json:"template_code"`
+	TemplateName sql.NullString `json:"template_name"`
+	HeadType     sql.NullString `json:"head_type"`
+	ProductID    uuid.NullUUID  `json:"product_id"`
+	Active       sql.NullBool   `json:"active"`
 }
 
 func (q *Queries) CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemplateParams) (SurveyTemplate, error) {
 	row := q.db.QueryRowContext(ctx, createSurveyTemplate,
 		arg.TemplateCode,
 		arg.TemplateName,
-		arg.ApplicantType,
+		arg.HeadType,
 		arg.ProductID,
 		arg.Active,
 	)
@@ -111,7 +111,7 @@ func (q *Queries) CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemp
 		&i.ID,
 		&i.TemplateCode,
 		&i.TemplateName,
-		&i.ApplicantType,
+		&i.HeadType,
 		&i.ProductID,
 		&i.Active,
 	)
@@ -188,7 +188,7 @@ func (q *Queries) GetSurveyTemplateWithSections(ctx context.Context, id uuid.UUI
 }
 
 const listSurveyTemplates = `-- name: ListSurveyTemplates :many
-SELECT id, template_code, template_name, applicant_type, product_id, active FROM survey_templates WHERE active = TRUE
+SELECT id, template_code, template_name, head_type, product_id, active FROM survey_templates WHERE active = TRUE
 `
 
 func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, error) {
@@ -204,7 +204,7 @@ func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, er
 			&i.ID,
 			&i.TemplateCode,
 			&i.TemplateName,
-			&i.ApplicantType,
+			&i.HeadType,
 			&i.ProductID,
 			&i.Active,
 		); err != nil {

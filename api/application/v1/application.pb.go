@@ -1400,6 +1400,110 @@ func (x *ListApplicationDocumentsResponse) GetDocuments() []*ApplicationDocument
 	return nil
 }
 
+type GetPresignedUrlRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileName      string                 `protobuf:"bytes,1,opt,name=file_name,json=fileName,proto3" json:"file_name,omitempty"`
+	FileType      string                 `protobuf:"bytes,2,opt,name=file_type,json=fileType,proto3" json:"file_type,omitempty"` // Hanya pdf, png, jpeg
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPresignedUrlRequest) Reset() {
+	*x = GetPresignedUrlRequest{}
+	mi := &file_application_v1_application_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPresignedUrlRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPresignedUrlRequest) ProtoMessage() {}
+
+func (x *GetPresignedUrlRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPresignedUrlRequest.ProtoReflect.Descriptor instead.
+func (*GetPresignedUrlRequest) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetPresignedUrlRequest) GetFileName() string {
+	if x != nil {
+		return x.FileName
+	}
+	return ""
+}
+
+func (x *GetPresignedUrlRequest) GetFileType() string {
+	if x != nil {
+		return x.FileType
+	}
+	return ""
+}
+
+type GetPresignedUrlResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UploadUrl     string                 `protobuf:"bytes,1,opt,name=upload_url,json=uploadUrl,proto3" json:"upload_url,omitempty"`
+	FileUrl       string                 `protobuf:"bytes,2,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"` // Final URL after successful upload
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPresignedUrlResponse) Reset() {
+	*x = GetPresignedUrlResponse{}
+	mi := &file_application_v1_application_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPresignedUrlResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPresignedUrlResponse) ProtoMessage() {}
+
+func (x *GetPresignedUrlResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_application_v1_application_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPresignedUrlResponse.ProtoReflect.Descriptor instead.
+func (*GetPresignedUrlResponse) Descriptor() ([]byte, []int) {
+	return file_application_v1_application_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *GetPresignedUrlResponse) GetUploadUrl() string {
+	if x != nil {
+		return x.UploadUrl
+	}
+	return ""
+}
+
+func (x *GetPresignedUrlResponse) GetFileUrl() string {
+	if x != nil {
+		return x.FileUrl
+	}
+	return ""
+}
+
 var File_application_v1_application_proto protoreflect.FileDescriptor
 
 const file_application_v1_application_proto_rawDesc = "" +
@@ -1535,7 +1639,14 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"\x1fListApplicationDocumentsRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"i\n" +
 	" ListApplicationDocumentsResponse\x12E\n" +
-	"\tdocuments\x18\x01 \x03(\v2'.api.application.v1.ApplicationDocumentR\tdocuments2\x9e\v\n" +
+	"\tdocuments\x18\x01 \x03(\v2'.api.application.v1.ApplicationDocumentR\tdocuments\"R\n" +
+	"\x16GetPresignedUrlRequest\x12\x1b\n" +
+	"\tfile_name\x18\x01 \x01(\tR\bfileName\x12\x1b\n" +
+	"\tfile_type\x18\x02 \x01(\tR\bfileType\"S\n" +
+	"\x17GetPresignedUrlResponse\x12\x1d\n" +
+	"\n" +
+	"upload_url\x18\x01 \x01(\tR\tuploadUrl\x12\x19\n" +
+	"\bfile_url\x18\x02 \x01(\tR\afileUrl2\xbd\f\n" +
 	"\x12ApplicationService\x12\x7f\n" +
 	"\x11CreateApplication\x12,.api.application.v1.CreateApplicationRequest\x1a\x1f.api.application.v1.Application\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/applications\x12{\n" +
 	"\x0eGetApplication\x12).api.application.v1.GetApplicationRequest\x1a\x1f.api.application.v1.Application\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/applications/{id}\x12\x87\x01\n" +
@@ -1545,7 +1656,8 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"\x1bUpsertApplicationAttributes\x126.api.application.v1.UpsertApplicationAttributesRequest\x1a).api.application.v1.ApplicationAttributes\"7\x82\xd3\xe4\x93\x021:\x01*\",/v1/applications/{application_id}/attributes\x12\x97\x01\n" +
 	"\x17ChangeApplicationStatus\x122.api.application.v1.ChangeApplicationStatusRequest\x1a\x1f.api.application.v1.Application\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/applications/{id}/status\x12\xb2\x01\n" +
 	"\x19UploadApplicationDocument\x124.api.application.v1.UploadApplicationDocumentRequest\x1a'.api.application.v1.ApplicationDocument\"6\x82\xd3\xe4\x93\x020:\x01*\"+/v1/applications/{application_id}/documents\x12\xba\x01\n" +
-	"\x18ListApplicationDocuments\x123.api.application.v1.ListApplicationDocumentsRequest\x1a4.api.application.v1.ListApplicationDocumentsResponse\"3\x82\xd3\xe4\x93\x02-\x12+/v1/applications/{application_id}/documents2\x97\x04\n" +
+	"\x18ListApplicationDocuments\x123.api.application.v1.ListApplicationDocumentsRequest\x1a4.api.application.v1.ListApplicationDocumentsResponse\"3\x82\xd3\xe4\x93\x02-\x12+/v1/applications/{application_id}/documents\x12\x9c\x01\n" +
+	"\x0fGetPresignedUrl\x12*.api.application.v1.GetPresignedUrlRequest\x1a+.api.application.v1.GetPresignedUrlResponse\"0\x82\xd3\xe4\x93\x02*\x12(/v1/applications/documents/presigned-url2\x97\x04\n" +
 	"\fPartyService\x12\xa5\x01\n" +
 	"\x15AddPartyToApplication\x120.api.application.v1.AddPartyToApplicationRequest\x1a$.api.application.v1.ApplicationParty\"4\x82\xd3\xe4\x93\x02.:\x01*\")/v1/applications/{application_id}/parties\x12\xa9\x01\n" +
 	"\x1aRemovePartyFromApplication\x125.api.application.v1.RemovePartyFromApplicationRequest\x1a\x16.google.protobuf.Empty\"<\x82\xd3\xe4\x93\x026*4/v1/applications/{application_id}/parties/{party_id}\x12\xb2\x01\n" +
@@ -1564,7 +1676,7 @@ func file_application_v1_application_proto_rawDescGZIP() []byte {
 	return file_application_v1_application_proto_rawDescData
 }
 
-var file_application_v1_application_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_application_v1_application_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_application_v1_application_proto_goTypes = []any{
 	(*ApplicationAttribute)(nil),               // 0: api.application.v1.ApplicationAttribute
 	(*ApplicationAttributes)(nil),              // 1: api.application.v1.ApplicationAttributes
@@ -1586,16 +1698,18 @@ var file_application_v1_application_proto_goTypes = []any{
 	(*UploadApplicationDocumentRequest)(nil),   // 17: api.application.v1.UploadApplicationDocumentRequest
 	(*ListApplicationDocumentsRequest)(nil),    // 18: api.application.v1.ListApplicationDocumentsRequest
 	(*ListApplicationDocumentsResponse)(nil),   // 19: api.application.v1.ListApplicationDocumentsResponse
-	(*timestamppb.Timestamp)(nil),              // 20: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),                      // 21: google.protobuf.Empty
+	(*GetPresignedUrlRequest)(nil),             // 20: api.application.v1.GetPresignedUrlRequest
+	(*GetPresignedUrlResponse)(nil),            // 21: api.application.v1.GetPresignedUrlResponse
+	(*timestamppb.Timestamp)(nil),              // 22: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),                      // 23: google.protobuf.Empty
 }
 var file_application_v1_application_proto_depIdxs = []int32{
 	0,  // 0: api.application.v1.ApplicationAttributes.attributes:type_name -> api.application.v1.ApplicationAttribute
 	0,  // 1: api.application.v1.Application.attributes:type_name -> api.application.v1.ApplicationAttribute
-	20, // 2: api.application.v1.Application.submitted_at:type_name -> google.protobuf.Timestamp
-	20, // 3: api.application.v1.Application.created_at:type_name -> google.protobuf.Timestamp
-	20, // 4: api.application.v1.Application.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 5: api.application.v1.ApplicationDocument.uploaded_at:type_name -> google.protobuf.Timestamp
+	22, // 2: api.application.v1.Application.submitted_at:type_name -> google.protobuf.Timestamp
+	22, // 3: api.application.v1.Application.created_at:type_name -> google.protobuf.Timestamp
+	22, // 4: api.application.v1.Application.updated_at:type_name -> google.protobuf.Timestamp
+	22, // 5: api.application.v1.ApplicationDocument.uploaded_at:type_name -> google.protobuf.Timestamp
 	0,  // 6: api.application.v1.CreateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
 	2,  // 7: api.application.v1.ListApplicationsResponse.applications:type_name -> api.application.v1.Application
 	0,  // 8: api.application.v1.UpdateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
@@ -1611,23 +1725,25 @@ var file_application_v1_application_proto_depIdxs = []int32{
 	12, // 18: api.application.v1.ApplicationService.ChangeApplicationStatus:input_type -> api.application.v1.ChangeApplicationStatusRequest
 	17, // 19: api.application.v1.ApplicationService.UploadApplicationDocument:input_type -> api.application.v1.UploadApplicationDocumentRequest
 	18, // 20: api.application.v1.ApplicationService.ListApplicationDocuments:input_type -> api.application.v1.ListApplicationDocumentsRequest
-	13, // 21: api.application.v1.PartyService.AddPartyToApplication:input_type -> api.application.v1.AddPartyToApplicationRequest
-	14, // 22: api.application.v1.PartyService.RemovePartyFromApplication:input_type -> api.application.v1.RemovePartyFromApplicationRequest
-	15, // 23: api.application.v1.PartyService.ListApplicationParties:input_type -> api.application.v1.ListApplicationPartiesRequest
-	2,  // 24: api.application.v1.ApplicationService.CreateApplication:output_type -> api.application.v1.Application
-	2,  // 25: api.application.v1.ApplicationService.GetApplication:output_type -> api.application.v1.Application
-	8,  // 26: api.application.v1.ApplicationService.ListApplications:output_type -> api.application.v1.ListApplicationsResponse
-	2,  // 27: api.application.v1.ApplicationService.UpdateApplication:output_type -> api.application.v1.Application
-	1,  // 28: api.application.v1.ApplicationService.GetApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
-	1,  // 29: api.application.v1.ApplicationService.UpsertApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
-	2,  // 30: api.application.v1.ApplicationService.ChangeApplicationStatus:output_type -> api.application.v1.Application
-	3,  // 31: api.application.v1.ApplicationService.UploadApplicationDocument:output_type -> api.application.v1.ApplicationDocument
-	19, // 32: api.application.v1.ApplicationService.ListApplicationDocuments:output_type -> api.application.v1.ListApplicationDocumentsResponse
-	4,  // 33: api.application.v1.PartyService.AddPartyToApplication:output_type -> api.application.v1.ApplicationParty
-	21, // 34: api.application.v1.PartyService.RemovePartyFromApplication:output_type -> google.protobuf.Empty
-	16, // 35: api.application.v1.PartyService.ListApplicationParties:output_type -> api.application.v1.ListApplicationPartiesResponse
-	24, // [24:36] is the sub-list for method output_type
-	12, // [12:24] is the sub-list for method input_type
+	20, // 21: api.application.v1.ApplicationService.GetPresignedUrl:input_type -> api.application.v1.GetPresignedUrlRequest
+	13, // 22: api.application.v1.PartyService.AddPartyToApplication:input_type -> api.application.v1.AddPartyToApplicationRequest
+	14, // 23: api.application.v1.PartyService.RemovePartyFromApplication:input_type -> api.application.v1.RemovePartyFromApplicationRequest
+	15, // 24: api.application.v1.PartyService.ListApplicationParties:input_type -> api.application.v1.ListApplicationPartiesRequest
+	2,  // 25: api.application.v1.ApplicationService.CreateApplication:output_type -> api.application.v1.Application
+	2,  // 26: api.application.v1.ApplicationService.GetApplication:output_type -> api.application.v1.Application
+	8,  // 27: api.application.v1.ApplicationService.ListApplications:output_type -> api.application.v1.ListApplicationsResponse
+	2,  // 28: api.application.v1.ApplicationService.UpdateApplication:output_type -> api.application.v1.Application
+	1,  // 29: api.application.v1.ApplicationService.GetApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
+	1,  // 30: api.application.v1.ApplicationService.UpsertApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
+	2,  // 31: api.application.v1.ApplicationService.ChangeApplicationStatus:output_type -> api.application.v1.Application
+	3,  // 32: api.application.v1.ApplicationService.UploadApplicationDocument:output_type -> api.application.v1.ApplicationDocument
+	19, // 33: api.application.v1.ApplicationService.ListApplicationDocuments:output_type -> api.application.v1.ListApplicationDocumentsResponse
+	21, // 34: api.application.v1.ApplicationService.GetPresignedUrl:output_type -> api.application.v1.GetPresignedUrlResponse
+	4,  // 35: api.application.v1.PartyService.AddPartyToApplication:output_type -> api.application.v1.ApplicationParty
+	23, // 36: api.application.v1.PartyService.RemovePartyFromApplication:output_type -> google.protobuf.Empty
+	16, // 37: api.application.v1.PartyService.ListApplicationParties:output_type -> api.application.v1.ListApplicationPartiesResponse
+	25, // [25:38] is the sub-list for method output_type
+	12, // [12:25] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name
 	12, // [12:12] is the sub-list for extension extendee
 	0,  // [0:12] is the sub-list for field type_name
@@ -1644,7 +1760,7 @@ func file_application_v1_application_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_application_v1_application_proto_rawDesc), len(file_application_v1_application_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

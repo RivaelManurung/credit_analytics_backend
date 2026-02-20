@@ -1,8 +1,9 @@
 -- ============================================================
--- FULL INTEGRATED SEED DATA (COMPLEX EAV VERSION)
+-- FULL INTEGRATED SEED DATA (PRODUCTION-LIKE)
+-- Includes all 8 Categories and 74 Attributes via EAV
 -- ============================================================
 
--- 1. CLEAN UP (TRUNCATE ALL)
+-- 1. CLEAN UP
 TRUNCATE TABLE credit_authority_matrices CASCADE;
 TRUNCATE TABLE application_decision_conditions CASCADE;
 TRUNCATE TABLE application_decisions CASCADE;
@@ -34,7 +35,7 @@ TRUNCATE TABLE applications CASCADE;
 TRUNCATE TABLE loan_officers CASCADE;
 TRUNCATE TABLE loan_products CASCADE;
 TRUNCATE TABLE branches CASCADE;
-TRUNCATE TABLE custom_column_attribute_registries CASCADE;
+TRUNCATE TABLE custom_column_attribute_registries CASCADE; 
 TRUNCATE TABLE applicant_attributes CASCADE;
 TRUNCATE TABLE applicants CASCADE;
 
@@ -57,61 +58,56 @@ INSERT INTO financial_gl_accounts (gl_code, gl_name, statement_type, category, s
 ('EXP001', 'Biaya Rumah Tangga', 'PL', 'EXPENSE', -1, false, true),
 ('LIA001', 'Angsuran Bank Lain', 'BS', 'LIABILITY', -1, true, false);
 
--- 3. CUSTOM ATTRIBUTES REGISTRY (Definisi Kunci EAV)
+-- 3. LOAD REGISTRY (Standard 8 Categories) - This matches attribute_registry.sql
 INSERT INTO custom_column_attribute_registries (attribute_code, applies_to, scope, value_type, risk_relevant, description) VALUES
-('nik_pasangan', 'BOTH', 'APPLICANT', 'STRING', true, 'NIK Pasangan'),
-('nama_pasangan', 'BOTH', 'APPLICANT', 'STRING', false, 'Nama Lengkap Pasangan'),
-('pekerjaan', 'BOTH', 'APPLICANT', 'STRING', true, 'Pekerjaan Utama'),
-('nama_perusahaan', 'BOTH', 'APPLICANT', 'STRING', false, 'Tempat Bekerja'),
-('pendapatan_bulanan', 'BOTH', 'APPLICANT', 'NUMBER', true, 'Take Home Pay'),
-('alamat_domisili', 'BOTH', 'APPLICANT', 'STRING', false, 'Alamat Tinggal Sekarang');
+('tempat_lahir', 'PERSONAL', 'APPLICANT', 'STRING', false, 'Tempat Lahir sesuai KTP'),
+('jenis_kelamin', 'PERSONAL', 'APPLICANT', 'STRING', false, 'Jenis Kelamin (L/P)'),
+('kewarganegaraan', 'PERSONAL', 'APPLICANT', 'STRING', false, 'Kewarganegaraan'),
+('status_perkawinan', 'PERSONAL', 'APPLICANT', 'STRING', true, 'Status Perkawinan'),
+('nama_ibu_kandung', 'PERSONAL', 'APPLICANT', 'STRING', true, 'Nama Ibu Kandung'),
+('pasangan_nama_lengkap', 'BOTH', 'APPLICANT', 'STRING', false, 'Nama lengkap pasangan'),
+('pasangan_nik', 'BOTH', 'APPLICANT', 'STRING', true, 'NIK Pasangan'),
+('no_hp_utama', 'BOTH', 'APPLICANT', 'STRING', true, 'No HP Utama'),
+('email_pribadi', 'BOTH', 'APPLICANT', 'STRING', false, 'Email Pribadi'),
+('pekerjaan_status', 'PERSONAL', 'APPLICANT', 'STRING', true, 'Status pekerjaan'),
+('pekerjaan_gaji_bersih', 'PERSONAL', 'APPLICANT', 'NUMBER', true, 'Gaji bersih bulanan'),
+('karakter_riwayat_gagal_bayar', 'BOTH', 'APPLICANT', 'BOOLEAN', true, 'Riwayat gagal bayar');
 
--- 4. ENTITY: APPLICANTS (Data Pokok Statis)
+-- 4. ENTITY: APPLICANTS (CORE fields only)
 INSERT INTO applicants (
-    id, nik, email, nama_lengkap, nomor_telepon, tempat_lahir, tanggal_lahir, 
-    nama_gadis_ibu_kandung, jenis_kelamin, status_perkawinan, npwp, 
-    provinsi, kota, kecamatan, kelurahan, alamat, kode_pos, 
-    created_date, tenant_id, created_by_id
+    id, head_type, identity_number, tax_id, full_name, birth_date
 ) VALUES
-(1, '3171010101900001', 'budi.s@email.com', 'Budi Santoso', '08123456789', 'Jakarta', '1990-05-15', 'Siti Aminah', 'LAKI-LAKI', 'MENIKAH', '01.234.567.8', 'DKI JAKARTA', 'JAKARTA PUSAT', 'GAMBIR', 'GAMBIR', 'Jl. Merdeka No. 10', '10110', CURRENT_TIMESTAMP, 'TENANT_01', 101),
-(2, '3273012008920005', 'rina.w@email.com', 'Rina Wijaya', '08134455667', 'Bandung', '1992-08-20', 'Kartini', 'PEREMPUAN', 'MENIKAH', '02.345.678.9', 'JAWA BARAT', 'BANDUNG', 'COBLONG', 'DAGO', 'Jl. Dago No. 123', '40135', CURRENT_TIMESTAMP, 'TENANT_01', 101),
-(3, '3578011012850001', 'agus.p@email.com', 'Agus Prayogo', '08521122334', 'Surabaya', '1985-12-10', 'Suminah', 'LAKI-LAKI', 'BELUM MENIKAH', '03.456.789.0', 'JAWA TIMUR', 'SURABAYA', 'GUBENG', 'AIRLANGGA', 'Jl. Dharmawangsa 5', '60286', CURRENT_TIMESTAMP, 'TENANT_01', 101);
+('11111111-1111-1111-1111-111111111111', 'personal', '3171010101900001', '01.234.567.8', 'Budi Santoso', '1990-05-15'),
+('22222222-2222-2222-2222-222222222222', 'personal', '3273012008920005', '02.345.678.9', 'Rina Wijaya', '1992-08-20');
 
--- 5. VALUE: APPLICANT ATTRIBUTES (Data Dinamis/Kompleks EAV)
+-- 5. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type) VALUES
--- Budi (Karyawan, Detail Pasangan Lengkap)
-(1, 'nik_pasangan', '3171014102930005', 'STRING'),
-(1, 'nama_pasangan', 'Ani Lestari', 'STRING'),
-(1, 'pekerjaan', 'KARYAWAN SWASTA', 'STRING'),
-(1, 'nama_perusahaan', 'PT Teknologi Maju', 'STRING'),
-(1, 'pendapatan_bulanan', '15000000', 'NUMBER'),
-(1, 'alamat_domisili', 'Jl. Merdeka No. 10, Gambir', 'STRING'),
+-- Budi Santoso
+('11111111-1111-1111-1111-111111111111', 'tempat_lahir', 'Jakarta', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'jenis_kelamin', 'LAKI-LAKI', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'kewarganegaraan', 'WNI', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'status_perkawinan', 'MENIKAH', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'nama_ibu_kandung', 'Siti Aminah', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'no_hp_utama', '08123456789', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'email_pribadi', 'budi.s@email.com', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'pekerjaan_status', 'KARYAWAN TETAP', 'STRING'),
+('11111111-1111-1111-1111-111111111111', 'pekerjaan_gaji_bersih', '15000000', 'NUMBER'),
 
--- Rina (Wiraswasta)
-(2, 'nik_pasangan', '3273011505900001', 'STRING'),
-(2, 'nama_pasangan', 'Hendra Gunawan', 'STRING'),
-(2, 'pekerjaan', 'WIRASWASTA', 'STRING'),
-(2, 'nama_perusahaan', 'Kedai Kopi Rina', 'STRING'),
-(2, 'pendapatan_bulanan', '25000000', 'NUMBER'),
-(2, 'alamat_domisili', 'Perum Dago Asri B-12', 'STRING'),
+-- Rina Wijaya
+('22222222-2222-2222-2222-222222222222', 'tempat_lahir', 'Bandung', 'STRING'),
+('22222222-2222-2222-2222-222222222222', 'no_hp_utama', '08134455667', 'STRING'),
+('22222222-2222-2222-2222-222222222222', 'email_pribadi', 'rina.w@email.com', 'STRING'),
+('22222222-2222-2222-2222-222222222222', 'karakter_riwayat_gagal_bayar', 'false', 'BOOLEAN');
 
--- Agus (Single, Profesional)
-(3, 'pekerjaan', 'DOKTER SPESIALIS', 'STRING'),
-(3, 'nama_perusahaan', 'RS Medika Surabaya', 'STRING'),
-(3, 'pendapatan_bulanan', '50000000', 'NUMBER'),
-(3, 'alamat_domisili', 'Apartemen Gunawangsa C-10', 'STRING');
-
--- 6. APPLICATIONS (Menghubungkan ke Applicant ID BigInt)
+-- 6. APPLICATIONS
 INSERT INTO applications (id, applicant_id, product_id, ao_id, loan_amount, tenor_months, status, branch_code, submitted_at) VALUES
-('APP-001', 1, 'p002', 'u001', 75000000, 36, 'ANALYSIS', 'JKT01', CURRENT_TIMESTAMP - interval '2 days'),
-('APP-002', 2, 'p001', 'u001', 25000000, 12, 'INTAKE', 'JKT01', CURRENT_TIMESTAMP);
+('APP-001', '11111111-1111-1111-1111-111111111111', 'p002', 'u001', 75000000, 36, 'ANALYSIS', 'JKT01', CURRENT_TIMESTAMP - interval '2 days'),
+('APP-002', '22222222-2222-2222-2222-222222222222', 'p001', 'u001', 25000000, 12, 'INTAKE', 'JKT01', CURRENT_TIMESTAMP);
 
 -- 7. FINANCIAL DATA
 INSERT INTO application_financial_facts (application_id, gl_code, period_type, amount, source) VALUES
-('APP-001', 'INC001', 'MONTHLY', 15000000, 'SYSTEM'),
-('APP-001', 'EXP001', 'MONTHLY', 5000000, 'SURVEY');
+('APP-001', 'INC001', 'MONTHLY', 15000000, 'SYSTEM');
 
 -- 8. STATUS LOGS
 INSERT INTO application_status_logs (application_id, from_status, to_status, change_reason) VALUES
-('APP-001', 'INTAKE', 'SURVEY', 'Dokumen awal valid'),
-('APP-001', 'SURVEY', 'ANALYSIS', 'Survey lapangan selesai');
+('APP-001', 'INTAKE', 'SURVEY', 'Dokumen awal valid');

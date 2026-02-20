@@ -25,22 +25,22 @@ func NewSurveyRepo(data *Data, logger log.Logger) biz.SurveyRepo {
 
 func (r *surveyRepo) CreateSurveyTemplate(ctx context.Context, t *biz.SurveyTemplate) (*biz.SurveyTemplate, error) {
 	res, err := r.data.db.CreateSurveyTemplate(ctx, db.CreateSurveyTemplateParams{
-		TemplateCode:  sql.NullString{String: t.TemplateCode, Valid: t.TemplateCode != ""},
-		TemplateName:  sql.NullString{String: t.TemplateName, Valid: t.TemplateName != ""},
-		ApplicantType: sql.NullString{String: t.ApplicantType, Valid: t.ApplicantType != ""},
-		ProductID:     uuid.NullUUID{UUID: t.ProductID, Valid: t.ProductID != uuid.Nil},
-		Active:        sql.NullBool{Bool: t.Active, Valid: true},
+		TemplateCode: sql.NullString{String: t.TemplateCode, Valid: t.TemplateCode != ""},
+		TemplateName: sql.NullString{String: t.TemplateName, Valid: t.TemplateName != ""},
+		HeadType:     sql.NullString{String: t.HeadType, Valid: t.HeadType != ""},
+		ProductID:    uuid.NullUUID{UUID: t.ProductID, Valid: t.ProductID != uuid.Nil},
+		Active:       sql.NullBool{Bool: t.Active, Valid: true},
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &biz.SurveyTemplate{
-		ID:            res.ID,
-		TemplateCode:  res.TemplateCode.String,
-		TemplateName:  res.TemplateName.String,
-		ApplicantType: res.ApplicantType.String,
-		ProductID:     res.ProductID.UUID,
-		Active:        res.Active.Bool,
+		ID:           res.ID,
+		TemplateCode: res.TemplateCode.String,
+		TemplateName: res.TemplateName.String,
+		HeadType:     res.HeadType.String,
+		ProductID:    res.ProductID.UUID,
+		Active:       res.Active.Bool,
 	}, nil
 }
 
@@ -52,12 +52,12 @@ func (r *surveyRepo) ListSurveyTemplates(ctx context.Context) ([]*biz.SurveyTemp
 	var res []*biz.SurveyTemplate
 	for _, t := range templates {
 		res = append(res, &biz.SurveyTemplate{
-			ID:            t.ID,
-			TemplateCode:  t.TemplateCode.String,
-			TemplateName:  t.TemplateName.String,
-			ApplicantType: t.ApplicantType.String,
-			ProductID:     t.ProductID.UUID,
-			Active:        t.Active.Bool,
+			ID:           t.ID,
+			TemplateCode: t.TemplateCode.String,
+			TemplateName: t.TemplateName.String,
+			HeadType:     t.HeadType.String,
+			ProductID:    t.ProductID.UUID,
+			Active:       t.Active.Bool,
 		})
 	}
 	return res, nil

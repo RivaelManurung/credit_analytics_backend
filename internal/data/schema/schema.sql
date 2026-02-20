@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE applicants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    applicant_type VARCHAR(20) NOT NULL, -- PERSONAL | CORPORATE
+    head_type VARCHAR(20) NOT NULL, -- personal | corporate
     identity_number VARCHAR(100),
     tax_id VARCHAR(100),
     full_name VARCHAR(255),
@@ -140,7 +140,7 @@ CREATE TABLE survey_templates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     template_code VARCHAR(100) UNIQUE,
     template_name VARCHAR(255),
-    applicant_type VARCHAR(20), -- PERSONAL | CORPORATE | BOTH
+    head_type VARCHAR(20), -- personal | corporate | both
     product_id UUID REFERENCES loan_products(id),
     active BOOLEAN DEFAULT TRUE
 );

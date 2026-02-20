@@ -28,7 +28,7 @@ type SurveyTemplate struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	TemplateCode  string                 `protobuf:"bytes,2,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
 	TemplateName  string                 `protobuf:"bytes,3,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
-	ApplicantType string                 `protobuf:"bytes,4,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	HeadType      string                 `protobuf:"bytes,4,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
 	ProductId     string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Active        bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -86,9 +86,9 @@ func (x *SurveyTemplate) GetTemplateName() string {
 	return ""
 }
 
-func (x *SurveyTemplate) GetApplicantType() string {
+func (x *SurveyTemplate) GetHeadType() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.HeadType
 	}
 	return ""
 }
@@ -927,7 +927,7 @@ type CreateSurveyTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TemplateCode  string                 `protobuf:"bytes,1,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
 	TemplateName  string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
-	ApplicantType string                 `protobuf:"bytes,3,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	HeadType      string                 `protobuf:"bytes,3,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
 	ProductId     string                 `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -978,9 +978,9 @@ func (x *CreateSurveyTemplateRequest) GetTemplateName() string {
 	return ""
 }
 
-func (x *CreateSurveyTemplateRequest) GetApplicantType() string {
+func (x *CreateSurveyTemplateRequest) GetHeadType() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.HeadType
 	}
 	return ""
 }
@@ -1083,12 +1083,12 @@ var File_survey_v1_survey_proto protoreflect.FileDescriptor
 
 const file_survey_v1_survey_proto_rawDesc = "" +
 	"\n" +
-	"\x16survey/v1/survey.proto\x12\rapi.survey.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\x01\n" +
+	"\x16survey/v1/survey.proto\x12\rapi.survey.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbe\x01\n" +
 	"\x0eSurveyTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rtemplate_code\x18\x02 \x01(\tR\ftemplateCode\x12#\n" +
-	"\rtemplate_name\x18\x03 \x01(\tR\ftemplateName\x12%\n" +
-	"\x0eapplicant_type\x18\x04 \x01(\tR\rapplicantType\x12\x1d\n" +
+	"\rtemplate_name\x18\x03 \x01(\tR\ftemplateName\x12\x1b\n" +
+	"\thead_type\x18\x04 \x01(\tR\bheadType\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x05 \x01(\tR\tproductId\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\"\x89\x03\n" +
@@ -1167,11 +1167,11 @@ const file_survey_v1_survey_proto_rawDesc = "" +
 	"assignedTo\x12%\n" +
 	"\x0esurvey_purpose\x18\x05 \x01(\tR\rsurveyPurpose\"\"\n" +
 	"\x10GetSurveyRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xc5\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xbb\x01\n" +
 	"\x1bCreateSurveyTemplateRequest\x12#\n" +
 	"\rtemplate_code\x18\x01 \x01(\tR\ftemplateCode\x12#\n" +
-	"\rtemplate_name\x18\x02 \x01(\tR\ftemplateName\x12%\n" +
-	"\x0eapplicant_type\x18\x03 \x01(\tR\rapplicantType\x12\x1d\n" +
+	"\rtemplate_name\x18\x02 \x01(\tR\ftemplateName\x12\x1b\n" +
+	"\thead_type\x18\x03 \x01(\tR\bheadType\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x04 \x01(\tR\tproductId\x12\x16\n" +
 	"\x06active\x18\x05 \x01(\bR\x06active\"\x1c\n" +

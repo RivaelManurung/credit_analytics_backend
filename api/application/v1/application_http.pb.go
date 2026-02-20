@@ -24,6 +24,7 @@ const OperationApplicationServiceChangeApplicationStatus = "/api.application.v1.
 const OperationApplicationServiceCreateApplication = "/api.application.v1.ApplicationService/CreateApplication"
 const OperationApplicationServiceGetApplication = "/api.application.v1.ApplicationService/GetApplication"
 const OperationApplicationServiceGetApplicationAttributes = "/api.application.v1.ApplicationService/GetApplicationAttributes"
+const OperationApplicationServiceGetPresignedUrl = "/api.application.v1.ApplicationService/GetPresignedUrl"
 const OperationApplicationServiceListApplicationDocuments = "/api.application.v1.ApplicationService/ListApplicationDocuments"
 const OperationApplicationServiceListApplications = "/api.application.v1.ApplicationService/ListApplications"
 const OperationApplicationServiceUpdateApplication = "/api.application.v1.ApplicationService/UpdateApplication"
@@ -35,6 +36,7 @@ type ApplicationServiceHTTPServer interface {
 	CreateApplication(context.Context, *CreateApplicationRequest) (*Application, error)
 	GetApplication(context.Context, *GetApplicationRequest) (*Application, error)
 	GetApplicationAttributes(context.Context, *GetApplicationAttributesRequest) (*ApplicationAttributes, error)
+	GetPresignedUrl(context.Context, *GetPresignedUrlRequest) (*GetPresignedUrlResponse, error)
 	ListApplicationDocuments(context.Context, *ListApplicationDocumentsRequest) (*ListApplicationDocumentsResponse, error)
 	ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsResponse, error)
 	UpdateApplication(context.Context, *UpdateApplicationRequest) (*Application, error)
@@ -53,6 +55,7 @@ func RegisterApplicationServiceHTTPServer(s *http.Server, srv ApplicationService
 	r.POST("/v1/applications/{id}/status", _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv))
 	r.POST("/v1/applications/{application_id}/documents", _ApplicationService_UploadApplicationDocument0_HTTP_Handler(srv))
 	r.GET("/v1/applications/{application_id}/documents", _ApplicationService_ListApplicationDocuments0_HTTP_Handler(srv))
+	r.GET("/v1/applications/documents/presigned-url", _ApplicationService_GetPresignedUrl0_HTTP_Handler(srv))
 }
 
 func _ApplicationService_CreateApplication0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
@@ -262,11 +265,31 @@ func _ApplicationService_ListApplicationDocuments0_HTTP_Handler(srv ApplicationS
 	}
 }
 
+func _ApplicationService_GetPresignedUrl0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetPresignedUrlRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicationServiceGetPresignedUrl)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetPresignedUrl(ctx, req.(*GetPresignedUrlRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetPresignedUrlResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ApplicationServiceHTTPClient interface {
 	ChangeApplicationStatus(ctx context.Context, req *ChangeApplicationStatusRequest, opts ...http.CallOption) (rsp *Application, err error)
 	CreateApplication(ctx context.Context, req *CreateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
 	GetApplication(ctx context.Context, req *GetApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
 	GetApplicationAttributes(ctx context.Context, req *GetApplicationAttributesRequest, opts ...http.CallOption) (rsp *ApplicationAttributes, err error)
+	GetPresignedUrl(ctx context.Context, req *GetPresignedUrlRequest, opts ...http.CallOption) (rsp *GetPresignedUrlResponse, err error)
 	ListApplicationDocuments(ctx context.Context, req *ListApplicationDocumentsRequest, opts ...http.CallOption) (rsp *ListApplicationDocumentsResponse, err error)
 	ListApplications(ctx context.Context, req *ListApplicationsRequest, opts ...http.CallOption) (rsp *ListApplicationsResponse, err error)
 	UpdateApplication(ctx context.Context, req *UpdateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
@@ -326,6 +349,19 @@ func (c *ApplicationServiceHTTPClientImpl) GetApplicationAttributes(ctx context.
 	pattern := "/v1/applications/{application_id}/attributes"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationApplicationServiceGetApplicationAttributes))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicationServiceHTTPClientImpl) GetPresignedUrl(ctx context.Context, in *GetPresignedUrlRequest, opts ...http.CallOption) (*GetPresignedUrlResponse, error) {
+	var out GetPresignedUrlResponse
+	pattern := "/v1/applications/documents/presigned-url"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationApplicationServiceGetPresignedUrl))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

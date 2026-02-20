@@ -21,7 +21,7 @@ func NewApplicantService(uc *biz.ApplicantUsecase) *ApplicantService {
 
 func (s *ApplicantService) CreateApplicant(ctx context.Context, req *pb.CreateApplicantRequest) (*pb.Applicant, error) {
 	a := &biz.Applicant{
-		ApplicantType:  req.ApplicantType,
+		HeadType:       req.HeadType,
 		IdentityNumber: req.IdentityNumber,
 		TaxID:          req.TaxId,
 		FullName:       req.FullName,
@@ -65,7 +65,7 @@ func (s *ApplicantService) UpdateApplicant(ctx context.Context, req *pb.UpdateAp
 	}
 	a := &biz.Applicant{
 		ID:             id,
-		ApplicantType:  req.ApplicantType,
+		HeadType:       req.HeadType,
 		IdentityNumber: req.IdentityNumber,
 		TaxID:          req.TaxId,
 		FullName:       req.FullName,
@@ -127,7 +127,7 @@ func (s *ApplicantService) ListApplicants(ctx context.Context, req *pb.ListAppli
 func mapBizToProto(a *biz.Applicant) *pb.Applicant {
 	res := &pb.Applicant{
 		Id:                a.ID.String(),
-		ApplicantType:     a.ApplicantType,
+		HeadType:          a.HeadType,
 		IdentityNumber:    a.IdentityNumber,
 		TaxId:             a.TaxID,
 		FullName:          a.FullName,

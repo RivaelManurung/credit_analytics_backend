@@ -94,7 +94,7 @@ func (x *ApplicantAttribute) GetUpdatedAt() *timestamppb.Timestamp {
 type Applicant struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ApplicantType     string                 `protobuf:"bytes,2,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	HeadType          string                 `protobuf:"bytes,2,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,3,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,4,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,5,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -144,9 +144,9 @@ func (x *Applicant) GetId() string {
 	return ""
 }
 
-func (x *Applicant) GetApplicantType() string {
+func (x *Applicant) GetHeadType() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.HeadType
 	}
 	return ""
 }
@@ -253,7 +253,7 @@ func (x *ApplicantAttributes) GetAttributes() []*ApplicantAttribute {
 
 type CreateApplicantRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	ApplicantType     string                 `protobuf:"bytes,1,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	HeadType          string                 `protobuf:"bytes,1,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,2,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,3,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,4,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -294,9 +294,9 @@ func (*CreateApplicantRequest) Descriptor() ([]byte, []int) {
 	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateApplicantRequest) GetApplicantType() string {
+func (x *CreateApplicantRequest) GetHeadType() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.HeadType
 	}
 	return ""
 }
@@ -434,7 +434,7 @@ func (x *GetApplicantAttributesRequest) GetApplicantId() string {
 type UpdateApplicantRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ApplicantType     string                 `protobuf:"bytes,2,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	HeadType          string                 `protobuf:"bytes,2,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,3,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,4,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,5,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -482,9 +482,9 @@ func (x *UpdateApplicantRequest) GetId() string {
 	return ""
 }
 
-func (x *UpdateApplicantRequest) GetApplicantType() string {
+func (x *UpdateApplicantRequest) GetHeadType() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.HeadType
 	}
 	return ""
 }
@@ -689,10 +689,10 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1b\n" +
 	"\tdata_type\x18\x03 \x01(\tR\bdataType\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa9\x03\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9f\x03\n" +
 	"\tApplicant\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
-	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
+	"\thead_type\x18\x02 \x01(\tR\bheadType\x12'\n" +
 	"\x0fidentity_number\x18\x03 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x04 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x05 \x01(\tR\bfullName\x12\x1d\n" +
@@ -710,9 +710,9 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x13ApplicantAttributes\x12D\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"\xb0\x02\n" +
-	"\x16CreateApplicantRequest\x12%\n" +
-	"\x0eapplicant_type\x18\x01 \x01(\tR\rapplicantType\x12'\n" +
+	"attributes\"\xa6\x02\n" +
+	"\x16CreateApplicantRequest\x12\x1b\n" +
+	"\thead_type\x18\x01 \x01(\tR\bheadType\x12'\n" +
 	"\x0fidentity_number\x18\x02 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x03 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x04 \x01(\tR\bfullName\x12\x1d\n" +
@@ -725,10 +725,10 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x13GetApplicantRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"B\n" +
 	"\x1dGetApplicantAttributesRequest\x12!\n" +
-	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\"\xc0\x02\n" +
+	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\"\xb6\x02\n" +
 	"\x16UpdateApplicantRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
-	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
+	"\thead_type\x18\x02 \x01(\tR\bheadType\x12'\n" +
 	"\x0fidentity_number\x18\x03 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x04 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x05 \x01(\tR\bfullName\x12\x1d\n" +

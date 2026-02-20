@@ -56,7 +56,7 @@ message ApplicantAttribute {
 
 message Applicant {
   string id = 1;
-  string applicant_type = 2;
+  string head_type = 2;
   string identity_number = 3;
   string tax_id = 4;
   string full_name = 5;
@@ -72,7 +72,7 @@ message ApplicantAttributes {
 }
 
 message CreateApplicantRequest {
-  string applicant_type = 1;
+  string head_type = 1;
   string identity_number = 2;
   string tax_id = 3;
   string full_name = 4;
@@ -91,7 +91,7 @@ message GetApplicantAttributesRequest {
 
 message UpdateApplicantRequest {
   string id = 1;
-  string applicant_type = 2;
+  string head_type = 2;
   string identity_number = 3;
   string tax_id = 4;
   string full_name = 5;
