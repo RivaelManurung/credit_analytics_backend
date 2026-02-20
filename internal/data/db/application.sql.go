@@ -76,6 +76,74 @@ func (q *Queries) CreateApplication(ctx context.Context, arg CreateApplicationPa
 	return i, err
 }
 
+const createApplicationParty = `-- name: CreateApplicationParty :one
+INSERT INTO application_parties (
+    application_id, party_id, role_code, legal_obligation, slik_required
+) VALUES (
+    $1, $2, $3, $4, $5
+) RETURNING application_id, party_id, role_code, legal_obligation, slik_required
+`
+
+type CreateApplicationPartyParams struct {
+	ApplicationID   uuid.UUID    `json:"application_id"`
+	PartyID         uuid.UUID    `json:"party_id"`
+	RoleCode        string       `json:"role_code"`
+	LegalObligation sql.NullBool `json:"legal_obligation"`
+	SlikRequired    sql.NullBool `json:"slik_required"`
+}
+
+func (q *Queries) CreateApplicationParty(ctx context.Context, arg CreateApplicationPartyParams) (ApplicationParty, error) {
+	row := q.db.QueryRowContext(ctx, createApplicationParty,
+		arg.ApplicationID,
+		arg.PartyID,
+		arg.RoleCode,
+		arg.LegalObligation,
+		arg.SlikRequired,
+	)
+	var i ApplicationParty
+	err := row.Scan(
+		&i.ApplicationID,
+		&i.PartyID,
+		&i.RoleCode,
+		&i.LegalObligation,
+		&i.SlikRequired,
+	)
+	return i, err
+}
+
+const createParty = `-- name: CreateParty :one
+INSERT INTO parties (
+    party_type, identifier, name, date_of_birth
+) VALUES (
+    $1, $2, $3, $4
+) RETURNING id, party_type, identifier, name, date_of_birth
+`
+
+type CreatePartyParams struct {
+	PartyType   sql.NullString `json:"party_type"`
+	Identifier  sql.NullString `json:"identifier"`
+	Name        sql.NullString `json:"name"`
+	DateOfBirth sql.NullTime   `json:"date_of_birth"`
+}
+
+func (q *Queries) CreateParty(ctx context.Context, arg CreatePartyParams) (Party, error) {
+	row := q.db.QueryRowContext(ctx, createParty,
+		arg.PartyType,
+		arg.Identifier,
+		arg.Name,
+		arg.DateOfBirth,
+	)
+	var i Party
+	err := row.Scan(
+		&i.ID,
+		&i.PartyType,
+		&i.Identifier,
+		&i.Name,
+		&i.DateOfBirth,
+	)
+	return i, err
+}
+
 const createStatusLog = `-- name: CreateStatusLog :one
 INSERT INTO application_status_logs (
     application_id, from_status, to_status, changed_by, change_reason
@@ -171,6 +239,56 @@ func (q *Queries) GetApplicationAttributes(ctx context.Context, applicationID uu
 			&i.AttrValue,
 			&i.DataType,
 			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPartiesByApplication = `-- name: GetPartiesByApplication :many
+SELECT p.id, p.party_type, p.identifier, p.name, p.date_of_birth, ap.role_code, ap.legal_obligation, ap.slik_required
+FROM parties p
+JOIN application_parties ap ON p.id = ap.party_id
+WHERE ap.application_id = $1
+`
+
+type GetPartiesByApplicationRow struct {
+	ID              uuid.UUID      `json:"id"`
+	PartyType       sql.NullString `json:"party_type"`
+	Identifier      sql.NullString `json:"identifier"`
+	Name            sql.NullString `json:"name"`
+	DateOfBirth     sql.NullTime   `json:"date_of_birth"`
+	RoleCode        string         `json:"role_code"`
+	LegalObligation sql.NullBool   `json:"legal_obligation"`
+	SlikRequired    sql.NullBool   `json:"slik_required"`
+}
+
+func (q *Queries) GetPartiesByApplication(ctx context.Context, applicationID uuid.UUID) ([]GetPartiesByApplicationRow, error) {
+	rows, err := q.db.QueryContext(ctx, getPartiesByApplication, applicationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetPartiesByApplicationRow
+	for rows.Next() {
+		var i GetPartiesByApplicationRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.PartyType,
+			&i.Identifier,
+			&i.Name,
+			&i.DateOfBirth,
+			&i.RoleCode,
+			&i.LegalObligation,
+			&i.SlikRequired,
 		); err != nil {
 			return nil, err
 		}

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v5.29.3
-// source: api/applicant/v1/applicant.proto
+// source: applicant/v1/applicant.proto
 
 package v1
 
@@ -19,255 +19,255 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Applicant_CreateApplicant_FullMethodName          = "/api.applicant.v1.Applicant/CreateApplicant"
-	Applicant_GetApplicant_FullMethodName             = "/api.applicant.v1.Applicant/GetApplicant"
-	Applicant_UpdateApplicant_FullMethodName          = "/api.applicant.v1.Applicant/UpdateApplicant"
-	Applicant_ListApplicants_FullMethodName           = "/api.applicant.v1.Applicant/ListApplicants"
-	Applicant_UpsertApplicantAttribute_FullMethodName = "/api.applicant.v1.Applicant/UpsertApplicantAttribute"
+	ApplicantService_CreateApplicant_FullMethodName           = "/api.applicant.v1.ApplicantService/CreateApplicant"
+	ApplicantService_GetApplicant_FullMethodName              = "/api.applicant.v1.ApplicantService/GetApplicant"
+	ApplicantService_UpdateApplicant_FullMethodName           = "/api.applicant.v1.ApplicantService/UpdateApplicant"
+	ApplicantService_GetApplicantAttributes_FullMethodName    = "/api.applicant.v1.ApplicantService/GetApplicantAttributes"
+	ApplicantService_UpsertApplicantAttributes_FullMethodName = "/api.applicant.v1.ApplicantService/UpsertApplicantAttributes"
 )
 
-// ApplicantClient is the client API for Applicant service.
+// ApplicantServiceClient is the client API for ApplicantService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ApplicantClient interface {
-	CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*CreateApplicantReply, error)
-	GetApplicant(ctx context.Context, in *GetApplicantRequest, opts ...grpc.CallOption) (*GetApplicantReply, error)
-	UpdateApplicant(ctx context.Context, in *UpdateApplicantRequest, opts ...grpc.CallOption) (*UpdateApplicantReply, error)
-	ListApplicants(ctx context.Context, in *ListApplicantsRequest, opts ...grpc.CallOption) (*ListApplicantsReply, error)
-	UpsertApplicantAttribute(ctx context.Context, in *UpsertApplicantAttributeRequest, opts ...grpc.CallOption) (*ApplicantAttribute, error)
+type ApplicantServiceClient interface {
+	CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
+	GetApplicant(ctx context.Context, in *GetApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
+	UpdateApplicant(ctx context.Context, in *UpdateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
+	GetApplicantAttributes(ctx context.Context, in *GetApplicantAttributesRequest, opts ...grpc.CallOption) (*ApplicantAttributes, error)
+	UpsertApplicantAttributes(ctx context.Context, in *UpsertApplicantAttributesRequest, opts ...grpc.CallOption) (*ApplicantAttributes, error)
 }
 
-type applicantClient struct {
+type applicantServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewApplicantClient(cc grpc.ClientConnInterface) ApplicantClient {
-	return &applicantClient{cc}
+func NewApplicantServiceClient(cc grpc.ClientConnInterface) ApplicantServiceClient {
+	return &applicantServiceClient{cc}
 }
 
-func (c *applicantClient) CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*CreateApplicantReply, error) {
+func (c *applicantServiceClient) CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateApplicantReply)
-	err := c.cc.Invoke(ctx, Applicant_CreateApplicant_FullMethodName, in, out, cOpts...)
+	out := new(Applicant)
+	err := c.cc.Invoke(ctx, ApplicantService_CreateApplicant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicantClient) GetApplicant(ctx context.Context, in *GetApplicantRequest, opts ...grpc.CallOption) (*GetApplicantReply, error) {
+func (c *applicantServiceClient) GetApplicant(ctx context.Context, in *GetApplicantRequest, opts ...grpc.CallOption) (*Applicant, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetApplicantReply)
-	err := c.cc.Invoke(ctx, Applicant_GetApplicant_FullMethodName, in, out, cOpts...)
+	out := new(Applicant)
+	err := c.cc.Invoke(ctx, ApplicantService_GetApplicant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicantClient) UpdateApplicant(ctx context.Context, in *UpdateApplicantRequest, opts ...grpc.CallOption) (*UpdateApplicantReply, error) {
+func (c *applicantServiceClient) UpdateApplicant(ctx context.Context, in *UpdateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateApplicantReply)
-	err := c.cc.Invoke(ctx, Applicant_UpdateApplicant_FullMethodName, in, out, cOpts...)
+	out := new(Applicant)
+	err := c.cc.Invoke(ctx, ApplicantService_UpdateApplicant_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicantClient) ListApplicants(ctx context.Context, in *ListApplicantsRequest, opts ...grpc.CallOption) (*ListApplicantsReply, error) {
+func (c *applicantServiceClient) GetApplicantAttributes(ctx context.Context, in *GetApplicantAttributesRequest, opts ...grpc.CallOption) (*ApplicantAttributes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListApplicantsReply)
-	err := c.cc.Invoke(ctx, Applicant_ListApplicants_FullMethodName, in, out, cOpts...)
+	out := new(ApplicantAttributes)
+	err := c.cc.Invoke(ctx, ApplicantService_GetApplicantAttributes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicantClient) UpsertApplicantAttribute(ctx context.Context, in *UpsertApplicantAttributeRequest, opts ...grpc.CallOption) (*ApplicantAttribute, error) {
+func (c *applicantServiceClient) UpsertApplicantAttributes(ctx context.Context, in *UpsertApplicantAttributesRequest, opts ...grpc.CallOption) (*ApplicantAttributes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ApplicantAttribute)
-	err := c.cc.Invoke(ctx, Applicant_UpsertApplicantAttribute_FullMethodName, in, out, cOpts...)
+	out := new(ApplicantAttributes)
+	err := c.cc.Invoke(ctx, ApplicantService_UpsertApplicantAttributes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ApplicantServer is the server API for Applicant service.
-// All implementations must embed UnimplementedApplicantServer
+// ApplicantServiceServer is the server API for ApplicantService service.
+// All implementations must embed UnimplementedApplicantServiceServer
 // for forward compatibility.
-type ApplicantServer interface {
-	CreateApplicant(context.Context, *CreateApplicantRequest) (*CreateApplicantReply, error)
-	GetApplicant(context.Context, *GetApplicantRequest) (*GetApplicantReply, error)
-	UpdateApplicant(context.Context, *UpdateApplicantRequest) (*UpdateApplicantReply, error)
-	ListApplicants(context.Context, *ListApplicantsRequest) (*ListApplicantsReply, error)
-	UpsertApplicantAttribute(context.Context, *UpsertApplicantAttributeRequest) (*ApplicantAttribute, error)
-	mustEmbedUnimplementedApplicantServer()
+type ApplicantServiceServer interface {
+	CreateApplicant(context.Context, *CreateApplicantRequest) (*Applicant, error)
+	GetApplicant(context.Context, *GetApplicantRequest) (*Applicant, error)
+	UpdateApplicant(context.Context, *UpdateApplicantRequest) (*Applicant, error)
+	GetApplicantAttributes(context.Context, *GetApplicantAttributesRequest) (*ApplicantAttributes, error)
+	UpsertApplicantAttributes(context.Context, *UpsertApplicantAttributesRequest) (*ApplicantAttributes, error)
+	mustEmbedUnimplementedApplicantServiceServer()
 }
 
-// UnimplementedApplicantServer must be embedded to have
+// UnimplementedApplicantServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedApplicantServer struct{}
+type UnimplementedApplicantServiceServer struct{}
 
-func (UnimplementedApplicantServer) CreateApplicant(context.Context, *CreateApplicantRequest) (*CreateApplicantReply, error) {
+func (UnimplementedApplicantServiceServer) CreateApplicant(context.Context, *CreateApplicantRequest) (*Applicant, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateApplicant not implemented")
 }
-func (UnimplementedApplicantServer) GetApplicant(context.Context, *GetApplicantRequest) (*GetApplicantReply, error) {
+func (UnimplementedApplicantServiceServer) GetApplicant(context.Context, *GetApplicantRequest) (*Applicant, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetApplicant not implemented")
 }
-func (UnimplementedApplicantServer) UpdateApplicant(context.Context, *UpdateApplicantRequest) (*UpdateApplicantReply, error) {
+func (UnimplementedApplicantServiceServer) UpdateApplicant(context.Context, *UpdateApplicantRequest) (*Applicant, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateApplicant not implemented")
 }
-func (UnimplementedApplicantServer) ListApplicants(context.Context, *ListApplicantsRequest) (*ListApplicantsReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListApplicants not implemented")
+func (UnimplementedApplicantServiceServer) GetApplicantAttributes(context.Context, *GetApplicantAttributesRequest) (*ApplicantAttributes, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetApplicantAttributes not implemented")
 }
-func (UnimplementedApplicantServer) UpsertApplicantAttribute(context.Context, *UpsertApplicantAttributeRequest) (*ApplicantAttribute, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpsertApplicantAttribute not implemented")
+func (UnimplementedApplicantServiceServer) UpsertApplicantAttributes(context.Context, *UpsertApplicantAttributesRequest) (*ApplicantAttributes, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpsertApplicantAttributes not implemented")
 }
-func (UnimplementedApplicantServer) mustEmbedUnimplementedApplicantServer() {}
-func (UnimplementedApplicantServer) testEmbeddedByValue()                   {}
+func (UnimplementedApplicantServiceServer) mustEmbedUnimplementedApplicantServiceServer() {}
+func (UnimplementedApplicantServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeApplicantServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ApplicantServer will
+// UnsafeApplicantServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ApplicantServiceServer will
 // result in compilation errors.
-type UnsafeApplicantServer interface {
-	mustEmbedUnimplementedApplicantServer()
+type UnsafeApplicantServiceServer interface {
+	mustEmbedUnimplementedApplicantServiceServer()
 }
 
-func RegisterApplicantServer(s grpc.ServiceRegistrar, srv ApplicantServer) {
-	// If the following call panics, it indicates UnimplementedApplicantServer was
+func RegisterApplicantServiceServer(s grpc.ServiceRegistrar, srv ApplicantServiceServer) {
+	// If the following call panics, it indicates UnimplementedApplicantServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Applicant_ServiceDesc, srv)
+	s.RegisterService(&ApplicantService_ServiceDesc, srv)
 }
 
-func _Applicant_CreateApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApplicantService_CreateApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateApplicantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicantServer).CreateApplicant(ctx, in)
+		return srv.(ApplicantServiceServer).CreateApplicant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Applicant_CreateApplicant_FullMethodName,
+		FullMethod: ApplicantService_CreateApplicant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicantServer).CreateApplicant(ctx, req.(*CreateApplicantRequest))
+		return srv.(ApplicantServiceServer).CreateApplicant(ctx, req.(*CreateApplicantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Applicant_GetApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApplicantService_GetApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetApplicantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicantServer).GetApplicant(ctx, in)
+		return srv.(ApplicantServiceServer).GetApplicant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Applicant_GetApplicant_FullMethodName,
+		FullMethod: ApplicantService_GetApplicant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicantServer).GetApplicant(ctx, req.(*GetApplicantRequest))
+		return srv.(ApplicantServiceServer).GetApplicant(ctx, req.(*GetApplicantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Applicant_UpdateApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ApplicantService_UpdateApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateApplicantRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicantServer).UpdateApplicant(ctx, in)
+		return srv.(ApplicantServiceServer).UpdateApplicant(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Applicant_UpdateApplicant_FullMethodName,
+		FullMethod: ApplicantService_UpdateApplicant_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicantServer).UpdateApplicant(ctx, req.(*UpdateApplicantRequest))
+		return srv.(ApplicantServiceServer).UpdateApplicant(ctx, req.(*UpdateApplicantRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Applicant_ListApplicants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListApplicantsRequest)
+func _ApplicantService_GetApplicantAttributes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApplicantAttributesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicantServer).ListApplicants(ctx, in)
+		return srv.(ApplicantServiceServer).GetApplicantAttributes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Applicant_ListApplicants_FullMethodName,
+		FullMethod: ApplicantService_GetApplicantAttributes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicantServer).ListApplicants(ctx, req.(*ListApplicantsRequest))
+		return srv.(ApplicantServiceServer).GetApplicantAttributes(ctx, req.(*GetApplicantAttributesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Applicant_UpsertApplicantAttribute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertApplicantAttributeRequest)
+func _ApplicantService_UpsertApplicantAttributes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpsertApplicantAttributesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicantServer).UpsertApplicantAttribute(ctx, in)
+		return srv.(ApplicantServiceServer).UpsertApplicantAttributes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Applicant_UpsertApplicantAttribute_FullMethodName,
+		FullMethod: ApplicantService_UpsertApplicantAttributes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicantServer).UpsertApplicantAttribute(ctx, req.(*UpsertApplicantAttributeRequest))
+		return srv.(ApplicantServiceServer).UpsertApplicantAttributes(ctx, req.(*UpsertApplicantAttributesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Applicant_ServiceDesc is the grpc.ServiceDesc for Applicant service.
+// ApplicantService_ServiceDesc is the grpc.ServiceDesc for ApplicantService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Applicant_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.applicant.v1.Applicant",
-	HandlerType: (*ApplicantServer)(nil),
+var ApplicantService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.applicant.v1.ApplicantService",
+	HandlerType: (*ApplicantServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateApplicant",
-			Handler:    _Applicant_CreateApplicant_Handler,
+			Handler:    _ApplicantService_CreateApplicant_Handler,
 		},
 		{
 			MethodName: "GetApplicant",
-			Handler:    _Applicant_GetApplicant_Handler,
+			Handler:    _ApplicantService_GetApplicant_Handler,
 		},
 		{
 			MethodName: "UpdateApplicant",
-			Handler:    _Applicant_UpdateApplicant_Handler,
+			Handler:    _ApplicantService_UpdateApplicant_Handler,
 		},
 		{
-			MethodName: "ListApplicants",
-			Handler:    _Applicant_ListApplicants_Handler,
+			MethodName: "GetApplicantAttributes",
+			Handler:    _ApplicantService_GetApplicantAttributes_Handler,
 		},
 		{
-			MethodName: "UpsertApplicantAttribute",
-			Handler:    _Applicant_UpsertApplicantAttribute_Handler,
+			MethodName: "UpsertApplicantAttributes",
+			Handler:    _ApplicantService_UpsertApplicantAttributes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/applicant/v1/applicant.proto",
+	Metadata: "applicant/v1/applicant.proto",
 }

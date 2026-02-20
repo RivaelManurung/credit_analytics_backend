@@ -9,18 +9,7 @@ option go_package = "credit-analytics-backend/api/survey/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.survey.v1";
 
-service Survey {
-  rpc CreateSurveyTemplate (CreateSurveyTemplateRequest) returns (SurveyTemplate) {
-    option (google.api.http) = {
-      post: "/v1/surveys/templates",
-      body: "*"
-    };
-  }
-  rpc ListSurveyTemplates (ListSurveyTemplatesRequest) returns (ListSurveyTemplatesReply) {
-    option (google.api.http) = {
-      get: "/v1/surveys/templates"
-    };
-  }
+service SurveyService {
   rpc AssignSurvey (AssignSurveyRequest) returns (ApplicationSurvey) {
     option (google.api.http) = {
       post: "/v1/applications/{application_id}/surveys",
@@ -32,19 +21,38 @@ service Survey {
       get: "/v1/surveys/{id}"
     };
   }
-  rpc UpdateSurveyStatus (UpdateSurveyStatusRequest) returns (ApplicationSurvey) {
+  rpc ListSurveysByApplication (ListSurveysByApplicationRequest) returns (ListSurveysResponse) {
     option (google.api.http) = {
-      patch: "/v1/surveys/{id}/status",
+      get: "/v1/applications/{application_id}/surveys"
+    };
+  }
+
+  rpc StartSurvey (StartSurveyRequest) returns (ApplicationSurvey) {
+    option (google.api.http) = {
+      post: "/v1/surveys/{id}/start",
       body: "*"
     };
   }
-  rpc UpsertSurveyAnswer (UpsertSurveyAnswerRequest) returns (SurveyAnswer) {
+  rpc SubmitSurvey (SubmitSurveyRequest) returns (ApplicationSurvey) {
+    option (google.api.http) = {
+      post: "/v1/surveys/{id}/submit",
+      body: "*"
+    };
+  }
+  rpc VerifySurvey (VerifySurveyRequest) returns (ApplicationSurvey) {
+    option (google.api.http) = {
+      post: "/v1/surveys/{id}/verify",
+      body: "*"
+    };
+  }
+
+  rpc SubmitSurveyAnswer (SubmitSurveyAnswerRequest) returns (SurveyAnswer) {
     option (google.api.http) = {
       post: "/v1/surveys/{survey_id}/answers",
       body: "*"
     };
   }
-  rpc CreateSurveyEvidence (CreateSurveyEvidenceRequest) returns (SurveyEvidence) {
+  rpc UploadSurveyEvidence (UploadSurveyEvidenceRequest) returns (SurveyEvidence) {
     option (google.api.http) = {
       post: "/v1/surveys/{survey_id}/evidences",
       body: "*"
@@ -94,18 +102,43 @@ message SurveyEvidence {
   google.protobuf.Timestamp captured_at = 6;
 }
 
-message CreateSurveyTemplateRequest {
-  string template_code = 1;
-  string template_name = 2;
-  string applicant_type = 3;
-  string product_id = 4;
-  bool active = 5;
+message ListSurveysByApplicationRequest {
+  string application_id = 1;
 }
 
-message ListSurveyTemplatesRequest {}
+message ListSurveysResponse {
+  repeated ApplicationSurvey surveys = 1;
+}
 
-message ListSurveyTemplatesReply {
-  repeated SurveyTemplate templates = 1;
+message StartSurveyRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message SubmitSurveyRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message VerifySurveyRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message SubmitSurveyAnswerRequest {
+  string survey_id = 1;
+  string question_id = 2;
+  string answer_text = 3;
+  string answer_number = 4;
+  bool answer_boolean = 5;
+  string answer_date = 6;
+}
+
+message UploadSurveyEvidenceRequest {
+  string survey_id = 1;
+  string evidence_type = 2;
+  string file_url = 3;
+  string description = 4;
 }
 
 message AssignSurveyRequest {
@@ -120,24 +153,16 @@ message GetSurveyRequest {
   string id = 1;
 }
 
-message UpdateSurveyStatusRequest {
-  string id = 1;
-  string status = 2;
-  string user_id = 3; // for submitted_by
+message CreateSurveyTemplateRequest {
+  string template_code = 1;
+  string template_name = 2;
+  string applicant_type = 3;
+  string product_id = 4;
+  bool active = 5;
 }
 
-message UpsertSurveyAnswerRequest {
-  string survey_id = 1;
-  string question_id = 2;
-  string answer_text = 3;
-  string answer_number = 4;
-  bool answer_boolean = 5;
-  string answer_date = 6;
-}
+message ListSurveyTemplatesRequest {}
 
-message CreateSurveyEvidenceRequest {
-  string survey_id = 1;
-  string evidence_type = 2;
-  string file_url = 3;
-  string description = 4;
+message ListSurveyTemplatesResponse {
+  repeated SurveyTemplate templates = 1;
 }

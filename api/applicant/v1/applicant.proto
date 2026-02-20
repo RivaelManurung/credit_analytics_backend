@@ -9,30 +9,32 @@ option go_package = "credit-analytics-backend/api/applicant/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.applicant.v1";
 
-service Applicant {
-  rpc CreateApplicant (CreateApplicantRequest) returns (CreateApplicantReply) {
+service ApplicantService {
+  rpc CreateApplicant (CreateApplicantRequest) returns (Applicant) {
     option (google.api.http) = {
       post: "/v1/applicants",
       body: "*"
     };
   }
-  rpc GetApplicant (GetApplicantRequest) returns (GetApplicantReply) {
+  rpc GetApplicant (GetApplicantRequest) returns (Applicant) {
     option (google.api.http) = {
       get: "/v1/applicants/{id}"
     };
   }
-  rpc UpdateApplicant (UpdateApplicantRequest) returns (UpdateApplicantReply) {
+  rpc UpdateApplicant (UpdateApplicantRequest) returns (Applicant) {
     option (google.api.http) = {
       put: "/v1/applicants/{id}",
       body: "*"
     };
   }
-  rpc ListApplicants (ListApplicantsRequest) returns (ListApplicantsReply) {
+
+  rpc GetApplicantAttributes (GetApplicantAttributesRequest) returns (ApplicantAttributes) {
     option (google.api.http) = {
-      get: "/v1/applicants"
+      get: "/v1/applicants/{applicant_id}/attributes"
     };
   }
-  rpc UpsertApplicantAttribute (UpsertApplicantAttributeRequest) returns (ApplicantAttribute) {
+
+  rpc UpsertApplicantAttributes (UpsertApplicantAttributesRequest) returns (ApplicantAttributes) {
     option (google.api.http) = {
       post: "/v1/applicants/{applicant_id}/attributes",
       body: "*"
@@ -47,7 +49,7 @@ message ApplicantAttribute {
   google.protobuf.Timestamp updated_at = 4;
 }
 
-message ApplicantInfo {
+message Applicant {
   string id = 1;
   string applicant_type = 2;
   string identity_number = 3;
@@ -60,6 +62,10 @@ message ApplicantInfo {
   google.protobuf.Timestamp updated_at = 10;
 }
 
+message ApplicantAttributes {
+  repeated ApplicantAttribute attributes = 1;
+}
+
 message CreateApplicantRequest {
   string applicant_type = 1;
   string identity_number = 2;
@@ -70,17 +76,12 @@ message CreateApplicantRequest {
   repeated ApplicantAttribute attributes = 7;
 }
 
-message CreateApplicantReply {
-  string id = 1;
-  string message = 2;
-}
-
 message GetApplicantRequest {
   string id = 1;
 }
 
-message GetApplicantReply {
-  ApplicantInfo applicant = 1;
+message GetApplicantAttributesRequest {
+  string applicant_id = 1;
 }
 
 message UpdateApplicantRequest {
@@ -94,24 +95,7 @@ message UpdateApplicantRequest {
   repeated ApplicantAttribute attributes = 8;
 }
 
-message UpdateApplicantReply {
-  string message = 1;
-}
-
-message ListApplicantsRequest {
-  int32 page = 1;
-  int32 page_size = 2;
-  string keyword = 3;
-}
-
-message ListApplicantsReply {
-  repeated ApplicantInfo applicants = 1;
-  int32 total = 2;
-}
-
-message UpsertApplicantAttributeRequest {
+message UpsertApplicantAttributesRequest {
   string applicant_id = 1;
-  string key = 2;
-  string value = 3;
-  string data_type = 4;
+  repeated ApplicantAttribute attributes = 2;
 }

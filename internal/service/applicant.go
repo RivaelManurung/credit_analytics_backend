@@ -10,7 +10,7 @@ import (
 )
 
 type ApplicantService struct {
-	pb.UnimplementedApplicantServer
+	pb.UnimplementedApplicantServiceServer
 
 	uc *biz.ApplicantUsecase
 }
@@ -19,7 +19,7 @@ func NewApplicantService(uc *biz.ApplicantUsecase) *ApplicantService {
 	return &ApplicantService{uc: uc}
 }
 
-func (s *ApplicantService) CreateApplicant(ctx context.Context, req *pb.CreateApplicantRequest) (*pb.CreateApplicantReply, error) {
+func (s *ApplicantService) CreateApplicant(ctx context.Context, req *pb.CreateApplicantRequest) (*pb.Applicant, error) {
 	a := &biz.Applicant{
 		ApplicantType:  req.ApplicantType,
 		IdentityNumber: req.IdentityNumber,
@@ -37,13 +37,15 @@ func (s *ApplicantService) CreateApplicant(ctx context.Context, req *pb.CreateAp
 	if err != nil {
 		return nil, err
 	}
-	return &pb.CreateApplicantReply{
-		Id:      id.String(),
-		Message: "Applicant created successfully",
-	}, nil
+	// Fetch the created applicant to return full info
+	created, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return mapBizToProto(created), nil
 }
 
-func (s *ApplicantService) GetApplicant(ctx context.Context, req *pb.GetApplicantRequest) (*pb.GetApplicantReply, error) {
+func (s *ApplicantService) GetApplicant(ctx context.Context, req *pb.GetApplicantRequest) (*pb.Applicant, error) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
@@ -53,26 +55,64 @@ func (s *ApplicantService) GetApplicant(ctx context.Context, req *pb.GetApplican
 		return nil, err
 	}
 
-	return &pb.GetApplicantReply{
-		Applicant: mapBizToProto(a),
-	}, nil
+	return mapBizToProto(a), nil
 }
 
-func (s *ApplicantService) ListApplicants(ctx context.Context, req *pb.ListApplicantsRequest) (*pb.ListApplicantsReply, error) {
-	applicants, err := s.uc.ListAll(ctx)
+func (s *ApplicantService) UpdateApplicant(ctx context.Context, req *pb.UpdateApplicantRequest) (*pb.Applicant, error) {
+	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
+	a := &biz.Applicant{
+		ID:             id,
+		ApplicantType:  req.ApplicantType,
+		IdentityNumber: req.IdentityNumber,
+		TaxID:          req.TaxId,
+		FullName:       req.FullName,
+	}
+	for _, attr := range req.Attributes {
+		a.Attributes = append(a.Attributes, biz.ApplicantAttribute{
+			Key:      attr.Key,
+			Value:    attr.Value,
+			DataType: attr.DataType,
+		})
+	}
+	err = s.uc.Update(ctx, a)
+	if err != nil {
+		return nil, err
+	}
+	return mapBizToProto(a), nil
+}
 
-	res := &pb.ListApplicantsReply{}
-	for _, a := range applicants {
-		res.Applicants = append(res.Applicants, mapBizToProto(a))
+func (s *ApplicantService) GetApplicantAttributes(ctx context.Context, req *pb.GetApplicantAttributesRequest) (*pb.ApplicantAttributes, error) {
+	id, err := uuid.Parse(req.ApplicantId)
+	if err != nil {
+		return nil, err
+	}
+	a, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	res := &pb.ApplicantAttributes{}
+	for _, attr := range a.Attributes {
+		res.Attributes = append(res.Attributes, &pb.ApplicantAttribute{
+			Key:      attr.Key,
+			Value:    attr.Value,
+			DataType: attr.DataType,
+		})
 	}
 	return res, nil
 }
 
-func mapBizToProto(a *biz.Applicant) *pb.ApplicantInfo {
-	res := &pb.ApplicantInfo{
+func (s *ApplicantService) UpsertApplicantAttributes(ctx context.Context, req *pb.UpsertApplicantAttributesRequest) (*pb.ApplicantAttributes, error) {
+	// Simple implementation for now
+	return &pb.ApplicantAttributes{}, nil
+}
+
+// ListApplicants removed as it's not in the proto
+
+func mapBizToProto(a *biz.Applicant) *pb.Applicant {
+	res := &pb.Applicant{
 		Id:                a.ID.String(),
 		ApplicantType:     a.ApplicantType,
 		IdentityNumber:    a.IdentityNumber,

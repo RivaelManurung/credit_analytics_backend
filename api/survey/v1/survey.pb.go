@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: api/survey/v1/survey.proto
+// source: survey/v1/survey.proto
 
 package v1
 
@@ -37,7 +37,7 @@ type SurveyTemplate struct {
 
 func (x *SurveyTemplate) Reset() {
 	*x = SurveyTemplate{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[0]
+	mi := &file_survey_v1_survey_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -49,7 +49,7 @@ func (x *SurveyTemplate) String() string {
 func (*SurveyTemplate) ProtoMessage() {}
 
 func (x *SurveyTemplate) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[0]
+	mi := &file_survey_v1_survey_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -62,7 +62,7 @@ func (x *SurveyTemplate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SurveyTemplate.ProtoReflect.Descriptor instead.
 func (*SurveyTemplate) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{0}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *SurveyTemplate) GetId() string {
@@ -125,7 +125,7 @@ type ApplicationSurvey struct {
 
 func (x *ApplicationSurvey) Reset() {
 	*x = ApplicationSurvey{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[1]
+	mi := &file_survey_v1_survey_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -137,7 +137,7 @@ func (x *ApplicationSurvey) String() string {
 func (*ApplicationSurvey) ProtoMessage() {}
 
 func (x *ApplicationSurvey) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[1]
+	mi := &file_survey_v1_survey_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -150,7 +150,7 @@ func (x *ApplicationSurvey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApplicationSurvey.ProtoReflect.Descriptor instead.
 func (*ApplicationSurvey) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{1}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ApplicationSurvey) GetId() string {
@@ -239,7 +239,7 @@ type SurveyAnswer struct {
 
 func (x *SurveyAnswer) Reset() {
 	*x = SurveyAnswer{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[2]
+	mi := &file_survey_v1_survey_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -251,7 +251,7 @@ func (x *SurveyAnswer) String() string {
 func (*SurveyAnswer) ProtoMessage() {}
 
 func (x *SurveyAnswer) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[2]
+	mi := &file_survey_v1_survey_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -264,7 +264,7 @@ func (x *SurveyAnswer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SurveyAnswer.ProtoReflect.Descriptor instead.
 func (*SurveyAnswer) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{2}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SurveyAnswer) GetId() string {
@@ -337,7 +337,7 @@ type SurveyEvidence struct {
 
 func (x *SurveyEvidence) Reset() {
 	*x = SurveyEvidence{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[3]
+	mi := &file_survey_v1_survey_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -349,7 +349,7 @@ func (x *SurveyEvidence) String() string {
 func (*SurveyEvidence) ProtoMessage() {}
 
 func (x *SurveyEvidence) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[3]
+	mi := &file_survey_v1_survey_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -362,7 +362,7 @@ func (x *SurveyEvidence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SurveyEvidence.ProtoReflect.Descriptor instead.
 func (*SurveyEvidence) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{3}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SurveyEvidence) GetId() string {
@@ -407,32 +407,28 @@ func (x *SurveyEvidence) GetCapturedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type CreateSurveyTemplateRequest struct {
+type ListSurveysByApplicationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TemplateCode  string                 `protobuf:"bytes,1,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
-	TemplateName  string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
-	ApplicantType string                 `protobuf:"bytes,3,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
-	ProductId     string                 `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSurveyTemplateRequest) Reset() {
-	*x = CreateSurveyTemplateRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[4]
+func (x *ListSurveysByApplicationRequest) Reset() {
+	*x = ListSurveysByApplicationRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSurveyTemplateRequest) String() string {
+func (x *ListSurveysByApplicationRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSurveyTemplateRequest) ProtoMessage() {}
+func (*ListSurveysByApplicationRequest) ProtoMessage() {}
 
-func (x *CreateSurveyTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[4]
+func (x *ListSurveysByApplicationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -443,67 +439,327 @@ func (x *CreateSurveyTemplateRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSurveyTemplateRequest.ProtoReflect.Descriptor instead.
-func (*CreateSurveyTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{4}
+// Deprecated: Use ListSurveysByApplicationRequest.ProtoReflect.Descriptor instead.
+func (*ListSurveysByApplicationRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *CreateSurveyTemplateRequest) GetTemplateCode() string {
+func (x *ListSurveysByApplicationRequest) GetApplicationId() string {
 	if x != nil {
-		return x.TemplateCode
+		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *CreateSurveyTemplateRequest) GetTemplateName() string {
+type ListSurveysResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Surveys       []*ApplicationSurvey   `protobuf:"bytes,1,rep,name=surveys,proto3" json:"surveys,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSurveysResponse) Reset() {
+	*x = ListSurveysResponse{}
+	mi := &file_survey_v1_survey_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSurveysResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSurveysResponse) ProtoMessage() {}
+
+func (x *ListSurveysResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[5]
 	if x != nil {
-		return x.TemplateName
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSurveysResponse.ProtoReflect.Descriptor instead.
+func (*ListSurveysResponse) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListSurveysResponse) GetSurveys() []*ApplicationSurvey {
+	if x != nil {
+		return x.Surveys
+	}
+	return nil
+}
+
+type StartSurveyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StartSurveyRequest) Reset() {
+	*x = StartSurveyRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartSurveyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartSurveyRequest) ProtoMessage() {}
+
+func (x *StartSurveyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartSurveyRequest.ProtoReflect.Descriptor instead.
+func (*StartSurveyRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *StartSurveyRequest) GetId() string {
+	if x != nil {
+		return x.Id
 	}
 	return ""
 }
 
-func (x *CreateSurveyTemplateRequest) GetApplicantType() string {
+func (x *StartSurveyRequest) GetUserId() string {
 	if x != nil {
-		return x.ApplicantType
+		return x.UserId
 	}
 	return ""
 }
 
-func (x *CreateSurveyTemplateRequest) GetProductId() string {
+type SubmitSurveyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitSurveyRequest) Reset() {
+	*x = SubmitSurveyRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitSurveyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitSurveyRequest) ProtoMessage() {}
+
+func (x *SubmitSurveyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[7]
 	if x != nil {
-		return x.ProductId
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitSurveyRequest.ProtoReflect.Descriptor instead.
+func (*SubmitSurveyRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SubmitSurveyRequest) GetId() string {
+	if x != nil {
+		return x.Id
 	}
 	return ""
 }
 
-func (x *CreateSurveyTemplateRequest) GetActive() bool {
+func (x *SubmitSurveyRequest) GetUserId() string {
 	if x != nil {
-		return x.Active
+		return x.UserId
+	}
+	return ""
+}
+
+type VerifySurveyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VerifySurveyRequest) Reset() {
+	*x = VerifySurveyRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VerifySurveyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifySurveyRequest) ProtoMessage() {}
+
+func (x *VerifySurveyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifySurveyRequest.ProtoReflect.Descriptor instead.
+func (*VerifySurveyRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *VerifySurveyRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *VerifySurveyRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type SubmitSurveyAnswerRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SurveyId      string                 `protobuf:"bytes,1,opt,name=survey_id,json=surveyId,proto3" json:"survey_id,omitempty"`
+	QuestionId    string                 `protobuf:"bytes,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
+	AnswerText    string                 `protobuf:"bytes,3,opt,name=answer_text,json=answerText,proto3" json:"answer_text,omitempty"`
+	AnswerNumber  string                 `protobuf:"bytes,4,opt,name=answer_number,json=answerNumber,proto3" json:"answer_number,omitempty"`
+	AnswerBoolean bool                   `protobuf:"varint,5,opt,name=answer_boolean,json=answerBoolean,proto3" json:"answer_boolean,omitempty"`
+	AnswerDate    string                 `protobuf:"bytes,6,opt,name=answer_date,json=answerDate,proto3" json:"answer_date,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitSurveyAnswerRequest) Reset() {
+	*x = SubmitSurveyAnswerRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitSurveyAnswerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitSurveyAnswerRequest) ProtoMessage() {}
+
+func (x *SubmitSurveyAnswerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitSurveyAnswerRequest.ProtoReflect.Descriptor instead.
+func (*SubmitSurveyAnswerRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SubmitSurveyAnswerRequest) GetSurveyId() string {
+	if x != nil {
+		return x.SurveyId
+	}
+	return ""
+}
+
+func (x *SubmitSurveyAnswerRequest) GetQuestionId() string {
+	if x != nil {
+		return x.QuestionId
+	}
+	return ""
+}
+
+func (x *SubmitSurveyAnswerRequest) GetAnswerText() string {
+	if x != nil {
+		return x.AnswerText
+	}
+	return ""
+}
+
+func (x *SubmitSurveyAnswerRequest) GetAnswerNumber() string {
+	if x != nil {
+		return x.AnswerNumber
+	}
+	return ""
+}
+
+func (x *SubmitSurveyAnswerRequest) GetAnswerBoolean() bool {
+	if x != nil {
+		return x.AnswerBoolean
 	}
 	return false
 }
 
-type ListSurveyTemplatesRequest struct {
+func (x *SubmitSurveyAnswerRequest) GetAnswerDate() string {
+	if x != nil {
+		return x.AnswerDate
+	}
+	return ""
+}
+
+type UploadSurveyEvidenceRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SurveyId      string                 `protobuf:"bytes,1,opt,name=survey_id,json=surveyId,proto3" json:"survey_id,omitempty"`
+	EvidenceType  string                 `protobuf:"bytes,2,opt,name=evidence_type,json=evidenceType,proto3" json:"evidence_type,omitempty"`
+	FileUrl       string                 `protobuf:"bytes,3,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListSurveyTemplatesRequest) Reset() {
-	*x = ListSurveyTemplatesRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[5]
+func (x *UploadSurveyEvidenceRequest) Reset() {
+	*x = UploadSurveyEvidenceRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListSurveyTemplatesRequest) String() string {
+func (x *UploadSurveyEvidenceRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListSurveyTemplatesRequest) ProtoMessage() {}
+func (*UploadSurveyEvidenceRequest) ProtoMessage() {}
 
-func (x *ListSurveyTemplatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[5]
+func (x *UploadSurveyEvidenceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -514,53 +770,37 @@ func (x *ListSurveyTemplatesRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListSurveyTemplatesRequest.ProtoReflect.Descriptor instead.
-func (*ListSurveyTemplatesRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{5}
+// Deprecated: Use UploadSurveyEvidenceRequest.ProtoReflect.Descriptor instead.
+func (*UploadSurveyEvidenceRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{10}
 }
 
-type ListSurveyTemplatesReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Templates     []*SurveyTemplate      `protobuf:"bytes,1,rep,name=templates,proto3" json:"templates,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListSurveyTemplatesReply) Reset() {
-	*x = ListSurveyTemplatesReply{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListSurveyTemplatesReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListSurveyTemplatesReply) ProtoMessage() {}
-
-func (x *ListSurveyTemplatesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[6]
+func (x *UploadSurveyEvidenceRequest) GetSurveyId() string {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
+		return x.SurveyId
 	}
-	return mi.MessageOf(x)
+	return ""
 }
 
-// Deprecated: Use ListSurveyTemplatesReply.ProtoReflect.Descriptor instead.
-func (*ListSurveyTemplatesReply) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *ListSurveyTemplatesReply) GetTemplates() []*SurveyTemplate {
+func (x *UploadSurveyEvidenceRequest) GetEvidenceType() string {
 	if x != nil {
-		return x.Templates
+		return x.EvidenceType
 	}
-	return nil
+	return ""
+}
+
+func (x *UploadSurveyEvidenceRequest) GetFileUrl() string {
+	if x != nil {
+		return x.FileUrl
+	}
+	return ""
+}
+
+func (x *UploadSurveyEvidenceRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
 }
 
 type AssignSurveyRequest struct {
@@ -576,7 +816,7 @@ type AssignSurveyRequest struct {
 
 func (x *AssignSurveyRequest) Reset() {
 	*x = AssignSurveyRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[7]
+	mi := &file_survey_v1_survey_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -588,7 +828,7 @@ func (x *AssignSurveyRequest) String() string {
 func (*AssignSurveyRequest) ProtoMessage() {}
 
 func (x *AssignSurveyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[7]
+	mi := &file_survey_v1_survey_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -601,7 +841,7 @@ func (x *AssignSurveyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssignSurveyRequest.ProtoReflect.Descriptor instead.
 func (*AssignSurveyRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{7}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AssignSurveyRequest) GetApplicationId() string {
@@ -648,7 +888,7 @@ type GetSurveyRequest struct {
 
 func (x *GetSurveyRequest) Reset() {
 	*x = GetSurveyRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[8]
+	mi := &file_survey_v1_survey_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -660,7 +900,7 @@ func (x *GetSurveyRequest) String() string {
 func (*GetSurveyRequest) ProtoMessage() {}
 
 func (x *GetSurveyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[8]
+	mi := &file_survey_v1_survey_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -673,7 +913,7 @@ func (x *GetSurveyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSurveyRequest.ProtoReflect.Descriptor instead.
 func (*GetSurveyRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{8}
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetSurveyRequest) GetId() string {
@@ -683,30 +923,32 @@ func (x *GetSurveyRequest) GetId() string {
 	return ""
 }
 
-type UpdateSurveyStatusRequest struct {
+type CreateSurveyTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
-	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // for submitted_by
+	TemplateCode  string                 `protobuf:"bytes,1,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
+	TemplateName  string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
+	ApplicantType string                 `protobuf:"bytes,3,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	ProductId     string                 `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateSurveyStatusRequest) Reset() {
-	*x = UpdateSurveyStatusRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[9]
+func (x *CreateSurveyTemplateRequest) Reset() {
+	*x = CreateSurveyTemplateRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateSurveyStatusRequest) String() string {
+func (x *CreateSurveyTemplateRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateSurveyStatusRequest) ProtoMessage() {}
+func (*CreateSurveyTemplateRequest) ProtoMessage() {}
 
-func (x *UpdateSurveyStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[9]
+func (x *CreateSurveyTemplateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -717,141 +959,67 @@ func (x *UpdateSurveyStatusRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateSurveyStatusRequest.ProtoReflect.Descriptor instead.
-func (*UpdateSurveyStatusRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{9}
+// Deprecated: Use CreateSurveyTemplateRequest.ProtoReflect.Descriptor instead.
+func (*CreateSurveyTemplateRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *UpdateSurveyStatusRequest) GetId() string {
+func (x *CreateSurveyTemplateRequest) GetTemplateCode() string {
 	if x != nil {
-		return x.Id
+		return x.TemplateCode
 	}
 	return ""
 }
 
-func (x *UpdateSurveyStatusRequest) GetStatus() string {
+func (x *CreateSurveyTemplateRequest) GetTemplateName() string {
 	if x != nil {
-		return x.Status
+		return x.TemplateName
 	}
 	return ""
 }
 
-func (x *UpdateSurveyStatusRequest) GetUserId() string {
+func (x *CreateSurveyTemplateRequest) GetApplicantType() string {
 	if x != nil {
-		return x.UserId
+		return x.ApplicantType
 	}
 	return ""
 }
 
-type UpsertSurveyAnswerRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SurveyId      string                 `protobuf:"bytes,1,opt,name=survey_id,json=surveyId,proto3" json:"survey_id,omitempty"`
-	QuestionId    string                 `protobuf:"bytes,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
-	AnswerText    string                 `protobuf:"bytes,3,opt,name=answer_text,json=answerText,proto3" json:"answer_text,omitempty"`
-	AnswerNumber  string                 `protobuf:"bytes,4,opt,name=answer_number,json=answerNumber,proto3" json:"answer_number,omitempty"`
-	AnswerBoolean bool                   `protobuf:"varint,5,opt,name=answer_boolean,json=answerBoolean,proto3" json:"answer_boolean,omitempty"`
-	AnswerDate    string                 `protobuf:"bytes,6,opt,name=answer_date,json=answerDate,proto3" json:"answer_date,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpsertSurveyAnswerRequest) Reset() {
-	*x = UpsertSurveyAnswerRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpsertSurveyAnswerRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpsertSurveyAnswerRequest) ProtoMessage() {}
-
-func (x *UpsertSurveyAnswerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[10]
+func (x *CreateSurveyTemplateRequest) GetProductId() string {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpsertSurveyAnswerRequest.ProtoReflect.Descriptor instead.
-func (*UpsertSurveyAnswerRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *UpsertSurveyAnswerRequest) GetSurveyId() string {
-	if x != nil {
-		return x.SurveyId
+		return x.ProductId
 	}
 	return ""
 }
 
-func (x *UpsertSurveyAnswerRequest) GetQuestionId() string {
+func (x *CreateSurveyTemplateRequest) GetActive() bool {
 	if x != nil {
-		return x.QuestionId
-	}
-	return ""
-}
-
-func (x *UpsertSurveyAnswerRequest) GetAnswerText() string {
-	if x != nil {
-		return x.AnswerText
-	}
-	return ""
-}
-
-func (x *UpsertSurveyAnswerRequest) GetAnswerNumber() string {
-	if x != nil {
-		return x.AnswerNumber
-	}
-	return ""
-}
-
-func (x *UpsertSurveyAnswerRequest) GetAnswerBoolean() bool {
-	if x != nil {
-		return x.AnswerBoolean
+		return x.Active
 	}
 	return false
 }
 
-func (x *UpsertSurveyAnswerRequest) GetAnswerDate() string {
-	if x != nil {
-		return x.AnswerDate
-	}
-	return ""
-}
-
-type CreateSurveyEvidenceRequest struct {
+type ListSurveyTemplatesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SurveyId      string                 `protobuf:"bytes,1,opt,name=survey_id,json=surveyId,proto3" json:"survey_id,omitempty"`
-	EvidenceType  string                 `protobuf:"bytes,2,opt,name=evidence_type,json=evidenceType,proto3" json:"evidence_type,omitempty"`
-	FileUrl       string                 `protobuf:"bytes,3,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`
-	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateSurveyEvidenceRequest) Reset() {
-	*x = CreateSurveyEvidenceRequest{}
-	mi := &file_api_survey_v1_survey_proto_msgTypes[11]
+func (x *ListSurveyTemplatesRequest) Reset() {
+	*x = ListSurveyTemplatesRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateSurveyEvidenceRequest) String() string {
+func (x *ListSurveyTemplatesRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateSurveyEvidenceRequest) ProtoMessage() {}
+func (*ListSurveyTemplatesRequest) ProtoMessage() {}
 
-func (x *CreateSurveyEvidenceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_survey_v1_survey_proto_msgTypes[11]
+func (x *ListSurveyTemplatesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -862,44 +1030,60 @@ func (x *CreateSurveyEvidenceRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateSurveyEvidenceRequest.ProtoReflect.Descriptor instead.
-func (*CreateSurveyEvidenceRequest) Descriptor() ([]byte, []int) {
-	return file_api_survey_v1_survey_proto_rawDescGZIP(), []int{11}
+// Deprecated: Use ListSurveyTemplatesRequest.ProtoReflect.Descriptor instead.
+func (*ListSurveyTemplatesRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *CreateSurveyEvidenceRequest) GetSurveyId() string {
+type ListSurveyTemplatesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Templates     []*SurveyTemplate      `protobuf:"bytes,1,rep,name=templates,proto3" json:"templates,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSurveyTemplatesResponse) Reset() {
+	*x = ListSurveyTemplatesResponse{}
+	mi := &file_survey_v1_survey_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSurveyTemplatesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSurveyTemplatesResponse) ProtoMessage() {}
+
+func (x *ListSurveyTemplatesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[15]
 	if x != nil {
-		return x.SurveyId
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
 	}
-	return ""
+	return mi.MessageOf(x)
 }
 
-func (x *CreateSurveyEvidenceRequest) GetEvidenceType() string {
+// Deprecated: Use ListSurveyTemplatesResponse.ProtoReflect.Descriptor instead.
+func (*ListSurveyTemplatesResponse) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListSurveyTemplatesResponse) GetTemplates() []*SurveyTemplate {
 	if x != nil {
-		return x.EvidenceType
+		return x.Templates
 	}
-	return ""
+	return nil
 }
 
-func (x *CreateSurveyEvidenceRequest) GetFileUrl() string {
-	if x != nil {
-		return x.FileUrl
-	}
-	return ""
-}
+var File_survey_v1_survey_proto protoreflect.FileDescriptor
 
-func (x *CreateSurveyEvidenceRequest) GetDescription() string {
-	if x != nil {
-		return x.Description
-	}
-	return ""
-}
-
-var File_api_survey_v1_survey_proto protoreflect.FileDescriptor
-
-const file_api_survey_v1_survey_proto_rawDesc = "" +
+const file_survey_v1_survey_proto_rawDesc = "" +
 	"\n" +
-	"\x1aapi/survey/v1/survey.proto\x12\rapi.survey.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\x01\n" +
+	"\x16survey/v1/survey.proto\x12\rapi.survey.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\x01\n" +
 	"\x0eSurveyTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rtemplate_code\x18\x02 \x01(\tR\ftemplateCode\x12#\n" +
@@ -944,17 +1128,35 @@ const file_api_survey_v1_survey_proto_rawDesc = "" +
 	"\bfile_url\x18\x04 \x01(\tR\afileUrl\x12 \n" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\x12;\n" +
 	"\vcaptured_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"capturedAt\"\xc5\x01\n" +
-	"\x1bCreateSurveyTemplateRequest\x12#\n" +
-	"\rtemplate_code\x18\x01 \x01(\tR\ftemplateCode\x12#\n" +
-	"\rtemplate_name\x18\x02 \x01(\tR\ftemplateName\x12%\n" +
-	"\x0eapplicant_type\x18\x03 \x01(\tR\rapplicantType\x12\x1d\n" +
-	"\n" +
-	"product_id\x18\x04 \x01(\tR\tproductId\x12\x16\n" +
-	"\x06active\x18\x05 \x01(\bR\x06active\"\x1c\n" +
-	"\x1aListSurveyTemplatesRequest\"W\n" +
-	"\x18ListSurveyTemplatesReply\x12;\n" +
-	"\ttemplates\x18\x01 \x03(\v2\x1d.api.survey.v1.SurveyTemplateR\ttemplates\"\xc6\x01\n" +
+	"capturedAt\"H\n" +
+	"\x1fListSurveysByApplicationRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"Q\n" +
+	"\x13ListSurveysResponse\x12:\n" +
+	"\asurveys\x18\x01 \x03(\v2 .api.survey.v1.ApplicationSurveyR\asurveys\"=\n" +
+	"\x12StartSurveyRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\">\n" +
+	"\x13SubmitSurveyRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\">\n" +
+	"\x13VerifySurveyRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"\xe7\x01\n" +
+	"\x19SubmitSurveyAnswerRequest\x12\x1b\n" +
+	"\tsurvey_id\x18\x01 \x01(\tR\bsurveyId\x12\x1f\n" +
+	"\vquestion_id\x18\x02 \x01(\tR\n" +
+	"questionId\x12\x1f\n" +
+	"\vanswer_text\x18\x03 \x01(\tR\n" +
+	"answerText\x12#\n" +
+	"\ranswer_number\x18\x04 \x01(\tR\fanswerNumber\x12%\n" +
+	"\x0eanswer_boolean\x18\x05 \x01(\bR\ranswerBoolean\x12\x1f\n" +
+	"\vanswer_date\x18\x06 \x01(\tR\n" +
+	"answerDate\"\x9c\x01\n" +
+	"\x1bUploadSurveyEvidenceRequest\x12\x1b\n" +
+	"\tsurvey_id\x18\x01 \x01(\tR\bsurveyId\x12#\n" +
+	"\revidence_type\x18\x02 \x01(\tR\fevidenceType\x12\x19\n" +
+	"\bfile_url\x18\x03 \x01(\tR\afileUrl\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xc6\x01\n" +
 	"\x13AssignSurveyRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12\x1f\n" +
 	"\vtemplate_id\x18\x02 \x01(\tR\n" +
@@ -965,111 +1167,110 @@ const file_api_survey_v1_survey_proto_rawDesc = "" +
 	"assignedTo\x12%\n" +
 	"\x0esurvey_purpose\x18\x05 \x01(\tR\rsurveyPurpose\"\"\n" +
 	"\x10GetSurveyRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\\\n" +
-	"\x19UpdateSurveyStatusRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\tR\x06userId\"\xe7\x01\n" +
-	"\x19UpsertSurveyAnswerRequest\x12\x1b\n" +
-	"\tsurvey_id\x18\x01 \x01(\tR\bsurveyId\x12\x1f\n" +
-	"\vquestion_id\x18\x02 \x01(\tR\n" +
-	"questionId\x12\x1f\n" +
-	"\vanswer_text\x18\x03 \x01(\tR\n" +
-	"answerText\x12#\n" +
-	"\ranswer_number\x18\x04 \x01(\tR\fanswerNumber\x12%\n" +
-	"\x0eanswer_boolean\x18\x05 \x01(\bR\ranswerBoolean\x12\x1f\n" +
-	"\vanswer_date\x18\x06 \x01(\tR\n" +
-	"answerDate\"\x9c\x01\n" +
-	"\x1bCreateSurveyEvidenceRequest\x12\x1b\n" +
-	"\tsurvey_id\x18\x01 \x01(\tR\bsurveyId\x12#\n" +
-	"\revidence_type\x18\x02 \x01(\tR\fevidenceType\x12\x19\n" +
-	"\bfile_url\x18\x03 \x01(\tR\afileUrl\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription2\xb3\a\n" +
-	"\x06Survey\x12\x83\x01\n" +
-	"\x14CreateSurveyTemplate\x12*.api.survey.v1.CreateSurveyTemplateRequest\x1a\x1d.api.survey.v1.SurveyTemplate\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/surveys/templates\x12\x88\x01\n" +
-	"\x13ListSurveyTemplates\x12).api.survey.v1.ListSurveyTemplatesRequest\x1a'.api.survey.v1.ListSurveyTemplatesReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/surveys/templates\x12\x8a\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xc5\x01\n" +
+	"\x1bCreateSurveyTemplateRequest\x12#\n" +
+	"\rtemplate_code\x18\x01 \x01(\tR\ftemplateCode\x12#\n" +
+	"\rtemplate_name\x18\x02 \x01(\tR\ftemplateName\x12%\n" +
+	"\x0eapplicant_type\x18\x03 \x01(\tR\rapplicantType\x12\x1d\n" +
+	"\n" +
+	"product_id\x18\x04 \x01(\tR\tproductId\x12\x16\n" +
+	"\x06active\x18\x05 \x01(\bR\x06active\"\x1c\n" +
+	"\x1aListSurveyTemplatesRequest\"Z\n" +
+	"\x1bListSurveyTemplatesResponse\x12;\n" +
+	"\ttemplates\x18\x01 \x03(\v2\x1d.api.survey.v1.SurveyTemplateR\ttemplates2\xb1\b\n" +
+	"\rSurveyService\x12\x8a\x01\n" +
 	"\fAssignSurvey\x12\".api.survey.v1.AssignSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"4\x82\xd3\xe4\x93\x02.:\x01*\")/v1/applications/{application_id}/surveys\x12h\n" +
-	"\tGetSurvey\x12\x1f.api.survey.v1.GetSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/surveys/{id}\x12\x84\x01\n" +
-	"\x12UpdateSurveyStatus\x12(.api.survey.v1.UpdateSurveyStatusRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*2\x17/v1/surveys/{id}/status\x12\x87\x01\n" +
-	"\x12UpsertSurveyAnswer\x12(.api.survey.v1.UpsertSurveyAnswerRequest\x1a\x1b.api.survey.v1.SurveyAnswer\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/surveys/{survey_id}/answers\x12\x8f\x01\n" +
-	"\x14CreateSurveyEvidence\x12*.api.survey.v1.CreateSurveyEvidenceRequest\x1a\x1d.api.survey.v1.SurveyEvidence\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/surveys/{survey_id}/evidencesB<\n" +
+	"\tGetSurvey\x12\x1f.api.survey.v1.GetSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/surveys/{id}\x12\xa1\x01\n" +
+	"\x18ListSurveysByApplication\x12..api.survey.v1.ListSurveysByApplicationRequest\x1a\".api.survey.v1.ListSurveysResponse\"1\x82\xd3\xe4\x93\x02+\x12)/v1/applications/{application_id}/surveys\x12u\n" +
+	"\vStartSurvey\x12!.api.survey.v1.StartSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/surveys/{id}/start\x12x\n" +
+	"\fSubmitSurvey\x12\".api.survey.v1.SubmitSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/surveys/{id}/submit\x12x\n" +
+	"\fVerifySurvey\x12\".api.survey.v1.VerifySurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/surveys/{id}/verify\x12\x87\x01\n" +
+	"\x12SubmitSurveyAnswer\x12(.api.survey.v1.SubmitSurveyAnswerRequest\x1a\x1b.api.survey.v1.SurveyAnswer\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/surveys/{survey_id}/answers\x12\x8f\x01\n" +
+	"\x14UploadSurveyEvidence\x12*.api.survey.v1.UploadSurveyEvidenceRequest\x1a\x1d.api.survey.v1.SurveyEvidence\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/surveys/{survey_id}/evidencesB<\n" +
 	"\rapi.survey.v1P\x01Z)credit-analytics-backend/api/survey/v1;v1b\x06proto3"
 
 var (
-	file_api_survey_v1_survey_proto_rawDescOnce sync.Once
-	file_api_survey_v1_survey_proto_rawDescData []byte
+	file_survey_v1_survey_proto_rawDescOnce sync.Once
+	file_survey_v1_survey_proto_rawDescData []byte
 )
 
-func file_api_survey_v1_survey_proto_rawDescGZIP() []byte {
-	file_api_survey_v1_survey_proto_rawDescOnce.Do(func() {
-		file_api_survey_v1_survey_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_survey_v1_survey_proto_rawDesc), len(file_api_survey_v1_survey_proto_rawDesc)))
+func file_survey_v1_survey_proto_rawDescGZIP() []byte {
+	file_survey_v1_survey_proto_rawDescOnce.Do(func() {
+		file_survey_v1_survey_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_survey_v1_survey_proto_rawDesc), len(file_survey_v1_survey_proto_rawDesc)))
 	})
-	return file_api_survey_v1_survey_proto_rawDescData
+	return file_survey_v1_survey_proto_rawDescData
 }
 
-var file_api_survey_v1_survey_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_api_survey_v1_survey_proto_goTypes = []any{
-	(*SurveyTemplate)(nil),              // 0: api.survey.v1.SurveyTemplate
-	(*ApplicationSurvey)(nil),           // 1: api.survey.v1.ApplicationSurvey
-	(*SurveyAnswer)(nil),                // 2: api.survey.v1.SurveyAnswer
-	(*SurveyEvidence)(nil),              // 3: api.survey.v1.SurveyEvidence
-	(*CreateSurveyTemplateRequest)(nil), // 4: api.survey.v1.CreateSurveyTemplateRequest
-	(*ListSurveyTemplatesRequest)(nil),  // 5: api.survey.v1.ListSurveyTemplatesRequest
-	(*ListSurveyTemplatesReply)(nil),    // 6: api.survey.v1.ListSurveyTemplatesReply
-	(*AssignSurveyRequest)(nil),         // 7: api.survey.v1.AssignSurveyRequest
-	(*GetSurveyRequest)(nil),            // 8: api.survey.v1.GetSurveyRequest
-	(*UpdateSurveyStatusRequest)(nil),   // 9: api.survey.v1.UpdateSurveyStatusRequest
-	(*UpsertSurveyAnswerRequest)(nil),   // 10: api.survey.v1.UpsertSurveyAnswerRequest
-	(*CreateSurveyEvidenceRequest)(nil), // 11: api.survey.v1.CreateSurveyEvidenceRequest
-	(*timestamppb.Timestamp)(nil),       // 12: google.protobuf.Timestamp
+var file_survey_v1_survey_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_survey_v1_survey_proto_goTypes = []any{
+	(*SurveyTemplate)(nil),                  // 0: api.survey.v1.SurveyTemplate
+	(*ApplicationSurvey)(nil),               // 1: api.survey.v1.ApplicationSurvey
+	(*SurveyAnswer)(nil),                    // 2: api.survey.v1.SurveyAnswer
+	(*SurveyEvidence)(nil),                  // 3: api.survey.v1.SurveyEvidence
+	(*ListSurveysByApplicationRequest)(nil), // 4: api.survey.v1.ListSurveysByApplicationRequest
+	(*ListSurveysResponse)(nil),             // 5: api.survey.v1.ListSurveysResponse
+	(*StartSurveyRequest)(nil),              // 6: api.survey.v1.StartSurveyRequest
+	(*SubmitSurveyRequest)(nil),             // 7: api.survey.v1.SubmitSurveyRequest
+	(*VerifySurveyRequest)(nil),             // 8: api.survey.v1.VerifySurveyRequest
+	(*SubmitSurveyAnswerRequest)(nil),       // 9: api.survey.v1.SubmitSurveyAnswerRequest
+	(*UploadSurveyEvidenceRequest)(nil),     // 10: api.survey.v1.UploadSurveyEvidenceRequest
+	(*AssignSurveyRequest)(nil),             // 11: api.survey.v1.AssignSurveyRequest
+	(*GetSurveyRequest)(nil),                // 12: api.survey.v1.GetSurveyRequest
+	(*CreateSurveyTemplateRequest)(nil),     // 13: api.survey.v1.CreateSurveyTemplateRequest
+	(*ListSurveyTemplatesRequest)(nil),      // 14: api.survey.v1.ListSurveyTemplatesRequest
+	(*ListSurveyTemplatesResponse)(nil),     // 15: api.survey.v1.ListSurveyTemplatesResponse
+	(*timestamppb.Timestamp)(nil),           // 16: google.protobuf.Timestamp
 }
-var file_api_survey_v1_survey_proto_depIdxs = []int32{
-	12, // 0: api.survey.v1.ApplicationSurvey.started_at:type_name -> google.protobuf.Timestamp
-	12, // 1: api.survey.v1.ApplicationSurvey.submitted_at:type_name -> google.protobuf.Timestamp
-	12, // 2: api.survey.v1.SurveyAnswer.answered_at:type_name -> google.protobuf.Timestamp
-	12, // 3: api.survey.v1.SurveyEvidence.captured_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: api.survey.v1.ListSurveyTemplatesReply.templates:type_name -> api.survey.v1.SurveyTemplate
-	4,  // 5: api.survey.v1.Survey.CreateSurveyTemplate:input_type -> api.survey.v1.CreateSurveyTemplateRequest
-	5,  // 6: api.survey.v1.Survey.ListSurveyTemplates:input_type -> api.survey.v1.ListSurveyTemplatesRequest
-	7,  // 7: api.survey.v1.Survey.AssignSurvey:input_type -> api.survey.v1.AssignSurveyRequest
-	8,  // 8: api.survey.v1.Survey.GetSurvey:input_type -> api.survey.v1.GetSurveyRequest
-	9,  // 9: api.survey.v1.Survey.UpdateSurveyStatus:input_type -> api.survey.v1.UpdateSurveyStatusRequest
-	10, // 10: api.survey.v1.Survey.UpsertSurveyAnswer:input_type -> api.survey.v1.UpsertSurveyAnswerRequest
-	11, // 11: api.survey.v1.Survey.CreateSurveyEvidence:input_type -> api.survey.v1.CreateSurveyEvidenceRequest
-	0,  // 12: api.survey.v1.Survey.CreateSurveyTemplate:output_type -> api.survey.v1.SurveyTemplate
-	6,  // 13: api.survey.v1.Survey.ListSurveyTemplates:output_type -> api.survey.v1.ListSurveyTemplatesReply
-	1,  // 14: api.survey.v1.Survey.AssignSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	1,  // 15: api.survey.v1.Survey.GetSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	1,  // 16: api.survey.v1.Survey.UpdateSurveyStatus:output_type -> api.survey.v1.ApplicationSurvey
-	2,  // 17: api.survey.v1.Survey.UpsertSurveyAnswer:output_type -> api.survey.v1.SurveyAnswer
-	3,  // 18: api.survey.v1.Survey.CreateSurveyEvidence:output_type -> api.survey.v1.SurveyEvidence
-	12, // [12:19] is the sub-list for method output_type
-	5,  // [5:12] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+var file_survey_v1_survey_proto_depIdxs = []int32{
+	16, // 0: api.survey.v1.ApplicationSurvey.started_at:type_name -> google.protobuf.Timestamp
+	16, // 1: api.survey.v1.ApplicationSurvey.submitted_at:type_name -> google.protobuf.Timestamp
+	16, // 2: api.survey.v1.SurveyAnswer.answered_at:type_name -> google.protobuf.Timestamp
+	16, // 3: api.survey.v1.SurveyEvidence.captured_at:type_name -> google.protobuf.Timestamp
+	1,  // 4: api.survey.v1.ListSurveysResponse.surveys:type_name -> api.survey.v1.ApplicationSurvey
+	0,  // 5: api.survey.v1.ListSurveyTemplatesResponse.templates:type_name -> api.survey.v1.SurveyTemplate
+	11, // 6: api.survey.v1.SurveyService.AssignSurvey:input_type -> api.survey.v1.AssignSurveyRequest
+	12, // 7: api.survey.v1.SurveyService.GetSurvey:input_type -> api.survey.v1.GetSurveyRequest
+	4,  // 8: api.survey.v1.SurveyService.ListSurveysByApplication:input_type -> api.survey.v1.ListSurveysByApplicationRequest
+	6,  // 9: api.survey.v1.SurveyService.StartSurvey:input_type -> api.survey.v1.StartSurveyRequest
+	7,  // 10: api.survey.v1.SurveyService.SubmitSurvey:input_type -> api.survey.v1.SubmitSurveyRequest
+	8,  // 11: api.survey.v1.SurveyService.VerifySurvey:input_type -> api.survey.v1.VerifySurveyRequest
+	9,  // 12: api.survey.v1.SurveyService.SubmitSurveyAnswer:input_type -> api.survey.v1.SubmitSurveyAnswerRequest
+	10, // 13: api.survey.v1.SurveyService.UploadSurveyEvidence:input_type -> api.survey.v1.UploadSurveyEvidenceRequest
+	1,  // 14: api.survey.v1.SurveyService.AssignSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 15: api.survey.v1.SurveyService.GetSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	5,  // 16: api.survey.v1.SurveyService.ListSurveysByApplication:output_type -> api.survey.v1.ListSurveysResponse
+	1,  // 17: api.survey.v1.SurveyService.StartSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 18: api.survey.v1.SurveyService.SubmitSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 19: api.survey.v1.SurveyService.VerifySurvey:output_type -> api.survey.v1.ApplicationSurvey
+	2,  // 20: api.survey.v1.SurveyService.SubmitSurveyAnswer:output_type -> api.survey.v1.SurveyAnswer
+	3,  // 21: api.survey.v1.SurveyService.UploadSurveyEvidence:output_type -> api.survey.v1.SurveyEvidence
+	14, // [14:22] is the sub-list for method output_type
+	6,  // [6:14] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
-func init() { file_api_survey_v1_survey_proto_init() }
-func file_api_survey_v1_survey_proto_init() {
-	if File_api_survey_v1_survey_proto != nil {
+func init() { file_survey_v1_survey_proto_init() }
+func file_survey_v1_survey_proto_init() {
+	if File_survey_v1_survey_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_survey_v1_survey_proto_rawDesc), len(file_api_survey_v1_survey_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_survey_v1_survey_proto_rawDesc), len(file_survey_v1_survey_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_survey_v1_survey_proto_goTypes,
-		DependencyIndexes: file_api_survey_v1_survey_proto_depIdxs,
-		MessageInfos:      file_api_survey_v1_survey_proto_msgTypes,
+		GoTypes:           file_survey_v1_survey_proto_goTypes,
+		DependencyIndexes: file_survey_v1_survey_proto_depIdxs,
+		MessageInfos:      file_survey_v1_survey_proto_msgTypes,
 	}.Build()
-	File_api_survey_v1_survey_proto = out.File
-	file_api_survey_v1_survey_proto_goTypes = nil
-	file_api_survey_v1_survey_proto_depIdxs = nil
+	File_survey_v1_survey_proto = out.File
+	file_survey_v1_survey_proto_goTypes = nil
+	file_survey_v1_survey_proto_depIdxs = nil
 }

@@ -17,8 +17,10 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService, applicant *service.ApplicantService,
-	reference *service.ReferenceService, survey *service.SurveyService, financial *service.FinancialService, decision *service.DecisionService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService,
+	party *service.PartyService, applicant *service.ApplicantService, reference *service.ReferenceService,
+	survey *service.SurveyService, financial *service.FinancialService,
+	decision *service.DecisionService, committee *service.CommitteeService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -35,11 +37,13 @@ func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, application 
 	}
 	srv := grpc.NewServer(opts...)
 	v1.RegisterGreeterServer(srv, greeter)
-	applicationV1.RegisterApplicationServer(srv, application)
-	applicantV1.RegisterApplicantServer(srv, applicant)
-	referenceV1.RegisterReferenceServer(srv, reference)
-	surveyV1.RegisterSurveyServer(srv, survey)
-	financialV1.RegisterFinancialServer(srv, financial)
-	decisionV1.RegisterDecisionServer(srv, decision)
+	applicationV1.RegisterApplicationServiceServer(srv, application)
+	applicationV1.RegisterPartyServiceServer(srv, party)
+	applicantV1.RegisterApplicantServiceServer(srv, applicant)
+	referenceV1.RegisterReferenceServiceServer(srv, reference)
+	surveyV1.RegisterSurveyServiceServer(srv, survey)
+	financialV1.RegisterFinancialServiceServer(srv, financial)
+	decisionV1.RegisterDecisionServiceServer(srv, decision)
+	decisionV1.RegisterCommitteeServiceServer(srv, committee)
 	return srv
 }

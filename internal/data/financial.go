@@ -88,6 +88,29 @@ func (r *financialRepo) CreateAsset(ctx context.Context, a *biz.Asset) (*biz.Ass
 	if err != nil {
 		return nil, err
 	}
+	return mapAssetToBiz(&res), nil
+}
+
+func (r *financialRepo) UpdateAsset(ctx context.Context, a *biz.Asset) (*biz.Asset, error) {
+	val, _ := decimal.NewFromString(a.EstimatedValue)
+	res, err := r.data.db.UpdateAsset(ctx, db.UpdateAssetParams{
+		ID:              a.ID,
+		AssetTypeCode:   sql.NullString{String: a.AssetTypeCode, Valid: true},
+		AssetName:       sql.NullString{String: a.AssetName, Valid: true},
+		OwnershipStatus: sql.NullString{String: a.OwnershipStatus, Valid: a.OwnershipStatus != ""},
+		AcquisitionYear: sql.NullInt32{Int32: a.AcquisitionYear, Valid: a.AcquisitionYear != 0},
+		EstimatedValue:  sql.NullString{String: val.String(), Valid: true},
+		ValuationMethod: sql.NullString{String: a.ValuationMethod, Valid: a.ValuationMethod != ""},
+		LocationText:    sql.NullString{String: a.LocationText, Valid: a.LocationText != ""},
+		Encumbered:      sql.NullBool{Bool: a.Encumbered, Valid: true},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return mapAssetToBiz(&res), nil
+}
+
+func mapAssetToBiz(res *db.ApplicationAsset) *biz.Asset {
 	return &biz.Asset{
 		ID:              res.ID,
 		ApplicationID:   res.ApplicationID,
@@ -99,7 +122,7 @@ func (r *financialRepo) CreateAsset(ctx context.Context, a *biz.Asset) (*biz.Ass
 		ValuationMethod: res.ValuationMethod.String,
 		LocationText:    res.LocationText.String,
 		Encumbered:      res.Encumbered.Bool,
-	}, nil
+	}
 }
 
 func (r *financialRepo) ListAssets(ctx context.Context, appID uuid.UUID) ([]*biz.Asset, error) {
@@ -143,6 +166,31 @@ func (r *financialRepo) CreateLiability(ctx context.Context, l *biz.Liability) (
 	if err != nil {
 		return nil, err
 	}
+	return mapLiabilityToBiz(&res), nil
+}
+
+func (r *financialRepo) UpdateLiability(ctx context.Context, l *biz.Liability) (*biz.Liability, error) {
+	outstanding, _ := decimal.NewFromString(l.OutstandingAmount)
+	installment, _ := decimal.NewFromString(l.MonthlyInstallment)
+	rate, _ := decimal.NewFromString(l.InterestRate)
+
+	res, err := r.data.db.UpdateLiability(ctx, db.UpdateLiabilityParams{
+		ID:                 l.ID,
+		CreditorName:       sql.NullString{String: l.CreditorName, Valid: true},
+		LiabilityType:      sql.NullString{String: l.LiabilityType, Valid: l.LiabilityType != ""},
+		OutstandingAmount:  sql.NullString{String: outstanding.String(), Valid: true},
+		MonthlyInstallment: sql.NullString{String: installment.String(), Valid: true},
+		InterestRate:       sql.NullString{String: rate.String(), Valid: true},
+		MaturityDate:       sql.NullTime{Time: l.MaturityDate, Valid: !l.MaturityDate.IsZero()},
+		Source:             sql.NullString{String: l.Source, Valid: l.Source != ""},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return mapLiabilityToBiz(&res), nil
+}
+
+func mapLiabilityToBiz(res *db.ApplicationLiability) *biz.Liability {
 	return &biz.Liability{
 		ID:                 res.ID,
 		ApplicationID:      res.ApplicationID,
@@ -153,7 +201,7 @@ func (r *financialRepo) CreateLiability(ctx context.Context, l *biz.Liability) (
 		InterestRate:       res.InterestRate.String,
 		MaturityDate:       res.MaturityDate.Time,
 		Source:             res.Source.String,
-	}, nil
+	}
 }
 
 func (r *financialRepo) ListLiabilities(ctx context.Context, appID uuid.UUID) ([]*biz.Liability, error) {

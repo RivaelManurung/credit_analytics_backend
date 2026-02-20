@@ -13,7 +13,7 @@ import (
 )
 
 type SurveyService struct {
-	pb.UnimplementedSurveyServer
+	pb.UnimplementedSurveyServiceServer
 	uc  *biz.SurveyUsecase
 	log *log.Helper
 }
@@ -25,6 +25,20 @@ func NewSurveyService(uc *biz.SurveyUsecase, logger log.Logger) *SurveyService {
 	}
 }
 
+func (s *SurveyService) ListSurveysByApplication(ctx context.Context, req *pb.ListSurveysByApplicationRequest) (*pb.ListSurveysResponse, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	surveys, err := s.uc.ListSurveysByApplication(ctx, appID)
+	if err != nil {
+		return nil, err
+	}
+	var res []*pb.ApplicationSurvey
+	for _, sv := range surveys {
+		res = append(res, mapSurveyToPb(sv))
+	}
+	return &pb.ListSurveysResponse{Surveys: res}, nil
+}
+
+// Keep These but they are not in the gRPC service interface
 func (s *SurveyService) CreateSurveyTemplate(ctx context.Context, req *pb.CreateSurveyTemplateRequest) (*pb.SurveyTemplate, error) {
 	productID, _ := uuid.Parse(req.ProductId)
 	t, err := s.uc.CreateSurveyTemplate(ctx, &biz.SurveyTemplate{
@@ -47,7 +61,7 @@ func (s *SurveyService) CreateSurveyTemplate(ctx context.Context, req *pb.Create
 	}, nil
 }
 
-func (s *SurveyService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesReply, error) {
+func (s *SurveyService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesResponse, error) {
 	templates, err := s.uc.ListSurveyTemplates(ctx)
 	if err != nil {
 		return nil, err
@@ -63,7 +77,7 @@ func (s *SurveyService) ListSurveyTemplates(ctx context.Context, req *pb.ListSur
 			Active:        t.Active,
 		})
 	}
-	return &pb.ListSurveyTemplatesReply{Templates: res}, nil
+	return &pb.ListSurveyTemplatesResponse{Templates: res}, nil
 }
 
 func (s *SurveyService) AssignSurvey(ctx context.Context, req *pb.AssignSurveyRequest) (*pb.ApplicationSurvey, error) {
@@ -93,17 +107,37 @@ func (s *SurveyService) GetSurvey(ctx context.Context, req *pb.GetSurveyRequest)
 	return mapSurveyToPb(res), nil
 }
 
-func (s *SurveyService) UpdateSurveyStatus(ctx context.Context, req *pb.UpdateSurveyStatusRequest) (*pb.ApplicationSurvey, error) {
+func (s *SurveyService) StartSurvey(ctx context.Context, req *pb.StartSurveyRequest) (*pb.ApplicationSurvey, error) {
 	id, _ := uuid.Parse(req.Id)
 	userID, _ := uuid.Parse(req.UserId)
-	res, err := s.uc.UpdateSurveyStatus(ctx, id, req.Status, userID)
+	res, err := s.uc.UpdateSurveyStatus(ctx, id, "IN_PROGRESS", userID)
 	if err != nil {
 		return nil, err
 	}
 	return mapSurveyToPb(res), nil
 }
 
-func (s *SurveyService) UpsertSurveyAnswer(ctx context.Context, req *pb.UpsertSurveyAnswerRequest) (*pb.SurveyAnswer, error) {
+func (s *SurveyService) SubmitSurvey(ctx context.Context, req *pb.SubmitSurveyRequest) (*pb.ApplicationSurvey, error) {
+	id, _ := uuid.Parse(req.Id)
+	userID, _ := uuid.Parse(req.UserId)
+	res, err := s.uc.UpdateSurveyStatus(ctx, id, "SUBMITTED", userID)
+	if err != nil {
+		return nil, err
+	}
+	return mapSurveyToPb(res), nil
+}
+
+func (s *SurveyService) VerifySurvey(ctx context.Context, req *pb.VerifySurveyRequest) (*pb.ApplicationSurvey, error) {
+	id, _ := uuid.Parse(req.Id)
+	userID, _ := uuid.Parse(req.UserId)
+	res, err := s.uc.UpdateSurveyStatus(ctx, id, "VERIFIED", userID)
+	if err != nil {
+		return nil, err
+	}
+	return mapSurveyToPb(res), nil
+}
+
+func (s *SurveyService) SubmitSurveyAnswer(ctx context.Context, req *pb.SubmitSurveyAnswerRequest) (*pb.SurveyAnswer, error) {
 	surveyID, _ := uuid.Parse(req.SurveyId)
 	questionID, _ := uuid.Parse(req.QuestionId)
 	var date time.Time
@@ -133,7 +167,7 @@ func (s *SurveyService) UpsertSurveyAnswer(ctx context.Context, req *pb.UpsertSu
 	}, nil
 }
 
-func (s *SurveyService) CreateSurveyEvidence(ctx context.Context, req *pb.CreateSurveyEvidenceRequest) (*pb.SurveyEvidence, error) {
+func (s *SurveyService) UploadSurveyEvidence(ctx context.Context, req *pb.UploadSurveyEvidenceRequest) (*pb.SurveyEvidence, error) {
 	surveyID, _ := uuid.Parse(req.SurveyId)
 	res, err := s.uc.CreateSurveyEvidence(ctx, &biz.SurveyEvidence{
 		SurveyID:     surveyID,

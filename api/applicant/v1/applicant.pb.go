@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: api/applicant/v1/applicant.proto
+// source: applicant/v1/applicant.proto
 
 package v1
 
@@ -35,7 +35,7 @@ type ApplicantAttribute struct {
 
 func (x *ApplicantAttribute) Reset() {
 	*x = ApplicantAttribute{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[0]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -47,7 +47,7 @@ func (x *ApplicantAttribute) String() string {
 func (*ApplicantAttribute) ProtoMessage() {}
 
 func (x *ApplicantAttribute) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[0]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -60,7 +60,7 @@ func (x *ApplicantAttribute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApplicantAttribute.ProtoReflect.Descriptor instead.
 func (*ApplicantAttribute) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{0}
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ApplicantAttribute) GetKey() string {
@@ -91,7 +91,7 @@ func (x *ApplicantAttribute) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type ApplicantInfo struct {
+type Applicant struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicantType     string                 `protobuf:"bytes,2,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
@@ -107,21 +107,21 @@ type ApplicantInfo struct {
 	sizeCache         protoimpl.SizeCache
 }
 
-func (x *ApplicantInfo) Reset() {
-	*x = ApplicantInfo{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[1]
+func (x *Applicant) Reset() {
+	*x = Applicant{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ApplicantInfo) String() string {
+func (x *Applicant) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ApplicantInfo) ProtoMessage() {}
+func (*Applicant) ProtoMessage() {}
 
-func (x *ApplicantInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[1]
+func (x *Applicant) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -132,77 +132,121 @@ func (x *ApplicantInfo) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApplicantInfo.ProtoReflect.Descriptor instead.
-func (*ApplicantInfo) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use Applicant.ProtoReflect.Descriptor instead.
+func (*Applicant) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ApplicantInfo) GetId() string {
+func (x *Applicant) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetApplicantType() string {
+func (x *Applicant) GetApplicantType() string {
 	if x != nil {
 		return x.ApplicantType
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetIdentityNumber() string {
+func (x *Applicant) GetIdentityNumber() string {
 	if x != nil {
 		return x.IdentityNumber
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetTaxId() string {
+func (x *Applicant) GetTaxId() string {
 	if x != nil {
 		return x.TaxId
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetFullName() string {
+func (x *Applicant) GetFullName() string {
 	if x != nil {
 		return x.FullName
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetBirthDate() string {
+func (x *Applicant) GetBirthDate() string {
 	if x != nil {
 		return x.BirthDate
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetEstablishmentDate() string {
+func (x *Applicant) GetEstablishmentDate() string {
 	if x != nil {
 		return x.EstablishmentDate
 	}
 	return ""
 }
 
-func (x *ApplicantInfo) GetAttributes() []*ApplicantAttribute {
+func (x *Applicant) GetAttributes() []*ApplicantAttribute {
 	if x != nil {
 		return x.Attributes
 	}
 	return nil
 }
 
-func (x *ApplicantInfo) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Applicant) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *ApplicantInfo) GetUpdatedAt() *timestamppb.Timestamp {
+func (x *Applicant) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
+	}
+	return nil
+}
+
+type ApplicantAttributes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Attributes    []*ApplicantAttribute  `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ApplicantAttributes) Reset() {
+	*x = ApplicantAttributes{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ApplicantAttributes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApplicantAttributes) ProtoMessage() {}
+
+func (x *ApplicantAttributes) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApplicantAttributes.ProtoReflect.Descriptor instead.
+func (*ApplicantAttributes) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ApplicantAttributes) GetAttributes() []*ApplicantAttribute {
+	if x != nil {
+		return x.Attributes
 	}
 	return nil
 }
@@ -222,7 +266,7 @@ type CreateApplicantRequest struct {
 
 func (x *CreateApplicantRequest) Reset() {
 	*x = CreateApplicantRequest{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[2]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -234,7 +278,7 @@ func (x *CreateApplicantRequest) String() string {
 func (*CreateApplicantRequest) ProtoMessage() {}
 
 func (x *CreateApplicantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[2]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -247,7 +291,7 @@ func (x *CreateApplicantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateApplicantRequest.ProtoReflect.Descriptor instead.
 func (*CreateApplicantRequest) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{2}
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateApplicantRequest) GetApplicantType() string {
@@ -299,58 +343,6 @@ func (x *CreateApplicantRequest) GetAttributes() []*ApplicantAttribute {
 	return nil
 }
 
-type CreateApplicantReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreateApplicantReply) Reset() {
-	*x = CreateApplicantReply{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreateApplicantReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreateApplicantReply) ProtoMessage() {}
-
-func (x *CreateApplicantReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreateApplicantReply.ProtoReflect.Descriptor instead.
-func (*CreateApplicantReply) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *CreateApplicantReply) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *CreateApplicantReply) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
 type GetApplicantRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -360,7 +352,7 @@ type GetApplicantRequest struct {
 
 func (x *GetApplicantRequest) Reset() {
 	*x = GetApplicantRequest{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[4]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -372,7 +364,7 @@ func (x *GetApplicantRequest) String() string {
 func (*GetApplicantRequest) ProtoMessage() {}
 
 func (x *GetApplicantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[4]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -385,7 +377,7 @@ func (x *GetApplicantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetApplicantRequest.ProtoReflect.Descriptor instead.
 func (*GetApplicantRequest) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{4}
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetApplicantRequest) GetId() string {
@@ -395,28 +387,28 @@ func (x *GetApplicantRequest) GetId() string {
 	return ""
 }
 
-type GetApplicantReply struct {
+type GetApplicantAttributesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Applicant     *ApplicantInfo         `protobuf:"bytes,1,opt,name=applicant,proto3" json:"applicant,omitempty"`
+	ApplicantId   string                 `protobuf:"bytes,1,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetApplicantReply) Reset() {
-	*x = GetApplicantReply{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[5]
+func (x *GetApplicantAttributesRequest) Reset() {
+	*x = GetApplicantAttributesRequest{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetApplicantReply) String() string {
+func (x *GetApplicantAttributesRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetApplicantReply) ProtoMessage() {}
+func (*GetApplicantAttributesRequest) ProtoMessage() {}
 
-func (x *GetApplicantReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[5]
+func (x *GetApplicantAttributesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -427,16 +419,16 @@ func (x *GetApplicantReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetApplicantReply.ProtoReflect.Descriptor instead.
-func (*GetApplicantReply) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{5}
+// Deprecated: Use GetApplicantAttributesRequest.ProtoReflect.Descriptor instead.
+func (*GetApplicantAttributesRequest) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetApplicantReply) GetApplicant() *ApplicantInfo {
+func (x *GetApplicantAttributesRequest) GetApplicantId() string {
 	if x != nil {
-		return x.Applicant
+		return x.ApplicantId
 	}
-	return nil
+	return ""
 }
 
 type UpdateApplicantRequest struct {
@@ -455,7 +447,7 @@ type UpdateApplicantRequest struct {
 
 func (x *UpdateApplicantRequest) Reset() {
 	*x = UpdateApplicantRequest{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[6]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -467,7 +459,7 @@ func (x *UpdateApplicantRequest) String() string {
 func (*UpdateApplicantRequest) ProtoMessage() {}
 
 func (x *UpdateApplicantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[6]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -480,7 +472,7 @@ func (x *UpdateApplicantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateApplicantRequest.ProtoReflect.Descriptor instead.
 func (*UpdateApplicantRequest) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{6}
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateApplicantRequest) GetId() string {
@@ -539,187 +531,29 @@ func (x *UpdateApplicantRequest) GetAttributes() []*ApplicantAttribute {
 	return nil
 }
 
-type UpdateApplicantReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateApplicantReply) Reset() {
-	*x = UpdateApplicantReply{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateApplicantReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateApplicantReply) ProtoMessage() {}
-
-func (x *UpdateApplicantReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateApplicantReply.ProtoReflect.Descriptor instead.
-func (*UpdateApplicantReply) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *UpdateApplicantReply) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-type ListApplicantsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Keyword       string                 `protobuf:"bytes,3,opt,name=keyword,proto3" json:"keyword,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListApplicantsRequest) Reset() {
-	*x = ListApplicantsRequest{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListApplicantsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListApplicantsRequest) ProtoMessage() {}
-
-func (x *ListApplicantsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListApplicantsRequest.ProtoReflect.Descriptor instead.
-func (*ListApplicantsRequest) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *ListApplicantsRequest) GetPage() int32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-func (x *ListApplicantsRequest) GetPageSize() int32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
-}
-
-func (x *ListApplicantsRequest) GetKeyword() string {
-	if x != nil {
-		return x.Keyword
-	}
-	return ""
-}
-
-type ListApplicantsReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Applicants    []*ApplicantInfo       `protobuf:"bytes,1,rep,name=applicants,proto3" json:"applicants,omitempty"`
-	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListApplicantsReply) Reset() {
-	*x = ListApplicantsReply{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListApplicantsReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListApplicantsReply) ProtoMessage() {}
-
-func (x *ListApplicantsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListApplicantsReply.ProtoReflect.Descriptor instead.
-func (*ListApplicantsReply) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *ListApplicantsReply) GetApplicants() []*ApplicantInfo {
-	if x != nil {
-		return x.Applicants
-	}
-	return nil
-}
-
-func (x *ListApplicantsReply) GetTotal() int32 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
-}
-
-type UpsertApplicantAttributeRequest struct {
+type UpsertApplicantAttributesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ApplicantId   string                 `protobuf:"bytes,1,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
-	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-	DataType      string                 `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	Attributes    []*ApplicantAttribute  `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpsertApplicantAttributeRequest) Reset() {
-	*x = UpsertApplicantAttributeRequest{}
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[10]
+func (x *UpsertApplicantAttributesRequest) Reset() {
+	*x = UpsertApplicantAttributesRequest{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpsertApplicantAttributeRequest) String() string {
+func (x *UpsertApplicantAttributesRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpsertApplicantAttributeRequest) ProtoMessage() {}
+func (*UpsertApplicantAttributesRequest) ProtoMessage() {}
 
-func (x *UpsertApplicantAttributeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_applicant_v1_applicant_proto_msgTypes[10]
+func (x *UpsertApplicantAttributesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,51 +564,37 @@ func (x *UpsertApplicantAttributeRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpsertApplicantAttributeRequest.ProtoReflect.Descriptor instead.
-func (*UpsertApplicantAttributeRequest) Descriptor() ([]byte, []int) {
-	return file_api_applicant_v1_applicant_proto_rawDescGZIP(), []int{10}
+// Deprecated: Use UpsertApplicantAttributesRequest.ProtoReflect.Descriptor instead.
+func (*UpsertApplicantAttributesRequest) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *UpsertApplicantAttributeRequest) GetApplicantId() string {
+func (x *UpsertApplicantAttributesRequest) GetApplicantId() string {
 	if x != nil {
 		return x.ApplicantId
 	}
 	return ""
 }
 
-func (x *UpsertApplicantAttributeRequest) GetKey() string {
+func (x *UpsertApplicantAttributesRequest) GetAttributes() []*ApplicantAttribute {
 	if x != nil {
-		return x.Key
+		return x.Attributes
 	}
-	return ""
+	return nil
 }
 
-func (x *UpsertApplicantAttributeRequest) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
+var File_applicant_v1_applicant_proto protoreflect.FileDescriptor
 
-func (x *UpsertApplicantAttributeRequest) GetDataType() string {
-	if x != nil {
-		return x.DataType
-	}
-	return ""
-}
-
-var File_api_applicant_v1_applicant_proto protoreflect.FileDescriptor
-
-const file_api_applicant_v1_applicant_proto_rawDesc = "" +
+const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\n" +
-	" api/applicant/v1/applicant.proto\x12\x10api.applicant.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x94\x01\n" +
+	"\x1capplicant/v1/applicant.proto\x12\x10api.applicant.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x94\x01\n" +
 	"\x12ApplicantAttribute\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1b\n" +
 	"\tdata_type\x18\x03 \x01(\tR\bdataType\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xad\x03\n" +
-	"\rApplicantInfo\x12\x0e\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa9\x03\n" +
+	"\tApplicant\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
 	"\x0fidentity_number\x18\x03 \x01(\tR\x0eidentityNumber\x12\x15\n" +
@@ -790,7 +610,11 @@ const file_api_applicant_v1_applicant_proto_rawDesc = "" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xb0\x02\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"[\n" +
+	"\x13ApplicantAttributes\x12D\n" +
+	"\n" +
+	"attributes\x18\x01 \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
+	"attributes\"\xb0\x02\n" +
 	"\x16CreateApplicantRequest\x12%\n" +
 	"\x0eapplicant_type\x18\x01 \x01(\tR\rapplicantType\x12'\n" +
 	"\x0fidentity_number\x18\x02 \x01(\tR\x0eidentityNumber\x12\x15\n" +
@@ -801,14 +625,11 @@ const file_api_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x12establishment_date\x18\x06 \x01(\tR\x11establishmentDate\x12D\n" +
 	"\n" +
 	"attributes\x18\a \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"@\n" +
-	"\x14CreateApplicantReply\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"%\n" +
+	"attributes\"%\n" +
 	"\x13GetApplicantRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"R\n" +
-	"\x11GetApplicantReply\x12=\n" +
-	"\tapplicant\x18\x01 \x01(\v2\x1f.api.applicant.v1.ApplicantInfoR\tapplicant\"\xc0\x02\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"B\n" +
+	"\x1dGetApplicantAttributesRequest\x12!\n" +
+	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\"\xc0\x02\n" +
 	"\x16UpdateApplicantRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
@@ -820,77 +641,63 @@ const file_api_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x12establishment_date\x18\a \x01(\tR\x11establishmentDate\x12D\n" +
 	"\n" +
 	"attributes\x18\b \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"0\n" +
-	"\x14UpdateApplicantReply\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"b\n" +
-	"\x15ListApplicantsRequest\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x18\n" +
-	"\akeyword\x18\x03 \x01(\tR\akeyword\"l\n" +
-	"\x13ListApplicantsReply\x12?\n" +
+	"attributes\"\x8b\x01\n" +
+	" UpsertApplicantAttributesRequest\x12!\n" +
+	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\x12D\n" +
 	"\n" +
-	"applicants\x18\x01 \x03(\v2\x1f.api.applicant.v1.ApplicantInfoR\n" +
-	"applicants\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"\x89\x01\n" +
-	"\x1fUpsertApplicantAttributeRequest\x12!\n" +
-	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\x12\x1b\n" +
-	"\tdata_type\x18\x04 \x01(\tR\bdataType2\xaf\x05\n" +
-	"\tApplicant\x12~\n" +
-	"\x0fCreateApplicant\x12(.api.applicant.v1.CreateApplicantRequest\x1a&.api.applicant.v1.CreateApplicantReply\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/applicants\x12w\n" +
-	"\fGetApplicant\x12%.api.applicant.v1.GetApplicantRequest\x1a#.api.applicant.v1.GetApplicantReply\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/applicants/{id}\x12\x83\x01\n" +
-	"\x0fUpdateApplicant\x12(.api.applicant.v1.UpdateApplicantRequest\x1a&.api.applicant.v1.UpdateApplicantReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/applicants/{id}\x12x\n" +
-	"\x0eListApplicants\x12'.api.applicant.v1.ListApplicantsRequest\x1a%.api.applicant.v1.ListApplicantsReply\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/applicants\x12\xa8\x01\n" +
-	"\x18UpsertApplicantAttribute\x121.api.applicant.v1.UpsertApplicantAttributeRequest\x1a$.api.applicant.v1.ApplicantAttribute\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/applicants/{applicant_id}/attributesBB\n" +
+	"attributes\x18\x02 \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
+	"attributes2\xc5\x05\n" +
+	"\x10ApplicantService\x12s\n" +
+	"\x0fCreateApplicant\x12(.api.applicant.v1.CreateApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/applicants\x12o\n" +
+	"\fGetApplicant\x12%.api.applicant.v1.GetApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/applicants/{id}\x12x\n" +
+	"\x0fUpdateApplicant\x12(.api.applicant.v1.UpdateApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/applicants/{id}\x12\xa2\x01\n" +
+	"\x16GetApplicantAttributes\x12/.api.applicant.v1.GetApplicantAttributesRequest\x1a%.api.applicant.v1.ApplicantAttributes\"0\x82\xd3\xe4\x93\x02*\x12(/v1/applicants/{applicant_id}/attributes\x12\xab\x01\n" +
+	"\x19UpsertApplicantAttributes\x122.api.applicant.v1.UpsertApplicantAttributesRequest\x1a%.api.applicant.v1.ApplicantAttributes\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/applicants/{applicant_id}/attributesBB\n" +
 	"\x10api.applicant.v1P\x01Z,credit-analytics-backend/api/applicant/v1;v1b\x06proto3"
 
 var (
-	file_api_applicant_v1_applicant_proto_rawDescOnce sync.Once
-	file_api_applicant_v1_applicant_proto_rawDescData []byte
+	file_applicant_v1_applicant_proto_rawDescOnce sync.Once
+	file_applicant_v1_applicant_proto_rawDescData []byte
 )
 
-func file_api_applicant_v1_applicant_proto_rawDescGZIP() []byte {
-	file_api_applicant_v1_applicant_proto_rawDescOnce.Do(func() {
-		file_api_applicant_v1_applicant_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_applicant_v1_applicant_proto_rawDesc), len(file_api_applicant_v1_applicant_proto_rawDesc)))
+func file_applicant_v1_applicant_proto_rawDescGZIP() []byte {
+	file_applicant_v1_applicant_proto_rawDescOnce.Do(func() {
+		file_applicant_v1_applicant_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_applicant_v1_applicant_proto_rawDesc), len(file_applicant_v1_applicant_proto_rawDesc)))
 	})
-	return file_api_applicant_v1_applicant_proto_rawDescData
+	return file_applicant_v1_applicant_proto_rawDescData
 }
 
-var file_api_applicant_v1_applicant_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_api_applicant_v1_applicant_proto_goTypes = []any{
-	(*ApplicantAttribute)(nil),              // 0: api.applicant.v1.ApplicantAttribute
-	(*ApplicantInfo)(nil),                   // 1: api.applicant.v1.ApplicantInfo
-	(*CreateApplicantRequest)(nil),          // 2: api.applicant.v1.CreateApplicantRequest
-	(*CreateApplicantReply)(nil),            // 3: api.applicant.v1.CreateApplicantReply
-	(*GetApplicantRequest)(nil),             // 4: api.applicant.v1.GetApplicantRequest
-	(*GetApplicantReply)(nil),               // 5: api.applicant.v1.GetApplicantReply
-	(*UpdateApplicantRequest)(nil),          // 6: api.applicant.v1.UpdateApplicantRequest
-	(*UpdateApplicantReply)(nil),            // 7: api.applicant.v1.UpdateApplicantReply
-	(*ListApplicantsRequest)(nil),           // 8: api.applicant.v1.ListApplicantsRequest
-	(*ListApplicantsReply)(nil),             // 9: api.applicant.v1.ListApplicantsReply
-	(*UpsertApplicantAttributeRequest)(nil), // 10: api.applicant.v1.UpsertApplicantAttributeRequest
-	(*timestamppb.Timestamp)(nil),           // 11: google.protobuf.Timestamp
+var file_applicant_v1_applicant_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_applicant_v1_applicant_proto_goTypes = []any{
+	(*ApplicantAttribute)(nil),               // 0: api.applicant.v1.ApplicantAttribute
+	(*Applicant)(nil),                        // 1: api.applicant.v1.Applicant
+	(*ApplicantAttributes)(nil),              // 2: api.applicant.v1.ApplicantAttributes
+	(*CreateApplicantRequest)(nil),           // 3: api.applicant.v1.CreateApplicantRequest
+	(*GetApplicantRequest)(nil),              // 4: api.applicant.v1.GetApplicantRequest
+	(*GetApplicantAttributesRequest)(nil),    // 5: api.applicant.v1.GetApplicantAttributesRequest
+	(*UpdateApplicantRequest)(nil),           // 6: api.applicant.v1.UpdateApplicantRequest
+	(*UpsertApplicantAttributesRequest)(nil), // 7: api.applicant.v1.UpsertApplicantAttributesRequest
+	(*timestamppb.Timestamp)(nil),            // 8: google.protobuf.Timestamp
 }
-var file_api_applicant_v1_applicant_proto_depIdxs = []int32{
-	11, // 0: api.applicant.v1.ApplicantAttribute.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 1: api.applicant.v1.ApplicantInfo.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	11, // 2: api.applicant.v1.ApplicantInfo.created_at:type_name -> google.protobuf.Timestamp
-	11, // 3: api.applicant.v1.ApplicantInfo.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: api.applicant.v1.CreateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	1,  // 5: api.applicant.v1.GetApplicantReply.applicant:type_name -> api.applicant.v1.ApplicantInfo
+var file_applicant_v1_applicant_proto_depIdxs = []int32{
+	8,  // 0: api.applicant.v1.ApplicantAttribute.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 1: api.applicant.v1.Applicant.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	8,  // 2: api.applicant.v1.Applicant.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 3: api.applicant.v1.Applicant.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 4: api.applicant.v1.ApplicantAttributes.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	0,  // 5: api.applicant.v1.CreateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
 	0,  // 6: api.applicant.v1.UpdateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	1,  // 7: api.applicant.v1.ListApplicantsReply.applicants:type_name -> api.applicant.v1.ApplicantInfo
-	2,  // 8: api.applicant.v1.Applicant.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
-	4,  // 9: api.applicant.v1.Applicant.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
-	6,  // 10: api.applicant.v1.Applicant.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
-	8,  // 11: api.applicant.v1.Applicant.ListApplicants:input_type -> api.applicant.v1.ListApplicantsRequest
-	10, // 12: api.applicant.v1.Applicant.UpsertApplicantAttribute:input_type -> api.applicant.v1.UpsertApplicantAttributeRequest
-	3,  // 13: api.applicant.v1.Applicant.CreateApplicant:output_type -> api.applicant.v1.CreateApplicantReply
-	5,  // 14: api.applicant.v1.Applicant.GetApplicant:output_type -> api.applicant.v1.GetApplicantReply
-	7,  // 15: api.applicant.v1.Applicant.UpdateApplicant:output_type -> api.applicant.v1.UpdateApplicantReply
-	9,  // 16: api.applicant.v1.Applicant.ListApplicants:output_type -> api.applicant.v1.ListApplicantsReply
-	0,  // 17: api.applicant.v1.Applicant.UpsertApplicantAttribute:output_type -> api.applicant.v1.ApplicantAttribute
+	0,  // 7: api.applicant.v1.UpsertApplicantAttributesRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	3,  // 8: api.applicant.v1.ApplicantService.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
+	4,  // 9: api.applicant.v1.ApplicantService.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
+	6,  // 10: api.applicant.v1.ApplicantService.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
+	5,  // 11: api.applicant.v1.ApplicantService.GetApplicantAttributes:input_type -> api.applicant.v1.GetApplicantAttributesRequest
+	7,  // 12: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:input_type -> api.applicant.v1.UpsertApplicantAttributesRequest
+	1,  // 13: api.applicant.v1.ApplicantService.CreateApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 14: api.applicant.v1.ApplicantService.GetApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 15: api.applicant.v1.ApplicantService.UpdateApplicant:output_type -> api.applicant.v1.Applicant
+	2,  // 16: api.applicant.v1.ApplicantService.GetApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
+	2,  // 17: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
 	13, // [13:18] is the sub-list for method output_type
 	8,  // [8:13] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
@@ -898,26 +705,26 @@ var file_api_applicant_v1_applicant_proto_depIdxs = []int32{
 	0,  // [0:8] is the sub-list for field type_name
 }
 
-func init() { file_api_applicant_v1_applicant_proto_init() }
-func file_api_applicant_v1_applicant_proto_init() {
-	if File_api_applicant_v1_applicant_proto != nil {
+func init() { file_applicant_v1_applicant_proto_init() }
+func file_applicant_v1_applicant_proto_init() {
+	if File_applicant_v1_applicant_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_applicant_v1_applicant_proto_rawDesc), len(file_api_applicant_v1_applicant_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_applicant_v1_applicant_proto_rawDesc), len(file_applicant_v1_applicant_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_applicant_v1_applicant_proto_goTypes,
-		DependencyIndexes: file_api_applicant_v1_applicant_proto_depIdxs,
-		MessageInfos:      file_api_applicant_v1_applicant_proto_msgTypes,
+		GoTypes:           file_applicant_v1_applicant_proto_goTypes,
+		DependencyIndexes: file_applicant_v1_applicant_proto_depIdxs,
+		MessageInfos:      file_applicant_v1_applicant_proto_msgTypes,
 	}.Build()
-	File_api_applicant_v1_applicant_proto = out.File
-	file_api_applicant_v1_applicant_proto_goTypes = nil
-	file_api_applicant_v1_applicant_proto_depIdxs = nil
+	File_applicant_v1_applicant_proto = out.File
+	file_applicant_v1_applicant_proto_goTypes = nil
+	file_applicant_v1_applicant_proto_depIdxs = nil
 }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v5.29.3
-// source: api/survey/v1/survey.proto
+// source: survey/v1/survey.proto
 
 package v1
 
@@ -19,77 +19,39 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSurveyAssignSurvey = "/api.survey.v1.Survey/AssignSurvey"
-const OperationSurveyCreateSurveyEvidence = "/api.survey.v1.Survey/CreateSurveyEvidence"
-const OperationSurveyCreateSurveyTemplate = "/api.survey.v1.Survey/CreateSurveyTemplate"
-const OperationSurveyGetSurvey = "/api.survey.v1.Survey/GetSurvey"
-const OperationSurveyListSurveyTemplates = "/api.survey.v1.Survey/ListSurveyTemplates"
-const OperationSurveyUpdateSurveyStatus = "/api.survey.v1.Survey/UpdateSurveyStatus"
-const OperationSurveyUpsertSurveyAnswer = "/api.survey.v1.Survey/UpsertSurveyAnswer"
+const OperationSurveyServiceAssignSurvey = "/api.survey.v1.SurveyService/AssignSurvey"
+const OperationSurveyServiceGetSurvey = "/api.survey.v1.SurveyService/GetSurvey"
+const OperationSurveyServiceListSurveysByApplication = "/api.survey.v1.SurveyService/ListSurveysByApplication"
+const OperationSurveyServiceStartSurvey = "/api.survey.v1.SurveyService/StartSurvey"
+const OperationSurveyServiceSubmitSurvey = "/api.survey.v1.SurveyService/SubmitSurvey"
+const OperationSurveyServiceSubmitSurveyAnswer = "/api.survey.v1.SurveyService/SubmitSurveyAnswer"
+const OperationSurveyServiceUploadSurveyEvidence = "/api.survey.v1.SurveyService/UploadSurveyEvidence"
+const OperationSurveyServiceVerifySurvey = "/api.survey.v1.SurveyService/VerifySurvey"
 
-type SurveyHTTPServer interface {
+type SurveyServiceHTTPServer interface {
 	AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error)
-	CreateSurveyEvidence(context.Context, *CreateSurveyEvidenceRequest) (*SurveyEvidence, error)
-	CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error)
 	GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error)
-	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesReply, error)
-	UpdateSurveyStatus(context.Context, *UpdateSurveyStatusRequest) (*ApplicationSurvey, error)
-	UpsertSurveyAnswer(context.Context, *UpsertSurveyAnswerRequest) (*SurveyAnswer, error)
+	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error)
+	StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error)
+	SubmitSurvey(context.Context, *SubmitSurveyRequest) (*ApplicationSurvey, error)
+	SubmitSurveyAnswer(context.Context, *SubmitSurveyAnswerRequest) (*SurveyAnswer, error)
+	UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error)
+	VerifySurvey(context.Context, *VerifySurveyRequest) (*ApplicationSurvey, error)
 }
 
-func RegisterSurveyHTTPServer(s *http.Server, srv SurveyHTTPServer) {
+func RegisterSurveyServiceHTTPServer(s *http.Server, srv SurveyServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/surveys/templates", _Survey_CreateSurveyTemplate0_HTTP_Handler(srv))
-	r.GET("/v1/surveys/templates", _Survey_ListSurveyTemplates0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/surveys", _Survey_AssignSurvey0_HTTP_Handler(srv))
-	r.GET("/v1/surveys/{id}", _Survey_GetSurvey0_HTTP_Handler(srv))
-	r.PATCH("/v1/surveys/{id}/status", _Survey_UpdateSurveyStatus0_HTTP_Handler(srv))
-	r.POST("/v1/surveys/{survey_id}/answers", _Survey_UpsertSurveyAnswer0_HTTP_Handler(srv))
-	r.POST("/v1/surveys/{survey_id}/evidences", _Survey_CreateSurveyEvidence0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/surveys", _SurveyService_AssignSurvey0_HTTP_Handler(srv))
+	r.GET("/v1/surveys/{id}", _SurveyService_GetSurvey0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/surveys", _SurveyService_ListSurveysByApplication0_HTTP_Handler(srv))
+	r.POST("/v1/surveys/{id}/start", _SurveyService_StartSurvey0_HTTP_Handler(srv))
+	r.POST("/v1/surveys/{id}/submit", _SurveyService_SubmitSurvey0_HTTP_Handler(srv))
+	r.POST("/v1/surveys/{id}/verify", _SurveyService_VerifySurvey0_HTTP_Handler(srv))
+	r.POST("/v1/surveys/{survey_id}/answers", _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv))
+	r.POST("/v1/surveys/{survey_id}/evidences", _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv))
 }
 
-func _Survey_CreateSurveyTemplate0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in CreateSurveyTemplateRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationSurveyCreateSurveyTemplate)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateSurveyTemplate(ctx, req.(*CreateSurveyTemplateRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SurveyTemplate)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Survey_ListSurveyTemplates0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in ListSurveyTemplatesRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationSurveyListSurveyTemplates)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ListSurveyTemplatesReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Survey_AssignSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
+func _SurveyService_AssignSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AssignSurveyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -101,7 +63,7 @@ func _Survey_AssignSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Cont
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSurveyAssignSurvey)
+		http.SetOperation(ctx, OperationSurveyServiceAssignSurvey)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.AssignSurvey(ctx, req.(*AssignSurveyRequest))
 		})
@@ -114,7 +76,7 @@ func _Survey_AssignSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Cont
 	}
 }
 
-func _Survey_GetSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
+func _SurveyService_GetSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetSurveyRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -123,7 +85,7 @@ func _Survey_GetSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSurveyGetSurvey)
+		http.SetOperation(ctx, OperationSurveyServiceGetSurvey)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetSurvey(ctx, req.(*GetSurveyRequest))
 		})
@@ -136,9 +98,31 @@ func _Survey_GetSurvey0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context
 	}
 }
 
-func _Survey_UpdateSurveyStatus0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
+func _SurveyService_ListSurveysByApplication0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpdateSurveyStatusRequest
+		var in ListSurveysByApplicationRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceListSurveysByApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListSurveysByApplication(ctx, req.(*ListSurveysByApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListSurveysResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SurveyService_StartSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StartSurveyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -148,9 +132,9 @@ func _Survey_UpdateSurveyStatus0_HTTP_Handler(srv SurveyHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSurveyUpdateSurveyStatus)
+		http.SetOperation(ctx, OperationSurveyServiceStartSurvey)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateSurveyStatus(ctx, req.(*UpdateSurveyStatusRequest))
+			return srv.StartSurvey(ctx, req.(*StartSurveyRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -161,9 +145,9 @@ func _Survey_UpdateSurveyStatus0_HTTP_Handler(srv SurveyHTTPServer) func(ctx htt
 	}
 }
 
-func _Survey_UpsertSurveyAnswer0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
+func _SurveyService_SubmitSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpsertSurveyAnswerRequest
+		var in SubmitSurveyRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -173,9 +157,59 @@ func _Survey_UpsertSurveyAnswer0_HTTP_Handler(srv SurveyHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSurveyUpsertSurveyAnswer)
+		http.SetOperation(ctx, OperationSurveyServiceSubmitSurvey)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpsertSurveyAnswer(ctx, req.(*UpsertSurveyAnswerRequest))
+			return srv.SubmitSurvey(ctx, req.(*SubmitSurveyRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ApplicationSurvey)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SurveyService_VerifySurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in VerifySurveyRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceVerifySurvey)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.VerifySurvey(ctx, req.(*VerifySurveyRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ApplicationSurvey)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SubmitSurveyAnswerRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceSubmitSurveyAnswer)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SubmitSurveyAnswer(ctx, req.(*SubmitSurveyAnswerRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -186,9 +220,9 @@ func _Survey_UpsertSurveyAnswer0_HTTP_Handler(srv SurveyHTTPServer) func(ctx htt
 	}
 }
 
-func _Survey_CreateSurveyEvidence0_HTTP_Handler(srv SurveyHTTPServer) func(ctx http.Context) error {
+func _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CreateSurveyEvidenceRequest
+		var in UploadSurveyEvidenceRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -198,9 +232,9 @@ func _Survey_CreateSurveyEvidence0_HTTP_Handler(srv SurveyHTTPServer) func(ctx h
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationSurveyCreateSurveyEvidence)
+		http.SetOperation(ctx, OperationSurveyServiceUploadSurveyEvidence)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateSurveyEvidence(ctx, req.(*CreateSurveyEvidenceRequest))
+			return srv.UploadSurveyEvidence(ctx, req.(*UploadSurveyEvidenceRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -211,29 +245,30 @@ func _Survey_CreateSurveyEvidence0_HTTP_Handler(srv SurveyHTTPServer) func(ctx h
 	}
 }
 
-type SurveyHTTPClient interface {
+type SurveyServiceHTTPClient interface {
 	AssignSurvey(ctx context.Context, req *AssignSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
-	CreateSurveyEvidence(ctx context.Context, req *CreateSurveyEvidenceRequest, opts ...http.CallOption) (rsp *SurveyEvidence, err error)
-	CreateSurveyTemplate(ctx context.Context, req *CreateSurveyTemplateRequest, opts ...http.CallOption) (rsp *SurveyTemplate, err error)
 	GetSurvey(ctx context.Context, req *GetSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
-	ListSurveyTemplates(ctx context.Context, req *ListSurveyTemplatesRequest, opts ...http.CallOption) (rsp *ListSurveyTemplatesReply, err error)
-	UpdateSurveyStatus(ctx context.Context, req *UpdateSurveyStatusRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
-	UpsertSurveyAnswer(ctx context.Context, req *UpsertSurveyAnswerRequest, opts ...http.CallOption) (rsp *SurveyAnswer, err error)
+	ListSurveysByApplication(ctx context.Context, req *ListSurveysByApplicationRequest, opts ...http.CallOption) (rsp *ListSurveysResponse, err error)
+	StartSurvey(ctx context.Context, req *StartSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
+	SubmitSurvey(ctx context.Context, req *SubmitSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
+	SubmitSurveyAnswer(ctx context.Context, req *SubmitSurveyAnswerRequest, opts ...http.CallOption) (rsp *SurveyAnswer, err error)
+	UploadSurveyEvidence(ctx context.Context, req *UploadSurveyEvidenceRequest, opts ...http.CallOption) (rsp *SurveyEvidence, err error)
+	VerifySurvey(ctx context.Context, req *VerifySurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
 }
 
-type SurveyHTTPClientImpl struct {
+type SurveyServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewSurveyHTTPClient(client *http.Client) SurveyHTTPClient {
-	return &SurveyHTTPClientImpl{client}
+func NewSurveyServiceHTTPClient(client *http.Client) SurveyServiceHTTPClient {
+	return &SurveyServiceHTTPClientImpl{client}
 }
 
-func (c *SurveyHTTPClientImpl) AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
+func (c *SurveyServiceHTTPClientImpl) AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
 	var out ApplicationSurvey
 	pattern := "/v1/applications/{application_id}/surveys"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSurveyAssignSurvey))
+	opts = append(opts, http.Operation(OperationSurveyServiceAssignSurvey))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -242,37 +277,11 @@ func (c *SurveyHTTPClientImpl) AssignSurvey(ctx context.Context, in *AssignSurve
 	return &out, nil
 }
 
-func (c *SurveyHTTPClientImpl) CreateSurveyEvidence(ctx context.Context, in *CreateSurveyEvidenceRequest, opts ...http.CallOption) (*SurveyEvidence, error) {
-	var out SurveyEvidence
-	pattern := "/v1/surveys/{survey_id}/evidences"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSurveyCreateSurveyEvidence))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *SurveyHTTPClientImpl) CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...http.CallOption) (*SurveyTemplate, error) {
-	var out SurveyTemplate
-	pattern := "/v1/surveys/templates"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSurveyCreateSurveyTemplate))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *SurveyHTTPClientImpl) GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
+func (c *SurveyServiceHTTPClientImpl) GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
 	var out ApplicationSurvey
 	pattern := "/v1/surveys/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationSurveyGetSurvey))
+	opts = append(opts, http.Operation(OperationSurveyServiceGetSurvey))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -281,11 +290,11 @@ func (c *SurveyHTTPClientImpl) GetSurvey(ctx context.Context, in *GetSurveyReque
 	return &out, nil
 }
 
-func (c *SurveyHTTPClientImpl) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...http.CallOption) (*ListSurveyTemplatesReply, error) {
-	var out ListSurveyTemplatesReply
-	pattern := "/v1/surveys/templates"
+func (c *SurveyServiceHTTPClientImpl) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...http.CallOption) (*ListSurveysResponse, error) {
+	var out ListSurveysResponse
+	pattern := "/v1/applications/{application_id}/surveys"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationSurveyListSurveyTemplates))
+	opts = append(opts, http.Operation(OperationSurveyServiceListSurveysByApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -294,24 +303,63 @@ func (c *SurveyHTTPClientImpl) ListSurveyTemplates(ctx context.Context, in *List
 	return &out, nil
 }
 
-func (c *SurveyHTTPClientImpl) UpdateSurveyStatus(ctx context.Context, in *UpdateSurveyStatusRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
+func (c *SurveyServiceHTTPClientImpl) StartSurvey(ctx context.Context, in *StartSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
 	var out ApplicationSurvey
-	pattern := "/v1/surveys/{id}/status"
+	pattern := "/v1/surveys/{id}/start"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSurveyUpdateSurveyStatus))
+	opts = append(opts, http.Operation(OperationSurveyServiceStartSurvey))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PATCH", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
-func (c *SurveyHTTPClientImpl) UpsertSurveyAnswer(ctx context.Context, in *UpsertSurveyAnswerRequest, opts ...http.CallOption) (*SurveyAnswer, error) {
+func (c *SurveyServiceHTTPClientImpl) SubmitSurvey(ctx context.Context, in *SubmitSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
+	var out ApplicationSurvey
+	pattern := "/v1/surveys/{id}/submit"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSurveyServiceSubmitSurvey))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *SurveyServiceHTTPClientImpl) SubmitSurveyAnswer(ctx context.Context, in *SubmitSurveyAnswerRequest, opts ...http.CallOption) (*SurveyAnswer, error) {
 	var out SurveyAnswer
 	pattern := "/v1/surveys/{survey_id}/answers"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationSurveyUpsertSurveyAnswer))
+	opts = append(opts, http.Operation(OperationSurveyServiceSubmitSurveyAnswer))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *SurveyServiceHTTPClientImpl) UploadSurveyEvidence(ctx context.Context, in *UploadSurveyEvidenceRequest, opts ...http.CallOption) (*SurveyEvidence, error) {
+	var out SurveyEvidence
+	pattern := "/v1/surveys/{survey_id}/evidences"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSurveyServiceUploadSurveyEvidence))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *SurveyServiceHTTPClientImpl) VerifySurvey(ctx context.Context, in *VerifySurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
+	var out ApplicationSurvey
+	pattern := "/v1/surveys/{id}/verify"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSurveyServiceVerifySurvey))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

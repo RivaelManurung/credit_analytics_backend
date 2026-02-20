@@ -221,6 +221,46 @@ func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, er
 	return items, nil
 }
 
+const listSurveysByApplication = `-- name: ListSurveysByApplication :many
+SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at FROM application_surveys WHERE application_id = $1
+`
+
+func (q *Queries) ListSurveysByApplication(ctx context.Context, applicationID uuid.NullUUID) ([]ApplicationSurvey, error) {
+	rows, err := q.db.QueryContext(ctx, listSurveysByApplication, applicationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ApplicationSurvey
+	for rows.Next() {
+		var i ApplicationSurvey
+		if err := rows.Scan(
+			&i.ID,
+			&i.ApplicationID,
+			&i.TemplateID,
+			&i.SurveyType,
+			&i.Status,
+			&i.SubmittedBy,
+			&i.VerifiedBy,
+			&i.VerifiedAt,
+			&i.AssignedTo,
+			&i.SurveyPurpose,
+			&i.StartedAt,
+			&i.SubmittedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateSurveyStatus = `-- name: UpdateSurveyStatus :one
 UPDATE application_surveys SET 
     status = $2,

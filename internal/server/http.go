@@ -25,8 +25,10 @@ import (
 var OpenApiFile embed.FS
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService, applicant *service.ApplicantService,
-	reference *service.ReferenceService, survey *service.SurveyService, financial *service.FinancialService, decision *service.DecisionService, logger log.Logger) *khttp.Server {
+func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService,
+	party *service.PartyService, applicant *service.ApplicantService, reference *service.ReferenceService,
+	survey *service.SurveyService, financial *service.FinancialService,
+	decision *service.DecisionService, committee *service.CommitteeService, logger log.Logger) *khttp.Server {
 	var opts = []khttp.ServerOption{
 		khttp.Middleware(
 			recovery.Recovery(),
@@ -63,11 +65,13 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 	srv.HandlePrefix("/docs", sh)
 
 	v1.RegisterGreeterHTTPServer(srv, greeter)
-	applicationV1.RegisterApplicationHTTPServer(srv, application)
-	applicantV1.RegisterApplicantHTTPServer(srv, applicant)
-	referenceV1.RegisterReferenceHTTPServer(srv, reference)
-	surveyV1.RegisterSurveyHTTPServer(srv, survey)
-	financialV1.RegisterFinancialHTTPServer(srv, financial)
-	decisionV1.RegisterDecisionHTTPServer(srv, decision)
+	applicationV1.RegisterApplicationServiceHTTPServer(srv, application)
+	applicationV1.RegisterPartyServiceHTTPServer(srv, party)
+	applicantV1.RegisterApplicantServiceHTTPServer(srv, applicant)
+	referenceV1.RegisterReferenceServiceHTTPServer(srv, reference)
+	surveyV1.RegisterSurveyServiceHTTPServer(srv, survey)
+	financialV1.RegisterFinancialServiceHTTPServer(srv, financial)
+	decisionV1.RegisterDecisionServiceHTTPServer(srv, decision)
+	decisionV1.RegisterCommitteeServiceHTTPServer(srv, committee)
 	return srv
 }

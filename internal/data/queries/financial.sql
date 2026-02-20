@@ -29,6 +29,29 @@ INSERT INTO application_liabilities (
 -- name: ListLiabilities :many
 SELECT * FROM application_liabilities WHERE application_id = $1;
 
+-- name: UpdateAsset :one
+UPDATE application_assets SET
+    asset_type_code = $2,
+    asset_name = $3,
+    ownership_status = $4,
+    acquisition_year = $5,
+    estimated_value = $6,
+    valuation_method = $7,
+    location_text = $8,
+    encumbered = $9
+WHERE id = $1 RETURNING *;
+
+-- name: UpdateLiability :one
+UPDATE application_liabilities SET
+    creditor_name = $2,
+    liability_type = $3,
+    outstanding_amount = $4,
+    monthly_installment = $5,
+    interest_rate = $6,
+    maturity_date = $7,
+    source = $8
+WHERE id = $1 RETURNING *;
+
 -- name: UpsertFinancialRatio :one
 INSERT INTO application_financial_ratios (
     application_id, ratio_code, ratio_value, calculation_version

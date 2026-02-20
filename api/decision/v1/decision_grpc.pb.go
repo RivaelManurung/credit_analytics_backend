@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v5.29.3
-// source: api/decision/v1/decision.proto
+// source: decision/v1/decision.proto
 
 package v1
 
@@ -19,255 +19,471 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Decision_CreateCommitteeSession_FullMethodName    = "/api.decision.v1.Decision/CreateCommitteeSession"
-	Decision_SubmitCommitteeVote_FullMethodName       = "/api.decision.v1.Decision/SubmitCommitteeVote"
-	Decision_FinalizeCommitteeDecision_FullMethodName = "/api.decision.v1.Decision/FinalizeCommitteeDecision"
-	Decision_RecordFinalDecision_FullMethodName       = "/api.decision.v1.Decision/RecordFinalDecision"
-	Decision_GetApplicationDecision_FullMethodName    = "/api.decision.v1.Decision/GetApplicationDecision"
+	CommitteeService_CreateCommitteeSession_FullMethodName             = "/api.decision.v1.CommitteeService/CreateCommitteeSession"
+	CommitteeService_GetCommitteeSession_FullMethodName                = "/api.decision.v1.CommitteeService/GetCommitteeSession"
+	CommitteeService_SubmitCommitteeVote_FullMethodName                = "/api.decision.v1.CommitteeService/SubmitCommitteeVote"
+	CommitteeService_FinalizeCommitteeDecision_FullMethodName          = "/api.decision.v1.CommitteeService/FinalizeCommitteeDecision"
+	CommitteeService_ListCommitteeSessionsByApplication_FullMethodName = "/api.decision.v1.CommitteeService/ListCommitteeSessionsByApplication"
 )
 
-// DecisionClient is the client API for Decision service.
+// CommitteeServiceClient is the client API for CommitteeService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type DecisionClient interface {
+type CommitteeServiceClient interface {
 	CreateCommitteeSession(ctx context.Context, in *CreateCommitteeSessionRequest, opts ...grpc.CallOption) (*CommitteeSession, error)
+	GetCommitteeSession(ctx context.Context, in *GetCommitteeSessionRequest, opts ...grpc.CallOption) (*CommitteeSession, error)
 	SubmitCommitteeVote(ctx context.Context, in *SubmitCommitteeVoteRequest, opts ...grpc.CallOption) (*CommitteeVote, error)
 	FinalizeCommitteeDecision(ctx context.Context, in *FinalizeCommitteeDecisionRequest, opts ...grpc.CallOption) (*CommitteeDecision, error)
-	RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...grpc.CallOption) (*FinalDecision, error)
-	GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...grpc.CallOption) (*FinalDecision, error)
+	ListCommitteeSessionsByApplication(ctx context.Context, in *ListCommitteeSessionsByApplicationRequest, opts ...grpc.CallOption) (*ListCommitteeSessionsResponse, error)
 }
 
-type decisionClient struct {
+type committeeServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewDecisionClient(cc grpc.ClientConnInterface) DecisionClient {
-	return &decisionClient{cc}
+func NewCommitteeServiceClient(cc grpc.ClientConnInterface) CommitteeServiceClient {
+	return &committeeServiceClient{cc}
 }
 
-func (c *decisionClient) CreateCommitteeSession(ctx context.Context, in *CreateCommitteeSessionRequest, opts ...grpc.CallOption) (*CommitteeSession, error) {
+func (c *committeeServiceClient) CreateCommitteeSession(ctx context.Context, in *CreateCommitteeSessionRequest, opts ...grpc.CallOption) (*CommitteeSession, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CommitteeSession)
-	err := c.cc.Invoke(ctx, Decision_CreateCommitteeSession_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CommitteeService_CreateCommitteeSession_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *decisionClient) SubmitCommitteeVote(ctx context.Context, in *SubmitCommitteeVoteRequest, opts ...grpc.CallOption) (*CommitteeVote, error) {
+func (c *committeeServiceClient) GetCommitteeSession(ctx context.Context, in *GetCommitteeSessionRequest, opts ...grpc.CallOption) (*CommitteeSession, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CommitteeSession)
+	err := c.cc.Invoke(ctx, CommitteeService_GetCommitteeSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *committeeServiceClient) SubmitCommitteeVote(ctx context.Context, in *SubmitCommitteeVoteRequest, opts ...grpc.CallOption) (*CommitteeVote, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CommitteeVote)
-	err := c.cc.Invoke(ctx, Decision_SubmitCommitteeVote_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CommitteeService_SubmitCommitteeVote_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *decisionClient) FinalizeCommitteeDecision(ctx context.Context, in *FinalizeCommitteeDecisionRequest, opts ...grpc.CallOption) (*CommitteeDecision, error) {
+func (c *committeeServiceClient) FinalizeCommitteeDecision(ctx context.Context, in *FinalizeCommitteeDecisionRequest, opts ...grpc.CallOption) (*CommitteeDecision, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CommitteeDecision)
-	err := c.cc.Invoke(ctx, Decision_FinalizeCommitteeDecision_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CommitteeService_FinalizeCommitteeDecision_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *decisionClient) RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...grpc.CallOption) (*FinalDecision, error) {
+func (c *committeeServiceClient) ListCommitteeSessionsByApplication(ctx context.Context, in *ListCommitteeSessionsByApplicationRequest, opts ...grpc.CallOption) (*ListCommitteeSessionsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FinalDecision)
-	err := c.cc.Invoke(ctx, Decision_RecordFinalDecision_FullMethodName, in, out, cOpts...)
+	out := new(ListCommitteeSessionsResponse)
+	err := c.cc.Invoke(ctx, CommitteeService_ListCommitteeSessionsByApplication_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *decisionClient) GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...grpc.CallOption) (*FinalDecision, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FinalDecision)
-	err := c.cc.Invoke(ctx, Decision_GetApplicationDecision_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// DecisionServer is the server API for Decision service.
-// All implementations must embed UnimplementedDecisionServer
+// CommitteeServiceServer is the server API for CommitteeService service.
+// All implementations must embed UnimplementedCommitteeServiceServer
 // for forward compatibility.
-type DecisionServer interface {
+type CommitteeServiceServer interface {
 	CreateCommitteeSession(context.Context, *CreateCommitteeSessionRequest) (*CommitteeSession, error)
+	GetCommitteeSession(context.Context, *GetCommitteeSessionRequest) (*CommitteeSession, error)
 	SubmitCommitteeVote(context.Context, *SubmitCommitteeVoteRequest) (*CommitteeVote, error)
 	FinalizeCommitteeDecision(context.Context, *FinalizeCommitteeDecisionRequest) (*CommitteeDecision, error)
-	RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*FinalDecision, error)
-	GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*FinalDecision, error)
-	mustEmbedUnimplementedDecisionServer()
+	ListCommitteeSessionsByApplication(context.Context, *ListCommitteeSessionsByApplicationRequest) (*ListCommitteeSessionsResponse, error)
+	mustEmbedUnimplementedCommitteeServiceServer()
 }
 
-// UnimplementedDecisionServer must be embedded to have
+// UnimplementedCommitteeServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedDecisionServer struct{}
+type UnimplementedCommitteeServiceServer struct{}
 
-func (UnimplementedDecisionServer) CreateCommitteeSession(context.Context, *CreateCommitteeSessionRequest) (*CommitteeSession, error) {
+func (UnimplementedCommitteeServiceServer) CreateCommitteeSession(context.Context, *CreateCommitteeSessionRequest) (*CommitteeSession, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateCommitteeSession not implemented")
 }
-func (UnimplementedDecisionServer) SubmitCommitteeVote(context.Context, *SubmitCommitteeVoteRequest) (*CommitteeVote, error) {
+func (UnimplementedCommitteeServiceServer) GetCommitteeSession(context.Context, *GetCommitteeSessionRequest) (*CommitteeSession, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCommitteeSession not implemented")
+}
+func (UnimplementedCommitteeServiceServer) SubmitCommitteeVote(context.Context, *SubmitCommitteeVoteRequest) (*CommitteeVote, error) {
 	return nil, status.Error(codes.Unimplemented, "method SubmitCommitteeVote not implemented")
 }
-func (UnimplementedDecisionServer) FinalizeCommitteeDecision(context.Context, *FinalizeCommitteeDecisionRequest) (*CommitteeDecision, error) {
+func (UnimplementedCommitteeServiceServer) FinalizeCommitteeDecision(context.Context, *FinalizeCommitteeDecisionRequest) (*CommitteeDecision, error) {
 	return nil, status.Error(codes.Unimplemented, "method FinalizeCommitteeDecision not implemented")
 }
-func (UnimplementedDecisionServer) RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*FinalDecision, error) {
-	return nil, status.Error(codes.Unimplemented, "method RecordFinalDecision not implemented")
+func (UnimplementedCommitteeServiceServer) ListCommitteeSessionsByApplication(context.Context, *ListCommitteeSessionsByApplicationRequest) (*ListCommitteeSessionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListCommitteeSessionsByApplication not implemented")
 }
-func (UnimplementedDecisionServer) GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*FinalDecision, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetApplicationDecision not implemented")
-}
-func (UnimplementedDecisionServer) mustEmbedUnimplementedDecisionServer() {}
-func (UnimplementedDecisionServer) testEmbeddedByValue()                  {}
+func (UnimplementedCommitteeServiceServer) mustEmbedUnimplementedCommitteeServiceServer() {}
+func (UnimplementedCommitteeServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeDecisionServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to DecisionServer will
+// UnsafeCommitteeServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CommitteeServiceServer will
 // result in compilation errors.
-type UnsafeDecisionServer interface {
-	mustEmbedUnimplementedDecisionServer()
+type UnsafeCommitteeServiceServer interface {
+	mustEmbedUnimplementedCommitteeServiceServer()
 }
 
-func RegisterDecisionServer(s grpc.ServiceRegistrar, srv DecisionServer) {
-	// If the following call panics, it indicates UnimplementedDecisionServer was
+func RegisterCommitteeServiceServer(s grpc.ServiceRegistrar, srv CommitteeServiceServer) {
+	// If the following call panics, it indicates UnimplementedCommitteeServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Decision_ServiceDesc, srv)
+	s.RegisterService(&CommitteeService_ServiceDesc, srv)
 }
 
-func _Decision_CreateCommitteeSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommitteeService_CreateCommitteeSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCommitteeSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DecisionServer).CreateCommitteeSession(ctx, in)
+		return srv.(CommitteeServiceServer).CreateCommitteeSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Decision_CreateCommitteeSession_FullMethodName,
+		FullMethod: CommitteeService_CreateCommitteeSession_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DecisionServer).CreateCommitteeSession(ctx, req.(*CreateCommitteeSessionRequest))
+		return srv.(CommitteeServiceServer).CreateCommitteeSession(ctx, req.(*CreateCommitteeSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Decision_SubmitCommitteeVote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommitteeService_GetCommitteeSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCommitteeSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommitteeServiceServer).GetCommitteeSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CommitteeService_GetCommitteeSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommitteeServiceServer).GetCommitteeSession(ctx, req.(*GetCommitteeSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CommitteeService_SubmitCommitteeVote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubmitCommitteeVoteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DecisionServer).SubmitCommitteeVote(ctx, in)
+		return srv.(CommitteeServiceServer).SubmitCommitteeVote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Decision_SubmitCommitteeVote_FullMethodName,
+		FullMethod: CommitteeService_SubmitCommitteeVote_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DecisionServer).SubmitCommitteeVote(ctx, req.(*SubmitCommitteeVoteRequest))
+		return srv.(CommitteeServiceServer).SubmitCommitteeVote(ctx, req.(*SubmitCommitteeVoteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Decision_FinalizeCommitteeDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommitteeService_FinalizeCommitteeDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FinalizeCommitteeDecisionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DecisionServer).FinalizeCommitteeDecision(ctx, in)
+		return srv.(CommitteeServiceServer).FinalizeCommitteeDecision(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Decision_FinalizeCommitteeDecision_FullMethodName,
+		FullMethod: CommitteeService_FinalizeCommitteeDecision_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DecisionServer).FinalizeCommitteeDecision(ctx, req.(*FinalizeCommitteeDecisionRequest))
+		return srv.(CommitteeServiceServer).FinalizeCommitteeDecision(ctx, req.(*FinalizeCommitteeDecisionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Decision_RecordFinalDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommitteeService_ListCommitteeSessionsByApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCommitteeSessionsByApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommitteeServiceServer).ListCommitteeSessionsByApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CommitteeService_ListCommitteeSessionsByApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommitteeServiceServer).ListCommitteeSessionsByApplication(ctx, req.(*ListCommitteeSessionsByApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// CommitteeService_ServiceDesc is the grpc.ServiceDesc for CommitteeService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var CommitteeService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.decision.v1.CommitteeService",
+	HandlerType: (*CommitteeServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateCommitteeSession",
+			Handler:    _CommitteeService_CreateCommitteeSession_Handler,
+		},
+		{
+			MethodName: "GetCommitteeSession",
+			Handler:    _CommitteeService_GetCommitteeSession_Handler,
+		},
+		{
+			MethodName: "SubmitCommitteeVote",
+			Handler:    _CommitteeService_SubmitCommitteeVote_Handler,
+		},
+		{
+			MethodName: "FinalizeCommitteeDecision",
+			Handler:    _CommitteeService_FinalizeCommitteeDecision_Handler,
+		},
+		{
+			MethodName: "ListCommitteeSessionsByApplication",
+			Handler:    _CommitteeService_ListCommitteeSessionsByApplication_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "decision/v1/decision.proto",
+}
+
+const (
+	DecisionService_RecordFinalDecision_FullMethodName    = "/api.decision.v1.DecisionService/RecordFinalDecision"
+	DecisionService_GetApplicationDecision_FullMethodName = "/api.decision.v1.DecisionService/GetApplicationDecision"
+	DecisionService_AddDecisionCondition_FullMethodName   = "/api.decision.v1.DecisionService/AddDecisionCondition"
+	DecisionService_ListDecisionConditions_FullMethodName = "/api.decision.v1.DecisionService/ListDecisionConditions"
+)
+
+// DecisionServiceClient is the client API for DecisionService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type DecisionServiceClient interface {
+	RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...grpc.CallOption) (*ApplicationDecision, error)
+	GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...grpc.CallOption) (*ApplicationDecision, error)
+	AddDecisionCondition(ctx context.Context, in *AddDecisionConditionRequest, opts ...grpc.CallOption) (*DecisionCondition, error)
+	ListDecisionConditions(ctx context.Context, in *ListDecisionConditionsRequest, opts ...grpc.CallOption) (*ListDecisionConditionsResponse, error)
+}
+
+type decisionServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewDecisionServiceClient(cc grpc.ClientConnInterface) DecisionServiceClient {
+	return &decisionServiceClient{cc}
+}
+
+func (c *decisionServiceClient) RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...grpc.CallOption) (*ApplicationDecision, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplicationDecision)
+	err := c.cc.Invoke(ctx, DecisionService_RecordFinalDecision_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *decisionServiceClient) GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...grpc.CallOption) (*ApplicationDecision, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplicationDecision)
+	err := c.cc.Invoke(ctx, DecisionService_GetApplicationDecision_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *decisionServiceClient) AddDecisionCondition(ctx context.Context, in *AddDecisionConditionRequest, opts ...grpc.CallOption) (*DecisionCondition, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DecisionCondition)
+	err := c.cc.Invoke(ctx, DecisionService_AddDecisionCondition_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *decisionServiceClient) ListDecisionConditions(ctx context.Context, in *ListDecisionConditionsRequest, opts ...grpc.CallOption) (*ListDecisionConditionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListDecisionConditionsResponse)
+	err := c.cc.Invoke(ctx, DecisionService_ListDecisionConditions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DecisionServiceServer is the server API for DecisionService service.
+// All implementations must embed UnimplementedDecisionServiceServer
+// for forward compatibility.
+type DecisionServiceServer interface {
+	RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*ApplicationDecision, error)
+	GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*ApplicationDecision, error)
+	AddDecisionCondition(context.Context, *AddDecisionConditionRequest) (*DecisionCondition, error)
+	ListDecisionConditions(context.Context, *ListDecisionConditionsRequest) (*ListDecisionConditionsResponse, error)
+	mustEmbedUnimplementedDecisionServiceServer()
+}
+
+// UnimplementedDecisionServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedDecisionServiceServer struct{}
+
+func (UnimplementedDecisionServiceServer) RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*ApplicationDecision, error) {
+	return nil, status.Error(codes.Unimplemented, "method RecordFinalDecision not implemented")
+}
+func (UnimplementedDecisionServiceServer) GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*ApplicationDecision, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetApplicationDecision not implemented")
+}
+func (UnimplementedDecisionServiceServer) AddDecisionCondition(context.Context, *AddDecisionConditionRequest) (*DecisionCondition, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddDecisionCondition not implemented")
+}
+func (UnimplementedDecisionServiceServer) ListDecisionConditions(context.Context, *ListDecisionConditionsRequest) (*ListDecisionConditionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListDecisionConditions not implemented")
+}
+func (UnimplementedDecisionServiceServer) mustEmbedUnimplementedDecisionServiceServer() {}
+func (UnimplementedDecisionServiceServer) testEmbeddedByValue()                         {}
+
+// UnsafeDecisionServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DecisionServiceServer will
+// result in compilation errors.
+type UnsafeDecisionServiceServer interface {
+	mustEmbedUnimplementedDecisionServiceServer()
+}
+
+func RegisterDecisionServiceServer(s grpc.ServiceRegistrar, srv DecisionServiceServer) {
+	// If the following call panics, it indicates UnimplementedDecisionServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&DecisionService_ServiceDesc, srv)
+}
+
+func _DecisionService_RecordFinalDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RecordFinalDecisionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DecisionServer).RecordFinalDecision(ctx, in)
+		return srv.(DecisionServiceServer).RecordFinalDecision(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Decision_RecordFinalDecision_FullMethodName,
+		FullMethod: DecisionService_RecordFinalDecision_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DecisionServer).RecordFinalDecision(ctx, req.(*RecordFinalDecisionRequest))
+		return srv.(DecisionServiceServer).RecordFinalDecision(ctx, req.(*RecordFinalDecisionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Decision_GetApplicationDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DecisionService_GetApplicationDecision_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetApplicationDecisionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DecisionServer).GetApplicationDecision(ctx, in)
+		return srv.(DecisionServiceServer).GetApplicationDecision(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Decision_GetApplicationDecision_FullMethodName,
+		FullMethod: DecisionService_GetApplicationDecision_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DecisionServer).GetApplicationDecision(ctx, req.(*GetApplicationDecisionRequest))
+		return srv.(DecisionServiceServer).GetApplicationDecision(ctx, req.(*GetApplicationDecisionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Decision_ServiceDesc is the grpc.ServiceDesc for Decision service.
+func _DecisionService_AddDecisionCondition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddDecisionConditionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DecisionServiceServer).AddDecisionCondition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DecisionService_AddDecisionCondition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DecisionServiceServer).AddDecisionCondition(ctx, req.(*AddDecisionConditionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DecisionService_ListDecisionConditions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDecisionConditionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DecisionServiceServer).ListDecisionConditions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DecisionService_ListDecisionConditions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DecisionServiceServer).ListDecisionConditions(ctx, req.(*ListDecisionConditionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DecisionService_ServiceDesc is the grpc.ServiceDesc for DecisionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Decision_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.decision.v1.Decision",
-	HandlerType: (*DecisionServer)(nil),
+var DecisionService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.decision.v1.DecisionService",
+	HandlerType: (*DecisionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateCommitteeSession",
-			Handler:    _Decision_CreateCommitteeSession_Handler,
-		},
-		{
-			MethodName: "SubmitCommitteeVote",
-			Handler:    _Decision_SubmitCommitteeVote_Handler,
-		},
-		{
-			MethodName: "FinalizeCommitteeDecision",
-			Handler:    _Decision_FinalizeCommitteeDecision_Handler,
-		},
-		{
 			MethodName: "RecordFinalDecision",
-			Handler:    _Decision_RecordFinalDecision_Handler,
+			Handler:    _DecisionService_RecordFinalDecision_Handler,
 		},
 		{
 			MethodName: "GetApplicationDecision",
-			Handler:    _Decision_GetApplicationDecision_Handler,
+			Handler:    _DecisionService_GetApplicationDecision_Handler,
+		},
+		{
+			MethodName: "AddDecisionCondition",
+			Handler:    _DecisionService_AddDecisionCondition_Handler,
+		},
+		{
+			MethodName: "ListDecisionConditions",
+			Handler:    _DecisionService_ListDecisionConditions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/decision/v1/decision.proto",
+	Metadata: "decision/v1/decision.proto",
 }

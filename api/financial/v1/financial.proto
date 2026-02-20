@@ -9,49 +9,64 @@ option go_package = "credit-analytics-backend/api/financial/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.financial.v1";
 
-service Financial {
-  rpc ListFinancialFacts (ListFinancialFactsRequest) returns (ListFinancialFactsReply) {
-    option (google.api.http) = {
-      get: "/v1/applications/{application_id}/financial-facts"
-    };
-  }
-  rpc UpsertFinancialFact (UpsertFinancialFactRequest) returns (FinancialFact) {
+service FinancialService {
+  rpc UpsertFinancialFact (UpsertFinancialFactRequest) returns (ApplicationFinancialFact) {
     option (google.api.http) = {
       post: "/v1/applications/{application_id}/financial-facts",
       body: "*"
     };
   }
-  rpc CreateAsset (CreateAssetRequest) returns (Asset) {
+  rpc ListFinancialFacts (ListFinancialFactsRequest) returns (ListFinancialFactsResponse) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/financial-facts"
+    };
+  }
+
+  rpc AddAsset (AddAssetRequest) returns (ApplicationAsset) {
     option (google.api.http) = {
       post: "/v1/applications/{application_id}/assets",
       body: "*"
     };
   }
-  rpc ListAssets (ListAssetsRequest) returns (ListAssetsReply) {
+  rpc UpdateAsset (UpdateAssetRequest) returns (ApplicationAsset) {
+    option (google.api.http) = {
+      put: "/v1/applications/{application_id}/assets/{id}",
+      body: "*"
+    };
+  }
+  rpc ListAssetsByApplication (ListAssetsByApplicationRequest) returns (ListAssetsResponse) {
     option (google.api.http) = {
       get: "/v1/applications/{application_id}/assets"
     };
   }
-  rpc CreateLiability (CreateLiabilityRequest) returns (Liability) {
+
+  rpc AddLiability (AddLiabilityRequest) returns (ApplicationLiability) {
     option (google.api.http) = {
       post: "/v1/applications/{application_id}/liabilities",
       body: "*"
     };
   }
-  rpc ListLiabilities (ListLiabilitiesRequest) returns (ListLiabilitiesReply) {
+  rpc UpdateLiability (UpdateLiabilityRequest) returns (ApplicationLiability) {
+    option (google.api.http) = {
+      put: "/v1/applications/{application_id}/liabilities/{id}",
+      body: "*"
+    };
+  }
+  rpc ListLiabilitiesByApplication (ListLiabilitiesByApplicationRequest) returns (ListLiabilitiesResponse) {
     option (google.api.http) = {
       get: "/v1/applications/{application_id}/liabilities"
     };
   }
-  rpc UpsertFinancialRatio (UpsertFinancialRatioRequest) returns (FinancialRatio) {
+
+  rpc CalculateFinancialRatios (CalculateFinancialRatiosRequest) returns (ListFinancialRatiosResponse) {
     option (google.api.http) = {
-      post: "/v1/applications/{application_id}/financial-ratios",
+      post: "/v1/applications/{application_id}/financial-ratios/calculate",
       body: "*"
     };
   }
 }
 
-message FinancialFact {
+message ApplicationFinancialFact {
   string id = 1;
   string application_id = 2;
   string gl_code = 3;
@@ -63,7 +78,7 @@ message FinancialFact {
   google.protobuf.Timestamp created_at = 9;
 }
 
-message Asset {
+message ApplicationAsset {
   string id = 1;
   string application_id = 2;
   string asset_type_code = 3;
@@ -76,7 +91,7 @@ message Asset {
   bool encumbered = 10;
 }
 
-message Liability {
+message ApplicationLiability {
   string id = 1;
   string application_id = 2;
   string creditor_name = 3;
@@ -97,14 +112,6 @@ message FinancialRatio {
   google.protobuf.Timestamp calculated_at = 6;
 }
 
-message ListFinancialFactsRequest {
-  string application_id = 1;
-}
-
-message ListFinancialFactsReply {
-  repeated FinancialFact facts = 1;
-}
-
 message UpsertFinancialFactRequest {
   string application_id = 1;
   string gl_code = 2;
@@ -115,7 +122,15 @@ message UpsertFinancialFactRequest {
   string confidence_level = 7;
 }
 
-message CreateAssetRequest {
+message ListFinancialFactsRequest {
+  string application_id = 1;
+}
+
+message ListFinancialFactsResponse {
+  repeated ApplicationFinancialFact facts = 1;
+}
+
+message AddAssetRequest {
   string application_id = 1;
   string asset_type_code = 2;
   string asset_name = 3;
@@ -127,15 +142,28 @@ message CreateAssetRequest {
   bool encumbered = 9;
 }
 
-message ListAssetsRequest {
+message UpdateAssetRequest {
+  string id = 1;
+  string application_id = 2;
+  string asset_type_code = 3;
+  string asset_name = 4;
+  string ownership_status = 5;
+  int32 acquisition_year = 6;
+  string estimated_value = 7;
+  string valuation_method = 8;
+  string location_text = 9;
+  bool encumbered = 10;
+}
+
+message ListAssetsByApplicationRequest {
   string application_id = 1;
 }
 
-message ListAssetsReply {
-  repeated Asset assets = 1;
+message ListAssetsResponse {
+  repeated ApplicationAsset assets = 1;
 }
 
-message CreateLiabilityRequest {
+message AddLiabilityRequest {
   string application_id = 1;
   string creditor_name = 2;
   string liability_type = 3;
@@ -146,17 +174,30 @@ message CreateLiabilityRequest {
   string source = 8;
 }
 
-message ListLiabilitiesRequest {
+message UpdateLiabilityRequest {
+  string id = 1;
+  string application_id = 2;
+  string creditor_name = 3;
+  string liability_type = 4;
+  string outstanding_amount = 5;
+  string monthly_installment = 6;
+  string interest_rate = 7;
+  string maturity_date = 8;
+  string source = 9;
+}
+
+message ListLiabilitiesByApplicationRequest {
   string application_id = 1;
 }
 
-message ListLiabilitiesReply {
-  repeated Liability liabilities = 1;
+message ListLiabilitiesResponse {
+  repeated ApplicationLiability liabilities = 1;
 }
 
-message UpsertFinancialRatioRequest {
+message CalculateFinancialRatiosRequest {
   string application_id = 1;
-  string ratio_code = 2;
-  string ratio_value = 3;
-  string calculation_version = 4;
+}
+
+message ListFinancialRatiosResponse {
+  repeated FinancialRatio ratios = 1;
 }

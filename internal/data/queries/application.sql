@@ -57,3 +57,23 @@ INSERT INTO application_status_logs (
 
 -- name: ListStatusLogs :many
 SELECT * FROM application_status_logs WHERE application_id = $1 ORDER BY changed_at DESC;
+
+-- name: CreateParty :one
+INSERT INTO parties (
+    party_type, identifier, name, date_of_birth
+) VALUES (
+    $1, $2, $3, $4
+) RETURNING *;
+
+-- name: CreateApplicationParty :one
+INSERT INTO application_parties (
+    application_id, party_id, role_code, legal_obligation, slik_required
+) VALUES (
+    $1, $2, $3, $4, $5
+) RETURNING *;
+
+-- name: GetPartiesByApplication :many
+SELECT p.*, ap.role_code, ap.legal_obligation, ap.slik_required
+FROM parties p
+JOIN application_parties ap ON p.id = ap.party_id
+WHERE ap.application_id = $1;

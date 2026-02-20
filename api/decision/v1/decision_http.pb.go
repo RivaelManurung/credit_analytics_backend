@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v5.29.3
-// source: api/decision/v1/decision.proto
+// source: decision/v1/decision.proto
 
 package v1
 
@@ -19,30 +19,30 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationDecisionCreateCommitteeSession = "/api.decision.v1.Decision/CreateCommitteeSession"
-const OperationDecisionFinalizeCommitteeDecision = "/api.decision.v1.Decision/FinalizeCommitteeDecision"
-const OperationDecisionGetApplicationDecision = "/api.decision.v1.Decision/GetApplicationDecision"
-const OperationDecisionRecordFinalDecision = "/api.decision.v1.Decision/RecordFinalDecision"
-const OperationDecisionSubmitCommitteeVote = "/api.decision.v1.Decision/SubmitCommitteeVote"
+const OperationCommitteeServiceCreateCommitteeSession = "/api.decision.v1.CommitteeService/CreateCommitteeSession"
+const OperationCommitteeServiceFinalizeCommitteeDecision = "/api.decision.v1.CommitteeService/FinalizeCommitteeDecision"
+const OperationCommitteeServiceGetCommitteeSession = "/api.decision.v1.CommitteeService/GetCommitteeSession"
+const OperationCommitteeServiceListCommitteeSessionsByApplication = "/api.decision.v1.CommitteeService/ListCommitteeSessionsByApplication"
+const OperationCommitteeServiceSubmitCommitteeVote = "/api.decision.v1.CommitteeService/SubmitCommitteeVote"
 
-type DecisionHTTPServer interface {
+type CommitteeServiceHTTPServer interface {
 	CreateCommitteeSession(context.Context, *CreateCommitteeSessionRequest) (*CommitteeSession, error)
 	FinalizeCommitteeDecision(context.Context, *FinalizeCommitteeDecisionRequest) (*CommitteeDecision, error)
-	GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*FinalDecision, error)
-	RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*FinalDecision, error)
+	GetCommitteeSession(context.Context, *GetCommitteeSessionRequest) (*CommitteeSession, error)
+	ListCommitteeSessionsByApplication(context.Context, *ListCommitteeSessionsByApplicationRequest) (*ListCommitteeSessionsResponse, error)
 	SubmitCommitteeVote(context.Context, *SubmitCommitteeVoteRequest) (*CommitteeVote, error)
 }
 
-func RegisterDecisionHTTPServer(s *http.Server, srv DecisionHTTPServer) {
+func RegisterCommitteeServiceHTTPServer(s *http.Server, srv CommitteeServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/committee/sessions", _Decision_CreateCommitteeSession0_HTTP_Handler(srv))
-	r.POST("/v1/committee/sessions/{committee_session_id}/votes", _Decision_SubmitCommitteeVote0_HTTP_Handler(srv))
-	r.POST("/v1/committee/sessions/{committee_session_id}/finalize", _Decision_FinalizeCommitteeDecision0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/final-decision", _Decision_RecordFinalDecision0_HTTP_Handler(srv))
-	r.GET("/v1/applications/{application_id}/decision", _Decision_GetApplicationDecision0_HTTP_Handler(srv))
+	r.POST("/v1/committee/sessions", _CommitteeService_CreateCommitteeSession0_HTTP_Handler(srv))
+	r.GET("/v1/committee/sessions/{id}", _CommitteeService_GetCommitteeSession0_HTTP_Handler(srv))
+	r.POST("/v1/committee/sessions/{committee_session_id}/votes", _CommitteeService_SubmitCommitteeVote0_HTTP_Handler(srv))
+	r.POST("/v1/committee/sessions/{committee_session_id}/finalize", _CommitteeService_FinalizeCommitteeDecision0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/committee-sessions", _CommitteeService_ListCommitteeSessionsByApplication0_HTTP_Handler(srv))
 }
 
-func _Decision_CreateCommitteeSession0_HTTP_Handler(srv DecisionHTTPServer) func(ctx http.Context) error {
+func _CommitteeService_CreateCommitteeSession0_HTTP_Handler(srv CommitteeServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateCommitteeSessionRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -51,7 +51,7 @@ func _Decision_CreateCommitteeSession0_HTTP_Handler(srv DecisionHTTPServer) func
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationDecisionCreateCommitteeSession)
+		http.SetOperation(ctx, OperationCommitteeServiceCreateCommitteeSession)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateCommitteeSession(ctx, req.(*CreateCommitteeSessionRequest))
 		})
@@ -64,7 +64,29 @@ func _Decision_CreateCommitteeSession0_HTTP_Handler(srv DecisionHTTPServer) func
 	}
 }
 
-func _Decision_SubmitCommitteeVote0_HTTP_Handler(srv DecisionHTTPServer) func(ctx http.Context) error {
+func _CommitteeService_GetCommitteeSession0_HTTP_Handler(srv CommitteeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetCommitteeSessionRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCommitteeServiceGetCommitteeSession)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetCommitteeSession(ctx, req.(*GetCommitteeSessionRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CommitteeSession)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _CommitteeService_SubmitCommitteeVote0_HTTP_Handler(srv CommitteeServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SubmitCommitteeVoteRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -76,7 +98,7 @@ func _Decision_SubmitCommitteeVote0_HTTP_Handler(srv DecisionHTTPServer) func(ct
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationDecisionSubmitCommitteeVote)
+		http.SetOperation(ctx, OperationCommitteeServiceSubmitCommitteeVote)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.SubmitCommitteeVote(ctx, req.(*SubmitCommitteeVoteRequest))
 		})
@@ -89,7 +111,7 @@ func _Decision_SubmitCommitteeVote0_HTTP_Handler(srv DecisionHTTPServer) func(ct
 	}
 }
 
-func _Decision_FinalizeCommitteeDecision0_HTTP_Handler(srv DecisionHTTPServer) func(ctx http.Context) error {
+func _CommitteeService_FinalizeCommitteeDecision0_HTTP_Handler(srv CommitteeServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in FinalizeCommitteeDecisionRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -101,7 +123,7 @@ func _Decision_FinalizeCommitteeDecision0_HTTP_Handler(srv DecisionHTTPServer) f
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationDecisionFinalizeCommitteeDecision)
+		http.SetOperation(ctx, OperationCommitteeServiceFinalizeCommitteeDecision)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.FinalizeCommitteeDecision(ctx, req.(*FinalizeCommitteeDecisionRequest))
 		})
@@ -114,7 +136,130 @@ func _Decision_FinalizeCommitteeDecision0_HTTP_Handler(srv DecisionHTTPServer) f
 	}
 }
 
-func _Decision_RecordFinalDecision0_HTTP_Handler(srv DecisionHTTPServer) func(ctx http.Context) error {
+func _CommitteeService_ListCommitteeSessionsByApplication0_HTTP_Handler(srv CommitteeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListCommitteeSessionsByApplicationRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCommitteeServiceListCommitteeSessionsByApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListCommitteeSessionsByApplication(ctx, req.(*ListCommitteeSessionsByApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListCommitteeSessionsResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+type CommitteeServiceHTTPClient interface {
+	CreateCommitteeSession(ctx context.Context, req *CreateCommitteeSessionRequest, opts ...http.CallOption) (rsp *CommitteeSession, err error)
+	FinalizeCommitteeDecision(ctx context.Context, req *FinalizeCommitteeDecisionRequest, opts ...http.CallOption) (rsp *CommitteeDecision, err error)
+	GetCommitteeSession(ctx context.Context, req *GetCommitteeSessionRequest, opts ...http.CallOption) (rsp *CommitteeSession, err error)
+	ListCommitteeSessionsByApplication(ctx context.Context, req *ListCommitteeSessionsByApplicationRequest, opts ...http.CallOption) (rsp *ListCommitteeSessionsResponse, err error)
+	SubmitCommitteeVote(ctx context.Context, req *SubmitCommitteeVoteRequest, opts ...http.CallOption) (rsp *CommitteeVote, err error)
+}
+
+type CommitteeServiceHTTPClientImpl struct {
+	cc *http.Client
+}
+
+func NewCommitteeServiceHTTPClient(client *http.Client) CommitteeServiceHTTPClient {
+	return &CommitteeServiceHTTPClientImpl{client}
+}
+
+func (c *CommitteeServiceHTTPClientImpl) CreateCommitteeSession(ctx context.Context, in *CreateCommitteeSessionRequest, opts ...http.CallOption) (*CommitteeSession, error) {
+	var out CommitteeSession
+	pattern := "/v1/committee/sessions"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationCommitteeServiceCreateCommitteeSession))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *CommitteeServiceHTTPClientImpl) FinalizeCommitteeDecision(ctx context.Context, in *FinalizeCommitteeDecisionRequest, opts ...http.CallOption) (*CommitteeDecision, error) {
+	var out CommitteeDecision
+	pattern := "/v1/committee/sessions/{committee_session_id}/finalize"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationCommitteeServiceFinalizeCommitteeDecision))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *CommitteeServiceHTTPClientImpl) GetCommitteeSession(ctx context.Context, in *GetCommitteeSessionRequest, opts ...http.CallOption) (*CommitteeSession, error) {
+	var out CommitteeSession
+	pattern := "/v1/committee/sessions/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationCommitteeServiceGetCommitteeSession))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *CommitteeServiceHTTPClientImpl) ListCommitteeSessionsByApplication(ctx context.Context, in *ListCommitteeSessionsByApplicationRequest, opts ...http.CallOption) (*ListCommitteeSessionsResponse, error) {
+	var out ListCommitteeSessionsResponse
+	pattern := "/v1/applications/{application_id}/committee-sessions"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationCommitteeServiceListCommitteeSessionsByApplication))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *CommitteeServiceHTTPClientImpl) SubmitCommitteeVote(ctx context.Context, in *SubmitCommitteeVoteRequest, opts ...http.CallOption) (*CommitteeVote, error) {
+	var out CommitteeVote
+	pattern := "/v1/committee/sessions/{committee_session_id}/votes"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationCommitteeServiceSubmitCommitteeVote))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+const OperationDecisionServiceAddDecisionCondition = "/api.decision.v1.DecisionService/AddDecisionCondition"
+const OperationDecisionServiceGetApplicationDecision = "/api.decision.v1.DecisionService/GetApplicationDecision"
+const OperationDecisionServiceListDecisionConditions = "/api.decision.v1.DecisionService/ListDecisionConditions"
+const OperationDecisionServiceRecordFinalDecision = "/api.decision.v1.DecisionService/RecordFinalDecision"
+
+type DecisionServiceHTTPServer interface {
+	AddDecisionCondition(context.Context, *AddDecisionConditionRequest) (*DecisionCondition, error)
+	GetApplicationDecision(context.Context, *GetApplicationDecisionRequest) (*ApplicationDecision, error)
+	ListDecisionConditions(context.Context, *ListDecisionConditionsRequest) (*ListDecisionConditionsResponse, error)
+	RecordFinalDecision(context.Context, *RecordFinalDecisionRequest) (*ApplicationDecision, error)
+}
+
+func RegisterDecisionServiceHTTPServer(s *http.Server, srv DecisionServiceHTTPServer) {
+	r := s.Route("/")
+	r.POST("/v1/applications/{application_id}/final-decision", _DecisionService_RecordFinalDecision0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/decision", _DecisionService_GetApplicationDecision0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/decision-conditions", _DecisionService_AddDecisionCondition0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/decision-conditions", _DecisionService_ListDecisionConditions0_HTTP_Handler(srv))
+}
+
+func _DecisionService_RecordFinalDecision0_HTTP_Handler(srv DecisionServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in RecordFinalDecisionRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -126,7 +271,7 @@ func _Decision_RecordFinalDecision0_HTTP_Handler(srv DecisionHTTPServer) func(ct
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationDecisionRecordFinalDecision)
+		http.SetOperation(ctx, OperationDecisionServiceRecordFinalDecision)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.RecordFinalDecision(ctx, req.(*RecordFinalDecisionRequest))
 		})
@@ -134,12 +279,12 @@ func _Decision_RecordFinalDecision0_HTTP_Handler(srv DecisionHTTPServer) func(ct
 		if err != nil {
 			return err
 		}
-		reply := out.(*FinalDecision)
+		reply := out.(*ApplicationDecision)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Decision_GetApplicationDecision0_HTTP_Handler(srv DecisionHTTPServer) func(ctx http.Context) error {
+func _DecisionService_GetApplicationDecision0_HTTP_Handler(srv DecisionServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetApplicationDecisionRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -148,7 +293,7 @@ func _Decision_GetApplicationDecision0_HTTP_Handler(srv DecisionHTTPServer) func
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationDecisionGetApplicationDecision)
+		http.SetOperation(ctx, OperationDecisionServiceGetApplicationDecision)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetApplicationDecision(ctx, req.(*GetApplicationDecisionRequest))
 		})
@@ -156,32 +301,78 @@ func _Decision_GetApplicationDecision0_HTTP_Handler(srv DecisionHTTPServer) func
 		if err != nil {
 			return err
 		}
-		reply := out.(*FinalDecision)
+		reply := out.(*ApplicationDecision)
 		return ctx.Result(200, reply)
 	}
 }
 
-type DecisionHTTPClient interface {
-	CreateCommitteeSession(ctx context.Context, req *CreateCommitteeSessionRequest, opts ...http.CallOption) (rsp *CommitteeSession, err error)
-	FinalizeCommitteeDecision(ctx context.Context, req *FinalizeCommitteeDecisionRequest, opts ...http.CallOption) (rsp *CommitteeDecision, err error)
-	GetApplicationDecision(ctx context.Context, req *GetApplicationDecisionRequest, opts ...http.CallOption) (rsp *FinalDecision, err error)
-	RecordFinalDecision(ctx context.Context, req *RecordFinalDecisionRequest, opts ...http.CallOption) (rsp *FinalDecision, err error)
-	SubmitCommitteeVote(ctx context.Context, req *SubmitCommitteeVoteRequest, opts ...http.CallOption) (rsp *CommitteeVote, err error)
+func _DecisionService_AddDecisionCondition0_HTTP_Handler(srv DecisionServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddDecisionConditionRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDecisionServiceAddDecisionCondition)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.AddDecisionCondition(ctx, req.(*AddDecisionConditionRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DecisionCondition)
+		return ctx.Result(200, reply)
+	}
 }
 
-type DecisionHTTPClientImpl struct {
+func _DecisionService_ListDecisionConditions0_HTTP_Handler(srv DecisionServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListDecisionConditionsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDecisionServiceListDecisionConditions)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListDecisionConditions(ctx, req.(*ListDecisionConditionsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListDecisionConditionsResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+type DecisionServiceHTTPClient interface {
+	AddDecisionCondition(ctx context.Context, req *AddDecisionConditionRequest, opts ...http.CallOption) (rsp *DecisionCondition, err error)
+	GetApplicationDecision(ctx context.Context, req *GetApplicationDecisionRequest, opts ...http.CallOption) (rsp *ApplicationDecision, err error)
+	ListDecisionConditions(ctx context.Context, req *ListDecisionConditionsRequest, opts ...http.CallOption) (rsp *ListDecisionConditionsResponse, err error)
+	RecordFinalDecision(ctx context.Context, req *RecordFinalDecisionRequest, opts ...http.CallOption) (rsp *ApplicationDecision, err error)
+}
+
+type DecisionServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewDecisionHTTPClient(client *http.Client) DecisionHTTPClient {
-	return &DecisionHTTPClientImpl{client}
+func NewDecisionServiceHTTPClient(client *http.Client) DecisionServiceHTTPClient {
+	return &DecisionServiceHTTPClientImpl{client}
 }
 
-func (c *DecisionHTTPClientImpl) CreateCommitteeSession(ctx context.Context, in *CreateCommitteeSessionRequest, opts ...http.CallOption) (*CommitteeSession, error) {
-	var out CommitteeSession
-	pattern := "/v1/committee/sessions"
+func (c *DecisionServiceHTTPClientImpl) AddDecisionCondition(ctx context.Context, in *AddDecisionConditionRequest, opts ...http.CallOption) (*DecisionCondition, error) {
+	var out DecisionCondition
+	pattern := "/v1/applications/{application_id}/decision-conditions"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationDecisionCreateCommitteeSession))
+	opts = append(opts, http.Operation(OperationDecisionServiceAddDecisionCondition))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -190,24 +381,11 @@ func (c *DecisionHTTPClientImpl) CreateCommitteeSession(ctx context.Context, in 
 	return &out, nil
 }
 
-func (c *DecisionHTTPClientImpl) FinalizeCommitteeDecision(ctx context.Context, in *FinalizeCommitteeDecisionRequest, opts ...http.CallOption) (*CommitteeDecision, error) {
-	var out CommitteeDecision
-	pattern := "/v1/committee/sessions/{committee_session_id}/finalize"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationDecisionFinalizeCommitteeDecision))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *DecisionHTTPClientImpl) GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...http.CallOption) (*FinalDecision, error) {
-	var out FinalDecision
+func (c *DecisionServiceHTTPClientImpl) GetApplicationDecision(ctx context.Context, in *GetApplicationDecisionRequest, opts ...http.CallOption) (*ApplicationDecision, error) {
+	var out ApplicationDecision
 	pattern := "/v1/applications/{application_id}/decision"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationDecisionGetApplicationDecision))
+	opts = append(opts, http.Operation(OperationDecisionServiceGetApplicationDecision))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -216,24 +394,24 @@ func (c *DecisionHTTPClientImpl) GetApplicationDecision(ctx context.Context, in 
 	return &out, nil
 }
 
-func (c *DecisionHTTPClientImpl) RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...http.CallOption) (*FinalDecision, error) {
-	var out FinalDecision
-	pattern := "/v1/applications/{application_id}/final-decision"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationDecisionRecordFinalDecision))
+func (c *DecisionServiceHTTPClientImpl) ListDecisionConditions(ctx context.Context, in *ListDecisionConditionsRequest, opts ...http.CallOption) (*ListDecisionConditionsResponse, error) {
+	var out ListDecisionConditionsResponse
+	pattern := "/v1/applications/{application_id}/decision-conditions"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDecisionServiceListDecisionConditions))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
-func (c *DecisionHTTPClientImpl) SubmitCommitteeVote(ctx context.Context, in *SubmitCommitteeVoteRequest, opts ...http.CallOption) (*CommitteeVote, error) {
-	var out CommitteeVote
-	pattern := "/v1/committee/sessions/{committee_session_id}/votes"
+func (c *DecisionServiceHTTPClientImpl) RecordFinalDecision(ctx context.Context, in *RecordFinalDecisionRequest, opts ...http.CallOption) (*ApplicationDecision, error) {
+	var out ApplicationDecision
+	pattern := "/v1/applications/{application_id}/final-decision"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationDecisionSubmitCommitteeVote))
+	opts = append(opts, http.Operation(OperationDecisionServiceRecordFinalDecision))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

@@ -8,10 +8,11 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type ReferenceService struct {
-	pb.UnimplementedReferenceServer
+	pb.UnimplementedReferenceServiceServer
 	uc  *biz.ReferenceUsecase
 	log *log.Helper
 }
@@ -23,7 +24,7 @@ func NewReferenceService(uc *biz.ReferenceUsecase, logger log.Logger) *Reference
 	}
 }
 
-func (s *ReferenceService) ListLoanProducts(ctx context.Context, req *pb.ListLoanProductsRequest) (*pb.ListLoanProductsReply, error) {
+func (s *ReferenceService) ListLoanProducts(ctx context.Context, req *emptypb.Empty) (*pb.ListLoanProductsResponse, error) {
 	products, err := s.uc.ListLoanProducts(ctx)
 	if err != nil {
 		return nil, err
@@ -38,7 +39,7 @@ func (s *ReferenceService) ListLoanProducts(ctx context.Context, req *pb.ListLoa
 			Active:      p.Active,
 		})
 	}
-	return &pb.ListLoanProductsReply{Products: res}, nil
+	return &pb.ListLoanProductsResponse{Products: res}, nil
 }
 
 func (s *ReferenceService) GetLoanProduct(ctx context.Context, req *pb.GetLoanProductRequest) (*pb.LoanProduct, error) {
@@ -59,7 +60,7 @@ func (s *ReferenceService) GetLoanProduct(ctx context.Context, req *pb.GetLoanPr
 	}, nil
 }
 
-func (s *ReferenceService) ListBranches(ctx context.Context, req *pb.ListBranchesRequest) (*pb.ListBranchesReply, error) {
+func (s *ReferenceService) ListBranches(ctx context.Context, req *emptypb.Empty) (*pb.ListBranchesResponse, error) {
 	branches, err := s.uc.ListBranches(ctx)
 	if err != nil {
 		return nil, err
@@ -72,10 +73,10 @@ func (s *ReferenceService) ListBranches(ctx context.Context, req *pb.ListBranche
 			RegionCode: b.RegionCode,
 		})
 	}
-	return &pb.ListBranchesReply{Branches: res}, nil
+	return &pb.ListBranchesResponse{Branches: res}, nil
 }
 
-func (s *ReferenceService) ListLoanOfficers(ctx context.Context, req *pb.ListLoanOfficersRequest) (*pb.ListLoanOfficersReply, error) {
+func (s *ReferenceService) ListLoanOfficers(ctx context.Context, req *pb.ListLoanOfficersRequest) (*pb.ListLoanOfficersResponse, error) {
 	officers, err := s.uc.ListLoanOfficers(ctx, req.BranchCode)
 	if err != nil {
 		return nil, err
@@ -88,10 +89,10 @@ func (s *ReferenceService) ListLoanOfficers(ctx context.Context, req *pb.ListLoa
 			BranchCode:  o.BranchCode,
 		})
 	}
-	return &pb.ListLoanOfficersReply{Officers: res}, nil
+	return &pb.ListLoanOfficersResponse{Officers: res}, nil
 }
 
-func (s *ReferenceService) ListApplicationStatuses(ctx context.Context, req *pb.ListApplicationStatusesRequest) (*pb.ListApplicationStatusesReply, error) {
+func (s *ReferenceService) ListApplicationStatuses(ctx context.Context, req *emptypb.Empty) (*pb.ListApplicationStatusesResponse, error) {
 	statuses, err := s.uc.ListApplicationStatuses(ctx)
 	if err != nil {
 		return nil, err
@@ -105,10 +106,10 @@ func (s *ReferenceService) ListApplicationStatuses(ctx context.Context, req *pb.
 			Description: st.Description,
 		})
 	}
-	return &pb.ListApplicationStatusesReply{Statuses: res}, nil
+	return &pb.ListApplicationStatusesResponse{Statuses: res}, nil
 }
 
-func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *pb.ListFinancialGLAccountsRequest) (*pb.ListFinancialGLAccountsReply, error) {
+func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *emptypb.Empty) (*pb.ListFinancialGLAccountsResponse, error) {
 	accounts, err := s.uc.ListFinancialGLAccounts(ctx)
 	if err != nil {
 		return nil, err
@@ -126,5 +127,13 @@ func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *pb.
 			Description:   a.Description,
 		})
 	}
-	return &pb.ListFinancialGLAccountsReply{Accounts: res}, nil
+	return &pb.ListFinancialGLAccountsResponse{Accounts: res}, nil
+}
+
+func (s *ReferenceService) ListAttributeRegistry(ctx context.Context, req *emptypb.Empty) (*pb.ListAttributeRegistryResponse, error) {
+	return &pb.ListAttributeRegistryResponse{}, nil
+}
+
+func (s *ReferenceService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesResponse, error) {
+	return &pb.ListSurveyTemplatesResponse{}, nil
 }

@@ -12,7 +12,7 @@ import (
 )
 
 type DecisionService struct {
-	pb.UnimplementedDecisionServer
+	pb.UnimplementedDecisionServiceServer
 	uc  *biz.DecisionUsecase
 	log *log.Helper
 }
@@ -24,7 +24,20 @@ func NewDecisionService(uc *biz.DecisionUsecase, logger log.Logger) *DecisionSer
 	}
 }
 
-func (s *DecisionService) CreateCommitteeSession(ctx context.Context, req *pb.CreateCommitteeSessionRequest) (*pb.CommitteeSession, error) {
+type CommitteeService struct {
+	pb.UnimplementedCommitteeServiceServer
+	uc  *biz.DecisionUsecase
+	log *log.Helper
+}
+
+func NewCommitteeService(uc *biz.DecisionUsecase, logger log.Logger) *CommitteeService {
+	return &CommitteeService{
+		uc:  uc,
+		log: log.NewHelper(logger),
+	}
+}
+
+func (s *CommitteeService) CreateCommitteeSession(ctx context.Context, req *pb.CreateCommitteeSessionRequest) (*pb.CommitteeSession, error) {
 	appID, _ := uuid.Parse(req.ApplicationId)
 	res, err := s.uc.CreateCommitteeSession(ctx, &biz.CommitteeSession{
 		ApplicationID:   appID,
@@ -45,7 +58,7 @@ func (s *DecisionService) CreateCommitteeSession(ctx context.Context, req *pb.Cr
 	}, nil
 }
 
-func (s *DecisionService) SubmitCommitteeVote(ctx context.Context, req *pb.SubmitCommitteeVoteRequest) (*pb.CommitteeVote, error) {
+func (s *CommitteeService) SubmitCommitteeVote(ctx context.Context, req *pb.SubmitCommitteeVoteRequest) (*pb.CommitteeVote, error) {
 	sessionID, _ := uuid.Parse(req.CommitteeSessionId)
 	userID, _ := uuid.Parse(req.UserId)
 	res, err := s.uc.SubmitCommitteeVote(ctx, &biz.CommitteeVote{
@@ -67,7 +80,7 @@ func (s *DecisionService) SubmitCommitteeVote(ctx context.Context, req *pb.Submi
 	}, nil
 }
 
-func (s *DecisionService) FinalizeCommitteeDecision(ctx context.Context, req *pb.FinalizeCommitteeDecisionRequest) (*pb.CommitteeDecision, error) {
+func (s *CommitteeService) FinalizeCommitteeDecision(ctx context.Context, req *pb.FinalizeCommitteeDecisionRequest) (*pb.CommitteeDecision, error) {
 	sessionID, _ := uuid.Parse(req.CommitteeSessionId)
 	res, err := s.uc.FinalizeCommitteeDecision(ctx, &biz.CommitteeDecision{
 		CommitteeSessionID:    sessionID,
@@ -94,7 +107,15 @@ func (s *DecisionService) FinalizeCommitteeDecision(ctx context.Context, req *pb
 	}, nil
 }
 
-func (s *DecisionService) RecordFinalDecision(ctx context.Context, req *pb.RecordFinalDecisionRequest) (*pb.FinalDecision, error) {
+func (s *CommitteeService) GetCommitteeSession(ctx context.Context, req *pb.GetCommitteeSessionRequest) (*pb.CommitteeSession, error) {
+	return &pb.CommitteeSession{}, nil
+}
+
+func (s *CommitteeService) ListCommitteeSessionsByApplication(ctx context.Context, req *pb.ListCommitteeSessionsByApplicationRequest) (*pb.ListCommitteeSessionsResponse, error) {
+	return &pb.ListCommitteeSessionsResponse{}, nil
+}
+
+func (s *DecisionService) RecordFinalDecision(ctx context.Context, req *pb.RecordFinalDecisionRequest) (*pb.ApplicationDecision, error) {
 	appID, _ := uuid.Parse(req.ApplicationId)
 	decidedBy, _ := uuid.Parse(req.DecidedBy)
 	res, err := s.uc.RecordFinalDecision(ctx, &biz.FinalDecision{
@@ -113,7 +134,7 @@ func (s *DecisionService) RecordFinalDecision(ctx context.Context, req *pb.Recor
 	return mapFinalDecisionToPb(res), nil
 }
 
-func (s *DecisionService) GetApplicationDecision(ctx context.Context, req *pb.GetApplicationDecisionRequest) (*pb.FinalDecision, error) {
+func (s *DecisionService) GetApplicationDecision(ctx context.Context, req *pb.GetApplicationDecisionRequest) (*pb.ApplicationDecision, error) {
 	appID, _ := uuid.Parse(req.ApplicationId)
 	res, err := s.uc.GetApplicationDecision(ctx, appID)
 	if err != nil {
@@ -122,8 +143,16 @@ func (s *DecisionService) GetApplicationDecision(ctx context.Context, req *pb.Ge
 	return mapFinalDecisionToPb(res), nil
 }
 
-func mapFinalDecisionToPb(d *biz.FinalDecision) *pb.FinalDecision {
-	return &pb.FinalDecision{
+func (s *DecisionService) AddDecisionCondition(ctx context.Context, req *pb.AddDecisionConditionRequest) (*pb.DecisionCondition, error) {
+	return &pb.DecisionCondition{}, nil
+}
+
+func (s *DecisionService) ListDecisionConditions(ctx context.Context, req *pb.ListDecisionConditionsRequest) (*pb.ListDecisionConditionsResponse, error) {
+	return &pb.ListDecisionConditionsResponse{}, nil
+}
+
+func mapFinalDecisionToPb(d *biz.FinalDecision) *pb.ApplicationDecision {
+	return &pb.ApplicationDecision{
 		Id:                d.ID.String(),
 		ApplicationId:     d.ApplicationID.String(),
 		Decision:          d.Decision,

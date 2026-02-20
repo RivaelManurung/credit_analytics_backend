@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v5.29.3
-// source: api/financial/v1/financial.proto
+// source: financial/v1/financial.proto
 
 package v1
 
@@ -19,331 +19,407 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Financial_ListFinancialFacts_FullMethodName   = "/api.financial.v1.Financial/ListFinancialFacts"
-	Financial_UpsertFinancialFact_FullMethodName  = "/api.financial.v1.Financial/UpsertFinancialFact"
-	Financial_CreateAsset_FullMethodName          = "/api.financial.v1.Financial/CreateAsset"
-	Financial_ListAssets_FullMethodName           = "/api.financial.v1.Financial/ListAssets"
-	Financial_CreateLiability_FullMethodName      = "/api.financial.v1.Financial/CreateLiability"
-	Financial_ListLiabilities_FullMethodName      = "/api.financial.v1.Financial/ListLiabilities"
-	Financial_UpsertFinancialRatio_FullMethodName = "/api.financial.v1.Financial/UpsertFinancialRatio"
+	FinancialService_UpsertFinancialFact_FullMethodName          = "/api.financial.v1.FinancialService/UpsertFinancialFact"
+	FinancialService_ListFinancialFacts_FullMethodName           = "/api.financial.v1.FinancialService/ListFinancialFacts"
+	FinancialService_AddAsset_FullMethodName                     = "/api.financial.v1.FinancialService/AddAsset"
+	FinancialService_UpdateAsset_FullMethodName                  = "/api.financial.v1.FinancialService/UpdateAsset"
+	FinancialService_ListAssetsByApplication_FullMethodName      = "/api.financial.v1.FinancialService/ListAssetsByApplication"
+	FinancialService_AddLiability_FullMethodName                 = "/api.financial.v1.FinancialService/AddLiability"
+	FinancialService_UpdateLiability_FullMethodName              = "/api.financial.v1.FinancialService/UpdateLiability"
+	FinancialService_ListLiabilitiesByApplication_FullMethodName = "/api.financial.v1.FinancialService/ListLiabilitiesByApplication"
+	FinancialService_CalculateFinancialRatios_FullMethodName     = "/api.financial.v1.FinancialService/CalculateFinancialRatios"
 )
 
-// FinancialClient is the client API for Financial service.
+// FinancialServiceClient is the client API for FinancialService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FinancialClient interface {
-	ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...grpc.CallOption) (*ListFinancialFactsReply, error)
-	UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...grpc.CallOption) (*FinancialFact, error)
-	CreateAsset(ctx context.Context, in *CreateAssetRequest, opts ...grpc.CallOption) (*Asset, error)
-	ListAssets(ctx context.Context, in *ListAssetsRequest, opts ...grpc.CallOption) (*ListAssetsReply, error)
-	CreateLiability(ctx context.Context, in *CreateLiabilityRequest, opts ...grpc.CallOption) (*Liability, error)
-	ListLiabilities(ctx context.Context, in *ListLiabilitiesRequest, opts ...grpc.CallOption) (*ListLiabilitiesReply, error)
-	UpsertFinancialRatio(ctx context.Context, in *UpsertFinancialRatioRequest, opts ...grpc.CallOption) (*FinancialRatio, error)
+type FinancialServiceClient interface {
+	UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...grpc.CallOption) (*ApplicationFinancialFact, error)
+	ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...grpc.CallOption) (*ListFinancialFactsResponse, error)
+	AddAsset(ctx context.Context, in *AddAssetRequest, opts ...grpc.CallOption) (*ApplicationAsset, error)
+	UpdateAsset(ctx context.Context, in *UpdateAssetRequest, opts ...grpc.CallOption) (*ApplicationAsset, error)
+	ListAssetsByApplication(ctx context.Context, in *ListAssetsByApplicationRequest, opts ...grpc.CallOption) (*ListAssetsResponse, error)
+	AddLiability(ctx context.Context, in *AddLiabilityRequest, opts ...grpc.CallOption) (*ApplicationLiability, error)
+	UpdateLiability(ctx context.Context, in *UpdateLiabilityRequest, opts ...grpc.CallOption) (*ApplicationLiability, error)
+	ListLiabilitiesByApplication(ctx context.Context, in *ListLiabilitiesByApplicationRequest, opts ...grpc.CallOption) (*ListLiabilitiesResponse, error)
+	CalculateFinancialRatios(ctx context.Context, in *CalculateFinancialRatiosRequest, opts ...grpc.CallOption) (*ListFinancialRatiosResponse, error)
 }
 
-type financialClient struct {
+type financialServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFinancialClient(cc grpc.ClientConnInterface) FinancialClient {
-	return &financialClient{cc}
+func NewFinancialServiceClient(cc grpc.ClientConnInterface) FinancialServiceClient {
+	return &financialServiceClient{cc}
 }
 
-func (c *financialClient) ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...grpc.CallOption) (*ListFinancialFactsReply, error) {
+func (c *financialServiceClient) UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...grpc.CallOption) (*ApplicationFinancialFact, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListFinancialFactsReply)
-	err := c.cc.Invoke(ctx, Financial_ListFinancialFacts_FullMethodName, in, out, cOpts...)
+	out := new(ApplicationFinancialFact)
+	err := c.cc.Invoke(ctx, FinancialService_UpsertFinancialFact_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...grpc.CallOption) (*FinancialFact, error) {
+func (c *financialServiceClient) ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...grpc.CallOption) (*ListFinancialFactsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FinancialFact)
-	err := c.cc.Invoke(ctx, Financial_UpsertFinancialFact_FullMethodName, in, out, cOpts...)
+	out := new(ListFinancialFactsResponse)
+	err := c.cc.Invoke(ctx, FinancialService_ListFinancialFacts_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) CreateAsset(ctx context.Context, in *CreateAssetRequest, opts ...grpc.CallOption) (*Asset, error) {
+func (c *financialServiceClient) AddAsset(ctx context.Context, in *AddAssetRequest, opts ...grpc.CallOption) (*ApplicationAsset, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Asset)
-	err := c.cc.Invoke(ctx, Financial_CreateAsset_FullMethodName, in, out, cOpts...)
+	out := new(ApplicationAsset)
+	err := c.cc.Invoke(ctx, FinancialService_AddAsset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) ListAssets(ctx context.Context, in *ListAssetsRequest, opts ...grpc.CallOption) (*ListAssetsReply, error) {
+func (c *financialServiceClient) UpdateAsset(ctx context.Context, in *UpdateAssetRequest, opts ...grpc.CallOption) (*ApplicationAsset, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListAssetsReply)
-	err := c.cc.Invoke(ctx, Financial_ListAssets_FullMethodName, in, out, cOpts...)
+	out := new(ApplicationAsset)
+	err := c.cc.Invoke(ctx, FinancialService_UpdateAsset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) CreateLiability(ctx context.Context, in *CreateLiabilityRequest, opts ...grpc.CallOption) (*Liability, error) {
+func (c *financialServiceClient) ListAssetsByApplication(ctx context.Context, in *ListAssetsByApplicationRequest, opts ...grpc.CallOption) (*ListAssetsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Liability)
-	err := c.cc.Invoke(ctx, Financial_CreateLiability_FullMethodName, in, out, cOpts...)
+	out := new(ListAssetsResponse)
+	err := c.cc.Invoke(ctx, FinancialService_ListAssetsByApplication_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) ListLiabilities(ctx context.Context, in *ListLiabilitiesRequest, opts ...grpc.CallOption) (*ListLiabilitiesReply, error) {
+func (c *financialServiceClient) AddLiability(ctx context.Context, in *AddLiabilityRequest, opts ...grpc.CallOption) (*ApplicationLiability, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListLiabilitiesReply)
-	err := c.cc.Invoke(ctx, Financial_ListLiabilities_FullMethodName, in, out, cOpts...)
+	out := new(ApplicationLiability)
+	err := c.cc.Invoke(ctx, FinancialService_AddLiability_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *financialClient) UpsertFinancialRatio(ctx context.Context, in *UpsertFinancialRatioRequest, opts ...grpc.CallOption) (*FinancialRatio, error) {
+func (c *financialServiceClient) UpdateLiability(ctx context.Context, in *UpdateLiabilityRequest, opts ...grpc.CallOption) (*ApplicationLiability, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FinancialRatio)
-	err := c.cc.Invoke(ctx, Financial_UpsertFinancialRatio_FullMethodName, in, out, cOpts...)
+	out := new(ApplicationLiability)
+	err := c.cc.Invoke(ctx, FinancialService_UpdateLiability_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FinancialServer is the server API for Financial service.
-// All implementations must embed UnimplementedFinancialServer
+func (c *financialServiceClient) ListLiabilitiesByApplication(ctx context.Context, in *ListLiabilitiesByApplicationRequest, opts ...grpc.CallOption) (*ListLiabilitiesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListLiabilitiesResponse)
+	err := c.cc.Invoke(ctx, FinancialService_ListLiabilitiesByApplication_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financialServiceClient) CalculateFinancialRatios(ctx context.Context, in *CalculateFinancialRatiosRequest, opts ...grpc.CallOption) (*ListFinancialRatiosResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListFinancialRatiosResponse)
+	err := c.cc.Invoke(ctx, FinancialService_CalculateFinancialRatios_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FinancialServiceServer is the server API for FinancialService service.
+// All implementations must embed UnimplementedFinancialServiceServer
 // for forward compatibility.
-type FinancialServer interface {
-	ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsReply, error)
-	UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*FinancialFact, error)
-	CreateAsset(context.Context, *CreateAssetRequest) (*Asset, error)
-	ListAssets(context.Context, *ListAssetsRequest) (*ListAssetsReply, error)
-	CreateLiability(context.Context, *CreateLiabilityRequest) (*Liability, error)
-	ListLiabilities(context.Context, *ListLiabilitiesRequest) (*ListLiabilitiesReply, error)
-	UpsertFinancialRatio(context.Context, *UpsertFinancialRatioRequest) (*FinancialRatio, error)
-	mustEmbedUnimplementedFinancialServer()
+type FinancialServiceServer interface {
+	UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*ApplicationFinancialFact, error)
+	ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsResponse, error)
+	AddAsset(context.Context, *AddAssetRequest) (*ApplicationAsset, error)
+	UpdateAsset(context.Context, *UpdateAssetRequest) (*ApplicationAsset, error)
+	ListAssetsByApplication(context.Context, *ListAssetsByApplicationRequest) (*ListAssetsResponse, error)
+	AddLiability(context.Context, *AddLiabilityRequest) (*ApplicationLiability, error)
+	UpdateLiability(context.Context, *UpdateLiabilityRequest) (*ApplicationLiability, error)
+	ListLiabilitiesByApplication(context.Context, *ListLiabilitiesByApplicationRequest) (*ListLiabilitiesResponse, error)
+	CalculateFinancialRatios(context.Context, *CalculateFinancialRatiosRequest) (*ListFinancialRatiosResponse, error)
+	mustEmbedUnimplementedFinancialServiceServer()
 }
 
-// UnimplementedFinancialServer must be embedded to have
+// UnimplementedFinancialServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedFinancialServer struct{}
+type UnimplementedFinancialServiceServer struct{}
 
-func (UnimplementedFinancialServer) ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListFinancialFacts not implemented")
-}
-func (UnimplementedFinancialServer) UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*FinancialFact, error) {
+func (UnimplementedFinancialServiceServer) UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*ApplicationFinancialFact, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpsertFinancialFact not implemented")
 }
-func (UnimplementedFinancialServer) CreateAsset(context.Context, *CreateAssetRequest) (*Asset, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateAsset not implemented")
+func (UnimplementedFinancialServiceServer) ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListFinancialFacts not implemented")
 }
-func (UnimplementedFinancialServer) ListAssets(context.Context, *ListAssetsRequest) (*ListAssetsReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListAssets not implemented")
+func (UnimplementedFinancialServiceServer) AddAsset(context.Context, *AddAssetRequest) (*ApplicationAsset, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddAsset not implemented")
 }
-func (UnimplementedFinancialServer) CreateLiability(context.Context, *CreateLiabilityRequest) (*Liability, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateLiability not implemented")
+func (UnimplementedFinancialServiceServer) UpdateAsset(context.Context, *UpdateAssetRequest) (*ApplicationAsset, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateAsset not implemented")
 }
-func (UnimplementedFinancialServer) ListLiabilities(context.Context, *ListLiabilitiesRequest) (*ListLiabilitiesReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListLiabilities not implemented")
+func (UnimplementedFinancialServiceServer) ListAssetsByApplication(context.Context, *ListAssetsByApplicationRequest) (*ListAssetsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAssetsByApplication not implemented")
 }
-func (UnimplementedFinancialServer) UpsertFinancialRatio(context.Context, *UpsertFinancialRatioRequest) (*FinancialRatio, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpsertFinancialRatio not implemented")
+func (UnimplementedFinancialServiceServer) AddLiability(context.Context, *AddLiabilityRequest) (*ApplicationLiability, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddLiability not implemented")
 }
-func (UnimplementedFinancialServer) mustEmbedUnimplementedFinancialServer() {}
-func (UnimplementedFinancialServer) testEmbeddedByValue()                   {}
+func (UnimplementedFinancialServiceServer) UpdateLiability(context.Context, *UpdateLiabilityRequest) (*ApplicationLiability, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateLiability not implemented")
+}
+func (UnimplementedFinancialServiceServer) ListLiabilitiesByApplication(context.Context, *ListLiabilitiesByApplicationRequest) (*ListLiabilitiesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListLiabilitiesByApplication not implemented")
+}
+func (UnimplementedFinancialServiceServer) CalculateFinancialRatios(context.Context, *CalculateFinancialRatiosRequest) (*ListFinancialRatiosResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CalculateFinancialRatios not implemented")
+}
+func (UnimplementedFinancialServiceServer) mustEmbedUnimplementedFinancialServiceServer() {}
+func (UnimplementedFinancialServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeFinancialServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FinancialServer will
+// UnsafeFinancialServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FinancialServiceServer will
 // result in compilation errors.
-type UnsafeFinancialServer interface {
-	mustEmbedUnimplementedFinancialServer()
+type UnsafeFinancialServiceServer interface {
+	mustEmbedUnimplementedFinancialServiceServer()
 }
 
-func RegisterFinancialServer(s grpc.ServiceRegistrar, srv FinancialServer) {
-	// If the following call panics, it indicates UnimplementedFinancialServer was
+func RegisterFinancialServiceServer(s grpc.ServiceRegistrar, srv FinancialServiceServer) {
+	// If the following call panics, it indicates UnimplementedFinancialServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Financial_ServiceDesc, srv)
+	s.RegisterService(&FinancialService_ServiceDesc, srv)
 }
 
-func _Financial_ListFinancialFacts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListFinancialFactsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FinancialServer).ListFinancialFacts(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Financial_ListFinancialFacts_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).ListFinancialFacts(ctx, req.(*ListFinancialFactsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Financial_UpsertFinancialFact_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FinancialService_UpsertFinancialFact_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpsertFinancialFactRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).UpsertFinancialFact(ctx, in)
+		return srv.(FinancialServiceServer).UpsertFinancialFact(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_UpsertFinancialFact_FullMethodName,
+		FullMethod: FinancialService_UpsertFinancialFact_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).UpsertFinancialFact(ctx, req.(*UpsertFinancialFactRequest))
+		return srv.(FinancialServiceServer).UpsertFinancialFact(ctx, req.(*UpsertFinancialFactRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Financial_CreateAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateAssetRequest)
+func _FinancialService_ListFinancialFacts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListFinancialFactsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).CreateAsset(ctx, in)
+		return srv.(FinancialServiceServer).ListFinancialFacts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_CreateAsset_FullMethodName,
+		FullMethod: FinancialService_ListFinancialFacts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).CreateAsset(ctx, req.(*CreateAssetRequest))
+		return srv.(FinancialServiceServer).ListFinancialFacts(ctx, req.(*ListFinancialFactsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Financial_ListAssets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListAssetsRequest)
+func _FinancialService_AddAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddAssetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).ListAssets(ctx, in)
+		return srv.(FinancialServiceServer).AddAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_ListAssets_FullMethodName,
+		FullMethod: FinancialService_AddAsset_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).ListAssets(ctx, req.(*ListAssetsRequest))
+		return srv.(FinancialServiceServer).AddAsset(ctx, req.(*AddAssetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Financial_CreateLiability_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateLiabilityRequest)
+func _FinancialService_UpdateAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAssetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).CreateLiability(ctx, in)
+		return srv.(FinancialServiceServer).UpdateAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_CreateLiability_FullMethodName,
+		FullMethod: FinancialService_UpdateAsset_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).CreateLiability(ctx, req.(*CreateLiabilityRequest))
+		return srv.(FinancialServiceServer).UpdateAsset(ctx, req.(*UpdateAssetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Financial_ListLiabilities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListLiabilitiesRequest)
+func _FinancialService_ListAssetsByApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAssetsByApplicationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).ListLiabilities(ctx, in)
+		return srv.(FinancialServiceServer).ListAssetsByApplication(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_ListLiabilities_FullMethodName,
+		FullMethod: FinancialService_ListAssetsByApplication_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).ListLiabilities(ctx, req.(*ListLiabilitiesRequest))
+		return srv.(FinancialServiceServer).ListAssetsByApplication(ctx, req.(*ListAssetsByApplicationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Financial_UpsertFinancialRatio_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertFinancialRatioRequest)
+func _FinancialService_AddLiability_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddLiabilityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FinancialServer).UpsertFinancialRatio(ctx, in)
+		return srv.(FinancialServiceServer).AddLiability(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Financial_UpsertFinancialRatio_FullMethodName,
+		FullMethod: FinancialService_AddLiability_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FinancialServer).UpsertFinancialRatio(ctx, req.(*UpsertFinancialRatioRequest))
+		return srv.(FinancialServiceServer).AddLiability(ctx, req.(*AddLiabilityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Financial_ServiceDesc is the grpc.ServiceDesc for Financial service.
+func _FinancialService_UpdateLiability_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLiabilityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinancialServiceServer).UpdateLiability(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinancialService_UpdateLiability_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinancialServiceServer).UpdateLiability(ctx, req.(*UpdateLiabilityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinancialService_ListLiabilitiesByApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListLiabilitiesByApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinancialServiceServer).ListLiabilitiesByApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinancialService_ListLiabilitiesByApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinancialServiceServer).ListLiabilitiesByApplication(ctx, req.(*ListLiabilitiesByApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinancialService_CalculateFinancialRatios_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CalculateFinancialRatiosRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinancialServiceServer).CalculateFinancialRatios(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinancialService_CalculateFinancialRatios_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinancialServiceServer).CalculateFinancialRatios(ctx, req.(*CalculateFinancialRatiosRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// FinancialService_ServiceDesc is the grpc.ServiceDesc for FinancialService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Financial_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.financial.v1.Financial",
-	HandlerType: (*FinancialServer)(nil),
+var FinancialService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.financial.v1.FinancialService",
+	HandlerType: (*FinancialServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ListFinancialFacts",
-			Handler:    _Financial_ListFinancialFacts_Handler,
-		},
-		{
 			MethodName: "UpsertFinancialFact",
-			Handler:    _Financial_UpsertFinancialFact_Handler,
+			Handler:    _FinancialService_UpsertFinancialFact_Handler,
 		},
 		{
-			MethodName: "CreateAsset",
-			Handler:    _Financial_CreateAsset_Handler,
+			MethodName: "ListFinancialFacts",
+			Handler:    _FinancialService_ListFinancialFacts_Handler,
 		},
 		{
-			MethodName: "ListAssets",
-			Handler:    _Financial_ListAssets_Handler,
+			MethodName: "AddAsset",
+			Handler:    _FinancialService_AddAsset_Handler,
 		},
 		{
-			MethodName: "CreateLiability",
-			Handler:    _Financial_CreateLiability_Handler,
+			MethodName: "UpdateAsset",
+			Handler:    _FinancialService_UpdateAsset_Handler,
 		},
 		{
-			MethodName: "ListLiabilities",
-			Handler:    _Financial_ListLiabilities_Handler,
+			MethodName: "ListAssetsByApplication",
+			Handler:    _FinancialService_ListAssetsByApplication_Handler,
 		},
 		{
-			MethodName: "UpsertFinancialRatio",
-			Handler:    _Financial_UpsertFinancialRatio_Handler,
+			MethodName: "AddLiability",
+			Handler:    _FinancialService_AddLiability_Handler,
+		},
+		{
+			MethodName: "UpdateLiability",
+			Handler:    _FinancialService_UpdateLiability_Handler,
+		},
+		{
+			MethodName: "ListLiabilitiesByApplication",
+			Handler:    _FinancialService_ListLiabilitiesByApplication_Handler,
+		},
+		{
+			MethodName: "CalculateFinancialRatios",
+			Handler:    _FinancialService_CalculateFinancialRatios_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/financial/v1/financial.proto",
+	Metadata: "financial/v1/financial.proto",
 }

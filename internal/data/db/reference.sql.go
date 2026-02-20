@@ -12,7 +12,7 @@ import (
 )
 
 const getLoanProduct = `-- name: GetLoanProduct :one
-SELECT id, product_code, product_name, segment, active FROM loan_products WHERE id = $1
+SELECT id, product_code, product_name, segment, active, assignment_mode FROM loan_products WHERE id = $1
 `
 
 func (q *Queries) GetLoanProduct(ctx context.Context, id uuid.UUID) (LoanProduct, error) {
@@ -24,6 +24,7 @@ func (q *Queries) GetLoanProduct(ctx context.Context, id uuid.UUID) (LoanProduct
 		&i.ProductName,
 		&i.Segment,
 		&i.Active,
+		&i.AssignmentMode,
 	)
 	return i, err
 }
@@ -151,7 +152,7 @@ func (q *Queries) ListLoanOfficers(ctx context.Context, branchCode string) ([]Lo
 }
 
 const listLoanProducts = `-- name: ListLoanProducts :many
-SELECT id, product_code, product_name, segment, active FROM loan_products WHERE active = TRUE
+SELECT id, product_code, product_name, segment, active, assignment_mode FROM loan_products WHERE active = TRUE
 `
 
 func (q *Queries) ListLoanProducts(ctx context.Context) ([]LoanProduct, error) {
@@ -169,6 +170,7 @@ func (q *Queries) ListLoanProducts(ctx context.Context) ([]LoanProduct, error) {
 			&i.ProductName,
 			&i.Segment,
 			&i.Active,
+			&i.AssignmentMode,
 		); err != nil {
 			return nil, err
 		}

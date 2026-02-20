@@ -66,7 +66,13 @@ func (r *applicationRepo) Save(ctx context.Context, a *biz.Application) (uuid.UU
 
 func (r *applicationRepo) Update(ctx context.Context, a *biz.Application) error {
 	return r.data.InTx(ctx, func(q *db.Queries) error {
-		_, err := q.UpdateApplication(ctx, db.UpdateApplicationParams{
+		// POINT 22: Audit Log - Fetch existing status to see if it changed
+		existing, err := q.GetApplication(ctx, a.ID)
+		if err != nil {
+			return fmt.Errorf("failed to fetch existing application for audit: %w", err)
+		}
+
+		_, err = q.UpdateApplication(ctx, db.UpdateApplicationParams{
 			ID:           a.ID,
 			ApplicantID:  a.ApplicantID,
 			ProductID:    a.ProductID,
@@ -80,6 +86,20 @@ func (r *applicationRepo) Update(ctx context.Context, a *biz.Application) error 
 		})
 		if err != nil {
 			return fmt.Errorf("failed to update application: %w", err)
+		}
+
+		// POINT 22: Audit Log - Record status transition if changed
+		if existing.Status != string(a.Status) {
+			_, err = q.CreateStatusLog(ctx, db.CreateStatusLogParams{
+				ApplicationID: a.ID,
+				FromStatus:    sql.NullString{String: existing.Status, Valid: true},
+				ToStatus:      sql.NullString{String: string(a.Status), Valid: true},
+				// Note: changed_by could be passed from context if we had auth
+				ChangeReason: sql.NullString{String: "Status updated by system/usecase", Valid: true},
+			})
+			if err != nil {
+				return fmt.Errorf("failed to record status audit log: %w", err)
+			}
 		}
 
 		for _, attr := range a.Attributes {
@@ -151,6 +171,65 @@ func (r *applicationRepo) ListAll(ctx context.Context) ([]*biz.Application, erro
 		item := mapToBiz(&app)
 		item.Attributes = attrMap[app.ID]
 		res = append(res, item)
+	}
+	return res, nil
+}
+
+func (r *applicationRepo) SaveParty(ctx context.Context, p *biz.Party) (uuid.UUID, error) {
+	res, err := r.data.db.CreateParty(ctx, db.CreatePartyParams{
+		PartyType:   sql.NullString{String: p.PartyType, Valid: true},
+		Identifier:  sql.NullString{String: p.Identifier, Valid: true},
+		Name:        sql.NullString{String: p.Name, Valid: true},
+		DateOfBirth: sql.NullTime{Time: p.DateOfBirth, Valid: !p.DateOfBirth.IsZero()},
+	})
+	if err != nil {
+		return uuid.Nil, err
+	}
+	return res.ID, nil
+}
+
+func (r *applicationRepo) AddPartyToApplication(ctx context.Context, appID uuid.UUID, partyID uuid.UUID, role string, slikRequired bool) error {
+	_, err := r.data.db.CreateApplicationParty(ctx, db.CreateApplicationPartyParams{
+		ApplicationID:   appID,
+		PartyID:         partyID,
+		RoleCode:        role,
+		SlikRequired:    sql.NullBool{Bool: slikRequired, Valid: true},
+		LegalObligation: sql.NullBool{Bool: true, Valid: true},
+	})
+	return err
+}
+
+func (r *applicationRepo) GetParties(ctx context.Context, appID uuid.UUID) ([]biz.ApplicationParty, error) {
+	rows, err := r.data.db.GetPartiesByApplication(ctx, appID)
+	if err != nil {
+		return nil, err
+	}
+	var res []biz.ApplicationParty
+	for _, row := range rows {
+		res = append(res, biz.ApplicationParty{
+			Party: biz.Party{
+				ID:          row.ID,
+				PartyType:   row.PartyType.String,
+				Identifier:  row.Identifier.String,
+				Name:        row.Name.String,
+				DateOfBirth: row.DateOfBirth.Time,
+			},
+			RoleCode:        row.RoleCode,
+			SlikRequired:    row.SlikRequired.Bool,
+			LegalObligation: row.LegalObligation.Bool,
+		})
+	}
+	return res, nil
+}
+
+func (r *applicationRepo) ListAvailableAOs(ctx context.Context, branchCode string) ([]uuid.UUID, error) {
+	aos, err := r.data.db.ListLoanOfficers(ctx, branchCode)
+	if err != nil {
+		return nil, err
+	}
+	var res []uuid.UUID
+	for _, ao := range aos {
+		res = append(res, ao.ID)
 	}
 	return res, nil
 }

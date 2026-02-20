@@ -258,11 +258,12 @@ type LoanOfficer struct {
 }
 
 type LoanProduct struct {
-	ID          uuid.UUID      `json:"id"`
-	ProductCode sql.NullString `json:"product_code"`
-	ProductName sql.NullString `json:"product_name"`
-	Segment     sql.NullString `json:"segment"`
-	Active      sql.NullBool   `json:"active"`
+	ID             uuid.UUID      `json:"id"`
+	ProductCode    sql.NullString `json:"product_code"`
+	ProductName    sql.NullString `json:"product_name"`
+	Segment        sql.NullString `json:"segment"`
+	Active         sql.NullBool   `json:"active"`
+	AssignmentMode sql.NullString `json:"assignment_mode"`
 }
 
 type Party struct {

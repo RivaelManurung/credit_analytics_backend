@@ -85,6 +85,18 @@ func (r *surveyRepo) GetSurvey(ctx context.Context, id uuid.UUID) (*biz.Applicat
 	return mapSurveyToBiz(&res), nil
 }
 
+func (r *surveyRepo) ListSurveysByApplication(ctx context.Context, appID uuid.UUID) ([]*biz.ApplicationSurvey, error) {
+	surveys, err := r.data.db.ListSurveysByApplication(ctx, uuid.NullUUID{UUID: appID, Valid: true})
+	if err != nil {
+		return nil, err
+	}
+	var res []*biz.ApplicationSurvey
+	for _, s := range surveys {
+		res = append(res, mapSurveyToBiz(&s))
+	}
+	return res, nil
+}
+
 func (r *surveyRepo) UpdateSurveyStatus(ctx context.Context, id uuid.UUID, status string, userID uuid.UUID) (*biz.ApplicationSurvey, error) {
 	res, err := r.data.db.UpdateSurveyStatus(ctx, db.UpdateSurveyStatusParams{
 		ID:          id,

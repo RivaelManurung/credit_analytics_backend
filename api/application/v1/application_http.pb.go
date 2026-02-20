@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v5.29.3
-// source: api/application/v1/application.proto
+// source: application/v1/application.proto
 
 package v1
 
@@ -10,6 +10,7 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,33 +20,36 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationApplicationCreateApplication = "/api.application.v1.Application/CreateApplication"
-const OperationApplicationGetApplication = "/api.application.v1.Application/GetApplication"
-const OperationApplicationListApplications = "/api.application.v1.Application/ListApplications"
-const OperationApplicationListStatusLogs = "/api.application.v1.Application/ListStatusLogs"
-const OperationApplicationSoftDeleteApplication = "/api.application.v1.Application/SoftDeleteApplication"
-const OperationApplicationUpdateApplication = "/api.application.v1.Application/UpdateApplication"
+const OperationApplicationServiceChangeApplicationStatus = "/api.application.v1.ApplicationService/ChangeApplicationStatus"
+const OperationApplicationServiceCreateApplication = "/api.application.v1.ApplicationService/CreateApplication"
+const OperationApplicationServiceGetApplication = "/api.application.v1.ApplicationService/GetApplication"
+const OperationApplicationServiceGetApplicationAttributes = "/api.application.v1.ApplicationService/GetApplicationAttributes"
+const OperationApplicationServiceListApplications = "/api.application.v1.ApplicationService/ListApplications"
+const OperationApplicationServiceUpdateApplication = "/api.application.v1.ApplicationService/UpdateApplication"
+const OperationApplicationServiceUpsertApplicationAttributes = "/api.application.v1.ApplicationService/UpsertApplicationAttributes"
 
-type ApplicationHTTPServer interface {
-	CreateApplication(context.Context, *CreateApplicationRequest) (*CreateApplicationReply, error)
-	GetApplication(context.Context, *GetApplicationRequest) (*GetApplicationReply, error)
-	ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsReply, error)
-	ListStatusLogs(context.Context, *ListStatusLogsRequest) (*ListStatusLogsReply, error)
-	SoftDeleteApplication(context.Context, *SoftDeleteApplicationRequest) (*SoftDeleteApplicationReply, error)
-	UpdateApplication(context.Context, *UpdateApplicationRequest) (*UpdateApplicationReply, error)
+type ApplicationServiceHTTPServer interface {
+	ChangeApplicationStatus(context.Context, *ChangeApplicationStatusRequest) (*Application, error)
+	CreateApplication(context.Context, *CreateApplicationRequest) (*Application, error)
+	GetApplication(context.Context, *GetApplicationRequest) (*Application, error)
+	GetApplicationAttributes(context.Context, *GetApplicationAttributesRequest) (*ApplicationAttributes, error)
+	ListApplications(context.Context, *ListApplicationsRequest) (*ListApplicationsResponse, error)
+	UpdateApplication(context.Context, *UpdateApplicationRequest) (*Application, error)
+	UpsertApplicationAttributes(context.Context, *UpsertApplicationAttributesRequest) (*ApplicationAttributes, error)
 }
 
-func RegisterApplicationHTTPServer(s *http.Server, srv ApplicationHTTPServer) {
+func RegisterApplicationServiceHTTPServer(s *http.Server, srv ApplicationServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/applications", _Application_CreateApplication0_HTTP_Handler(srv))
-	r.GET("/v1/applications/{id}", _Application_GetApplication0_HTTP_Handler(srv))
-	r.GET("/v1/applications", _Application_ListApplications0_HTTP_Handler(srv))
-	r.PUT("/v1/applications/{id}", _Application_UpdateApplication0_HTTP_Handler(srv))
-	r.DELETE("/v1/applications/{id}", _Application_SoftDeleteApplication0_HTTP_Handler(srv))
-	r.GET("/v1/applications/{application_id}/status-logs", _Application_ListStatusLogs0_HTTP_Handler(srv))
+	r.POST("/v1/applications", _ApplicationService_CreateApplication0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{id}", _ApplicationService_GetApplication0_HTTP_Handler(srv))
+	r.GET("/v1/applications", _ApplicationService_ListApplications0_HTTP_Handler(srv))
+	r.PUT("/v1/applications/{id}", _ApplicationService_UpdateApplication0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/attributes", _ApplicationService_GetApplicationAttributes0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/attributes", _ApplicationService_UpsertApplicationAttributes0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{id}/status", _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv))
 }
 
-func _Application_CreateApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_CreateApplication0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateApplicationRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -54,7 +58,7 @@ func _Application_CreateApplication0_HTTP_Handler(srv ApplicationHTTPServer) fun
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationCreateApplication)
+		http.SetOperation(ctx, OperationApplicationServiceCreateApplication)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateApplication(ctx, req.(*CreateApplicationRequest))
 		})
@@ -62,12 +66,12 @@ func _Application_CreateApplication0_HTTP_Handler(srv ApplicationHTTPServer) fun
 		if err != nil {
 			return err
 		}
-		reply := out.(*CreateApplicationReply)
+		reply := out.(*Application)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Application_GetApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_GetApplication0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetApplicationRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -76,7 +80,7 @@ func _Application_GetApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(c
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationGetApplication)
+		http.SetOperation(ctx, OperationApplicationServiceGetApplication)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetApplication(ctx, req.(*GetApplicationRequest))
 		})
@@ -84,18 +88,18 @@ func _Application_GetApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(c
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetApplicationReply)
+		reply := out.(*Application)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Application_ListApplications0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_ListApplications0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListApplicationsRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationListApplications)
+		http.SetOperation(ctx, OperationApplicationServiceListApplications)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ListApplications(ctx, req.(*ListApplicationsRequest))
 		})
@@ -103,12 +107,12 @@ func _Application_ListApplications0_HTTP_Handler(srv ApplicationHTTPServer) func
 		if err != nil {
 			return err
 		}
-		reply := out.(*ListApplicationsReply)
+		reply := out.(*ListApplicationsResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Application_UpdateApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_UpdateApplication0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateApplicationRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -120,7 +124,7 @@ func _Application_UpdateApplication0_HTTP_Handler(srv ApplicationHTTPServer) fun
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationUpdateApplication)
+		http.SetOperation(ctx, OperationApplicationServiceUpdateApplication)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateApplication(ctx, req.(*UpdateApplicationRequest))
 		})
@@ -128,77 +132,106 @@ func _Application_UpdateApplication0_HTTP_Handler(srv ApplicationHTTPServer) fun
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateApplicationReply)
+		reply := out.(*Application)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Application_SoftDeleteApplication0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_GetApplicationAttributes0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in SoftDeleteApplicationRequest
+		var in GetApplicationAttributesRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationSoftDeleteApplication)
+		http.SetOperation(ctx, OperationApplicationServiceGetApplicationAttributes)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SoftDeleteApplication(ctx, req.(*SoftDeleteApplicationRequest))
+			return srv.GetApplicationAttributes(ctx, req.(*GetApplicationAttributesRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*SoftDeleteApplicationReply)
+		reply := out.(*ApplicationAttributes)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Application_ListStatusLogs0_HTTP_Handler(srv ApplicationHTTPServer) func(ctx http.Context) error {
+func _ApplicationService_UpsertApplicationAttributes0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ListStatusLogsRequest
+		var in UpsertApplicationAttributesRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationApplicationListStatusLogs)
+		http.SetOperation(ctx, OperationApplicationServiceUpsertApplicationAttributes)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListStatusLogs(ctx, req.(*ListStatusLogsRequest))
+			return srv.UpsertApplicationAttributes(ctx, req.(*UpsertApplicationAttributesRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ListStatusLogsReply)
+		reply := out.(*ApplicationAttributes)
 		return ctx.Result(200, reply)
 	}
 }
 
-type ApplicationHTTPClient interface {
-	CreateApplication(ctx context.Context, req *CreateApplicationRequest, opts ...http.CallOption) (rsp *CreateApplicationReply, err error)
-	GetApplication(ctx context.Context, req *GetApplicationRequest, opts ...http.CallOption) (rsp *GetApplicationReply, err error)
-	ListApplications(ctx context.Context, req *ListApplicationsRequest, opts ...http.CallOption) (rsp *ListApplicationsReply, err error)
-	ListStatusLogs(ctx context.Context, req *ListStatusLogsRequest, opts ...http.CallOption) (rsp *ListStatusLogsReply, err error)
-	SoftDeleteApplication(ctx context.Context, req *SoftDeleteApplicationRequest, opts ...http.CallOption) (rsp *SoftDeleteApplicationReply, err error)
-	UpdateApplication(ctx context.Context, req *UpdateApplicationRequest, opts ...http.CallOption) (rsp *UpdateApplicationReply, err error)
+func _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv ApplicationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ChangeApplicationStatusRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicationServiceChangeApplicationStatus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ChangeApplicationStatus(ctx, req.(*ChangeApplicationStatusRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*Application)
+		return ctx.Result(200, reply)
+	}
 }
 
-type ApplicationHTTPClientImpl struct {
+type ApplicationServiceHTTPClient interface {
+	ChangeApplicationStatus(ctx context.Context, req *ChangeApplicationStatusRequest, opts ...http.CallOption) (rsp *Application, err error)
+	CreateApplication(ctx context.Context, req *CreateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
+	GetApplication(ctx context.Context, req *GetApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
+	GetApplicationAttributes(ctx context.Context, req *GetApplicationAttributesRequest, opts ...http.CallOption) (rsp *ApplicationAttributes, err error)
+	ListApplications(ctx context.Context, req *ListApplicationsRequest, opts ...http.CallOption) (rsp *ListApplicationsResponse, err error)
+	UpdateApplication(ctx context.Context, req *UpdateApplicationRequest, opts ...http.CallOption) (rsp *Application, err error)
+	UpsertApplicationAttributes(ctx context.Context, req *UpsertApplicationAttributesRequest, opts ...http.CallOption) (rsp *ApplicationAttributes, err error)
+}
+
+type ApplicationServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewApplicationHTTPClient(client *http.Client) ApplicationHTTPClient {
-	return &ApplicationHTTPClientImpl{client}
+func NewApplicationServiceHTTPClient(client *http.Client) ApplicationServiceHTTPClient {
+	return &ApplicationServiceHTTPClientImpl{client}
 }
 
-func (c *ApplicationHTTPClientImpl) CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...http.CallOption) (*CreateApplicationReply, error) {
-	var out CreateApplicationReply
-	pattern := "/v1/applications"
+func (c *ApplicationServiceHTTPClientImpl) ChangeApplicationStatus(ctx context.Context, in *ChangeApplicationStatusRequest, opts ...http.CallOption) (*Application, error) {
+	var out Application
+	pattern := "/v1/applications/{id}/status"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationApplicationCreateApplication))
+	opts = append(opts, http.Operation(OperationApplicationServiceChangeApplicationStatus))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -207,11 +240,24 @@ func (c *ApplicationHTTPClientImpl) CreateApplication(ctx context.Context, in *C
 	return &out, nil
 }
 
-func (c *ApplicationHTTPClientImpl) GetApplication(ctx context.Context, in *GetApplicationRequest, opts ...http.CallOption) (*GetApplicationReply, error) {
-	var out GetApplicationReply
+func (c *ApplicationServiceHTTPClientImpl) CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...http.CallOption) (*Application, error) {
+	var out Application
+	pattern := "/v1/applications"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationApplicationServiceCreateApplication))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicationServiceHTTPClientImpl) GetApplication(ctx context.Context, in *GetApplicationRequest, opts ...http.CallOption) (*Application, error) {
+	var out Application
 	pattern := "/v1/applications/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationApplicationGetApplication))
+	opts = append(opts, http.Operation(OperationApplicationServiceGetApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -220,11 +266,24 @@ func (c *ApplicationHTTPClientImpl) GetApplication(ctx context.Context, in *GetA
 	return &out, nil
 }
 
-func (c *ApplicationHTTPClientImpl) ListApplications(ctx context.Context, in *ListApplicationsRequest, opts ...http.CallOption) (*ListApplicationsReply, error) {
-	var out ListApplicationsReply
+func (c *ApplicationServiceHTTPClientImpl) GetApplicationAttributes(ctx context.Context, in *GetApplicationAttributesRequest, opts ...http.CallOption) (*ApplicationAttributes, error) {
+	var out ApplicationAttributes
+	pattern := "/v1/applications/{application_id}/attributes"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationApplicationServiceGetApplicationAttributes))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicationServiceHTTPClientImpl) ListApplications(ctx context.Context, in *ListApplicationsRequest, opts ...http.CallOption) (*ListApplicationsResponse, error) {
+	var out ListApplicationsResponse
 	pattern := "/v1/applications"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationApplicationListApplications))
+	opts = append(opts, http.Operation(OperationApplicationServiceListApplications))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -233,39 +292,165 @@ func (c *ApplicationHTTPClientImpl) ListApplications(ctx context.Context, in *Li
 	return &out, nil
 }
 
-func (c *ApplicationHTTPClientImpl) ListStatusLogs(ctx context.Context, in *ListStatusLogsRequest, opts ...http.CallOption) (*ListStatusLogsReply, error) {
-	var out ListStatusLogsReply
-	pattern := "/v1/applications/{application_id}/status-logs"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationApplicationListStatusLogs))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *ApplicationHTTPClientImpl) SoftDeleteApplication(ctx context.Context, in *SoftDeleteApplicationRequest, opts ...http.CallOption) (*SoftDeleteApplicationReply, error) {
-	var out SoftDeleteApplicationReply
-	pattern := "/v1/applications/{id}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationApplicationSoftDeleteApplication))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *ApplicationHTTPClientImpl) UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...http.CallOption) (*UpdateApplicationReply, error) {
-	var out UpdateApplicationReply
+func (c *ApplicationServiceHTTPClientImpl) UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...http.CallOption) (*Application, error) {
+	var out Application
 	pattern := "/v1/applications/{id}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationApplicationUpdateApplication))
+	opts = append(opts, http.Operation(OperationApplicationServiceUpdateApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicationServiceHTTPClientImpl) UpsertApplicationAttributes(ctx context.Context, in *UpsertApplicationAttributesRequest, opts ...http.CallOption) (*ApplicationAttributes, error) {
+	var out ApplicationAttributes
+	pattern := "/v1/applications/{application_id}/attributes"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationApplicationServiceUpsertApplicationAttributes))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+const OperationPartyServiceAddPartyToApplication = "/api.application.v1.PartyService/AddPartyToApplication"
+const OperationPartyServiceListApplicationParties = "/api.application.v1.PartyService/ListApplicationParties"
+const OperationPartyServiceRemovePartyFromApplication = "/api.application.v1.PartyService/RemovePartyFromApplication"
+
+type PartyServiceHTTPServer interface {
+	AddPartyToApplication(context.Context, *AddPartyToApplicationRequest) (*ApplicationParty, error)
+	ListApplicationParties(context.Context, *ListApplicationPartiesRequest) (*ListApplicationPartiesResponse, error)
+	RemovePartyFromApplication(context.Context, *RemovePartyFromApplicationRequest) (*emptypb.Empty, error)
+}
+
+func RegisterPartyServiceHTTPServer(s *http.Server, srv PartyServiceHTTPServer) {
+	r := s.Route("/")
+	r.POST("/v1/applications/{application_id}/parties", _PartyService_AddPartyToApplication0_HTTP_Handler(srv))
+	r.DELETE("/v1/applications/{application_id}/parties/{party_id}", _PartyService_RemovePartyFromApplication0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/parties", _PartyService_ListApplicationParties0_HTTP_Handler(srv))
+}
+
+func _PartyService_AddPartyToApplication0_HTTP_Handler(srv PartyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddPartyToApplicationRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPartyServiceAddPartyToApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.AddPartyToApplication(ctx, req.(*AddPartyToApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ApplicationParty)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _PartyService_RemovePartyFromApplication0_HTTP_Handler(srv PartyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RemovePartyFromApplicationRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPartyServiceRemovePartyFromApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RemovePartyFromApplication(ctx, req.(*RemovePartyFromApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _PartyService_ListApplicationParties0_HTTP_Handler(srv PartyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListApplicationPartiesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPartyServiceListApplicationParties)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListApplicationParties(ctx, req.(*ListApplicationPartiesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListApplicationPartiesResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+type PartyServiceHTTPClient interface {
+	AddPartyToApplication(ctx context.Context, req *AddPartyToApplicationRequest, opts ...http.CallOption) (rsp *ApplicationParty, err error)
+	ListApplicationParties(ctx context.Context, req *ListApplicationPartiesRequest, opts ...http.CallOption) (rsp *ListApplicationPartiesResponse, err error)
+	RemovePartyFromApplication(ctx context.Context, req *RemovePartyFromApplicationRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+}
+
+type PartyServiceHTTPClientImpl struct {
+	cc *http.Client
+}
+
+func NewPartyServiceHTTPClient(client *http.Client) PartyServiceHTTPClient {
+	return &PartyServiceHTTPClientImpl{client}
+}
+
+func (c *PartyServiceHTTPClientImpl) AddPartyToApplication(ctx context.Context, in *AddPartyToApplicationRequest, opts ...http.CallOption) (*ApplicationParty, error) {
+	var out ApplicationParty
+	pattern := "/v1/applications/{application_id}/parties"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationPartyServiceAddPartyToApplication))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *PartyServiceHTTPClientImpl) ListApplicationParties(ctx context.Context, in *ListApplicationPartiesRequest, opts ...http.CallOption) (*ListApplicationPartiesResponse, error) {
+	var out ListApplicationPartiesResponse
+	pattern := "/v1/applications/{application_id}/parties"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationPartyServiceListApplicationParties))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *PartyServiceHTTPClientImpl) RemovePartyFromApplication(ctx context.Context, in *RemovePartyFromApplicationRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/v1/applications/{application_id}/parties/{party_id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationPartyServiceRemovePartyFromApplication))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

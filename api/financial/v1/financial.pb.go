@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: api/financial/v1/financial.proto
+// source: financial/v1/financial.proto
 
 package v1
 
@@ -23,7 +23,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type FinancialFact struct {
+type ApplicationFinancialFact struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicationId   string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -38,21 +38,21 @@ type FinancialFact struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *FinancialFact) Reset() {
-	*x = FinancialFact{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[0]
+func (x *ApplicationFinancialFact) Reset() {
+	*x = ApplicationFinancialFact{}
+	mi := &file_financial_v1_financial_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *FinancialFact) String() string {
+func (x *ApplicationFinancialFact) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*FinancialFact) ProtoMessage() {}
+func (*ApplicationFinancialFact) ProtoMessage() {}
 
-func (x *FinancialFact) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[0]
+func (x *ApplicationFinancialFact) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,75 +63,75 @@ func (x *FinancialFact) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FinancialFact.ProtoReflect.Descriptor instead.
-func (*FinancialFact) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use ApplicationFinancialFact.ProtoReflect.Descriptor instead.
+func (*ApplicationFinancialFact) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *FinancialFact) GetId() string {
+func (x *ApplicationFinancialFact) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetApplicationId() string {
+func (x *ApplicationFinancialFact) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetGlCode() string {
+func (x *ApplicationFinancialFact) GetGlCode() string {
 	if x != nil {
 		return x.GlCode
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetPeriodType() string {
+func (x *ApplicationFinancialFact) GetPeriodType() string {
 	if x != nil {
 		return x.PeriodType
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetPeriodLabel() string {
+func (x *ApplicationFinancialFact) GetPeriodLabel() string {
 	if x != nil {
 		return x.PeriodLabel
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetAmount() string {
+func (x *ApplicationFinancialFact) GetAmount() string {
 	if x != nil {
 		return x.Amount
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetSource() string {
+func (x *ApplicationFinancialFact) GetSource() string {
 	if x != nil {
 		return x.Source
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetConfidenceLevel() string {
+func (x *ApplicationFinancialFact) GetConfidenceLevel() string {
 	if x != nil {
 		return x.ConfidenceLevel
 	}
 	return ""
 }
 
-func (x *FinancialFact) GetCreatedAt() *timestamppb.Timestamp {
+func (x *ApplicationFinancialFact) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-type Asset struct {
+type ApplicationAsset struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicationId   string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -147,21 +147,21 @@ type Asset struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *Asset) Reset() {
-	*x = Asset{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[1]
+func (x *ApplicationAsset) Reset() {
+	*x = ApplicationAsset{}
+	mi := &file_financial_v1_financial_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Asset) String() string {
+func (x *ApplicationAsset) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Asset) ProtoMessage() {}
+func (*ApplicationAsset) ProtoMessage() {}
 
-func (x *Asset) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[1]
+func (x *ApplicationAsset) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -172,82 +172,82 @@ func (x *Asset) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Asset.ProtoReflect.Descriptor instead.
-func (*Asset) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use ApplicationAsset.ProtoReflect.Descriptor instead.
+func (*ApplicationAsset) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Asset) GetId() string {
+func (x *ApplicationAsset) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *Asset) GetApplicationId() string {
+func (x *ApplicationAsset) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *Asset) GetAssetTypeCode() string {
+func (x *ApplicationAsset) GetAssetTypeCode() string {
 	if x != nil {
 		return x.AssetTypeCode
 	}
 	return ""
 }
 
-func (x *Asset) GetAssetName() string {
+func (x *ApplicationAsset) GetAssetName() string {
 	if x != nil {
 		return x.AssetName
 	}
 	return ""
 }
 
-func (x *Asset) GetOwnershipStatus() string {
+func (x *ApplicationAsset) GetOwnershipStatus() string {
 	if x != nil {
 		return x.OwnershipStatus
 	}
 	return ""
 }
 
-func (x *Asset) GetAcquisitionYear() int32 {
+func (x *ApplicationAsset) GetAcquisitionYear() int32 {
 	if x != nil {
 		return x.AcquisitionYear
 	}
 	return 0
 }
 
-func (x *Asset) GetEstimatedValue() string {
+func (x *ApplicationAsset) GetEstimatedValue() string {
 	if x != nil {
 		return x.EstimatedValue
 	}
 	return ""
 }
 
-func (x *Asset) GetValuationMethod() string {
+func (x *ApplicationAsset) GetValuationMethod() string {
 	if x != nil {
 		return x.ValuationMethod
 	}
 	return ""
 }
 
-func (x *Asset) GetLocationText() string {
+func (x *ApplicationAsset) GetLocationText() string {
 	if x != nil {
 		return x.LocationText
 	}
 	return ""
 }
 
-func (x *Asset) GetEncumbered() bool {
+func (x *ApplicationAsset) GetEncumbered() bool {
 	if x != nil {
 		return x.Encumbered
 	}
 	return false
 }
 
-type Liability struct {
+type ApplicationLiability struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicationId      string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -262,21 +262,21 @@ type Liability struct {
 	sizeCache          protoimpl.SizeCache
 }
 
-func (x *Liability) Reset() {
-	*x = Liability{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[2]
+func (x *ApplicationLiability) Reset() {
+	*x = ApplicationLiability{}
+	mi := &file_financial_v1_financial_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Liability) String() string {
+func (x *ApplicationLiability) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Liability) ProtoMessage() {}
+func (*ApplicationLiability) ProtoMessage() {}
 
-func (x *Liability) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[2]
+func (x *ApplicationLiability) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,68 +287,68 @@ func (x *Liability) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Liability.ProtoReflect.Descriptor instead.
-func (*Liability) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use ApplicationLiability.ProtoReflect.Descriptor instead.
+func (*ApplicationLiability) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Liability) GetId() string {
+func (x *ApplicationLiability) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *Liability) GetApplicationId() string {
+func (x *ApplicationLiability) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *Liability) GetCreditorName() string {
+func (x *ApplicationLiability) GetCreditorName() string {
 	if x != nil {
 		return x.CreditorName
 	}
 	return ""
 }
 
-func (x *Liability) GetLiabilityType() string {
+func (x *ApplicationLiability) GetLiabilityType() string {
 	if x != nil {
 		return x.LiabilityType
 	}
 	return ""
 }
 
-func (x *Liability) GetOutstandingAmount() string {
+func (x *ApplicationLiability) GetOutstandingAmount() string {
 	if x != nil {
 		return x.OutstandingAmount
 	}
 	return ""
 }
 
-func (x *Liability) GetMonthlyInstallment() string {
+func (x *ApplicationLiability) GetMonthlyInstallment() string {
 	if x != nil {
 		return x.MonthlyInstallment
 	}
 	return ""
 }
 
-func (x *Liability) GetInterestRate() string {
+func (x *ApplicationLiability) GetInterestRate() string {
 	if x != nil {
 		return x.InterestRate
 	}
 	return ""
 }
 
-func (x *Liability) GetMaturityDate() string {
+func (x *ApplicationLiability) GetMaturityDate() string {
 	if x != nil {
 		return x.MaturityDate
 	}
 	return ""
 }
 
-func (x *Liability) GetSource() string {
+func (x *ApplicationLiability) GetSource() string {
 	if x != nil {
 		return x.Source
 	}
@@ -369,7 +369,7 @@ type FinancialRatio struct {
 
 func (x *FinancialRatio) Reset() {
 	*x = FinancialRatio{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[3]
+	mi := &file_financial_v1_financial_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -381,7 +381,7 @@ func (x *FinancialRatio) String() string {
 func (*FinancialRatio) ProtoMessage() {}
 
 func (x *FinancialRatio) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[3]
+	mi := &file_financial_v1_financial_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -394,7 +394,7 @@ func (x *FinancialRatio) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FinancialRatio.ProtoReflect.Descriptor instead.
 func (*FinancialRatio) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{3}
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *FinancialRatio) GetId() string {
@@ -439,94 +439,6 @@ func (x *FinancialRatio) GetCalculatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type ListFinancialFactsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListFinancialFactsRequest) Reset() {
-	*x = ListFinancialFactsRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListFinancialFactsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListFinancialFactsRequest) ProtoMessage() {}
-
-func (x *ListFinancialFactsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListFinancialFactsRequest.ProtoReflect.Descriptor instead.
-func (*ListFinancialFactsRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *ListFinancialFactsRequest) GetApplicationId() string {
-	if x != nil {
-		return x.ApplicationId
-	}
-	return ""
-}
-
-type ListFinancialFactsReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Facts         []*FinancialFact       `protobuf:"bytes,1,rep,name=facts,proto3" json:"facts,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListFinancialFactsReply) Reset() {
-	*x = ListFinancialFactsReply{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListFinancialFactsReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListFinancialFactsReply) ProtoMessage() {}
-
-func (x *ListFinancialFactsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListFinancialFactsReply.ProtoReflect.Descriptor instead.
-func (*ListFinancialFactsReply) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *ListFinancialFactsReply) GetFacts() []*FinancialFact {
-	if x != nil {
-		return x.Facts
-	}
-	return nil
-}
-
 type UpsertFinancialFactRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	ApplicationId   string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -542,7 +454,7 @@ type UpsertFinancialFactRequest struct {
 
 func (x *UpsertFinancialFactRequest) Reset() {
 	*x = UpsertFinancialFactRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[6]
+	mi := &file_financial_v1_financial_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -554,7 +466,7 @@ func (x *UpsertFinancialFactRequest) String() string {
 func (*UpsertFinancialFactRequest) ProtoMessage() {}
 
 func (x *UpsertFinancialFactRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[6]
+	mi := &file_financial_v1_financial_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -567,7 +479,7 @@ func (x *UpsertFinancialFactRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertFinancialFactRequest.ProtoReflect.Descriptor instead.
 func (*UpsertFinancialFactRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{6}
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UpsertFinancialFactRequest) GetApplicationId() string {
@@ -619,7 +531,95 @@ func (x *UpsertFinancialFactRequest) GetConfidenceLevel() string {
 	return ""
 }
 
-type CreateAssetRequest struct {
+type ListFinancialFactsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListFinancialFactsRequest) Reset() {
+	*x = ListFinancialFactsRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListFinancialFactsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListFinancialFactsRequest) ProtoMessage() {}
+
+func (x *ListFinancialFactsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListFinancialFactsRequest.ProtoReflect.Descriptor instead.
+func (*ListFinancialFactsRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListFinancialFactsRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+type ListFinancialFactsResponse struct {
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Facts         []*ApplicationFinancialFact `protobuf:"bytes,1,rep,name=facts,proto3" json:"facts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListFinancialFactsResponse) Reset() {
+	*x = ListFinancialFactsResponse{}
+	mi := &file_financial_v1_financial_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListFinancialFactsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListFinancialFactsResponse) ProtoMessage() {}
+
+func (x *ListFinancialFactsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListFinancialFactsResponse.ProtoReflect.Descriptor instead.
+func (*ListFinancialFactsResponse) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ListFinancialFactsResponse) GetFacts() []*ApplicationFinancialFact {
+	if x != nil {
+		return x.Facts
+	}
+	return nil
+}
+
+type AddAssetRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	ApplicationId   string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	AssetTypeCode   string                 `protobuf:"bytes,2,opt,name=asset_type_code,json=assetTypeCode,proto3" json:"asset_type_code,omitempty"`
@@ -634,21 +634,21 @@ type CreateAssetRequest struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *CreateAssetRequest) Reset() {
-	*x = CreateAssetRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[7]
+func (x *AddAssetRequest) Reset() {
+	*x = AddAssetRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateAssetRequest) String() string {
+func (x *AddAssetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateAssetRequest) ProtoMessage() {}
+func (*AddAssetRequest) ProtoMessage() {}
 
-func (x *CreateAssetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[7]
+func (x *AddAssetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -659,96 +659,105 @@ func (x *CreateAssetRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateAssetRequest.ProtoReflect.Descriptor instead.
-func (*CreateAssetRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{7}
+// Deprecated: Use AddAssetRequest.ProtoReflect.Descriptor instead.
+func (*AddAssetRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *CreateAssetRequest) GetApplicationId() string {
+func (x *AddAssetRequest) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetAssetTypeCode() string {
+func (x *AddAssetRequest) GetAssetTypeCode() string {
 	if x != nil {
 		return x.AssetTypeCode
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetAssetName() string {
+func (x *AddAssetRequest) GetAssetName() string {
 	if x != nil {
 		return x.AssetName
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetOwnershipStatus() string {
+func (x *AddAssetRequest) GetOwnershipStatus() string {
 	if x != nil {
 		return x.OwnershipStatus
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetAcquisitionYear() int32 {
+func (x *AddAssetRequest) GetAcquisitionYear() int32 {
 	if x != nil {
 		return x.AcquisitionYear
 	}
 	return 0
 }
 
-func (x *CreateAssetRequest) GetEstimatedValue() string {
+func (x *AddAssetRequest) GetEstimatedValue() string {
 	if x != nil {
 		return x.EstimatedValue
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetValuationMethod() string {
+func (x *AddAssetRequest) GetValuationMethod() string {
 	if x != nil {
 		return x.ValuationMethod
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetLocationText() string {
+func (x *AddAssetRequest) GetLocationText() string {
 	if x != nil {
 		return x.LocationText
 	}
 	return ""
 }
 
-func (x *CreateAssetRequest) GetEncumbered() bool {
+func (x *AddAssetRequest) GetEncumbered() bool {
 	if x != nil {
 		return x.Encumbered
 	}
 	return false
 }
 
-type ListAssetsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type UpdateAssetRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ApplicationId   string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	AssetTypeCode   string                 `protobuf:"bytes,3,opt,name=asset_type_code,json=assetTypeCode,proto3" json:"asset_type_code,omitempty"`
+	AssetName       string                 `protobuf:"bytes,4,opt,name=asset_name,json=assetName,proto3" json:"asset_name,omitempty"`
+	OwnershipStatus string                 `protobuf:"bytes,5,opt,name=ownership_status,json=ownershipStatus,proto3" json:"ownership_status,omitempty"`
+	AcquisitionYear int32                  `protobuf:"varint,6,opt,name=acquisition_year,json=acquisitionYear,proto3" json:"acquisition_year,omitempty"`
+	EstimatedValue  string                 `protobuf:"bytes,7,opt,name=estimated_value,json=estimatedValue,proto3" json:"estimated_value,omitempty"`
+	ValuationMethod string                 `protobuf:"bytes,8,opt,name=valuation_method,json=valuationMethod,proto3" json:"valuation_method,omitempty"`
+	LocationText    string                 `protobuf:"bytes,9,opt,name=location_text,json=locationText,proto3" json:"location_text,omitempty"`
+	Encumbered      bool                   `protobuf:"varint,10,opt,name=encumbered,proto3" json:"encumbered,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
-func (x *ListAssetsRequest) Reset() {
-	*x = ListAssetsRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[8]
+func (x *UpdateAssetRequest) Reset() {
+	*x = UpdateAssetRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListAssetsRequest) String() string {
+func (x *UpdateAssetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListAssetsRequest) ProtoMessage() {}
+func (*UpdateAssetRequest) ProtoMessage() {}
 
-func (x *ListAssetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[8]
+func (x *UpdateAssetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -759,40 +768,103 @@ func (x *ListAssetsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListAssetsRequest.ProtoReflect.Descriptor instead.
-func (*ListAssetsRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{8}
+// Deprecated: Use UpdateAssetRequest.ProtoReflect.Descriptor instead.
+func (*UpdateAssetRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ListAssetsRequest) GetApplicationId() string {
+func (x *UpdateAssetRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-type ListAssetsReply struct {
+func (x *UpdateAssetRequest) GetAssetTypeCode() string {
+	if x != nil {
+		return x.AssetTypeCode
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetAssetName() string {
+	if x != nil {
+		return x.AssetName
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetOwnershipStatus() string {
+	if x != nil {
+		return x.OwnershipStatus
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetAcquisitionYear() int32 {
+	if x != nil {
+		return x.AcquisitionYear
+	}
+	return 0
+}
+
+func (x *UpdateAssetRequest) GetEstimatedValue() string {
+	if x != nil {
+		return x.EstimatedValue
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetValuationMethod() string {
+	if x != nil {
+		return x.ValuationMethod
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetLocationText() string {
+	if x != nil {
+		return x.LocationText
+	}
+	return ""
+}
+
+func (x *UpdateAssetRequest) GetEncumbered() bool {
+	if x != nil {
+		return x.Encumbered
+	}
+	return false
+}
+
+type ListAssetsByApplicationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Assets        []*Asset               `protobuf:"bytes,1,rep,name=assets,proto3" json:"assets,omitempty"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListAssetsReply) Reset() {
-	*x = ListAssetsReply{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[9]
+func (x *ListAssetsByApplicationRequest) Reset() {
+	*x = ListAssetsByApplicationRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListAssetsReply) String() string {
+func (x *ListAssetsByApplicationRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListAssetsReply) ProtoMessage() {}
+func (*ListAssetsByApplicationRequest) ProtoMessage() {}
 
-func (x *ListAssetsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[9]
+func (x *ListAssetsByApplicationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -803,19 +875,63 @@ func (x *ListAssetsReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListAssetsReply.ProtoReflect.Descriptor instead.
-func (*ListAssetsReply) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{9}
+// Deprecated: Use ListAssetsByApplicationRequest.ProtoReflect.Descriptor instead.
+func (*ListAssetsByApplicationRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *ListAssetsReply) GetAssets() []*Asset {
+func (x *ListAssetsByApplicationRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+type ListAssetsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Assets        []*ApplicationAsset    `protobuf:"bytes,1,rep,name=assets,proto3" json:"assets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAssetsResponse) Reset() {
+	*x = ListAssetsResponse{}
+	mi := &file_financial_v1_financial_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAssetsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAssetsResponse) ProtoMessage() {}
+
+func (x *ListAssetsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAssetsResponse.ProtoReflect.Descriptor instead.
+func (*ListAssetsResponse) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ListAssetsResponse) GetAssets() []*ApplicationAsset {
 	if x != nil {
 		return x.Assets
 	}
 	return nil
 }
 
-type CreateLiabilityRequest struct {
+type AddLiabilityRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	ApplicationId      string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	CreditorName       string                 `protobuf:"bytes,2,opt,name=creditor_name,json=creditorName,proto3" json:"creditor_name,omitempty"`
@@ -829,21 +945,21 @@ type CreateLiabilityRequest struct {
 	sizeCache          protoimpl.SizeCache
 }
 
-func (x *CreateLiabilityRequest) Reset() {
-	*x = CreateLiabilityRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[10]
+func (x *AddLiabilityRequest) Reset() {
+	*x = AddLiabilityRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateLiabilityRequest) String() string {
+func (x *AddLiabilityRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateLiabilityRequest) ProtoMessage() {}
+func (*AddLiabilityRequest) ProtoMessage() {}
 
-func (x *CreateLiabilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[10]
+func (x *AddLiabilityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -854,89 +970,197 @@ func (x *CreateLiabilityRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateLiabilityRequest.ProtoReflect.Descriptor instead.
-func (*CreateLiabilityRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{10}
+// Deprecated: Use AddLiabilityRequest.ProtoReflect.Descriptor instead.
+func (*AddLiabilityRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *CreateLiabilityRequest) GetApplicationId() string {
+func (x *AddLiabilityRequest) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetCreditorName() string {
+func (x *AddLiabilityRequest) GetCreditorName() string {
 	if x != nil {
 		return x.CreditorName
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetLiabilityType() string {
+func (x *AddLiabilityRequest) GetLiabilityType() string {
 	if x != nil {
 		return x.LiabilityType
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetOutstandingAmount() string {
+func (x *AddLiabilityRequest) GetOutstandingAmount() string {
 	if x != nil {
 		return x.OutstandingAmount
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetMonthlyInstallment() string {
+func (x *AddLiabilityRequest) GetMonthlyInstallment() string {
 	if x != nil {
 		return x.MonthlyInstallment
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetInterestRate() string {
+func (x *AddLiabilityRequest) GetInterestRate() string {
 	if x != nil {
 		return x.InterestRate
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetMaturityDate() string {
+func (x *AddLiabilityRequest) GetMaturityDate() string {
 	if x != nil {
 		return x.MaturityDate
 	}
 	return ""
 }
 
-func (x *CreateLiabilityRequest) GetSource() string {
+func (x *AddLiabilityRequest) GetSource() string {
 	if x != nil {
 		return x.Source
 	}
 	return ""
 }
 
-type ListLiabilitiesRequest struct {
+type UpdateLiabilityRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ApplicationId      string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	CreditorName       string                 `protobuf:"bytes,3,opt,name=creditor_name,json=creditorName,proto3" json:"creditor_name,omitempty"`
+	LiabilityType      string                 `protobuf:"bytes,4,opt,name=liability_type,json=liabilityType,proto3" json:"liability_type,omitempty"`
+	OutstandingAmount  string                 `protobuf:"bytes,5,opt,name=outstanding_amount,json=outstandingAmount,proto3" json:"outstanding_amount,omitempty"`
+	MonthlyInstallment string                 `protobuf:"bytes,6,opt,name=monthly_installment,json=monthlyInstallment,proto3" json:"monthly_installment,omitempty"`
+	InterestRate       string                 `protobuf:"bytes,7,opt,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`
+	MaturityDate       string                 `protobuf:"bytes,8,opt,name=maturity_date,json=maturityDate,proto3" json:"maturity_date,omitempty"`
+	Source             string                 `protobuf:"bytes,9,opt,name=source,proto3" json:"source,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *UpdateLiabilityRequest) Reset() {
+	*x = UpdateLiabilityRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateLiabilityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateLiabilityRequest) ProtoMessage() {}
+
+func (x *UpdateLiabilityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateLiabilityRequest.ProtoReflect.Descriptor instead.
+func (*UpdateLiabilityRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *UpdateLiabilityRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetCreditorName() string {
+	if x != nil {
+		return x.CreditorName
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetLiabilityType() string {
+	if x != nil {
+		return x.LiabilityType
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetOutstandingAmount() string {
+	if x != nil {
+		return x.OutstandingAmount
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetMonthlyInstallment() string {
+	if x != nil {
+		return x.MonthlyInstallment
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetInterestRate() string {
+	if x != nil {
+		return x.InterestRate
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetMaturityDate() string {
+	if x != nil {
+		return x.MaturityDate
+	}
+	return ""
+}
+
+func (x *UpdateLiabilityRequest) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+type ListLiabilitiesByApplicationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListLiabilitiesRequest) Reset() {
-	*x = ListLiabilitiesRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[11]
+func (x *ListLiabilitiesByApplicationRequest) Reset() {
+	*x = ListLiabilitiesByApplicationRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListLiabilitiesRequest) String() string {
+func (x *ListLiabilitiesByApplicationRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListLiabilitiesRequest) ProtoMessage() {}
+func (*ListLiabilitiesByApplicationRequest) ProtoMessage() {}
 
-func (x *ListLiabilitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[11]
+func (x *ListLiabilitiesByApplicationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -947,40 +1171,40 @@ func (x *ListLiabilitiesRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListLiabilitiesRequest.ProtoReflect.Descriptor instead.
-func (*ListLiabilitiesRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{11}
+// Deprecated: Use ListLiabilitiesByApplicationRequest.ProtoReflect.Descriptor instead.
+func (*ListLiabilitiesByApplicationRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *ListLiabilitiesRequest) GetApplicationId() string {
+func (x *ListLiabilitiesByApplicationRequest) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-type ListLiabilitiesReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Liabilities   []*Liability           `protobuf:"bytes,1,rep,name=liabilities,proto3" json:"liabilities,omitempty"`
+type ListLiabilitiesResponse struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Liabilities   []*ApplicationLiability `protobuf:"bytes,1,rep,name=liabilities,proto3" json:"liabilities,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListLiabilitiesReply) Reset() {
-	*x = ListLiabilitiesReply{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[12]
+func (x *ListLiabilitiesResponse) Reset() {
+	*x = ListLiabilitiesResponse{}
+	mi := &file_financial_v1_financial_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListLiabilitiesReply) String() string {
+func (x *ListLiabilitiesResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListLiabilitiesReply) ProtoMessage() {}
+func (*ListLiabilitiesResponse) ProtoMessage() {}
 
-func (x *ListLiabilitiesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[12]
+func (x *ListLiabilitiesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -991,43 +1215,40 @@ func (x *ListLiabilitiesReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListLiabilitiesReply.ProtoReflect.Descriptor instead.
-func (*ListLiabilitiesReply) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{12}
+// Deprecated: Use ListLiabilitiesResponse.ProtoReflect.Descriptor instead.
+func (*ListLiabilitiesResponse) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *ListLiabilitiesReply) GetLiabilities() []*Liability {
+func (x *ListLiabilitiesResponse) GetLiabilities() []*ApplicationLiability {
 	if x != nil {
 		return x.Liabilities
 	}
 	return nil
 }
 
-type UpsertFinancialRatioRequest struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	ApplicationId      string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
-	RatioCode          string                 `protobuf:"bytes,2,opt,name=ratio_code,json=ratioCode,proto3" json:"ratio_code,omitempty"`
-	RatioValue         string                 `protobuf:"bytes,3,opt,name=ratio_value,json=ratioValue,proto3" json:"ratio_value,omitempty"`
-	CalculationVersion string                 `protobuf:"bytes,4,opt,name=calculation_version,json=calculationVersion,proto3" json:"calculation_version,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+type CalculateFinancialRatiosRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpsertFinancialRatioRequest) Reset() {
-	*x = UpsertFinancialRatioRequest{}
-	mi := &file_api_financial_v1_financial_proto_msgTypes[13]
+func (x *CalculateFinancialRatiosRequest) Reset() {
+	*x = CalculateFinancialRatiosRequest{}
+	mi := &file_financial_v1_financial_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpsertFinancialRatioRequest) String() string {
+func (x *CalculateFinancialRatiosRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpsertFinancialRatioRequest) ProtoMessage() {}
+func (*CalculateFinancialRatiosRequest) ProtoMessage() {}
 
-func (x *UpsertFinancialRatioRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_financial_v1_financial_proto_msgTypes[13]
+func (x *CalculateFinancialRatiosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1038,45 +1259,68 @@ func (x *UpsertFinancialRatioRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpsertFinancialRatioRequest.ProtoReflect.Descriptor instead.
-func (*UpsertFinancialRatioRequest) Descriptor() ([]byte, []int) {
-	return file_api_financial_v1_financial_proto_rawDescGZIP(), []int{13}
+// Deprecated: Use CalculateFinancialRatiosRequest.ProtoReflect.Descriptor instead.
+func (*CalculateFinancialRatiosRequest) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *UpsertFinancialRatioRequest) GetApplicationId() string {
+func (x *CalculateFinancialRatiosRequest) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *UpsertFinancialRatioRequest) GetRatioCode() string {
-	if x != nil {
-		return x.RatioCode
-	}
-	return ""
+type ListFinancialRatiosResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ratios        []*FinancialRatio      `protobuf:"bytes,1,rep,name=ratios,proto3" json:"ratios,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpsertFinancialRatioRequest) GetRatioValue() string {
-	if x != nil {
-		return x.RatioValue
-	}
-	return ""
+func (x *ListFinancialRatiosResponse) Reset() {
+	*x = ListFinancialRatiosResponse{}
+	mi := &file_financial_v1_financial_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpsertFinancialRatioRequest) GetCalculationVersion() string {
-	if x != nil {
-		return x.CalculationVersion
-	}
-	return ""
+func (x *ListFinancialRatiosResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
 }
 
-var File_api_financial_v1_financial_proto protoreflect.FileDescriptor
+func (*ListFinancialRatiosResponse) ProtoMessage() {}
 
-const file_api_financial_v1_financial_proto_rawDesc = "" +
+func (x *ListFinancialRatiosResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_financial_v1_financial_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListFinancialRatiosResponse.ProtoReflect.Descriptor instead.
+func (*ListFinancialRatiosResponse) Descriptor() ([]byte, []int) {
+	return file_financial_v1_financial_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ListFinancialRatiosResponse) GetRatios() []*FinancialRatio {
+	if x != nil {
+		return x.Ratios
+	}
+	return nil
+}
+
+var File_financial_v1_financial_proto protoreflect.FileDescriptor
+
+const file_financial_v1_financial_proto_rawDesc = "" +
 	"\n" +
-	" api/financial/v1/financial.proto\x12\x10api.financial.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb9\x02\n" +
-	"\rFinancialFact\x12\x0e\n" +
+	"\x1cfinancial/v1/financial.proto\x12\x10api.financial.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc4\x02\n" +
+	"\x18ApplicationFinancialFact\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12\x17\n" +
 	"\agl_code\x18\x03 \x01(\tR\x06glCode\x12\x1f\n" +
@@ -1087,8 +1331,8 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\x06source\x18\a \x01(\tR\x06source\x12)\n" +
 	"\x10confidence_level\x18\b \x01(\tR\x0fconfidenceLevel\x129\n" +
 	"\n" +
-	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xf4\x02\n" +
-	"\x05Asset\x12\x0e\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xff\x02\n" +
+	"\x10ApplicationAsset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12&\n" +
 	"\x0fasset_type_code\x18\x03 \x01(\tR\rassetTypeCode\x12\x1d\n" +
@@ -1102,8 +1346,8 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\n" +
 	"encumbered\x18\n" +
 	" \x01(\bR\n" +
-	"encumbered\"\xd0\x02\n" +
-	"\tLiability\x12\x0e\n" +
+	"encumbered\"\xdb\x02\n" +
+	"\x14ApplicationLiability\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12#\n" +
 	"\rcreditor_name\x18\x03 \x01(\tR\fcreditorName\x12%\n" +
@@ -1121,11 +1365,7 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\vratio_value\x18\x04 \x01(\tR\n" +
 	"ratioValue\x12/\n" +
 	"\x13calculation_version\x18\x05 \x01(\tR\x12calculationVersion\x12?\n" +
-	"\rcalculated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\fcalculatedAt\"B\n" +
-	"\x19ListFinancialFactsRequest\x12%\n" +
-	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"P\n" +
-	"\x17ListFinancialFactsReply\x125\n" +
-	"\x05facts\x18\x01 \x03(\v2\x1f.api.financial.v1.FinancialFactR\x05facts\"\xfb\x01\n" +
+	"\rcalculated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\fcalculatedAt\"\xfb\x01\n" +
 	"\x1aUpsertFinancialFactRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12\x17\n" +
 	"\agl_code\x18\x02 \x01(\tR\x06glCode\x12\x1f\n" +
@@ -1134,8 +1374,12 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\fperiod_label\x18\x04 \x01(\tR\vperiodLabel\x12\x16\n" +
 	"\x06amount\x18\x05 \x01(\tR\x06amount\x12\x16\n" +
 	"\x06source\x18\x06 \x01(\tR\x06source\x12)\n" +
-	"\x10confidence_level\x18\a \x01(\tR\x0fconfidenceLevel\"\xf1\x02\n" +
-	"\x12CreateAssetRequest\x12%\n" +
+	"\x10confidence_level\x18\a \x01(\tR\x0fconfidenceLevel\"B\n" +
+	"\x19ListFinancialFactsRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"^\n" +
+	"\x1aListFinancialFactsResponse\x12@\n" +
+	"\x05facts\x18\x01 \x03(\v2*.api.financial.v1.ApplicationFinancialFactR\x05facts\"\xee\x02\n" +
+	"\x0fAddAssetRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12&\n" +
 	"\x0fasset_type_code\x18\x02 \x01(\tR\rassetTypeCode\x12\x1d\n" +
 	"\n" +
@@ -1147,12 +1391,27 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\rlocation_text\x18\b \x01(\tR\flocationText\x12\x1e\n" +
 	"\n" +
 	"encumbered\x18\t \x01(\bR\n" +
-	"encumbered\":\n" +
-	"\x11ListAssetsRequest\x12%\n" +
-	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"B\n" +
-	"\x0fListAssetsReply\x12/\n" +
-	"\x06assets\x18\x01 \x03(\v2\x17.api.financial.v1.AssetR\x06assets\"\xcd\x02\n" +
-	"\x16CreateLiabilityRequest\x12%\n" +
+	"encumbered\"\x81\x03\n" +
+	"\x12UpdateAssetRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12&\n" +
+	"\x0fasset_type_code\x18\x03 \x01(\tR\rassetTypeCode\x12\x1d\n" +
+	"\n" +
+	"asset_name\x18\x04 \x01(\tR\tassetName\x12)\n" +
+	"\x10ownership_status\x18\x05 \x01(\tR\x0fownershipStatus\x12)\n" +
+	"\x10acquisition_year\x18\x06 \x01(\x05R\x0facquisitionYear\x12'\n" +
+	"\x0festimated_value\x18\a \x01(\tR\x0eestimatedValue\x12)\n" +
+	"\x10valuation_method\x18\b \x01(\tR\x0fvaluationMethod\x12#\n" +
+	"\rlocation_text\x18\t \x01(\tR\flocationText\x12\x1e\n" +
+	"\n" +
+	"encumbered\x18\n" +
+	" \x01(\bR\n" +
+	"encumbered\"G\n" +
+	"\x1eListAssetsByApplicationRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"P\n" +
+	"\x12ListAssetsResponse\x12:\n" +
+	"\x06assets\x18\x01 \x03(\v2\".api.financial.v1.ApplicationAssetR\x06assets\"\xca\x02\n" +
+	"\x13AddLiabilityRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12#\n" +
 	"\rcreditor_name\x18\x02 \x01(\tR\fcreditorName\x12%\n" +
 	"\x0eliability_type\x18\x03 \x01(\tR\rliabilityType\x12-\n" +
@@ -1160,106 +1419,122 @@ const file_api_financial_v1_financial_proto_rawDesc = "" +
 	"\x13monthly_installment\x18\x05 \x01(\tR\x12monthlyInstallment\x12#\n" +
 	"\rinterest_rate\x18\x06 \x01(\tR\finterestRate\x12#\n" +
 	"\rmaturity_date\x18\a \x01(\tR\fmaturityDate\x12\x16\n" +
-	"\x06source\x18\b \x01(\tR\x06source\"?\n" +
-	"\x16ListLiabilitiesRequest\x12%\n" +
-	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"U\n" +
-	"\x14ListLiabilitiesReply\x12=\n" +
-	"\vliabilities\x18\x01 \x03(\v2\x1b.api.financial.v1.LiabilityR\vliabilities\"\xb5\x01\n" +
-	"\x1bUpsertFinancialRatioRequest\x12%\n" +
-	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12\x1d\n" +
-	"\n" +
-	"ratio_code\x18\x02 \x01(\tR\tratioCode\x12\x1f\n" +
-	"\vratio_value\x18\x03 \x01(\tR\n" +
-	"ratioValue\x12/\n" +
-	"\x13calculation_version\x18\x04 \x01(\tR\x12calculationVersion2\xc2\b\n" +
-	"\tFinancial\x12\xa7\x01\n" +
-	"\x12ListFinancialFacts\x12+.api.financial.v1.ListFinancialFactsRequest\x1a).api.financial.v1.ListFinancialFactsReply\"9\x82\xd3\xe4\x93\x023\x121/v1/applications/{application_id}/financial-facts\x12\xa2\x01\n" +
-	"\x13UpsertFinancialFact\x12,.api.financial.v1.UpsertFinancialFactRequest\x1a\x1f.api.financial.v1.FinancialFact\"<\x82\xd3\xe4\x93\x026:\x01*\"1/v1/applications/{application_id}/financial-facts\x12\x81\x01\n" +
-	"\vCreateAsset\x12$.api.financial.v1.CreateAssetRequest\x1a\x17.api.financial.v1.Asset\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/applications/{application_id}/assets\x12\x86\x01\n" +
-	"\n" +
-	"ListAssets\x12#.api.financial.v1.ListAssetsRequest\x1a!.api.financial.v1.ListAssetsReply\"0\x82\xd3\xe4\x93\x02*\x12(/v1/applications/{application_id}/assets\x12\x92\x01\n" +
-	"\x0fCreateLiability\x12(.api.financial.v1.CreateLiabilityRequest\x1a\x1b.api.financial.v1.Liability\"8\x82\xd3\xe4\x93\x022:\x01*\"-/v1/applications/{application_id}/liabilities\x12\x9a\x01\n" +
-	"\x0fListLiabilities\x12(.api.financial.v1.ListLiabilitiesRequest\x1a&.api.financial.v1.ListLiabilitiesReply\"5\x82\xd3\xe4\x93\x02/\x12-/v1/applications/{application_id}/liabilities\x12\xa6\x01\n" +
-	"\x14UpsertFinancialRatio\x12-.api.financial.v1.UpsertFinancialRatioRequest\x1a .api.financial.v1.FinancialRatio\"=\x82\xd3\xe4\x93\x027:\x01*\"2/v1/applications/{application_id}/financial-ratiosBB\n" +
+	"\x06source\x18\b \x01(\tR\x06source\"\xdd\x02\n" +
+	"\x16UpdateLiabilityRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12#\n" +
+	"\rcreditor_name\x18\x03 \x01(\tR\fcreditorName\x12%\n" +
+	"\x0eliability_type\x18\x04 \x01(\tR\rliabilityType\x12-\n" +
+	"\x12outstanding_amount\x18\x05 \x01(\tR\x11outstandingAmount\x12/\n" +
+	"\x13monthly_installment\x18\x06 \x01(\tR\x12monthlyInstallment\x12#\n" +
+	"\rinterest_rate\x18\a \x01(\tR\finterestRate\x12#\n" +
+	"\rmaturity_date\x18\b \x01(\tR\fmaturityDate\x12\x16\n" +
+	"\x06source\x18\t \x01(\tR\x06source\"L\n" +
+	"#ListLiabilitiesByApplicationRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"c\n" +
+	"\x17ListLiabilitiesResponse\x12H\n" +
+	"\vliabilities\x18\x01 \x03(\v2&.api.financial.v1.ApplicationLiabilityR\vliabilities\"H\n" +
+	"\x1fCalculateFinancialRatiosRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"W\n" +
+	"\x1bListFinancialRatiosResponse\x128\n" +
+	"\x06ratios\x18\x01 \x03(\v2 .api.financial.v1.FinancialRatioR\x06ratios2\xf3\v\n" +
+	"\x10FinancialService\x12\xad\x01\n" +
+	"\x13UpsertFinancialFact\x12,.api.financial.v1.UpsertFinancialFactRequest\x1a*.api.financial.v1.ApplicationFinancialFact\"<\x82\xd3\xe4\x93\x026:\x01*\"1/v1/applications/{application_id}/financial-facts\x12\xaa\x01\n" +
+	"\x12ListFinancialFacts\x12+.api.financial.v1.ListFinancialFactsRequest\x1a,.api.financial.v1.ListFinancialFactsResponse\"9\x82\xd3\xe4\x93\x023\x121/v1/applications/{application_id}/financial-facts\x12\x86\x01\n" +
+	"\bAddAsset\x12!.api.financial.v1.AddAssetRequest\x1a\".api.financial.v1.ApplicationAsset\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/applications/{application_id}/assets\x12\x91\x01\n" +
+	"\vUpdateAsset\x12$.api.financial.v1.UpdateAssetRequest\x1a\".api.financial.v1.ApplicationAsset\"8\x82\xd3\xe4\x93\x022:\x01*\x1a-/v1/applications/{application_id}/assets/{id}\x12\xa3\x01\n" +
+	"\x17ListAssetsByApplication\x120.api.financial.v1.ListAssetsByApplicationRequest\x1a$.api.financial.v1.ListAssetsResponse\"0\x82\xd3\xe4\x93\x02*\x12(/v1/applications/{application_id}/assets\x12\x97\x01\n" +
+	"\fAddLiability\x12%.api.financial.v1.AddLiabilityRequest\x1a&.api.financial.v1.ApplicationLiability\"8\x82\xd3\xe4\x93\x022:\x01*\"-/v1/applications/{application_id}/liabilities\x12\xa2\x01\n" +
+	"\x0fUpdateLiability\x12(.api.financial.v1.UpdateLiabilityRequest\x1a&.api.financial.v1.ApplicationLiability\"=\x82\xd3\xe4\x93\x027:\x01*\x1a2/v1/applications/{application_id}/liabilities/{id}\x12\xb7\x01\n" +
+	"\x1cListLiabilitiesByApplication\x125.api.financial.v1.ListLiabilitiesByApplicationRequest\x1a).api.financial.v1.ListLiabilitiesResponse\"5\x82\xd3\xe4\x93\x02/\x12-/v1/applications/{application_id}/liabilities\x12\xc5\x01\n" +
+	"\x18CalculateFinancialRatios\x121.api.financial.v1.CalculateFinancialRatiosRequest\x1a-.api.financial.v1.ListFinancialRatiosResponse\"G\x82\xd3\xe4\x93\x02A:\x01*\"</v1/applications/{application_id}/financial-ratios/calculateBB\n" +
 	"\x10api.financial.v1P\x01Z,credit-analytics-backend/api/financial/v1;v1b\x06proto3"
 
 var (
-	file_api_financial_v1_financial_proto_rawDescOnce sync.Once
-	file_api_financial_v1_financial_proto_rawDescData []byte
+	file_financial_v1_financial_proto_rawDescOnce sync.Once
+	file_financial_v1_financial_proto_rawDescData []byte
 )
 
-func file_api_financial_v1_financial_proto_rawDescGZIP() []byte {
-	file_api_financial_v1_financial_proto_rawDescOnce.Do(func() {
-		file_api_financial_v1_financial_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_financial_v1_financial_proto_rawDesc), len(file_api_financial_v1_financial_proto_rawDesc)))
+func file_financial_v1_financial_proto_rawDescGZIP() []byte {
+	file_financial_v1_financial_proto_rawDescOnce.Do(func() {
+		file_financial_v1_financial_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_financial_v1_financial_proto_rawDesc), len(file_financial_v1_financial_proto_rawDesc)))
 	})
-	return file_api_financial_v1_financial_proto_rawDescData
+	return file_financial_v1_financial_proto_rawDescData
 }
 
-var file_api_financial_v1_financial_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
-var file_api_financial_v1_financial_proto_goTypes = []any{
-	(*FinancialFact)(nil),               // 0: api.financial.v1.FinancialFact
-	(*Asset)(nil),                       // 1: api.financial.v1.Asset
-	(*Liability)(nil),                   // 2: api.financial.v1.Liability
-	(*FinancialRatio)(nil),              // 3: api.financial.v1.FinancialRatio
-	(*ListFinancialFactsRequest)(nil),   // 4: api.financial.v1.ListFinancialFactsRequest
-	(*ListFinancialFactsReply)(nil),     // 5: api.financial.v1.ListFinancialFactsReply
-	(*UpsertFinancialFactRequest)(nil),  // 6: api.financial.v1.UpsertFinancialFactRequest
-	(*CreateAssetRequest)(nil),          // 7: api.financial.v1.CreateAssetRequest
-	(*ListAssetsRequest)(nil),           // 8: api.financial.v1.ListAssetsRequest
-	(*ListAssetsReply)(nil),             // 9: api.financial.v1.ListAssetsReply
-	(*CreateLiabilityRequest)(nil),      // 10: api.financial.v1.CreateLiabilityRequest
-	(*ListLiabilitiesRequest)(nil),      // 11: api.financial.v1.ListLiabilitiesRequest
-	(*ListLiabilitiesReply)(nil),        // 12: api.financial.v1.ListLiabilitiesReply
-	(*UpsertFinancialRatioRequest)(nil), // 13: api.financial.v1.UpsertFinancialRatioRequest
-	(*timestamppb.Timestamp)(nil),       // 14: google.protobuf.Timestamp
+var file_financial_v1_financial_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_financial_v1_financial_proto_goTypes = []any{
+	(*ApplicationFinancialFact)(nil),            // 0: api.financial.v1.ApplicationFinancialFact
+	(*ApplicationAsset)(nil),                    // 1: api.financial.v1.ApplicationAsset
+	(*ApplicationLiability)(nil),                // 2: api.financial.v1.ApplicationLiability
+	(*FinancialRatio)(nil),                      // 3: api.financial.v1.FinancialRatio
+	(*UpsertFinancialFactRequest)(nil),          // 4: api.financial.v1.UpsertFinancialFactRequest
+	(*ListFinancialFactsRequest)(nil),           // 5: api.financial.v1.ListFinancialFactsRequest
+	(*ListFinancialFactsResponse)(nil),          // 6: api.financial.v1.ListFinancialFactsResponse
+	(*AddAssetRequest)(nil),                     // 7: api.financial.v1.AddAssetRequest
+	(*UpdateAssetRequest)(nil),                  // 8: api.financial.v1.UpdateAssetRequest
+	(*ListAssetsByApplicationRequest)(nil),      // 9: api.financial.v1.ListAssetsByApplicationRequest
+	(*ListAssetsResponse)(nil),                  // 10: api.financial.v1.ListAssetsResponse
+	(*AddLiabilityRequest)(nil),                 // 11: api.financial.v1.AddLiabilityRequest
+	(*UpdateLiabilityRequest)(nil),              // 12: api.financial.v1.UpdateLiabilityRequest
+	(*ListLiabilitiesByApplicationRequest)(nil), // 13: api.financial.v1.ListLiabilitiesByApplicationRequest
+	(*ListLiabilitiesResponse)(nil),             // 14: api.financial.v1.ListLiabilitiesResponse
+	(*CalculateFinancialRatiosRequest)(nil),     // 15: api.financial.v1.CalculateFinancialRatiosRequest
+	(*ListFinancialRatiosResponse)(nil),         // 16: api.financial.v1.ListFinancialRatiosResponse
+	(*timestamppb.Timestamp)(nil),               // 17: google.protobuf.Timestamp
 }
-var file_api_financial_v1_financial_proto_depIdxs = []int32{
-	14, // 0: api.financial.v1.FinancialFact.created_at:type_name -> google.protobuf.Timestamp
-	14, // 1: api.financial.v1.FinancialRatio.calculated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: api.financial.v1.ListFinancialFactsReply.facts:type_name -> api.financial.v1.FinancialFact
-	1,  // 3: api.financial.v1.ListAssetsReply.assets:type_name -> api.financial.v1.Asset
-	2,  // 4: api.financial.v1.ListLiabilitiesReply.liabilities:type_name -> api.financial.v1.Liability
-	4,  // 5: api.financial.v1.Financial.ListFinancialFacts:input_type -> api.financial.v1.ListFinancialFactsRequest
-	6,  // 6: api.financial.v1.Financial.UpsertFinancialFact:input_type -> api.financial.v1.UpsertFinancialFactRequest
-	7,  // 7: api.financial.v1.Financial.CreateAsset:input_type -> api.financial.v1.CreateAssetRequest
-	8,  // 8: api.financial.v1.Financial.ListAssets:input_type -> api.financial.v1.ListAssetsRequest
-	10, // 9: api.financial.v1.Financial.CreateLiability:input_type -> api.financial.v1.CreateLiabilityRequest
-	11, // 10: api.financial.v1.Financial.ListLiabilities:input_type -> api.financial.v1.ListLiabilitiesRequest
-	13, // 11: api.financial.v1.Financial.UpsertFinancialRatio:input_type -> api.financial.v1.UpsertFinancialRatioRequest
-	5,  // 12: api.financial.v1.Financial.ListFinancialFacts:output_type -> api.financial.v1.ListFinancialFactsReply
-	0,  // 13: api.financial.v1.Financial.UpsertFinancialFact:output_type -> api.financial.v1.FinancialFact
-	1,  // 14: api.financial.v1.Financial.CreateAsset:output_type -> api.financial.v1.Asset
-	9,  // 15: api.financial.v1.Financial.ListAssets:output_type -> api.financial.v1.ListAssetsReply
-	2,  // 16: api.financial.v1.Financial.CreateLiability:output_type -> api.financial.v1.Liability
-	12, // 17: api.financial.v1.Financial.ListLiabilities:output_type -> api.financial.v1.ListLiabilitiesReply
-	3,  // 18: api.financial.v1.Financial.UpsertFinancialRatio:output_type -> api.financial.v1.FinancialRatio
-	12, // [12:19] is the sub-list for method output_type
-	5,  // [5:12] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+var file_financial_v1_financial_proto_depIdxs = []int32{
+	17, // 0: api.financial.v1.ApplicationFinancialFact.created_at:type_name -> google.protobuf.Timestamp
+	17, // 1: api.financial.v1.FinancialRatio.calculated_at:type_name -> google.protobuf.Timestamp
+	0,  // 2: api.financial.v1.ListFinancialFactsResponse.facts:type_name -> api.financial.v1.ApplicationFinancialFact
+	1,  // 3: api.financial.v1.ListAssetsResponse.assets:type_name -> api.financial.v1.ApplicationAsset
+	2,  // 4: api.financial.v1.ListLiabilitiesResponse.liabilities:type_name -> api.financial.v1.ApplicationLiability
+	3,  // 5: api.financial.v1.ListFinancialRatiosResponse.ratios:type_name -> api.financial.v1.FinancialRatio
+	4,  // 6: api.financial.v1.FinancialService.UpsertFinancialFact:input_type -> api.financial.v1.UpsertFinancialFactRequest
+	5,  // 7: api.financial.v1.FinancialService.ListFinancialFacts:input_type -> api.financial.v1.ListFinancialFactsRequest
+	7,  // 8: api.financial.v1.FinancialService.AddAsset:input_type -> api.financial.v1.AddAssetRequest
+	8,  // 9: api.financial.v1.FinancialService.UpdateAsset:input_type -> api.financial.v1.UpdateAssetRequest
+	9,  // 10: api.financial.v1.FinancialService.ListAssetsByApplication:input_type -> api.financial.v1.ListAssetsByApplicationRequest
+	11, // 11: api.financial.v1.FinancialService.AddLiability:input_type -> api.financial.v1.AddLiabilityRequest
+	12, // 12: api.financial.v1.FinancialService.UpdateLiability:input_type -> api.financial.v1.UpdateLiabilityRequest
+	13, // 13: api.financial.v1.FinancialService.ListLiabilitiesByApplication:input_type -> api.financial.v1.ListLiabilitiesByApplicationRequest
+	15, // 14: api.financial.v1.FinancialService.CalculateFinancialRatios:input_type -> api.financial.v1.CalculateFinancialRatiosRequest
+	0,  // 15: api.financial.v1.FinancialService.UpsertFinancialFact:output_type -> api.financial.v1.ApplicationFinancialFact
+	6,  // 16: api.financial.v1.FinancialService.ListFinancialFacts:output_type -> api.financial.v1.ListFinancialFactsResponse
+	1,  // 17: api.financial.v1.FinancialService.AddAsset:output_type -> api.financial.v1.ApplicationAsset
+	1,  // 18: api.financial.v1.FinancialService.UpdateAsset:output_type -> api.financial.v1.ApplicationAsset
+	10, // 19: api.financial.v1.FinancialService.ListAssetsByApplication:output_type -> api.financial.v1.ListAssetsResponse
+	2,  // 20: api.financial.v1.FinancialService.AddLiability:output_type -> api.financial.v1.ApplicationLiability
+	2,  // 21: api.financial.v1.FinancialService.UpdateLiability:output_type -> api.financial.v1.ApplicationLiability
+	14, // 22: api.financial.v1.FinancialService.ListLiabilitiesByApplication:output_type -> api.financial.v1.ListLiabilitiesResponse
+	16, // 23: api.financial.v1.FinancialService.CalculateFinancialRatios:output_type -> api.financial.v1.ListFinancialRatiosResponse
+	15, // [15:24] is the sub-list for method output_type
+	6,  // [6:15] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
-func init() { file_api_financial_v1_financial_proto_init() }
-func file_api_financial_v1_financial_proto_init() {
-	if File_api_financial_v1_financial_proto != nil {
+func init() { file_financial_v1_financial_proto_init() }
+func file_financial_v1_financial_proto_init() {
+	if File_financial_v1_financial_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_financial_v1_financial_proto_rawDesc), len(file_api_financial_v1_financial_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_financial_v1_financial_proto_rawDesc), len(file_financial_v1_financial_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_financial_v1_financial_proto_goTypes,
-		DependencyIndexes: file_api_financial_v1_financial_proto_depIdxs,
-		MessageInfos:      file_api_financial_v1_financial_proto_msgTypes,
+		GoTypes:           file_financial_v1_financial_proto_goTypes,
+		DependencyIndexes: file_financial_v1_financial_proto_depIdxs,
+		MessageInfos:      file_financial_v1_financial_proto_msgTypes,
 	}.Build()
-	File_api_financial_v1_financial_proto = out.File
-	file_api_financial_v1_financial_proto_goTypes = nil
-	file_api_financial_v1_financial_proto_depIdxs = nil
+	File_financial_v1_financial_proto = out.File
+	file_financial_v1_financial_proto_goTypes = nil
+	file_financial_v1_financial_proto_depIdxs = nil
 }

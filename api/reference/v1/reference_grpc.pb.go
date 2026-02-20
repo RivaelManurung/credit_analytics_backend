@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v5.29.3
-// source: api/reference/v1/reference.proto
+// source: reference/v1/reference.proto
 
 package v1
 
@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,293 +20,369 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Reference_ListLoanProducts_FullMethodName        = "/api.reference.v1.Reference/ListLoanProducts"
-	Reference_GetLoanProduct_FullMethodName          = "/api.reference.v1.Reference/GetLoanProduct"
-	Reference_ListBranches_FullMethodName            = "/api.reference.v1.Reference/ListBranches"
-	Reference_ListLoanOfficers_FullMethodName        = "/api.reference.v1.Reference/ListLoanOfficers"
-	Reference_ListApplicationStatuses_FullMethodName = "/api.reference.v1.Reference/ListApplicationStatuses"
-	Reference_ListFinancialGLAccounts_FullMethodName = "/api.reference.v1.Reference/ListFinancialGLAccounts"
+	ReferenceService_ListLoanProducts_FullMethodName        = "/api.reference.v1.ReferenceService/ListLoanProducts"
+	ReferenceService_GetLoanProduct_FullMethodName          = "/api.reference.v1.ReferenceService/GetLoanProduct"
+	ReferenceService_ListBranches_FullMethodName            = "/api.reference.v1.ReferenceService/ListBranches"
+	ReferenceService_ListLoanOfficers_FullMethodName        = "/api.reference.v1.ReferenceService/ListLoanOfficers"
+	ReferenceService_ListApplicationStatuses_FullMethodName = "/api.reference.v1.ReferenceService/ListApplicationStatuses"
+	ReferenceService_ListAttributeRegistry_FullMethodName   = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
+	ReferenceService_ListSurveyTemplates_FullMethodName     = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
+	ReferenceService_ListFinancialGLAccounts_FullMethodName = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
 )
 
-// ReferenceClient is the client API for Reference service.
+// ReferenceServiceClient is the client API for ReferenceService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ReferenceClient interface {
-	ListLoanProducts(ctx context.Context, in *ListLoanProductsRequest, opts ...grpc.CallOption) (*ListLoanProductsReply, error)
+type ReferenceServiceClient interface {
+	ListLoanProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListLoanProductsResponse, error)
 	GetLoanProduct(ctx context.Context, in *GetLoanProductRequest, opts ...grpc.CallOption) (*LoanProduct, error)
-	ListBranches(ctx context.Context, in *ListBranchesRequest, opts ...grpc.CallOption) (*ListBranchesReply, error)
-	ListLoanOfficers(ctx context.Context, in *ListLoanOfficersRequest, opts ...grpc.CallOption) (*ListLoanOfficersReply, error)
-	ListApplicationStatuses(ctx context.Context, in *ListApplicationStatusesRequest, opts ...grpc.CallOption) (*ListApplicationStatusesReply, error)
-	ListFinancialGLAccounts(ctx context.Context, in *ListFinancialGLAccountsRequest, opts ...grpc.CallOption) (*ListFinancialGLAccountsReply, error)
+	ListBranches(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBranchesResponse, error)
+	ListLoanOfficers(ctx context.Context, in *ListLoanOfficersRequest, opts ...grpc.CallOption) (*ListLoanOfficersResponse, error)
+	ListApplicationStatuses(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListApplicationStatusesResponse, error)
+	ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error)
+	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
+	ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error)
 }
 
-type referenceClient struct {
+type referenceServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewReferenceClient(cc grpc.ClientConnInterface) ReferenceClient {
-	return &referenceClient{cc}
+func NewReferenceServiceClient(cc grpc.ClientConnInterface) ReferenceServiceClient {
+	return &referenceServiceClient{cc}
 }
 
-func (c *referenceClient) ListLoanProducts(ctx context.Context, in *ListLoanProductsRequest, opts ...grpc.CallOption) (*ListLoanProductsReply, error) {
+func (c *referenceServiceClient) ListLoanProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListLoanProductsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListLoanProductsReply)
-	err := c.cc.Invoke(ctx, Reference_ListLoanProducts_FullMethodName, in, out, cOpts...)
+	out := new(ListLoanProductsResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListLoanProducts_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *referenceClient) GetLoanProduct(ctx context.Context, in *GetLoanProductRequest, opts ...grpc.CallOption) (*LoanProduct, error) {
+func (c *referenceServiceClient) GetLoanProduct(ctx context.Context, in *GetLoanProductRequest, opts ...grpc.CallOption) (*LoanProduct, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LoanProduct)
-	err := c.cc.Invoke(ctx, Reference_GetLoanProduct_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ReferenceService_GetLoanProduct_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *referenceClient) ListBranches(ctx context.Context, in *ListBranchesRequest, opts ...grpc.CallOption) (*ListBranchesReply, error) {
+func (c *referenceServiceClient) ListBranches(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBranchesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListBranchesReply)
-	err := c.cc.Invoke(ctx, Reference_ListBranches_FullMethodName, in, out, cOpts...)
+	out := new(ListBranchesResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListBranches_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *referenceClient) ListLoanOfficers(ctx context.Context, in *ListLoanOfficersRequest, opts ...grpc.CallOption) (*ListLoanOfficersReply, error) {
+func (c *referenceServiceClient) ListLoanOfficers(ctx context.Context, in *ListLoanOfficersRequest, opts ...grpc.CallOption) (*ListLoanOfficersResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListLoanOfficersReply)
-	err := c.cc.Invoke(ctx, Reference_ListLoanOfficers_FullMethodName, in, out, cOpts...)
+	out := new(ListLoanOfficersResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListLoanOfficers_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *referenceClient) ListApplicationStatuses(ctx context.Context, in *ListApplicationStatusesRequest, opts ...grpc.CallOption) (*ListApplicationStatusesReply, error) {
+func (c *referenceServiceClient) ListApplicationStatuses(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListApplicationStatusesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListApplicationStatusesReply)
-	err := c.cc.Invoke(ctx, Reference_ListApplicationStatuses_FullMethodName, in, out, cOpts...)
+	out := new(ListApplicationStatusesResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListApplicationStatuses_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *referenceClient) ListFinancialGLAccounts(ctx context.Context, in *ListFinancialGLAccountsRequest, opts ...grpc.CallOption) (*ListFinancialGLAccountsReply, error) {
+func (c *referenceServiceClient) ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListFinancialGLAccountsReply)
-	err := c.cc.Invoke(ctx, Reference_ListFinancialGLAccounts_FullMethodName, in, out, cOpts...)
+	out := new(ListAttributeRegistryResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListAttributeRegistry_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ReferenceServer is the server API for Reference service.
-// All implementations must embed UnimplementedReferenceServer
+func (c *referenceServiceClient) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSurveyTemplatesResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListSurveyTemplates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListFinancialGLAccountsResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListFinancialGLAccounts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ReferenceServiceServer is the server API for ReferenceService service.
+// All implementations must embed UnimplementedReferenceServiceServer
 // for forward compatibility.
-type ReferenceServer interface {
-	ListLoanProducts(context.Context, *ListLoanProductsRequest) (*ListLoanProductsReply, error)
+type ReferenceServiceServer interface {
+	ListLoanProducts(context.Context, *emptypb.Empty) (*ListLoanProductsResponse, error)
 	GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error)
-	ListBranches(context.Context, *ListBranchesRequest) (*ListBranchesReply, error)
-	ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersReply, error)
-	ListApplicationStatuses(context.Context, *ListApplicationStatusesRequest) (*ListApplicationStatusesReply, error)
-	ListFinancialGLAccounts(context.Context, *ListFinancialGLAccountsRequest) (*ListFinancialGLAccountsReply, error)
-	mustEmbedUnimplementedReferenceServer()
+	ListBranches(context.Context, *emptypb.Empty) (*ListBranchesResponse, error)
+	ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersResponse, error)
+	ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error)
+	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
+	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
+	ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error)
+	mustEmbedUnimplementedReferenceServiceServer()
 }
 
-// UnimplementedReferenceServer must be embedded to have
+// UnimplementedReferenceServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedReferenceServer struct{}
+type UnimplementedReferenceServiceServer struct{}
 
-func (UnimplementedReferenceServer) ListLoanProducts(context.Context, *ListLoanProductsRequest) (*ListLoanProductsReply, error) {
+func (UnimplementedReferenceServiceServer) ListLoanProducts(context.Context, *emptypb.Empty) (*ListLoanProductsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListLoanProducts not implemented")
 }
-func (UnimplementedReferenceServer) GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error) {
+func (UnimplementedReferenceServiceServer) GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetLoanProduct not implemented")
 }
-func (UnimplementedReferenceServer) ListBranches(context.Context, *ListBranchesRequest) (*ListBranchesReply, error) {
+func (UnimplementedReferenceServiceServer) ListBranches(context.Context, *emptypb.Empty) (*ListBranchesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListBranches not implemented")
 }
-func (UnimplementedReferenceServer) ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersReply, error) {
+func (UnimplementedReferenceServiceServer) ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListLoanOfficers not implemented")
 }
-func (UnimplementedReferenceServer) ListApplicationStatuses(context.Context, *ListApplicationStatusesRequest) (*ListApplicationStatusesReply, error) {
+func (UnimplementedReferenceServiceServer) ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListApplicationStatuses not implemented")
 }
-func (UnimplementedReferenceServer) ListFinancialGLAccounts(context.Context, *ListFinancialGLAccountsRequest) (*ListFinancialGLAccountsReply, error) {
+func (UnimplementedReferenceServiceServer) ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAttributeRegistry not implemented")
+}
+func (UnimplementedReferenceServiceServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
+}
+func (UnimplementedReferenceServiceServer) ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListFinancialGLAccounts not implemented")
 }
-func (UnimplementedReferenceServer) mustEmbedUnimplementedReferenceServer() {}
-func (UnimplementedReferenceServer) testEmbeddedByValue()                   {}
+func (UnimplementedReferenceServiceServer) mustEmbedUnimplementedReferenceServiceServer() {}
+func (UnimplementedReferenceServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeReferenceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ReferenceServer will
+// UnsafeReferenceServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ReferenceServiceServer will
 // result in compilation errors.
-type UnsafeReferenceServer interface {
-	mustEmbedUnimplementedReferenceServer()
+type UnsafeReferenceServiceServer interface {
+	mustEmbedUnimplementedReferenceServiceServer()
 }
 
-func RegisterReferenceServer(s grpc.ServiceRegistrar, srv ReferenceServer) {
-	// If the following call panics, it indicates UnimplementedReferenceServer was
+func RegisterReferenceServiceServer(s grpc.ServiceRegistrar, srv ReferenceServiceServer) {
+	// If the following call panics, it indicates UnimplementedReferenceServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Reference_ServiceDesc, srv)
+	s.RegisterService(&ReferenceService_ServiceDesc, srv)
 }
 
-func _Reference_ListLoanProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListLoanProductsRequest)
+func _ReferenceService_ListLoanProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).ListLoanProducts(ctx, in)
+		return srv.(ReferenceServiceServer).ListLoanProducts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_ListLoanProducts_FullMethodName,
+		FullMethod: ReferenceService_ListLoanProducts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).ListLoanProducts(ctx, req.(*ListLoanProductsRequest))
+		return srv.(ReferenceServiceServer).ListLoanProducts(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Reference_GetLoanProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ReferenceService_GetLoanProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLoanProductRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).GetLoanProduct(ctx, in)
+		return srv.(ReferenceServiceServer).GetLoanProduct(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_GetLoanProduct_FullMethodName,
+		FullMethod: ReferenceService_GetLoanProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).GetLoanProduct(ctx, req.(*GetLoanProductRequest))
+		return srv.(ReferenceServiceServer).GetLoanProduct(ctx, req.(*GetLoanProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Reference_ListBranches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListBranchesRequest)
+func _ReferenceService_ListBranches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).ListBranches(ctx, in)
+		return srv.(ReferenceServiceServer).ListBranches(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_ListBranches_FullMethodName,
+		FullMethod: ReferenceService_ListBranches_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).ListBranches(ctx, req.(*ListBranchesRequest))
+		return srv.(ReferenceServiceServer).ListBranches(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Reference_ListLoanOfficers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ReferenceService_ListLoanOfficers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListLoanOfficersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).ListLoanOfficers(ctx, in)
+		return srv.(ReferenceServiceServer).ListLoanOfficers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_ListLoanOfficers_FullMethodName,
+		FullMethod: ReferenceService_ListLoanOfficers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).ListLoanOfficers(ctx, req.(*ListLoanOfficersRequest))
+		return srv.(ReferenceServiceServer).ListLoanOfficers(ctx, req.(*ListLoanOfficersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Reference_ListApplicationStatuses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListApplicationStatusesRequest)
+func _ReferenceService_ListApplicationStatuses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).ListApplicationStatuses(ctx, in)
+		return srv.(ReferenceServiceServer).ListApplicationStatuses(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_ListApplicationStatuses_FullMethodName,
+		FullMethod: ReferenceService_ListApplicationStatuses_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).ListApplicationStatuses(ctx, req.(*ListApplicationStatusesRequest))
+		return srv.(ReferenceServiceServer).ListApplicationStatuses(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Reference_ListFinancialGLAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListFinancialGLAccountsRequest)
+func _ReferenceService_ListAttributeRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServer).ListFinancialGLAccounts(ctx, in)
+		return srv.(ReferenceServiceServer).ListAttributeRegistry(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Reference_ListFinancialGLAccounts_FullMethodName,
+		FullMethod: ReferenceService_ListAttributeRegistry_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServer).ListFinancialGLAccounts(ctx, req.(*ListFinancialGLAccountsRequest))
+		return srv.(ReferenceServiceServer).ListAttributeRegistry(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Reference_ServiceDesc is the grpc.ServiceDesc for Reference service.
+func _ReferenceService_ListSurveyTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSurveyTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_ListSurveyTemplates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_ListFinancialGLAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_ListFinancialGLAccounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ReferenceService_ServiceDesc is the grpc.ServiceDesc for ReferenceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Reference_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.reference.v1.Reference",
-	HandlerType: (*ReferenceServer)(nil),
+var ReferenceService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.reference.v1.ReferenceService",
+	HandlerType: (*ReferenceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ListLoanProducts",
-			Handler:    _Reference_ListLoanProducts_Handler,
+			Handler:    _ReferenceService_ListLoanProducts_Handler,
 		},
 		{
 			MethodName: "GetLoanProduct",
-			Handler:    _Reference_GetLoanProduct_Handler,
+			Handler:    _ReferenceService_GetLoanProduct_Handler,
 		},
 		{
 			MethodName: "ListBranches",
-			Handler:    _Reference_ListBranches_Handler,
+			Handler:    _ReferenceService_ListBranches_Handler,
 		},
 		{
 			MethodName: "ListLoanOfficers",
-			Handler:    _Reference_ListLoanOfficers_Handler,
+			Handler:    _ReferenceService_ListLoanOfficers_Handler,
 		},
 		{
 			MethodName: "ListApplicationStatuses",
-			Handler:    _Reference_ListApplicationStatuses_Handler,
+			Handler:    _ReferenceService_ListApplicationStatuses_Handler,
+		},
+		{
+			MethodName: "ListAttributeRegistry",
+			Handler:    _ReferenceService_ListAttributeRegistry_Handler,
+		},
+		{
+			MethodName: "ListSurveyTemplates",
+			Handler:    _ReferenceService_ListSurveyTemplates_Handler,
 		},
 		{
 			MethodName: "ListFinancialGLAccounts",
-			Handler:    _Reference_ListFinancialGLAccounts_Handler,
+			Handler:    _ReferenceService_ListFinancialGLAccounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/reference/v1/reference.proto",
+	Metadata: "reference/v1/reference.proto",
 }

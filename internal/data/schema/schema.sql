@@ -49,7 +49,8 @@ CREATE TABLE loan_products (
     product_code VARCHAR(100) UNIQUE,
     product_name VARCHAR(255),
     segment VARCHAR(20), -- RETAIL | UMKM | CORPORATE
-    active BOOLEAN DEFAULT TRUE
+    active BOOLEAN DEFAULT TRUE,
+    assignment_mode VARCHAR(20) DEFAULT 'MANUAL' -- AUTO | CLAIM | MANUAL
 );
 
 CREATE TABLE loan_officers (

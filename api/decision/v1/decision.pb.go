@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: api/decision/v1/decision.proto
+// source: decision/v1/decision.proto
 
 package v1
 
@@ -38,7 +38,7 @@ type CommitteeSession struct {
 
 func (x *CommitteeSession) Reset() {
 	*x = CommitteeSession{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[0]
+	mi := &file_decision_v1_decision_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -50,7 +50,7 @@ func (x *CommitteeSession) String() string {
 func (*CommitteeSession) ProtoMessage() {}
 
 func (x *CommitteeSession) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[0]
+	mi := &file_decision_v1_decision_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +63,7 @@ func (x *CommitteeSession) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommitteeSession.ProtoReflect.Descriptor instead.
 func (*CommitteeSession) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{0}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CommitteeSession) GetId() string {
@@ -129,7 +129,7 @@ type CommitteeVote struct {
 
 func (x *CommitteeVote) Reset() {
 	*x = CommitteeVote{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[1]
+	mi := &file_decision_v1_decision_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -141,7 +141,7 @@ func (x *CommitteeVote) String() string {
 func (*CommitteeVote) ProtoMessage() {}
 
 func (x *CommitteeVote) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[1]
+	mi := &file_decision_v1_decision_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +154,7 @@ func (x *CommitteeVote) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommitteeVote.ProtoReflect.Descriptor instead.
 func (*CommitteeVote) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{1}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CommitteeVote) GetId() string {
@@ -216,7 +216,7 @@ type CommitteeDecision struct {
 
 func (x *CommitteeDecision) Reset() {
 	*x = CommitteeDecision{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[2]
+	mi := &file_decision_v1_decision_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -228,7 +228,7 @@ func (x *CommitteeDecision) String() string {
 func (*CommitteeDecision) ProtoMessage() {}
 
 func (x *CommitteeDecision) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[2]
+	mi := &file_decision_v1_decision_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -241,7 +241,7 @@ func (x *CommitteeDecision) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommitteeDecision.ProtoReflect.Descriptor instead.
 func (*CommitteeDecision) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{2}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CommitteeDecision) GetId() string {
@@ -307,7 +307,7 @@ func (x *CommitteeDecision) GetDecidedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type FinalDecision struct {
+type ApplicationDecision struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicationId     string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -323,21 +323,21 @@ type FinalDecision struct {
 	sizeCache         protoimpl.SizeCache
 }
 
-func (x *FinalDecision) Reset() {
-	*x = FinalDecision{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[3]
+func (x *ApplicationDecision) Reset() {
+	*x = ApplicationDecision{}
+	mi := &file_decision_v1_decision_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *FinalDecision) String() string {
+func (x *ApplicationDecision) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*FinalDecision) ProtoMessage() {}
+func (*ApplicationDecision) ProtoMessage() {}
 
-func (x *FinalDecision) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[3]
+func (x *ApplicationDecision) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,77 +348,153 @@ func (x *FinalDecision) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FinalDecision.ProtoReflect.Descriptor instead.
-func (*FinalDecision) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{3}
+// Deprecated: Use ApplicationDecision.ProtoReflect.Descriptor instead.
+func (*ApplicationDecision) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *FinalDecision) GetId() string {
+func (x *ApplicationDecision) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetApplicationId() string {
+func (x *ApplicationDecision) GetApplicationId() string {
 	if x != nil {
 		return x.ApplicationId
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetDecision() string {
+func (x *ApplicationDecision) GetDecision() string {
 	if x != nil {
 		return x.Decision
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetDecisionSource() string {
+func (x *ApplicationDecision) GetDecisionSource() string {
 	if x != nil {
 		return x.DecisionSource
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetFinalAmount() string {
+func (x *ApplicationDecision) GetFinalAmount() string {
 	if x != nil {
 		return x.FinalAmount
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetFinalTenor() int32 {
+func (x *ApplicationDecision) GetFinalTenor() int32 {
 	if x != nil {
 		return x.FinalTenor
 	}
 	return 0
 }
 
-func (x *FinalDecision) GetFinalInterestRate() string {
+func (x *ApplicationDecision) GetFinalInterestRate() string {
 	if x != nil {
 		return x.FinalInterestRate
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetDecisionReason() string {
+func (x *ApplicationDecision) GetDecisionReason() string {
 	if x != nil {
 		return x.DecisionReason
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetDecidedBy() string {
+func (x *ApplicationDecision) GetDecidedBy() string {
 	if x != nil {
 		return x.DecidedBy
 	}
 	return ""
 }
 
-func (x *FinalDecision) GetDecidedAt() *timestamppb.Timestamp {
+func (x *ApplicationDecision) GetDecidedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DecidedAt
+	}
+	return nil
+}
+
+type DecisionCondition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ApplicationId string                 `protobuf:"bytes,2,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	ConditionText string                 `protobuf:"bytes,3,opt,name=condition_text,json=conditionText,proto3" json:"condition_text,omitempty"`
+	IsMet         bool                   `protobuf:"varint,4,opt,name=is_met,json=isMet,proto3" json:"is_met,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DecisionCondition) Reset() {
+	*x = DecisionCondition{}
+	mi := &file_decision_v1_decision_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DecisionCondition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DecisionCondition) ProtoMessage() {}
+
+func (x *DecisionCondition) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DecisionCondition.ProtoReflect.Descriptor instead.
+func (*DecisionCondition) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DecisionCondition) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *DecisionCondition) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+func (x *DecisionCondition) GetConditionText() string {
+	if x != nil {
+		return x.ConditionText
+	}
+	return ""
+}
+
+func (x *DecisionCondition) GetIsMet() bool {
+	if x != nil {
+		return x.IsMet
+	}
+	return false
+}
+
+func (x *DecisionCondition) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
 	}
 	return nil
 }
@@ -434,7 +510,7 @@ type CreateCommitteeSessionRequest struct {
 
 func (x *CreateCommitteeSessionRequest) Reset() {
 	*x = CreateCommitteeSessionRequest{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[4]
+	mi := &file_decision_v1_decision_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -446,7 +522,7 @@ func (x *CreateCommitteeSessionRequest) String() string {
 func (*CreateCommitteeSessionRequest) ProtoMessage() {}
 
 func (x *CreateCommitteeSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[4]
+	mi := &file_decision_v1_decision_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -459,7 +535,7 @@ func (x *CreateCommitteeSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCommitteeSessionRequest.ProtoReflect.Descriptor instead.
 func (*CreateCommitteeSessionRequest) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{4}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateCommitteeSessionRequest) GetApplicationId() string {
@@ -483,6 +559,50 @@ func (x *CreateCommitteeSessionRequest) GetScheduledAt() *timestamppb.Timestamp 
 	return nil
 }
 
+type GetCommitteeSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCommitteeSessionRequest) Reset() {
+	*x = GetCommitteeSessionRequest{}
+	mi := &file_decision_v1_decision_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCommitteeSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCommitteeSessionRequest) ProtoMessage() {}
+
+func (x *GetCommitteeSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCommitteeSessionRequest.ProtoReflect.Descriptor instead.
+func (*GetCommitteeSessionRequest) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetCommitteeSessionRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 type SubmitCommitteeVoteRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	CommitteeSessionId string                 `protobuf:"bytes,1,opt,name=committee_session_id,json=committeeSessionId,proto3" json:"committee_session_id,omitempty"`
@@ -495,7 +615,7 @@ type SubmitCommitteeVoteRequest struct {
 
 func (x *SubmitCommitteeVoteRequest) Reset() {
 	*x = SubmitCommitteeVoteRequest{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[5]
+	mi := &file_decision_v1_decision_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -507,7 +627,7 @@ func (x *SubmitCommitteeVoteRequest) String() string {
 func (*SubmitCommitteeVoteRequest) ProtoMessage() {}
 
 func (x *SubmitCommitteeVoteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[5]
+	mi := &file_decision_v1_decision_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,7 +640,7 @@ func (x *SubmitCommitteeVoteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubmitCommitteeVoteRequest.ProtoReflect.Descriptor instead.
 func (*SubmitCommitteeVoteRequest) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{5}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *SubmitCommitteeVoteRequest) GetCommitteeSessionId() string {
@@ -566,7 +686,7 @@ type FinalizeCommitteeDecisionRequest struct {
 
 func (x *FinalizeCommitteeDecisionRequest) Reset() {
 	*x = FinalizeCommitteeDecisionRequest{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[6]
+	mi := &file_decision_v1_decision_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -578,7 +698,7 @@ func (x *FinalizeCommitteeDecisionRequest) String() string {
 func (*FinalizeCommitteeDecisionRequest) ProtoMessage() {}
 
 func (x *FinalizeCommitteeDecisionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[6]
+	mi := &file_decision_v1_decision_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -591,7 +711,7 @@ func (x *FinalizeCommitteeDecisionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FinalizeCommitteeDecisionRequest.ProtoReflect.Descriptor instead.
 func (*FinalizeCommitteeDecisionRequest) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{6}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *FinalizeCommitteeDecisionRequest) GetCommitteeSessionId() string {
@@ -643,6 +763,94 @@ func (x *FinalizeCommitteeDecisionRequest) GetRequiresNextCommittee() bool {
 	return false
 }
 
+type ListCommitteeSessionsByApplicationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCommitteeSessionsByApplicationRequest) Reset() {
+	*x = ListCommitteeSessionsByApplicationRequest{}
+	mi := &file_decision_v1_decision_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCommitteeSessionsByApplicationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCommitteeSessionsByApplicationRequest) ProtoMessage() {}
+
+func (x *ListCommitteeSessionsByApplicationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCommitteeSessionsByApplicationRequest.ProtoReflect.Descriptor instead.
+func (*ListCommitteeSessionsByApplicationRequest) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListCommitteeSessionsByApplicationRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+type ListCommitteeSessionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sessions      []*CommitteeSession    `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCommitteeSessionsResponse) Reset() {
+	*x = ListCommitteeSessionsResponse{}
+	mi := &file_decision_v1_decision_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCommitteeSessionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCommitteeSessionsResponse) ProtoMessage() {}
+
+func (x *ListCommitteeSessionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCommitteeSessionsResponse.ProtoReflect.Descriptor instead.
+func (*ListCommitteeSessionsResponse) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ListCommitteeSessionsResponse) GetSessions() []*CommitteeSession {
+	if x != nil {
+		return x.Sessions
+	}
+	return nil
+}
+
 type RecordFinalDecisionRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ApplicationId     string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
@@ -659,7 +867,7 @@ type RecordFinalDecisionRequest struct {
 
 func (x *RecordFinalDecisionRequest) Reset() {
 	*x = RecordFinalDecisionRequest{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[7]
+	mi := &file_decision_v1_decision_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -671,7 +879,7 @@ func (x *RecordFinalDecisionRequest) String() string {
 func (*RecordFinalDecisionRequest) ProtoMessage() {}
 
 func (x *RecordFinalDecisionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[7]
+	mi := &file_decision_v1_decision_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -684,7 +892,7 @@ func (x *RecordFinalDecisionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecordFinalDecisionRequest.ProtoReflect.Descriptor instead.
 func (*RecordFinalDecisionRequest) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{7}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *RecordFinalDecisionRequest) GetApplicationId() string {
@@ -752,7 +960,7 @@ type GetApplicationDecisionRequest struct {
 
 func (x *GetApplicationDecisionRequest) Reset() {
 	*x = GetApplicationDecisionRequest{}
-	mi := &file_api_decision_v1_decision_proto_msgTypes[8]
+	mi := &file_decision_v1_decision_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -764,7 +972,7 @@ func (x *GetApplicationDecisionRequest) String() string {
 func (*GetApplicationDecisionRequest) ProtoMessage() {}
 
 func (x *GetApplicationDecisionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_decision_v1_decision_proto_msgTypes[8]
+	mi := &file_decision_v1_decision_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -777,7 +985,7 @@ func (x *GetApplicationDecisionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetApplicationDecisionRequest.ProtoReflect.Descriptor instead.
 func (*GetApplicationDecisionRequest) Descriptor() ([]byte, []int) {
-	return file_api_decision_v1_decision_proto_rawDescGZIP(), []int{8}
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetApplicationDecisionRequest) GetApplicationId() string {
@@ -787,11 +995,151 @@ func (x *GetApplicationDecisionRequest) GetApplicationId() string {
 	return ""
 }
 
-var File_api_decision_v1_decision_proto protoreflect.FileDescriptor
+type AddDecisionConditionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	ConditionText string                 `protobuf:"bytes,2,opt,name=condition_text,json=conditionText,proto3" json:"condition_text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_api_decision_v1_decision_proto_rawDesc = "" +
+func (x *AddDecisionConditionRequest) Reset() {
+	*x = AddDecisionConditionRequest{}
+	mi := &file_decision_v1_decision_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDecisionConditionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDecisionConditionRequest) ProtoMessage() {}
+
+func (x *AddDecisionConditionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDecisionConditionRequest.ProtoReflect.Descriptor instead.
+func (*AddDecisionConditionRequest) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AddDecisionConditionRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+func (x *AddDecisionConditionRequest) GetConditionText() string {
+	if x != nil {
+		return x.ConditionText
+	}
+	return ""
+}
+
+type ListDecisionConditionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ApplicationId string                 `protobuf:"bytes,1,opt,name=application_id,json=applicationId,proto3" json:"application_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDecisionConditionsRequest) Reset() {
+	*x = ListDecisionConditionsRequest{}
+	mi := &file_decision_v1_decision_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDecisionConditionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDecisionConditionsRequest) ProtoMessage() {}
+
+func (x *ListDecisionConditionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDecisionConditionsRequest.ProtoReflect.Descriptor instead.
+func (*ListDecisionConditionsRequest) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ListDecisionConditionsRequest) GetApplicationId() string {
+	if x != nil {
+		return x.ApplicationId
+	}
+	return ""
+}
+
+type ListDecisionConditionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Conditions    []*DecisionCondition   `protobuf:"bytes,1,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDecisionConditionsResponse) Reset() {
+	*x = ListDecisionConditionsResponse{}
+	mi := &file_decision_v1_decision_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDecisionConditionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDecisionConditionsResponse) ProtoMessage() {}
+
+func (x *ListDecisionConditionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_decision_v1_decision_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDecisionConditionsResponse.ProtoReflect.Descriptor instead.
+func (*ListDecisionConditionsResponse) Descriptor() ([]byte, []int) {
+	return file_decision_v1_decision_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListDecisionConditionsResponse) GetConditions() []*DecisionCondition {
+	if x != nil {
+		return x.Conditions
+	}
+	return nil
+}
+
+var File_decision_v1_decision_proto protoreflect.FileDescriptor
+
+const file_decision_v1_decision_proto_rawDesc = "" +
 	"\n" +
-	"\x1eapi/decision/v1/decision.proto\x12\x0fapi.decision.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc5\x02\n" +
+	"\x1adecision/v1/decision.proto\x12\x0fapi.decision.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc5\x02\n" +
 	"\x10CommitteeSession\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12)\n" +
@@ -819,8 +1167,8 @@ const file_api_decision_v1_decision_proto_rawDesc = "" +
 	"\x16approved_interest_rate\x18\a \x01(\tR\x14approvedInterestRate\x126\n" +
 	"\x17requires_next_committee\x18\b \x01(\bR\x15requiresNextCommittee\x129\n" +
 	"\n" +
-	"decided_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tdecidedAt\"\x82\x03\n" +
-	"\rFinalDecision\x12\x0e\n" +
+	"decided_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tdecidedAt\"\x88\x03\n" +
+	"\x13ApplicationDecision\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12\x1a\n" +
 	"\bdecision\x18\x03 \x01(\tR\bdecision\x12'\n" +
@@ -834,11 +1182,20 @@ const file_api_decision_v1_decision_proto_rawDesc = "" +
 	"decided_by\x18\t \x01(\tR\tdecidedBy\x129\n" +
 	"\n" +
 	"decided_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tdecidedAt\"\xb0\x01\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tdecidedAt\"\xc3\x01\n" +
+	"\x11DecisionCondition\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12%\n" +
+	"\x0econdition_text\x18\x03 \x01(\tR\rconditionText\x12\x15\n" +
+	"\x06is_met\x18\x04 \x01(\bR\x05isMet\x129\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xb0\x01\n" +
 	"\x1dCreateCommitteeSessionRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12)\n" +
 	"\x10session_sequence\x18\x02 \x01(\x05R\x0fsessionSequence\x12=\n" +
-	"\fscheduled_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\vscheduledAt\"\x9c\x01\n" +
+	"\fscheduled_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\vscheduledAt\",\n" +
+	"\x1aGetCommitteeSessionRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x9c\x01\n" +
 	"\x1aSubmitCommitteeVoteRequest\x120\n" +
 	"\x14committee_session_id\x18\x01 \x01(\tR\x12committeeSessionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x12\n" +
@@ -852,7 +1209,11 @@ const file_api_decision_v1_decision_proto_rawDesc = "" +
 	"\x0fapproved_amount\x18\x04 \x01(\tR\x0eapprovedAmount\x12%\n" +
 	"\x0eapproved_tenor\x18\x05 \x01(\x05R\rapprovedTenor\x124\n" +
 	"\x16approved_interest_rate\x18\x06 \x01(\tR\x14approvedInterestRate\x126\n" +
-	"\x17requires_next_committee\x18\a \x01(\bR\x15requiresNextCommittee\"\xc4\x02\n" +
+	"\x17requires_next_committee\x18\a \x01(\bR\x15requiresNextCommittee\"R\n" +
+	")ListCommitteeSessionsByApplicationRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"^\n" +
+	"\x1dListCommitteeSessionsResponse\x12=\n" +
+	"\bsessions\x18\x01 \x03(\v2!.api.decision.v1.CommitteeSessionR\bsessions\"\xc4\x02\n" +
 	"\x1aRecordFinalDecisionRequest\x12%\n" +
 	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12\x1a\n" +
 	"\bdecision\x18\x02 \x01(\tR\bdecision\x12'\n" +
@@ -865,85 +1226,117 @@ const file_api_decision_v1_decision_proto_rawDesc = "" +
 	"\n" +
 	"decided_by\x18\b \x01(\tR\tdecidedBy\"F\n" +
 	"\x1dGetApplicationDecisionRequest\x12%\n" +
-	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId2\xb9\x06\n" +
-	"\bDecision\x12\x8e\x01\n" +
-	"\x16CreateCommitteeSession\x12..api.decision.v1.CreateCommitteeSessionRequest\x1a!.api.decision.v1.CommitteeSession\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/committee/sessions\x12\xa2\x01\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"k\n" +
+	"\x1bAddDecisionConditionRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\x12%\n" +
+	"\x0econdition_text\x18\x02 \x01(\tR\rconditionText\"F\n" +
+	"\x1dListDecisionConditionsRequest\x12%\n" +
+	"\x0eapplication_id\x18\x01 \x01(\tR\rapplicationId\"d\n" +
+	"\x1eListDecisionConditionsResponse\x12B\n" +
+	"\n" +
+	"conditions\x18\x01 \x03(\v2\".api.decision.v1.DecisionConditionR\n" +
+	"conditions2\xde\x06\n" +
+	"\x10CommitteeService\x12\x8e\x01\n" +
+	"\x16CreateCommitteeSession\x12..api.decision.v1.CreateCommitteeSessionRequest\x1a!.api.decision.v1.CommitteeSession\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/committee/sessions\x12\x8a\x01\n" +
+	"\x13GetCommitteeSession\x12+.api.decision.v1.GetCommitteeSessionRequest\x1a!.api.decision.v1.CommitteeSession\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/committee/sessions/{id}\x12\xa2\x01\n" +
 	"\x13SubmitCommitteeVote\x12+.api.decision.v1.SubmitCommitteeVoteRequest\x1a\x1e.api.decision.v1.CommitteeVote\">\x82\xd3\xe4\x93\x028:\x01*\"3/v1/committee/sessions/{committee_session_id}/votes\x12\xb5\x01\n" +
-	"\x19FinalizeCommitteeDecision\x121.api.decision.v1.FinalizeCommitteeDecisionRequest\x1a\".api.decision.v1.CommitteeDecision\"A\x82\xd3\xe4\x93\x02;:\x01*\"6/v1/committee/sessions/{committee_session_id}/finalize\x12\x9f\x01\n" +
-	"\x13RecordFinalDecision\x12+.api.decision.v1.RecordFinalDecisionRequest\x1a\x1e.api.decision.v1.FinalDecision\";\x82\xd3\xe4\x93\x025:\x01*\"0/v1/applications/{application_id}/final-decision\x12\x9c\x01\n" +
-	"\x16GetApplicationDecision\x12..api.decision.v1.GetApplicationDecisionRequest\x1a\x1e.api.decision.v1.FinalDecision\"2\x82\xd3\xe4\x93\x02,\x12*/v1/applications/{application_id}/decisionB@\n" +
+	"\x19FinalizeCommitteeDecision\x121.api.decision.v1.FinalizeCommitteeDecisionRequest\x1a\".api.decision.v1.CommitteeDecision\"A\x82\xd3\xe4\x93\x02;:\x01*\"6/v1/committee/sessions/{committee_session_id}/finalize\x12\xce\x01\n" +
+	"\"ListCommitteeSessionsByApplication\x12:.api.decision.v1.ListCommitteeSessionsByApplicationRequest\x1a..api.decision.v1.ListCommitteeSessionsResponse\"<\x82\xd3\xe4\x93\x026\x124/v1/applications/{application_id}/committee-sessions2\xc6\x05\n" +
+	"\x0fDecisionService\x12\xa5\x01\n" +
+	"\x13RecordFinalDecision\x12+.api.decision.v1.RecordFinalDecisionRequest\x1a$.api.decision.v1.ApplicationDecision\";\x82\xd3\xe4\x93\x025:\x01*\"0/v1/applications/{application_id}/final-decision\x12\xa2\x01\n" +
+	"\x16GetApplicationDecision\x12..api.decision.v1.GetApplicationDecisionRequest\x1a$.api.decision.v1.ApplicationDecision\"2\x82\xd3\xe4\x93\x02,\x12*/v1/applications/{application_id}/decision\x12\xaa\x01\n" +
+	"\x14AddDecisionCondition\x12,.api.decision.v1.AddDecisionConditionRequest\x1a\".api.decision.v1.DecisionCondition\"@\x82\xd3\xe4\x93\x02::\x01*\"5/v1/applications/{application_id}/decision-conditions\x12\xb8\x01\n" +
+	"\x16ListDecisionConditions\x12..api.decision.v1.ListDecisionConditionsRequest\x1a/.api.decision.v1.ListDecisionConditionsResponse\"=\x82\xd3\xe4\x93\x027\x125/v1/applications/{application_id}/decision-conditionsB@\n" +
 	"\x0fapi.decision.v1P\x01Z+credit-analytics-backend/api/decision/v1;v1b\x06proto3"
 
 var (
-	file_api_decision_v1_decision_proto_rawDescOnce sync.Once
-	file_api_decision_v1_decision_proto_rawDescData []byte
+	file_decision_v1_decision_proto_rawDescOnce sync.Once
+	file_decision_v1_decision_proto_rawDescData []byte
 )
 
-func file_api_decision_v1_decision_proto_rawDescGZIP() []byte {
-	file_api_decision_v1_decision_proto_rawDescOnce.Do(func() {
-		file_api_decision_v1_decision_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_decision_v1_decision_proto_rawDesc), len(file_api_decision_v1_decision_proto_rawDesc)))
+func file_decision_v1_decision_proto_rawDescGZIP() []byte {
+	file_decision_v1_decision_proto_rawDescOnce.Do(func() {
+		file_decision_v1_decision_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_decision_v1_decision_proto_rawDesc), len(file_decision_v1_decision_proto_rawDesc)))
 	})
-	return file_api_decision_v1_decision_proto_rawDescData
+	return file_decision_v1_decision_proto_rawDescData
 }
 
-var file_api_decision_v1_decision_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_api_decision_v1_decision_proto_goTypes = []any{
-	(*CommitteeSession)(nil),                 // 0: api.decision.v1.CommitteeSession
-	(*CommitteeVote)(nil),                    // 1: api.decision.v1.CommitteeVote
-	(*CommitteeDecision)(nil),                // 2: api.decision.v1.CommitteeDecision
-	(*FinalDecision)(nil),                    // 3: api.decision.v1.FinalDecision
-	(*CreateCommitteeSessionRequest)(nil),    // 4: api.decision.v1.CreateCommitteeSessionRequest
-	(*SubmitCommitteeVoteRequest)(nil),       // 5: api.decision.v1.SubmitCommitteeVoteRequest
-	(*FinalizeCommitteeDecisionRequest)(nil), // 6: api.decision.v1.FinalizeCommitteeDecisionRequest
-	(*RecordFinalDecisionRequest)(nil),       // 7: api.decision.v1.RecordFinalDecisionRequest
-	(*GetApplicationDecisionRequest)(nil),    // 8: api.decision.v1.GetApplicationDecisionRequest
-	(*timestamppb.Timestamp)(nil),            // 9: google.protobuf.Timestamp
+var file_decision_v1_decision_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_decision_v1_decision_proto_goTypes = []any{
+	(*CommitteeSession)(nil),                          // 0: api.decision.v1.CommitteeSession
+	(*CommitteeVote)(nil),                             // 1: api.decision.v1.CommitteeVote
+	(*CommitteeDecision)(nil),                         // 2: api.decision.v1.CommitteeDecision
+	(*ApplicationDecision)(nil),                       // 3: api.decision.v1.ApplicationDecision
+	(*DecisionCondition)(nil),                         // 4: api.decision.v1.DecisionCondition
+	(*CreateCommitteeSessionRequest)(nil),             // 5: api.decision.v1.CreateCommitteeSessionRequest
+	(*GetCommitteeSessionRequest)(nil),                // 6: api.decision.v1.GetCommitteeSessionRequest
+	(*SubmitCommitteeVoteRequest)(nil),                // 7: api.decision.v1.SubmitCommitteeVoteRequest
+	(*FinalizeCommitteeDecisionRequest)(nil),          // 8: api.decision.v1.FinalizeCommitteeDecisionRequest
+	(*ListCommitteeSessionsByApplicationRequest)(nil), // 9: api.decision.v1.ListCommitteeSessionsByApplicationRequest
+	(*ListCommitteeSessionsResponse)(nil),             // 10: api.decision.v1.ListCommitteeSessionsResponse
+	(*RecordFinalDecisionRequest)(nil),                // 11: api.decision.v1.RecordFinalDecisionRequest
+	(*GetApplicationDecisionRequest)(nil),             // 12: api.decision.v1.GetApplicationDecisionRequest
+	(*AddDecisionConditionRequest)(nil),               // 13: api.decision.v1.AddDecisionConditionRequest
+	(*ListDecisionConditionsRequest)(nil),             // 14: api.decision.v1.ListDecisionConditionsRequest
+	(*ListDecisionConditionsResponse)(nil),            // 15: api.decision.v1.ListDecisionConditionsResponse
+	(*timestamppb.Timestamp)(nil),                     // 16: google.protobuf.Timestamp
 }
-var file_api_decision_v1_decision_proto_depIdxs = []int32{
-	9,  // 0: api.decision.v1.CommitteeSession.scheduled_at:type_name -> google.protobuf.Timestamp
-	9,  // 1: api.decision.v1.CommitteeSession.started_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: api.decision.v1.CommitteeSession.completed_at:type_name -> google.protobuf.Timestamp
-	9,  // 3: api.decision.v1.CommitteeVote.voted_at:type_name -> google.protobuf.Timestamp
-	9,  // 4: api.decision.v1.CommitteeDecision.decided_at:type_name -> google.protobuf.Timestamp
-	9,  // 5: api.decision.v1.FinalDecision.decided_at:type_name -> google.protobuf.Timestamp
-	9,  // 6: api.decision.v1.CreateCommitteeSessionRequest.scheduled_at:type_name -> google.protobuf.Timestamp
-	4,  // 7: api.decision.v1.Decision.CreateCommitteeSession:input_type -> api.decision.v1.CreateCommitteeSessionRequest
-	5,  // 8: api.decision.v1.Decision.SubmitCommitteeVote:input_type -> api.decision.v1.SubmitCommitteeVoteRequest
-	6,  // 9: api.decision.v1.Decision.FinalizeCommitteeDecision:input_type -> api.decision.v1.FinalizeCommitteeDecisionRequest
-	7,  // 10: api.decision.v1.Decision.RecordFinalDecision:input_type -> api.decision.v1.RecordFinalDecisionRequest
-	8,  // 11: api.decision.v1.Decision.GetApplicationDecision:input_type -> api.decision.v1.GetApplicationDecisionRequest
-	0,  // 12: api.decision.v1.Decision.CreateCommitteeSession:output_type -> api.decision.v1.CommitteeSession
-	1,  // 13: api.decision.v1.Decision.SubmitCommitteeVote:output_type -> api.decision.v1.CommitteeVote
-	2,  // 14: api.decision.v1.Decision.FinalizeCommitteeDecision:output_type -> api.decision.v1.CommitteeDecision
-	3,  // 15: api.decision.v1.Decision.RecordFinalDecision:output_type -> api.decision.v1.FinalDecision
-	3,  // 16: api.decision.v1.Decision.GetApplicationDecision:output_type -> api.decision.v1.FinalDecision
-	12, // [12:17] is the sub-list for method output_type
-	7,  // [7:12] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+var file_decision_v1_decision_proto_depIdxs = []int32{
+	16, // 0: api.decision.v1.CommitteeSession.scheduled_at:type_name -> google.protobuf.Timestamp
+	16, // 1: api.decision.v1.CommitteeSession.started_at:type_name -> google.protobuf.Timestamp
+	16, // 2: api.decision.v1.CommitteeSession.completed_at:type_name -> google.protobuf.Timestamp
+	16, // 3: api.decision.v1.CommitteeVote.voted_at:type_name -> google.protobuf.Timestamp
+	16, // 4: api.decision.v1.CommitteeDecision.decided_at:type_name -> google.protobuf.Timestamp
+	16, // 5: api.decision.v1.ApplicationDecision.decided_at:type_name -> google.protobuf.Timestamp
+	16, // 6: api.decision.v1.DecisionCondition.created_at:type_name -> google.protobuf.Timestamp
+	16, // 7: api.decision.v1.CreateCommitteeSessionRequest.scheduled_at:type_name -> google.protobuf.Timestamp
+	0,  // 8: api.decision.v1.ListCommitteeSessionsResponse.sessions:type_name -> api.decision.v1.CommitteeSession
+	4,  // 9: api.decision.v1.ListDecisionConditionsResponse.conditions:type_name -> api.decision.v1.DecisionCondition
+	5,  // 10: api.decision.v1.CommitteeService.CreateCommitteeSession:input_type -> api.decision.v1.CreateCommitteeSessionRequest
+	6,  // 11: api.decision.v1.CommitteeService.GetCommitteeSession:input_type -> api.decision.v1.GetCommitteeSessionRequest
+	7,  // 12: api.decision.v1.CommitteeService.SubmitCommitteeVote:input_type -> api.decision.v1.SubmitCommitteeVoteRequest
+	8,  // 13: api.decision.v1.CommitteeService.FinalizeCommitteeDecision:input_type -> api.decision.v1.FinalizeCommitteeDecisionRequest
+	9,  // 14: api.decision.v1.CommitteeService.ListCommitteeSessionsByApplication:input_type -> api.decision.v1.ListCommitteeSessionsByApplicationRequest
+	11, // 15: api.decision.v1.DecisionService.RecordFinalDecision:input_type -> api.decision.v1.RecordFinalDecisionRequest
+	12, // 16: api.decision.v1.DecisionService.GetApplicationDecision:input_type -> api.decision.v1.GetApplicationDecisionRequest
+	13, // 17: api.decision.v1.DecisionService.AddDecisionCondition:input_type -> api.decision.v1.AddDecisionConditionRequest
+	14, // 18: api.decision.v1.DecisionService.ListDecisionConditions:input_type -> api.decision.v1.ListDecisionConditionsRequest
+	0,  // 19: api.decision.v1.CommitteeService.CreateCommitteeSession:output_type -> api.decision.v1.CommitteeSession
+	0,  // 20: api.decision.v1.CommitteeService.GetCommitteeSession:output_type -> api.decision.v1.CommitteeSession
+	1,  // 21: api.decision.v1.CommitteeService.SubmitCommitteeVote:output_type -> api.decision.v1.CommitteeVote
+	2,  // 22: api.decision.v1.CommitteeService.FinalizeCommitteeDecision:output_type -> api.decision.v1.CommitteeDecision
+	10, // 23: api.decision.v1.CommitteeService.ListCommitteeSessionsByApplication:output_type -> api.decision.v1.ListCommitteeSessionsResponse
+	3,  // 24: api.decision.v1.DecisionService.RecordFinalDecision:output_type -> api.decision.v1.ApplicationDecision
+	3,  // 25: api.decision.v1.DecisionService.GetApplicationDecision:output_type -> api.decision.v1.ApplicationDecision
+	4,  // 26: api.decision.v1.DecisionService.AddDecisionCondition:output_type -> api.decision.v1.DecisionCondition
+	15, // 27: api.decision.v1.DecisionService.ListDecisionConditions:output_type -> api.decision.v1.ListDecisionConditionsResponse
+	19, // [19:28] is the sub-list for method output_type
+	10, // [10:19] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
-func init() { file_api_decision_v1_decision_proto_init() }
-func file_api_decision_v1_decision_proto_init() {
-	if File_api_decision_v1_decision_proto != nil {
+func init() { file_decision_v1_decision_proto_init() }
+func file_decision_v1_decision_proto_init() {
+	if File_decision_v1_decision_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_decision_v1_decision_proto_rawDesc), len(file_api_decision_v1_decision_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_decision_v1_decision_proto_rawDesc), len(file_decision_v1_decision_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   16,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
-		GoTypes:           file_api_decision_v1_decision_proto_goTypes,
-		DependencyIndexes: file_api_decision_v1_decision_proto_depIdxs,
-		MessageInfos:      file_api_decision_v1_decision_proto_msgTypes,
+		GoTypes:           file_decision_v1_decision_proto_goTypes,
+		DependencyIndexes: file_decision_v1_decision_proto_depIdxs,
+		MessageInfos:      file_decision_v1_decision_proto_msgTypes,
 	}.Build()
-	File_api_decision_v1_decision_proto = out.File
-	file_api_decision_v1_decision_proto_goTypes = nil
-	file_api_decision_v1_decision_proto_depIdxs = nil
+	File_decision_v1_decision_proto = out.File
+	file_decision_v1_decision_proto_goTypes = nil
+	file_decision_v1_decision_proto_depIdxs = nil
 }

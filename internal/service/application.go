@@ -6,12 +6,15 @@ import (
 	pb "credit-analytics-backend/api/application/v1"
 	"credit-analytics-backend/internal/biz"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ApplicationService struct {
-	pb.UnimplementedApplicationServer
+	pb.UnimplementedApplicationServiceServer
 
 	uc *biz.ApplicationUsecase
 }
@@ -20,7 +23,7 @@ func NewApplicationService(uc *biz.ApplicationUsecase) *ApplicationService {
 	return &ApplicationService{uc: uc}
 }
 
-func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.CreateApplicationRequest) (*pb.CreateApplicationReply, error) {
+func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.CreateApplicationRequest) (*pb.Application, error) {
 	applicantID, _ := uuid.Parse(req.ApplicantId)
 	productID, _ := uuid.Parse(req.ProductId)
 	aoID, _ := uuid.Parse(req.AoId)
@@ -47,17 +50,21 @@ func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.Crea
 			DataType: attr.DataType,
 		})
 	}
+
 	id, err := s.uc.Create(ctx, app)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.CreateApplicationReply{
-		Id:      id.String(),
-		Message: "Application created successfully",
-	}, nil
+
+	created, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return mapAppBizToProto(created), nil
 }
 
-func (s *ApplicationService) GetApplication(ctx context.Context, req *pb.GetApplicationRequest) (*pb.GetApplicationReply, error) {
+func (s *ApplicationService) GetApplication(ctx context.Context, req *pb.GetApplicationRequest) (*pb.Application, error) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
@@ -66,12 +73,10 @@ func (s *ApplicationService) GetApplication(ctx context.Context, req *pb.GetAppl
 	if err != nil {
 		return nil, err
 	}
-	return &pb.GetApplicationReply{
-		Application: mapAppBizToProto(app),
-	}, nil
+	return mapAppBizToProto(app), nil
 }
 
-func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.UpdateApplicationRequest) (*pb.UpdateApplicationReply, error) {
+func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.UpdateApplicationRequest) (*pb.Application, error) {
 	id, _ := uuid.Parse(req.Id)
 	applicantID, _ := uuid.Parse(req.ApplicantId)
 	productID, _ := uuid.Parse(req.ProductId)
@@ -103,25 +108,91 @@ func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.Upda
 	if err != nil {
 		return nil, err
 	}
-	return &pb.UpdateApplicationReply{
-		Message: "Application updated successfully",
-	}, nil
+	return mapAppBizToProto(app), nil
 }
 
-func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListApplicationsRequest) (*pb.ListApplicationsReply, error) {
+func (s *ApplicationService) GetApplicationAttributes(ctx context.Context, req *pb.GetApplicationAttributesRequest) (*pb.ApplicationAttributes, error) {
+	return &pb.ApplicationAttributes{}, nil
+}
+
+func (s *ApplicationService) UpsertApplicationAttributes(ctx context.Context, req *pb.UpsertApplicationAttributesRequest) (*pb.ApplicationAttributes, error) {
+	return &pb.ApplicationAttributes{}, nil
+}
+
+func (s *ApplicationService) ChangeApplicationStatus(ctx context.Context, req *pb.ChangeApplicationStatusRequest) (*pb.Application, error) {
+	return &pb.Application{}, nil
+}
+
+func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListApplicationsRequest) (*pb.ListApplicationsResponse, error) {
 	apps, err := s.uc.List(ctx)
 	if err != nil {
 		return nil, err
 	}
-	res := &pb.ListApplicationsReply{}
+	var res []*pb.Application
 	for _, app := range apps {
-		res.Applications = append(res.Applications, mapAppBizToProto(app))
+		res = append(res, mapAppBizToProto(app))
 	}
-	return res, nil
+	return &pb.ListApplicationsResponse{Applications: res, Total: int32(len(res))}, nil
 }
 
-func mapAppBizToProto(app *biz.Application) *pb.ApplicationInfo {
-	res := &pb.ApplicationInfo{
+type PartyService struct {
+	pb.UnimplementedPartyServiceServer
+	uc  *biz.ApplicationUsecase
+	log *log.Helper
+}
+
+func NewPartyService(uc *biz.ApplicationUsecase, logger log.Logger) *PartyService {
+	return &PartyService{
+		uc:  uc,
+		log: log.NewHelper(logger),
+	}
+}
+
+func (s *PartyService) AddPartyToApplication(ctx context.Context, req *pb.AddPartyToApplicationRequest) (*pb.ApplicationParty, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	partyID, _ := uuid.Parse(req.PartyId)
+
+	err := s.uc.AddPartyToApplication(ctx, appID, partyID, req.RoleCode, req.SlikRequired)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ApplicationParty{
+		ApplicationId: appID.String(),
+		PartyId:       partyID.String(),
+		RoleCode:      req.RoleCode,
+		SlikRequired:  req.SlikRequired,
+	}, nil
+}
+
+func (s *PartyService) RemovePartyFromApplication(ctx context.Context, req *pb.RemovePartyFromApplicationRequest) (*emptypb.Empty, error) {
+	return &emptypb.Empty{}, nil
+}
+
+func (s *PartyService) ListApplicationParties(ctx context.Context, req *pb.ListApplicationPartiesRequest) (*pb.ListApplicationPartiesResponse, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	parties, err := s.uc.GetParties(ctx, appID)
+	if err != nil {
+		return nil, err
+	}
+	var res []*pb.ApplicationParty
+	for _, p := range parties {
+		res = append(res, &pb.ApplicationParty{
+			ApplicationId:   appID.String(),
+			PartyId:         p.Party.ID.String(),
+			PartyType:       p.Party.PartyType,
+			Name:            p.Party.Name,
+			Identifier:      p.Party.Identifier,
+			RoleCode:        p.RoleCode,
+			LegalObligation: p.LegalObligation,
+			SlikRequired:    p.SlikRequired,
+		})
+	}
+	return &pb.ListApplicationPartiesResponse{Parties: res}, nil
+}
+
+func mapAppBizToProto(app *biz.Application) *pb.Application {
+	res := &pb.Application{
 		Id:                 app.ID.String(),
 		ApplicantId:        app.ApplicantID.String(),
 		ProductId:          app.ProductID.String(),
@@ -142,5 +213,7 @@ func mapAppBizToProto(app *biz.Application) *pb.ApplicationInfo {
 			DataType: attr.DataType,
 		})
 	}
+	res.CreatedAt = timestamppb.New(app.CreatedAt)
+	res.UpdatedAt = timestamppb.New(app.UpdatedAt)
 	return res
 }

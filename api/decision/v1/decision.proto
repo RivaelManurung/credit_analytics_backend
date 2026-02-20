@@ -9,11 +9,16 @@ option go_package = "credit-analytics-backend/api/decision/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.decision.v1";
 
-service Decision {
+service CommitteeService {
   rpc CreateCommitteeSession (CreateCommitteeSessionRequest) returns (CommitteeSession) {
     option (google.api.http) = {
       post: "/v1/committee/sessions",
       body: "*"
+    };
+  }
+  rpc GetCommitteeSession (GetCommitteeSessionRequest) returns (CommitteeSession) {
+    option (google.api.http) = {
+      get: "/v1/committee/sessions/{id}"
     };
   }
   rpc SubmitCommitteeVote (SubmitCommitteeVoteRequest) returns (CommitteeVote) {
@@ -28,15 +33,34 @@ service Decision {
       body: "*"
     };
   }
-  rpc RecordFinalDecision (RecordFinalDecisionRequest) returns (FinalDecision) {
+  rpc ListCommitteeSessionsByApplication (ListCommitteeSessionsByApplicationRequest) returns (ListCommitteeSessionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/committee-sessions"
+    };
+  }
+}
+
+service DecisionService {
+  rpc RecordFinalDecision (RecordFinalDecisionRequest) returns (ApplicationDecision) {
     option (google.api.http) = {
       post: "/v1/applications/{application_id}/final-decision",
       body: "*"
     };
   }
-  rpc GetApplicationDecision (GetApplicationDecisionRequest) returns (FinalDecision) {
+  rpc GetApplicationDecision (GetApplicationDecisionRequest) returns (ApplicationDecision) {
     option (google.api.http) = {
       get: "/v1/applications/{application_id}/decision"
+    };
+  }
+  rpc AddDecisionCondition (AddDecisionConditionRequest) returns (DecisionCondition) {
+    option (google.api.http) = {
+      post: "/v1/applications/{application_id}/decision-conditions",
+      body: "*"
+    };
+  }
+  rpc ListDecisionConditions (ListDecisionConditionsRequest) returns (ListDecisionConditionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/applications/{application_id}/decision-conditions"
     };
   }
 }
@@ -72,7 +96,7 @@ message CommitteeDecision {
   google.protobuf.Timestamp decided_at = 9;
 }
 
-message FinalDecision {
+message ApplicationDecision {
   string id = 1;
   string application_id = 2;
   string decision = 3;
@@ -85,10 +109,22 @@ message FinalDecision {
   google.protobuf.Timestamp decided_at = 10;
 }
 
+message DecisionCondition {
+  string id = 1;
+  string application_id = 2;
+  string condition_text = 3;
+  bool is_met = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
 message CreateCommitteeSessionRequest {
   string application_id = 1;
   int32 session_sequence = 2;
   google.protobuf.Timestamp scheduled_at = 3;
+}
+
+message GetCommitteeSessionRequest {
+  string id = 1;
 }
 
 message SubmitCommitteeVoteRequest {
@@ -108,6 +144,14 @@ message FinalizeCommitteeDecisionRequest {
   bool requires_next_committee = 7;
 }
 
+message ListCommitteeSessionsByApplicationRequest {
+  string application_id = 1;
+}
+
+message ListCommitteeSessionsResponse {
+  repeated CommitteeSession sessions = 1;
+}
+
 message RecordFinalDecisionRequest {
   string application_id = 1;
   string decision = 2;
@@ -121,4 +165,17 @@ message RecordFinalDecisionRequest {
 
 message GetApplicationDecisionRequest {
   string application_id = 1;
+}
+
+message AddDecisionConditionRequest {
+  string application_id = 1;
+  string condition_text = 2;
+}
+
+message ListDecisionConditionsRequest {
+  string application_id = 1;
+}
+
+message ListDecisionConditionsResponse {
+  repeated DecisionCondition conditions = 1;
 }

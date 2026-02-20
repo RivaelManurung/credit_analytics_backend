@@ -23,6 +23,9 @@ INSERT INTO application_surveys (
 -- name: GetSurvey :one
 SELECT * FROM application_surveys WHERE id = $1;
 
+-- name: ListSurveysByApplication :many
+SELECT * FROM application_surveys WHERE application_id = $1;
+
 -- name: UpdateSurveyStatus :one
 UPDATE application_surveys SET 
     status = $2,

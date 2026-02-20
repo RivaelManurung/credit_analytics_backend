@@ -62,3 +62,8 @@ func (uc *ApplicantUsecase) ListAll(ctx context.Context) ([]*Applicant, error) {
 	uc.log.WithContext(ctx).Infof("Listing all Applicants")
 	return uc.repo.ListAll(ctx)
 }
+
+func (uc *ApplicantUsecase) Update(ctx context.Context, a *Applicant) error {
+	uc.log.WithContext(ctx).Infof("Updating Applicant: %s", a.ID)
+	return uc.repo.Update(ctx, a)
+}

@@ -255,6 +255,110 @@ func (q *Queries) ListLiabilities(ctx context.Context, applicationID uuid.UUID) 
 	return items, nil
 }
 
+const updateAsset = `-- name: UpdateAsset :one
+UPDATE application_assets SET
+    asset_type_code = $2,
+    asset_name = $3,
+    ownership_status = $4,
+    acquisition_year = $5,
+    estimated_value = $6,
+    valuation_method = $7,
+    location_text = $8,
+    encumbered = $9
+WHERE id = $1 RETURNING id, application_id, asset_type_code, asset_name, ownership_status, acquisition_year, estimated_value, valuation_method, location_text, encumbered, created_at
+`
+
+type UpdateAssetParams struct {
+	ID              uuid.UUID      `json:"id"`
+	AssetTypeCode   sql.NullString `json:"asset_type_code"`
+	AssetName       sql.NullString `json:"asset_name"`
+	OwnershipStatus sql.NullString `json:"ownership_status"`
+	AcquisitionYear sql.NullInt32  `json:"acquisition_year"`
+	EstimatedValue  sql.NullString `json:"estimated_value"`
+	ValuationMethod sql.NullString `json:"valuation_method"`
+	LocationText    sql.NullString `json:"location_text"`
+	Encumbered      sql.NullBool   `json:"encumbered"`
+}
+
+func (q *Queries) UpdateAsset(ctx context.Context, arg UpdateAssetParams) (ApplicationAsset, error) {
+	row := q.db.QueryRowContext(ctx, updateAsset,
+		arg.ID,
+		arg.AssetTypeCode,
+		arg.AssetName,
+		arg.OwnershipStatus,
+		arg.AcquisitionYear,
+		arg.EstimatedValue,
+		arg.ValuationMethod,
+		arg.LocationText,
+		arg.Encumbered,
+	)
+	var i ApplicationAsset
+	err := row.Scan(
+		&i.ID,
+		&i.ApplicationID,
+		&i.AssetTypeCode,
+		&i.AssetName,
+		&i.OwnershipStatus,
+		&i.AcquisitionYear,
+		&i.EstimatedValue,
+		&i.ValuationMethod,
+		&i.LocationText,
+		&i.Encumbered,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updateLiability = `-- name: UpdateLiability :one
+UPDATE application_liabilities SET
+    creditor_name = $2,
+    liability_type = $3,
+    outstanding_amount = $4,
+    monthly_installment = $5,
+    interest_rate = $6,
+    maturity_date = $7,
+    source = $8
+WHERE id = $1 RETURNING id, application_id, creditor_name, liability_type, outstanding_amount, monthly_installment, interest_rate, maturity_date, source, created_at
+`
+
+type UpdateLiabilityParams struct {
+	ID                 uuid.UUID      `json:"id"`
+	CreditorName       sql.NullString `json:"creditor_name"`
+	LiabilityType      sql.NullString `json:"liability_type"`
+	OutstandingAmount  sql.NullString `json:"outstanding_amount"`
+	MonthlyInstallment sql.NullString `json:"monthly_installment"`
+	InterestRate       sql.NullString `json:"interest_rate"`
+	MaturityDate       sql.NullTime   `json:"maturity_date"`
+	Source             sql.NullString `json:"source"`
+}
+
+func (q *Queries) UpdateLiability(ctx context.Context, arg UpdateLiabilityParams) (ApplicationLiability, error) {
+	row := q.db.QueryRowContext(ctx, updateLiability,
+		arg.ID,
+		arg.CreditorName,
+		arg.LiabilityType,
+		arg.OutstandingAmount,
+		arg.MonthlyInstallment,
+		arg.InterestRate,
+		arg.MaturityDate,
+		arg.Source,
+	)
+	var i ApplicationLiability
+	err := row.Scan(
+		&i.ID,
+		&i.ApplicationID,
+		&i.CreditorName,
+		&i.LiabilityType,
+		&i.OutstandingAmount,
+		&i.MonthlyInstallment,
+		&i.InterestRate,
+		&i.MaturityDate,
+		&i.Source,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const upsertFinancialFact = `-- name: UpsertFinancialFact :one
 INSERT INTO application_financial_facts (
     application_id, gl_code, period_type, period_label, amount, source, confidence_level

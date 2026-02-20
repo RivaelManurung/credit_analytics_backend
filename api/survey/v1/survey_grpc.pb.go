@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v5.29.3
-// source: api/survey/v1/survey.proto
+// source: survey/v1/survey.proto
 
 package v1
 
@@ -19,331 +19,369 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Survey_CreateSurveyTemplate_FullMethodName = "/api.survey.v1.Survey/CreateSurveyTemplate"
-	Survey_ListSurveyTemplates_FullMethodName  = "/api.survey.v1.Survey/ListSurveyTemplates"
-	Survey_AssignSurvey_FullMethodName         = "/api.survey.v1.Survey/AssignSurvey"
-	Survey_GetSurvey_FullMethodName            = "/api.survey.v1.Survey/GetSurvey"
-	Survey_UpdateSurveyStatus_FullMethodName   = "/api.survey.v1.Survey/UpdateSurveyStatus"
-	Survey_UpsertSurveyAnswer_FullMethodName   = "/api.survey.v1.Survey/UpsertSurveyAnswer"
-	Survey_CreateSurveyEvidence_FullMethodName = "/api.survey.v1.Survey/CreateSurveyEvidence"
+	SurveyService_AssignSurvey_FullMethodName             = "/api.survey.v1.SurveyService/AssignSurvey"
+	SurveyService_GetSurvey_FullMethodName                = "/api.survey.v1.SurveyService/GetSurvey"
+	SurveyService_ListSurveysByApplication_FullMethodName = "/api.survey.v1.SurveyService/ListSurveysByApplication"
+	SurveyService_StartSurvey_FullMethodName              = "/api.survey.v1.SurveyService/StartSurvey"
+	SurveyService_SubmitSurvey_FullMethodName             = "/api.survey.v1.SurveyService/SubmitSurvey"
+	SurveyService_VerifySurvey_FullMethodName             = "/api.survey.v1.SurveyService/VerifySurvey"
+	SurveyService_SubmitSurveyAnswer_FullMethodName       = "/api.survey.v1.SurveyService/SubmitSurveyAnswer"
+	SurveyService_UploadSurveyEvidence_FullMethodName     = "/api.survey.v1.SurveyService/UploadSurveyEvidence"
 )
 
-// SurveyClient is the client API for Survey service.
+// SurveyServiceClient is the client API for SurveyService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type SurveyClient interface {
-	CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...grpc.CallOption) (*SurveyTemplate, error)
-	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesReply, error)
+type SurveyServiceClient interface {
 	AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
 	GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
-	UpdateSurveyStatus(ctx context.Context, in *UpdateSurveyStatusRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
-	UpsertSurveyAnswer(ctx context.Context, in *UpsertSurveyAnswerRequest, opts ...grpc.CallOption) (*SurveyAnswer, error)
-	CreateSurveyEvidence(ctx context.Context, in *CreateSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error)
+	ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error)
+	StartSurvey(ctx context.Context, in *StartSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
+	SubmitSurvey(ctx context.Context, in *SubmitSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
+	VerifySurvey(ctx context.Context, in *VerifySurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
+	SubmitSurveyAnswer(ctx context.Context, in *SubmitSurveyAnswerRequest, opts ...grpc.CallOption) (*SurveyAnswer, error)
+	UploadSurveyEvidence(ctx context.Context, in *UploadSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error)
 }
 
-type surveyClient struct {
+type surveyServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewSurveyClient(cc grpc.ClientConnInterface) SurveyClient {
-	return &surveyClient{cc}
+func NewSurveyServiceClient(cc grpc.ClientConnInterface) SurveyServiceClient {
+	return &surveyServiceClient{cc}
 }
 
-func (c *surveyClient) CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...grpc.CallOption) (*SurveyTemplate, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SurveyTemplate)
-	err := c.cc.Invoke(ctx, Survey_CreateSurveyTemplate_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *surveyClient) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesReply, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListSurveyTemplatesReply)
-	err := c.cc.Invoke(ctx, Survey_ListSurveyTemplates_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *surveyClient) AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
+func (c *surveyServiceClient) AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ApplicationSurvey)
-	err := c.cc.Invoke(ctx, Survey_AssignSurvey_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_AssignSurvey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *surveyClient) GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
+func (c *surveyServiceClient) GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ApplicationSurvey)
-	err := c.cc.Invoke(ctx, Survey_GetSurvey_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_GetSurvey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *surveyClient) UpdateSurveyStatus(ctx context.Context, in *UpdateSurveyStatusRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
+func (c *surveyServiceClient) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSurveysResponse)
+	err := c.cc.Invoke(ctx, SurveyService_ListSurveysByApplication_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *surveyServiceClient) StartSurvey(ctx context.Context, in *StartSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ApplicationSurvey)
-	err := c.cc.Invoke(ctx, Survey_UpdateSurveyStatus_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_StartSurvey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *surveyClient) UpsertSurveyAnswer(ctx context.Context, in *UpsertSurveyAnswerRequest, opts ...grpc.CallOption) (*SurveyAnswer, error) {
+func (c *surveyServiceClient) SubmitSurvey(ctx context.Context, in *SubmitSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplicationSurvey)
+	err := c.cc.Invoke(ctx, SurveyService_SubmitSurvey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *surveyServiceClient) VerifySurvey(ctx context.Context, in *VerifySurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplicationSurvey)
+	err := c.cc.Invoke(ctx, SurveyService_VerifySurvey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *surveyServiceClient) SubmitSurveyAnswer(ctx context.Context, in *SubmitSurveyAnswerRequest, opts ...grpc.CallOption) (*SurveyAnswer, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SurveyAnswer)
-	err := c.cc.Invoke(ctx, Survey_UpsertSurveyAnswer_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_SubmitSurveyAnswer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *surveyClient) CreateSurveyEvidence(ctx context.Context, in *CreateSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error) {
+func (c *surveyServiceClient) UploadSurveyEvidence(ctx context.Context, in *UploadSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SurveyEvidence)
-	err := c.cc.Invoke(ctx, Survey_CreateSurveyEvidence_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_UploadSurveyEvidence_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SurveyServer is the server API for Survey service.
-// All implementations must embed UnimplementedSurveyServer
+// SurveyServiceServer is the server API for SurveyService service.
+// All implementations must embed UnimplementedSurveyServiceServer
 // for forward compatibility.
-type SurveyServer interface {
-	CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error)
-	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesReply, error)
+type SurveyServiceServer interface {
 	AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error)
 	GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error)
-	UpdateSurveyStatus(context.Context, *UpdateSurveyStatusRequest) (*ApplicationSurvey, error)
-	UpsertSurveyAnswer(context.Context, *UpsertSurveyAnswerRequest) (*SurveyAnswer, error)
-	CreateSurveyEvidence(context.Context, *CreateSurveyEvidenceRequest) (*SurveyEvidence, error)
-	mustEmbedUnimplementedSurveyServer()
+	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error)
+	StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error)
+	SubmitSurvey(context.Context, *SubmitSurveyRequest) (*ApplicationSurvey, error)
+	VerifySurvey(context.Context, *VerifySurveyRequest) (*ApplicationSurvey, error)
+	SubmitSurveyAnswer(context.Context, *SubmitSurveyAnswerRequest) (*SurveyAnswer, error)
+	UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error)
+	mustEmbedUnimplementedSurveyServiceServer()
 }
 
-// UnimplementedSurveyServer must be embedded to have
+// UnimplementedSurveyServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedSurveyServer struct{}
+type UnimplementedSurveyServiceServer struct{}
 
-func (UnimplementedSurveyServer) CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateSurveyTemplate not implemented")
-}
-func (UnimplementedSurveyServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
-}
-func (UnimplementedSurveyServer) AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error) {
+func (UnimplementedSurveyServiceServer) AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error) {
 	return nil, status.Error(codes.Unimplemented, "method AssignSurvey not implemented")
 }
-func (UnimplementedSurveyServer) GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error) {
+func (UnimplementedSurveyServiceServer) GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSurvey not implemented")
 }
-func (UnimplementedSurveyServer) UpdateSurveyStatus(context.Context, *UpdateSurveyStatusRequest) (*ApplicationSurvey, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateSurveyStatus not implemented")
+func (UnimplementedSurveyServiceServer) ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSurveysByApplication not implemented")
 }
-func (UnimplementedSurveyServer) UpsertSurveyAnswer(context.Context, *UpsertSurveyAnswerRequest) (*SurveyAnswer, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpsertSurveyAnswer not implemented")
+func (UnimplementedSurveyServiceServer) StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error) {
+	return nil, status.Error(codes.Unimplemented, "method StartSurvey not implemented")
 }
-func (UnimplementedSurveyServer) CreateSurveyEvidence(context.Context, *CreateSurveyEvidenceRequest) (*SurveyEvidence, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateSurveyEvidence not implemented")
+func (UnimplementedSurveyServiceServer) SubmitSurvey(context.Context, *SubmitSurveyRequest) (*ApplicationSurvey, error) {
+	return nil, status.Error(codes.Unimplemented, "method SubmitSurvey not implemented")
 }
-func (UnimplementedSurveyServer) mustEmbedUnimplementedSurveyServer() {}
-func (UnimplementedSurveyServer) testEmbeddedByValue()                {}
+func (UnimplementedSurveyServiceServer) VerifySurvey(context.Context, *VerifySurveyRequest) (*ApplicationSurvey, error) {
+	return nil, status.Error(codes.Unimplemented, "method VerifySurvey not implemented")
+}
+func (UnimplementedSurveyServiceServer) SubmitSurveyAnswer(context.Context, *SubmitSurveyAnswerRequest) (*SurveyAnswer, error) {
+	return nil, status.Error(codes.Unimplemented, "method SubmitSurveyAnswer not implemented")
+}
+func (UnimplementedSurveyServiceServer) UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error) {
+	return nil, status.Error(codes.Unimplemented, "method UploadSurveyEvidence not implemented")
+}
+func (UnimplementedSurveyServiceServer) mustEmbedUnimplementedSurveyServiceServer() {}
+func (UnimplementedSurveyServiceServer) testEmbeddedByValue()                       {}
 
-// UnsafeSurveyServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to SurveyServer will
+// UnsafeSurveyServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SurveyServiceServer will
 // result in compilation errors.
-type UnsafeSurveyServer interface {
-	mustEmbedUnimplementedSurveyServer()
+type UnsafeSurveyServiceServer interface {
+	mustEmbedUnimplementedSurveyServiceServer()
 }
 
-func RegisterSurveyServer(s grpc.ServiceRegistrar, srv SurveyServer) {
-	// If the following call panics, it indicates UnimplementedSurveyServer was
+func RegisterSurveyServiceServer(s grpc.ServiceRegistrar, srv SurveyServiceServer) {
+	// If the following call panics, it indicates UnimplementedSurveyServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Survey_ServiceDesc, srv)
+	s.RegisterService(&SurveyService_ServiceDesc, srv)
 }
 
-func _Survey_CreateSurveyTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSurveyTemplateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SurveyServer).CreateSurveyTemplate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Survey_CreateSurveyTemplate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).CreateSurveyTemplate(ctx, req.(*CreateSurveyTemplateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Survey_ListSurveyTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListSurveyTemplatesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SurveyServer).ListSurveyTemplates(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Survey_ListSurveyTemplates_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Survey_AssignSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SurveyService_AssignSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AssignSurveyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SurveyServer).AssignSurvey(ctx, in)
+		return srv.(SurveyServiceServer).AssignSurvey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Survey_AssignSurvey_FullMethodName,
+		FullMethod: SurveyService_AssignSurvey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).AssignSurvey(ctx, req.(*AssignSurveyRequest))
+		return srv.(SurveyServiceServer).AssignSurvey(ctx, req.(*AssignSurveyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Survey_GetSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SurveyService_GetSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetSurveyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SurveyServer).GetSurvey(ctx, in)
+		return srv.(SurveyServiceServer).GetSurvey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Survey_GetSurvey_FullMethodName,
+		FullMethod: SurveyService_GetSurvey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).GetSurvey(ctx, req.(*GetSurveyRequest))
+		return srv.(SurveyServiceServer).GetSurvey(ctx, req.(*GetSurveyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Survey_UpdateSurveyStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateSurveyStatusRequest)
+func _SurveyService_ListSurveysByApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSurveysByApplicationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SurveyServer).UpdateSurveyStatus(ctx, in)
+		return srv.(SurveyServiceServer).ListSurveysByApplication(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Survey_UpdateSurveyStatus_FullMethodName,
+		FullMethod: SurveyService_ListSurveysByApplication_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).UpdateSurveyStatus(ctx, req.(*UpdateSurveyStatusRequest))
+		return srv.(SurveyServiceServer).ListSurveysByApplication(ctx, req.(*ListSurveysByApplicationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Survey_UpsertSurveyAnswer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertSurveyAnswerRequest)
+func _SurveyService_StartSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartSurveyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SurveyServer).UpsertSurveyAnswer(ctx, in)
+		return srv.(SurveyServiceServer).StartSurvey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Survey_UpsertSurveyAnswer_FullMethodName,
+		FullMethod: SurveyService_StartSurvey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).UpsertSurveyAnswer(ctx, req.(*UpsertSurveyAnswerRequest))
+		return srv.(SurveyServiceServer).StartSurvey(ctx, req.(*StartSurveyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Survey_CreateSurveyEvidence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSurveyEvidenceRequest)
+func _SurveyService_SubmitSurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitSurveyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SurveyServer).CreateSurveyEvidence(ctx, in)
+		return srv.(SurveyServiceServer).SubmitSurvey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Survey_CreateSurveyEvidence_FullMethodName,
+		FullMethod: SurveyService_SubmitSurvey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SurveyServer).CreateSurveyEvidence(ctx, req.(*CreateSurveyEvidenceRequest))
+		return srv.(SurveyServiceServer).SubmitSurvey(ctx, req.(*SubmitSurveyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Survey_ServiceDesc is the grpc.ServiceDesc for Survey service.
+func _SurveyService_VerifySurvey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifySurveyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).VerifySurvey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_VerifySurvey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).VerifySurvey(ctx, req.(*VerifySurveyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SurveyService_SubmitSurveyAnswer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitSurveyAnswerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).SubmitSurveyAnswer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_SubmitSurveyAnswer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).SubmitSurveyAnswer(ctx, req.(*SubmitSurveyAnswerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SurveyService_UploadSurveyEvidence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadSurveyEvidenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).UploadSurveyEvidence(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_UploadSurveyEvidence_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).UploadSurveyEvidence(ctx, req.(*UploadSurveyEvidenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// SurveyService_ServiceDesc is the grpc.ServiceDesc for SurveyService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Survey_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.survey.v1.Survey",
-	HandlerType: (*SurveyServer)(nil),
+var SurveyService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.survey.v1.SurveyService",
+	HandlerType: (*SurveyServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateSurveyTemplate",
-			Handler:    _Survey_CreateSurveyTemplate_Handler,
-		},
-		{
-			MethodName: "ListSurveyTemplates",
-			Handler:    _Survey_ListSurveyTemplates_Handler,
-		},
-		{
 			MethodName: "AssignSurvey",
-			Handler:    _Survey_AssignSurvey_Handler,
+			Handler:    _SurveyService_AssignSurvey_Handler,
 		},
 		{
 			MethodName: "GetSurvey",
-			Handler:    _Survey_GetSurvey_Handler,
+			Handler:    _SurveyService_GetSurvey_Handler,
 		},
 		{
-			MethodName: "UpdateSurveyStatus",
-			Handler:    _Survey_UpdateSurveyStatus_Handler,
+			MethodName: "ListSurveysByApplication",
+			Handler:    _SurveyService_ListSurveysByApplication_Handler,
 		},
 		{
-			MethodName: "UpsertSurveyAnswer",
-			Handler:    _Survey_UpsertSurveyAnswer_Handler,
+			MethodName: "StartSurvey",
+			Handler:    _SurveyService_StartSurvey_Handler,
 		},
 		{
-			MethodName: "CreateSurveyEvidence",
-			Handler:    _Survey_CreateSurveyEvidence_Handler,
+			MethodName: "SubmitSurvey",
+			Handler:    _SurveyService_SubmitSurvey_Handler,
+		},
+		{
+			MethodName: "VerifySurvey",
+			Handler:    _SurveyService_VerifySurvey_Handler,
+		},
+		{
+			MethodName: "SubmitSurveyAnswer",
+			Handler:    _SurveyService_SubmitSurveyAnswer_Handler,
+		},
+		{
+			MethodName: "UploadSurveyEvidence",
+			Handler:    _SurveyService_UploadSurveyEvidence_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/survey/v1/survey.proto",
+	Metadata: "survey/v1/survey.proto",
 }

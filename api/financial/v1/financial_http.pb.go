@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v5.29.3
-// source: api/financial/v1/financial.proto
+// source: financial/v1/financial.proto
 
 package v1
 
@@ -19,58 +19,42 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationFinancialCreateAsset = "/api.financial.v1.Financial/CreateAsset"
-const OperationFinancialCreateLiability = "/api.financial.v1.Financial/CreateLiability"
-const OperationFinancialListAssets = "/api.financial.v1.Financial/ListAssets"
-const OperationFinancialListFinancialFacts = "/api.financial.v1.Financial/ListFinancialFacts"
-const OperationFinancialListLiabilities = "/api.financial.v1.Financial/ListLiabilities"
-const OperationFinancialUpsertFinancialFact = "/api.financial.v1.Financial/UpsertFinancialFact"
-const OperationFinancialUpsertFinancialRatio = "/api.financial.v1.Financial/UpsertFinancialRatio"
+const OperationFinancialServiceAddAsset = "/api.financial.v1.FinancialService/AddAsset"
+const OperationFinancialServiceAddLiability = "/api.financial.v1.FinancialService/AddLiability"
+const OperationFinancialServiceCalculateFinancialRatios = "/api.financial.v1.FinancialService/CalculateFinancialRatios"
+const OperationFinancialServiceListAssetsByApplication = "/api.financial.v1.FinancialService/ListAssetsByApplication"
+const OperationFinancialServiceListFinancialFacts = "/api.financial.v1.FinancialService/ListFinancialFacts"
+const OperationFinancialServiceListLiabilitiesByApplication = "/api.financial.v1.FinancialService/ListLiabilitiesByApplication"
+const OperationFinancialServiceUpdateAsset = "/api.financial.v1.FinancialService/UpdateAsset"
+const OperationFinancialServiceUpdateLiability = "/api.financial.v1.FinancialService/UpdateLiability"
+const OperationFinancialServiceUpsertFinancialFact = "/api.financial.v1.FinancialService/UpsertFinancialFact"
 
-type FinancialHTTPServer interface {
-	CreateAsset(context.Context, *CreateAssetRequest) (*Asset, error)
-	CreateLiability(context.Context, *CreateLiabilityRequest) (*Liability, error)
-	ListAssets(context.Context, *ListAssetsRequest) (*ListAssetsReply, error)
-	ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsReply, error)
-	ListLiabilities(context.Context, *ListLiabilitiesRequest) (*ListLiabilitiesReply, error)
-	UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*FinancialFact, error)
-	UpsertFinancialRatio(context.Context, *UpsertFinancialRatioRequest) (*FinancialRatio, error)
+type FinancialServiceHTTPServer interface {
+	AddAsset(context.Context, *AddAssetRequest) (*ApplicationAsset, error)
+	AddLiability(context.Context, *AddLiabilityRequest) (*ApplicationLiability, error)
+	CalculateFinancialRatios(context.Context, *CalculateFinancialRatiosRequest) (*ListFinancialRatiosResponse, error)
+	ListAssetsByApplication(context.Context, *ListAssetsByApplicationRequest) (*ListAssetsResponse, error)
+	ListFinancialFacts(context.Context, *ListFinancialFactsRequest) (*ListFinancialFactsResponse, error)
+	ListLiabilitiesByApplication(context.Context, *ListLiabilitiesByApplicationRequest) (*ListLiabilitiesResponse, error)
+	UpdateAsset(context.Context, *UpdateAssetRequest) (*ApplicationAsset, error)
+	UpdateLiability(context.Context, *UpdateLiabilityRequest) (*ApplicationLiability, error)
+	UpsertFinancialFact(context.Context, *UpsertFinancialFactRequest) (*ApplicationFinancialFact, error)
 }
 
-func RegisterFinancialHTTPServer(s *http.Server, srv FinancialHTTPServer) {
+func RegisterFinancialServiceHTTPServer(s *http.Server, srv FinancialServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/applications/{application_id}/financial-facts", _Financial_ListFinancialFacts0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/financial-facts", _Financial_UpsertFinancialFact0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/assets", _Financial_CreateAsset0_HTTP_Handler(srv))
-	r.GET("/v1/applications/{application_id}/assets", _Financial_ListAssets0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/liabilities", _Financial_CreateLiability0_HTTP_Handler(srv))
-	r.GET("/v1/applications/{application_id}/liabilities", _Financial_ListLiabilities0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{application_id}/financial-ratios", _Financial_UpsertFinancialRatio0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/financial-facts", _FinancialService_UpsertFinancialFact0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/financial-facts", _FinancialService_ListFinancialFacts0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/assets", _FinancialService_AddAsset0_HTTP_Handler(srv))
+	r.PUT("/v1/applications/{application_id}/assets/{id}", _FinancialService_UpdateAsset0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/assets", _FinancialService_ListAssetsByApplication0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/liabilities", _FinancialService_AddLiability0_HTTP_Handler(srv))
+	r.PUT("/v1/applications/{application_id}/liabilities/{id}", _FinancialService_UpdateLiability0_HTTP_Handler(srv))
+	r.GET("/v1/applications/{application_id}/liabilities", _FinancialService_ListLiabilitiesByApplication0_HTTP_Handler(srv))
+	r.POST("/v1/applications/{application_id}/financial-ratios/calculate", _FinancialService_CalculateFinancialRatios0_HTTP_Handler(srv))
 }
 
-func _Financial_ListFinancialFacts0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in ListFinancialFactsRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationFinancialListFinancialFacts)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListFinancialFacts(ctx, req.(*ListFinancialFactsRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ListFinancialFactsReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Financial_UpsertFinancialFact0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
+func _FinancialService_UpsertFinancialFact0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpsertFinancialFactRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -82,7 +66,7 @@ func _Financial_UpsertFinancialFact0_HTTP_Handler(srv FinancialHTTPServer) func(
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationFinancialUpsertFinancialFact)
+		http.SetOperation(ctx, OperationFinancialServiceUpsertFinancialFact)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpsertFinancialFact(ctx, req.(*UpsertFinancialFactRequest))
 		})
@@ -90,14 +74,36 @@ func _Financial_UpsertFinancialFact0_HTTP_Handler(srv FinancialHTTPServer) func(
 		if err != nil {
 			return err
 		}
-		reply := out.(*FinancialFact)
+		reply := out.(*ApplicationFinancialFact)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Financial_CreateAsset0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
+func _FinancialService_ListFinancialFacts0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CreateAssetRequest
+		var in ListFinancialFactsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationFinancialServiceListFinancialFacts)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListFinancialFacts(ctx, req.(*ListFinancialFactsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListFinancialFactsResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _FinancialService_AddAsset0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddAssetRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -107,44 +113,22 @@ func _Financial_CreateAsset0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationFinancialCreateAsset)
+		http.SetOperation(ctx, OperationFinancialServiceAddAsset)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateAsset(ctx, req.(*CreateAssetRequest))
+			return srv.AddAsset(ctx, req.(*AddAssetRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*Asset)
+		reply := out.(*ApplicationAsset)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Financial_ListAssets0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
+func _FinancialService_UpdateAsset0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ListAssetsRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationFinancialListAssets)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListAssets(ctx, req.(*ListAssetsRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ListAssetsReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Financial_CreateLiability0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in CreateLiabilityRequest
+		var in UpdateAssetRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -154,44 +138,44 @@ func _Financial_CreateLiability0_HTTP_Handler(srv FinancialHTTPServer) func(ctx 
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationFinancialCreateLiability)
+		http.SetOperation(ctx, OperationFinancialServiceUpdateAsset)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateLiability(ctx, req.(*CreateLiabilityRequest))
+			return srv.UpdateAsset(ctx, req.(*UpdateAssetRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*Liability)
+		reply := out.(*ApplicationAsset)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Financial_ListLiabilities0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
+func _FinancialService_ListAssetsByApplication0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ListLiabilitiesRequest
+		var in ListAssetsByApplicationRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationFinancialListLiabilities)
+		http.SetOperation(ctx, OperationFinancialServiceListAssetsByApplication)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListLiabilities(ctx, req.(*ListLiabilitiesRequest))
+			return srv.ListAssetsByApplication(ctx, req.(*ListAssetsByApplicationRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ListLiabilitiesReply)
+		reply := out.(*ListAssetsResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Financial_UpsertFinancialRatio0_HTTP_Handler(srv FinancialHTTPServer) func(ctx http.Context) error {
+func _FinancialService_AddLiability0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpsertFinancialRatioRequest
+		var in AddLiabilityRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -201,42 +185,116 @@ func _Financial_UpsertFinancialRatio0_HTTP_Handler(srv FinancialHTTPServer) func
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationFinancialUpsertFinancialRatio)
+		http.SetOperation(ctx, OperationFinancialServiceAddLiability)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpsertFinancialRatio(ctx, req.(*UpsertFinancialRatioRequest))
+			return srv.AddLiability(ctx, req.(*AddLiabilityRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*FinancialRatio)
+		reply := out.(*ApplicationLiability)
 		return ctx.Result(200, reply)
 	}
 }
 
-type FinancialHTTPClient interface {
-	CreateAsset(ctx context.Context, req *CreateAssetRequest, opts ...http.CallOption) (rsp *Asset, err error)
-	CreateLiability(ctx context.Context, req *CreateLiabilityRequest, opts ...http.CallOption) (rsp *Liability, err error)
-	ListAssets(ctx context.Context, req *ListAssetsRequest, opts ...http.CallOption) (rsp *ListAssetsReply, err error)
-	ListFinancialFacts(ctx context.Context, req *ListFinancialFactsRequest, opts ...http.CallOption) (rsp *ListFinancialFactsReply, err error)
-	ListLiabilities(ctx context.Context, req *ListLiabilitiesRequest, opts ...http.CallOption) (rsp *ListLiabilitiesReply, err error)
-	UpsertFinancialFact(ctx context.Context, req *UpsertFinancialFactRequest, opts ...http.CallOption) (rsp *FinancialFact, err error)
-	UpsertFinancialRatio(ctx context.Context, req *UpsertFinancialRatioRequest, opts ...http.CallOption) (rsp *FinancialRatio, err error)
+func _FinancialService_UpdateLiability0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateLiabilityRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationFinancialServiceUpdateLiability)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateLiability(ctx, req.(*UpdateLiabilityRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ApplicationLiability)
+		return ctx.Result(200, reply)
+	}
 }
 
-type FinancialHTTPClientImpl struct {
+func _FinancialService_ListLiabilitiesByApplication0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListLiabilitiesByApplicationRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationFinancialServiceListLiabilitiesByApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListLiabilitiesByApplication(ctx, req.(*ListLiabilitiesByApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListLiabilitiesResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _FinancialService_CalculateFinancialRatios0_HTTP_Handler(srv FinancialServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CalculateFinancialRatiosRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationFinancialServiceCalculateFinancialRatios)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CalculateFinancialRatios(ctx, req.(*CalculateFinancialRatiosRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListFinancialRatiosResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+type FinancialServiceHTTPClient interface {
+	AddAsset(ctx context.Context, req *AddAssetRequest, opts ...http.CallOption) (rsp *ApplicationAsset, err error)
+	AddLiability(ctx context.Context, req *AddLiabilityRequest, opts ...http.CallOption) (rsp *ApplicationLiability, err error)
+	CalculateFinancialRatios(ctx context.Context, req *CalculateFinancialRatiosRequest, opts ...http.CallOption) (rsp *ListFinancialRatiosResponse, err error)
+	ListAssetsByApplication(ctx context.Context, req *ListAssetsByApplicationRequest, opts ...http.CallOption) (rsp *ListAssetsResponse, err error)
+	ListFinancialFacts(ctx context.Context, req *ListFinancialFactsRequest, opts ...http.CallOption) (rsp *ListFinancialFactsResponse, err error)
+	ListLiabilitiesByApplication(ctx context.Context, req *ListLiabilitiesByApplicationRequest, opts ...http.CallOption) (rsp *ListLiabilitiesResponse, err error)
+	UpdateAsset(ctx context.Context, req *UpdateAssetRequest, opts ...http.CallOption) (rsp *ApplicationAsset, err error)
+	UpdateLiability(ctx context.Context, req *UpdateLiabilityRequest, opts ...http.CallOption) (rsp *ApplicationLiability, err error)
+	UpsertFinancialFact(ctx context.Context, req *UpsertFinancialFactRequest, opts ...http.CallOption) (rsp *ApplicationFinancialFact, err error)
+}
+
+type FinancialServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewFinancialHTTPClient(client *http.Client) FinancialHTTPClient {
-	return &FinancialHTTPClientImpl{client}
+func NewFinancialServiceHTTPClient(client *http.Client) FinancialServiceHTTPClient {
+	return &FinancialServiceHTTPClientImpl{client}
 }
 
-func (c *FinancialHTTPClientImpl) CreateAsset(ctx context.Context, in *CreateAssetRequest, opts ...http.CallOption) (*Asset, error) {
-	var out Asset
+func (c *FinancialServiceHTTPClientImpl) AddAsset(ctx context.Context, in *AddAssetRequest, opts ...http.CallOption) (*ApplicationAsset, error) {
+	var out ApplicationAsset
 	pattern := "/v1/applications/{application_id}/assets"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationFinancialCreateAsset))
+	opts = append(opts, http.Operation(OperationFinancialServiceAddAsset))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -245,11 +303,11 @@ func (c *FinancialHTTPClientImpl) CreateAsset(ctx context.Context, in *CreateAss
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) CreateLiability(ctx context.Context, in *CreateLiabilityRequest, opts ...http.CallOption) (*Liability, error) {
-	var out Liability
+func (c *FinancialServiceHTTPClientImpl) AddLiability(ctx context.Context, in *AddLiabilityRequest, opts ...http.CallOption) (*ApplicationLiability, error) {
+	var out ApplicationLiability
 	pattern := "/v1/applications/{application_id}/liabilities"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationFinancialCreateLiability))
+	opts = append(opts, http.Operation(OperationFinancialServiceAddLiability))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -258,11 +316,24 @@ func (c *FinancialHTTPClientImpl) CreateLiability(ctx context.Context, in *Creat
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) ListAssets(ctx context.Context, in *ListAssetsRequest, opts ...http.CallOption) (*ListAssetsReply, error) {
-	var out ListAssetsReply
+func (c *FinancialServiceHTTPClientImpl) CalculateFinancialRatios(ctx context.Context, in *CalculateFinancialRatiosRequest, opts ...http.CallOption) (*ListFinancialRatiosResponse, error) {
+	var out ListFinancialRatiosResponse
+	pattern := "/v1/applications/{application_id}/financial-ratios/calculate"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationFinancialServiceCalculateFinancialRatios))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *FinancialServiceHTTPClientImpl) ListAssetsByApplication(ctx context.Context, in *ListAssetsByApplicationRequest, opts ...http.CallOption) (*ListAssetsResponse, error) {
+	var out ListAssetsResponse
 	pattern := "/v1/applications/{application_id}/assets"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationFinancialListAssets))
+	opts = append(opts, http.Operation(OperationFinancialServiceListAssetsByApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -271,11 +342,11 @@ func (c *FinancialHTTPClientImpl) ListAssets(ctx context.Context, in *ListAssets
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...http.CallOption) (*ListFinancialFactsReply, error) {
-	var out ListFinancialFactsReply
+func (c *FinancialServiceHTTPClientImpl) ListFinancialFacts(ctx context.Context, in *ListFinancialFactsRequest, opts ...http.CallOption) (*ListFinancialFactsResponse, error) {
+	var out ListFinancialFactsResponse
 	pattern := "/v1/applications/{application_id}/financial-facts"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationFinancialListFinancialFacts))
+	opts = append(opts, http.Operation(OperationFinancialServiceListFinancialFacts))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -284,11 +355,11 @@ func (c *FinancialHTTPClientImpl) ListFinancialFacts(ctx context.Context, in *Li
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) ListLiabilities(ctx context.Context, in *ListLiabilitiesRequest, opts ...http.CallOption) (*ListLiabilitiesReply, error) {
-	var out ListLiabilitiesReply
+func (c *FinancialServiceHTTPClientImpl) ListLiabilitiesByApplication(ctx context.Context, in *ListLiabilitiesByApplicationRequest, opts ...http.CallOption) (*ListLiabilitiesResponse, error) {
+	var out ListLiabilitiesResponse
 	pattern := "/v1/applications/{application_id}/liabilities"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationFinancialListLiabilities))
+	opts = append(opts, http.Operation(OperationFinancialServiceListLiabilitiesByApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -297,24 +368,37 @@ func (c *FinancialHTTPClientImpl) ListLiabilities(ctx context.Context, in *ListL
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...http.CallOption) (*FinancialFact, error) {
-	var out FinancialFact
-	pattern := "/v1/applications/{application_id}/financial-facts"
+func (c *FinancialServiceHTTPClientImpl) UpdateAsset(ctx context.Context, in *UpdateAssetRequest, opts ...http.CallOption) (*ApplicationAsset, error) {
+	var out ApplicationAsset
+	pattern := "/v1/applications/{application_id}/assets/{id}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationFinancialUpsertFinancialFact))
+	opts = append(opts, http.Operation(OperationFinancialServiceUpdateAsset))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
-func (c *FinancialHTTPClientImpl) UpsertFinancialRatio(ctx context.Context, in *UpsertFinancialRatioRequest, opts ...http.CallOption) (*FinancialRatio, error) {
-	var out FinancialRatio
-	pattern := "/v1/applications/{application_id}/financial-ratios"
+func (c *FinancialServiceHTTPClientImpl) UpdateLiability(ctx context.Context, in *UpdateLiabilityRequest, opts ...http.CallOption) (*ApplicationLiability, error) {
+	var out ApplicationLiability
+	pattern := "/v1/applications/{application_id}/liabilities/{id}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationFinancialUpsertFinancialRatio))
+	opts = append(opts, http.Operation(OperationFinancialServiceUpdateLiability))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *FinancialServiceHTTPClientImpl) UpsertFinancialFact(ctx context.Context, in *UpsertFinancialFactRequest, opts ...http.CallOption) (*ApplicationFinancialFact, error) {
+	var out ApplicationFinancialFact
+	pattern := "/v1/applications/{application_id}/financial-facts"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationFinancialServiceUpsertFinancialFact))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
