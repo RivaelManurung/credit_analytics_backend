@@ -562,10 +562,9 @@ func (x *GetApplicationRequest) GetId() string {
 
 type ListApplicationsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
-	ApplicantId   string                 `protobuf:"bytes,4,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
+	Cursor        string                 `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	ApplicantId   string                 `protobuf:"bytes,3,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -600,18 +599,11 @@ func (*ListApplicationsRequest) Descriptor() ([]byte, []int) {
 	return file_application_v1_application_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ListApplicationsRequest) GetPage() int32 {
+func (x *ListApplicationsRequest) GetCursor() string {
 	if x != nil {
-		return x.Page
+		return x.Cursor
 	}
-	return 0
-}
-
-func (x *ListApplicationsRequest) GetPageSize() int32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
+	return ""
 }
 
 func (x *ListApplicationsRequest) GetStatus() string {
@@ -631,7 +623,7 @@ func (x *ListApplicationsRequest) GetApplicantId() string {
 type ListApplicationsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Applications  []*Application         `protobuf:"bytes,1,rep,name=applications,proto3" json:"applications,omitempty"`
-	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -673,11 +665,11 @@ func (x *ListApplicationsResponse) GetApplications() []*Application {
 	return nil
 }
 
-func (x *ListApplicationsResponse) GetTotal() int32 {
+func (x *ListApplicationsResponse) GetNextCursor() string {
 	if x != nil {
-		return x.Total
+		return x.NextCursor
 	}
-	return 0
+	return ""
 }
 
 type UpdateApplicationRequest struct {
@@ -1237,15 +1229,15 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"attributes\x18\v \x03(\v2(.api.application.v1.ApplicationAttributeR\n" +
 	"attributes\"'\n" +
 	"\x15GetApplicationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\x85\x01\n" +
-	"\x17ListApplicationsRequest\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\x12!\n" +
-	"\fapplicant_id\x18\x04 \x01(\tR\vapplicantId\"u\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"l\n" +
+	"\x17ListApplicationsRequest\x12\x16\n" +
+	"\x06cursor\x18\x01 \x01(\tR\x06cursor\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
+	"\fapplicant_id\x18\x03 \x01(\tR\vapplicantId\"\x80\x01\n" +
 	"\x18ListApplicationsResponse\x12C\n" +
-	"\fapplications\x18\x01 \x03(\v2\x1f.api.application.v1.ApplicationR\fapplications\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"\x94\x03\n" +
+	"\fapplications\x18\x01 \x03(\v2\x1f.api.application.v1.ApplicationR\fapplications\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\tR\n" +
+	"nextCursor\"\x94\x03\n" +
 	"\x18UpdateApplicationRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fapplicant_id\x18\x02 \x01(\tR\vapplicantId\x12\x1d\n" +

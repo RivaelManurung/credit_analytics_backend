@@ -120,7 +120,7 @@ func (s *ApplicantService) ListApplicants(ctx context.Context, req *pb.ListAppli
 	}
 	return &pb.ListApplicantsResponse{
 		Applicants: res,
-		Total:      int32(len(res)),
+		NextCursor: "", // Set to empty for now as placeholder
 	}, nil
 }
 

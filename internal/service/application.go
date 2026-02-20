@@ -132,7 +132,7 @@ func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListA
 	for _, app := range apps {
 		res = append(res, mapAppBizToProto(app))
 	}
-	return &pb.ListApplicationsResponse{Applications: res, Total: int32(len(res))}, nil
+	return &pb.ListApplicationsResponse{Applications: res, NextCursor: ""}, nil
 }
 
 type PartyService struct {

@@ -101,13 +101,12 @@ message UpdateApplicantRequest {
 }
 
 message ListApplicantsRequest {
-  int32 page = 1;
-  int32 pageSize = 2;
+  string cursor = 1;
 }
 
 message ListApplicantsResponse {
   repeated Applicant applicants = 1;
-  int32 total = 2;
+  string next_cursor = 2;
 }
 
 message UpsertApplicantAttributesRequest {

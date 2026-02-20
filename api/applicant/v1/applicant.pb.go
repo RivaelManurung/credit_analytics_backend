@@ -533,8 +533,7 @@ func (x *UpdateApplicantRequest) GetAttributes() []*ApplicantAttribute {
 
 type ListApplicantsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	Cursor        string                 `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -569,24 +568,17 @@ func (*ListApplicantsRequest) Descriptor() ([]byte, []int) {
 	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ListApplicantsRequest) GetPage() int32 {
+func (x *ListApplicantsRequest) GetCursor() string {
 	if x != nil {
-		return x.Page
+		return x.Cursor
 	}
-	return 0
-}
-
-func (x *ListApplicantsRequest) GetPageSize() int32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
+	return ""
 }
 
 type ListApplicantsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Applicants    []*Applicant           `protobuf:"bytes,1,rep,name=applicants,proto3" json:"applicants,omitempty"`
-	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -628,11 +620,11 @@ func (x *ListApplicantsResponse) GetApplicants() []*Applicant {
 	return nil
 }
 
-func (x *ListApplicantsResponse) GetTotal() int32 {
+func (x *ListApplicantsResponse) GetNextCursor() string {
 	if x != nil {
-		return x.Total
+		return x.NextCursor
 	}
-	return 0
+	return ""
 }
 
 type UpsertApplicantAttributesRequest struct {
@@ -745,15 +737,15 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x12establishment_date\x18\a \x01(\tR\x11establishmentDate\x12D\n" +
 	"\n" +
 	"attributes\x18\b \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"G\n" +
-	"\x15ListApplicantsRequest\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1a\n" +
-	"\bpageSize\x18\x02 \x01(\x05R\bpageSize\"k\n" +
+	"attributes\"/\n" +
+	"\x15ListApplicantsRequest\x12\x16\n" +
+	"\x06cursor\x18\x01 \x01(\tR\x06cursor\"v\n" +
 	"\x16ListApplicantsResponse\x12;\n" +
 	"\n" +
 	"applicants\x18\x01 \x03(\v2\x1b.api.applicant.v1.ApplicantR\n" +
-	"applicants\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"\x8b\x01\n" +
+	"applicants\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\tR\n" +
+	"nextCursor\"\x8b\x01\n" +
 	" UpsertApplicantAttributesRequest\x12!\n" +
 	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\x12D\n" +
 	"\n" +

@@ -131,15 +131,14 @@ message GetApplicationRequest {
 }
 
 message ListApplicationsRequest {
-  int32 page = 1;
-  int32 page_size = 2;
-  string status = 3;
-  string applicant_id = 4;
+  string cursor = 1;
+  string status = 2;
+  string applicant_id = 3;
 }
 
 message ListApplicationsResponse {
   repeated Application applications = 1;
-  int32 total = 2;
+  string next_cursor = 2;
 }
 
 message UpdateApplicationRequest {
