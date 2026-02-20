@@ -10,6 +10,11 @@ option java_multiple_files = true;
 option java_package = "api.applicant.v1";
 
 service ApplicantService {
+  rpc ListApplicants (ListApplicantsRequest) returns (ListApplicantsResponse) {
+    option (google.api.http) = {
+      get: "/v1/applicants"
+    };
+  }
   rpc CreateApplicant (CreateApplicantRequest) returns (Applicant) {
     option (google.api.http) = {
       post: "/v1/applicants",
@@ -93,6 +98,16 @@ message UpdateApplicantRequest {
   string birth_date = 6;
   string establishment_date = 7;
   repeated ApplicantAttribute attributes = 8;
+}
+
+message ListApplicantsRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+}
+
+message ListApplicantsResponse {
+  repeated Applicant applicants = 1;
+  int32 total = 2;
 }
 
 message UpsertApplicantAttributesRequest {

@@ -109,7 +109,20 @@ func (s *ApplicantService) UpsertApplicantAttributes(ctx context.Context, req *p
 	return &pb.ApplicantAttributes{}, nil
 }
 
-// ListApplicants removed as it's not in the proto
+func (s *ApplicantService) ListApplicants(ctx context.Context, req *pb.ListApplicantsRequest) (*pb.ListApplicantsResponse, error) {
+	applicants, err := s.uc.ListAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var res []*pb.Applicant
+	for _, a := range applicants {
+		res = append(res, mapBizToProto(a))
+	}
+	return &pb.ListApplicantsResponse{
+		Applicants: res,
+		Total:      int32(len(res)),
+	}, nil
+}
 
 func mapBizToProto(a *biz.Applicant) *pb.Applicant {
 	res := &pb.Applicant{

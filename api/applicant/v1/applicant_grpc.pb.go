@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	ApplicantService_ListApplicants_FullMethodName            = "/api.applicant.v1.ApplicantService/ListApplicants"
 	ApplicantService_CreateApplicant_FullMethodName           = "/api.applicant.v1.ApplicantService/CreateApplicant"
 	ApplicantService_GetApplicant_FullMethodName              = "/api.applicant.v1.ApplicantService/GetApplicant"
 	ApplicantService_UpdateApplicant_FullMethodName           = "/api.applicant.v1.ApplicantService/UpdateApplicant"
@@ -30,6 +31,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ApplicantServiceClient interface {
+	ListApplicants(ctx context.Context, in *ListApplicantsRequest, opts ...grpc.CallOption) (*ListApplicantsResponse, error)
 	CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
 	GetApplicant(ctx context.Context, in *GetApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
 	UpdateApplicant(ctx context.Context, in *UpdateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error)
@@ -43,6 +45,16 @@ type applicantServiceClient struct {
 
 func NewApplicantServiceClient(cc grpc.ClientConnInterface) ApplicantServiceClient {
 	return &applicantServiceClient{cc}
+}
+
+func (c *applicantServiceClient) ListApplicants(ctx context.Context, in *ListApplicantsRequest, opts ...grpc.CallOption) (*ListApplicantsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListApplicantsResponse)
+	err := c.cc.Invoke(ctx, ApplicantService_ListApplicants_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *applicantServiceClient) CreateApplicant(ctx context.Context, in *CreateApplicantRequest, opts ...grpc.CallOption) (*Applicant, error) {
@@ -99,6 +111,7 @@ func (c *applicantServiceClient) UpsertApplicantAttributes(ctx context.Context, 
 // All implementations must embed UnimplementedApplicantServiceServer
 // for forward compatibility.
 type ApplicantServiceServer interface {
+	ListApplicants(context.Context, *ListApplicantsRequest) (*ListApplicantsResponse, error)
 	CreateApplicant(context.Context, *CreateApplicantRequest) (*Applicant, error)
 	GetApplicant(context.Context, *GetApplicantRequest) (*Applicant, error)
 	UpdateApplicant(context.Context, *UpdateApplicantRequest) (*Applicant, error)
@@ -114,6 +127,9 @@ type ApplicantServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedApplicantServiceServer struct{}
 
+func (UnimplementedApplicantServiceServer) ListApplicants(context.Context, *ListApplicantsRequest) (*ListApplicantsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListApplicants not implemented")
+}
 func (UnimplementedApplicantServiceServer) CreateApplicant(context.Context, *CreateApplicantRequest) (*Applicant, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateApplicant not implemented")
 }
@@ -148,6 +164,24 @@ func RegisterApplicantServiceServer(s grpc.ServiceRegistrar, srv ApplicantServic
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&ApplicantService_ServiceDesc, srv)
+}
+
+func _ApplicantService_ListApplicants_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListApplicantsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicantServiceServer).ListApplicants(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicantService_ListApplicants_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicantServiceServer).ListApplicants(ctx, req.(*ListApplicantsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ApplicantService_CreateApplicant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -247,6 +281,10 @@ var ApplicantService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.applicant.v1.ApplicantService",
 	HandlerType: (*ApplicantServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListApplicants",
+			Handler:    _ApplicantService_ListApplicants_Handler,
+		},
 		{
 			MethodName: "CreateApplicant",
 			Handler:    _ApplicantService_CreateApplicant_Handler,

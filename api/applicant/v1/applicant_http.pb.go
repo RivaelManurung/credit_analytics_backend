@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationApplicantServiceCreateApplicant = "/api.applicant.v1.ApplicantService/CreateApplicant"
 const OperationApplicantServiceGetApplicant = "/api.applicant.v1.ApplicantService/GetApplicant"
 const OperationApplicantServiceGetApplicantAttributes = "/api.applicant.v1.ApplicantService/GetApplicantAttributes"
+const OperationApplicantServiceListApplicants = "/api.applicant.v1.ApplicantService/ListApplicants"
 const OperationApplicantServiceUpdateApplicant = "/api.applicant.v1.ApplicantService/UpdateApplicant"
 const OperationApplicantServiceUpsertApplicantAttributes = "/api.applicant.v1.ApplicantService/UpsertApplicantAttributes"
 
@@ -29,17 +30,38 @@ type ApplicantServiceHTTPServer interface {
 	CreateApplicant(context.Context, *CreateApplicantRequest) (*Applicant, error)
 	GetApplicant(context.Context, *GetApplicantRequest) (*Applicant, error)
 	GetApplicantAttributes(context.Context, *GetApplicantAttributesRequest) (*ApplicantAttributes, error)
+	ListApplicants(context.Context, *ListApplicantsRequest) (*ListApplicantsResponse, error)
 	UpdateApplicant(context.Context, *UpdateApplicantRequest) (*Applicant, error)
 	UpsertApplicantAttributes(context.Context, *UpsertApplicantAttributesRequest) (*ApplicantAttributes, error)
 }
 
 func RegisterApplicantServiceHTTPServer(s *http.Server, srv ApplicantServiceHTTPServer) {
 	r := s.Route("/")
+	r.GET("/v1/applicants", _ApplicantService_ListApplicants0_HTTP_Handler(srv))
 	r.POST("/v1/applicants", _ApplicantService_CreateApplicant0_HTTP_Handler(srv))
 	r.GET("/v1/applicants/{id}", _ApplicantService_GetApplicant0_HTTP_Handler(srv))
 	r.PUT("/v1/applicants/{id}", _ApplicantService_UpdateApplicant0_HTTP_Handler(srv))
 	r.GET("/v1/applicants/{applicant_id}/attributes", _ApplicantService_GetApplicantAttributes0_HTTP_Handler(srv))
 	r.POST("/v1/applicants/{applicant_id}/attributes", _ApplicantService_UpsertApplicantAttributes0_HTTP_Handler(srv))
+}
+
+func _ApplicantService_ListApplicants0_HTTP_Handler(srv ApplicantServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListApplicantsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicantServiceListApplicants)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListApplicants(ctx, req.(*ListApplicantsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListApplicantsResponse)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _ApplicantService_CreateApplicant0_HTTP_Handler(srv ApplicantServiceHTTPServer) func(ctx http.Context) error {
@@ -162,6 +184,7 @@ type ApplicantServiceHTTPClient interface {
 	CreateApplicant(ctx context.Context, req *CreateApplicantRequest, opts ...http.CallOption) (rsp *Applicant, err error)
 	GetApplicant(ctx context.Context, req *GetApplicantRequest, opts ...http.CallOption) (rsp *Applicant, err error)
 	GetApplicantAttributes(ctx context.Context, req *GetApplicantAttributesRequest, opts ...http.CallOption) (rsp *ApplicantAttributes, err error)
+	ListApplicants(ctx context.Context, req *ListApplicantsRequest, opts ...http.CallOption) (rsp *ListApplicantsResponse, err error)
 	UpdateApplicant(ctx context.Context, req *UpdateApplicantRequest, opts ...http.CallOption) (rsp *Applicant, err error)
 	UpsertApplicantAttributes(ctx context.Context, req *UpsertApplicantAttributesRequest, opts ...http.CallOption) (rsp *ApplicantAttributes, err error)
 }
@@ -205,6 +228,19 @@ func (c *ApplicantServiceHTTPClientImpl) GetApplicantAttributes(ctx context.Cont
 	pattern := "/v1/applicants/{applicant_id}/attributes"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationApplicantServiceGetApplicantAttributes))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ApplicantServiceHTTPClientImpl) ListApplicants(ctx context.Context, in *ListApplicantsRequest, opts ...http.CallOption) (*ListApplicantsResponse, error) {
+	var out ListApplicantsResponse
+	pattern := "/v1/applicants"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationApplicantServiceListApplicants))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

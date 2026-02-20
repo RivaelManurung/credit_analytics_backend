@@ -531,6 +531,110 @@ func (x *UpdateApplicantRequest) GetAttributes() []*ApplicantAttribute {
 	return nil
 }
 
+type ListApplicantsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,2,opt,name=pageSize,proto3" json:"pageSize,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListApplicantsRequest) Reset() {
+	*x = ListApplicantsRequest{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListApplicantsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListApplicantsRequest) ProtoMessage() {}
+
+func (x *ListApplicantsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListApplicantsRequest.ProtoReflect.Descriptor instead.
+func (*ListApplicantsRequest) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ListApplicantsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListApplicantsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type ListApplicantsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Applicants    []*Applicant           `protobuf:"bytes,1,rep,name=applicants,proto3" json:"applicants,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListApplicantsResponse) Reset() {
+	*x = ListApplicantsResponse{}
+	mi := &file_applicant_v1_applicant_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListApplicantsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListApplicantsResponse) ProtoMessage() {}
+
+func (x *ListApplicantsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_applicant_v1_applicant_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListApplicantsResponse.ProtoReflect.Descriptor instead.
+func (*ListApplicantsResponse) Descriptor() ([]byte, []int) {
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListApplicantsResponse) GetApplicants() []*Applicant {
+	if x != nil {
+		return x.Applicants
+	}
+	return nil
+}
+
+func (x *ListApplicantsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 type UpsertApplicantAttributesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ApplicantId   string                 `protobuf:"bytes,1,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
@@ -541,7 +645,7 @@ type UpsertApplicantAttributesRequest struct {
 
 func (x *UpsertApplicantAttributesRequest) Reset() {
 	*x = UpsertApplicantAttributesRequest{}
-	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -553,7 +657,7 @@ func (x *UpsertApplicantAttributesRequest) String() string {
 func (*UpsertApplicantAttributesRequest) ProtoMessage() {}
 
 func (x *UpsertApplicantAttributesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_applicant_v1_applicant_proto_msgTypes[7]
+	mi := &file_applicant_v1_applicant_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -566,7 +670,7 @@ func (x *UpsertApplicantAttributesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertApplicantAttributesRequest.ProtoReflect.Descriptor instead.
 func (*UpsertApplicantAttributesRequest) Descriptor() ([]byte, []int) {
-	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{7}
+	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpsertApplicantAttributesRequest) GetApplicantId() string {
@@ -641,13 +745,22 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x12establishment_date\x18\a \x01(\tR\x11establishmentDate\x12D\n" +
 	"\n" +
 	"attributes\x18\b \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"\x8b\x01\n" +
+	"attributes\"G\n" +
+	"\x15ListApplicantsRequest\x12\x12\n" +
+	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1a\n" +
+	"\bpageSize\x18\x02 \x01(\x05R\bpageSize\"k\n" +
+	"\x16ListApplicantsResponse\x12;\n" +
+	"\n" +
+	"applicants\x18\x01 \x03(\v2\x1b.api.applicant.v1.ApplicantR\n" +
+	"applicants\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"\x8b\x01\n" +
 	" UpsertApplicantAttributesRequest\x12!\n" +
 	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\x12D\n" +
 	"\n" +
 	"attributes\x18\x02 \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes2\xc5\x05\n" +
-	"\x10ApplicantService\x12s\n" +
+	"attributes2\xc2\x06\n" +
+	"\x10ApplicantService\x12{\n" +
+	"\x0eListApplicants\x12'.api.applicant.v1.ListApplicantsRequest\x1a(.api.applicant.v1.ListApplicantsResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/applicants\x12s\n" +
 	"\x0fCreateApplicant\x12(.api.applicant.v1.CreateApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/applicants\x12o\n" +
 	"\fGetApplicant\x12%.api.applicant.v1.GetApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/applicants/{id}\x12x\n" +
 	"\x0fUpdateApplicant\x12(.api.applicant.v1.UpdateApplicantRequest\x1a\x1b.api.applicant.v1.Applicant\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/applicants/{id}\x12\xa2\x01\n" +
@@ -667,7 +780,7 @@ func file_applicant_v1_applicant_proto_rawDescGZIP() []byte {
 	return file_applicant_v1_applicant_proto_rawDescData
 }
 
-var file_applicant_v1_applicant_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_applicant_v1_applicant_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_applicant_v1_applicant_proto_goTypes = []any{
 	(*ApplicantAttribute)(nil),               // 0: api.applicant.v1.ApplicantAttribute
 	(*Applicant)(nil),                        // 1: api.applicant.v1.Applicant
@@ -676,33 +789,38 @@ var file_applicant_v1_applicant_proto_goTypes = []any{
 	(*GetApplicantRequest)(nil),              // 4: api.applicant.v1.GetApplicantRequest
 	(*GetApplicantAttributesRequest)(nil),    // 5: api.applicant.v1.GetApplicantAttributesRequest
 	(*UpdateApplicantRequest)(nil),           // 6: api.applicant.v1.UpdateApplicantRequest
-	(*UpsertApplicantAttributesRequest)(nil), // 7: api.applicant.v1.UpsertApplicantAttributesRequest
-	(*timestamppb.Timestamp)(nil),            // 8: google.protobuf.Timestamp
+	(*ListApplicantsRequest)(nil),            // 7: api.applicant.v1.ListApplicantsRequest
+	(*ListApplicantsResponse)(nil),           // 8: api.applicant.v1.ListApplicantsResponse
+	(*UpsertApplicantAttributesRequest)(nil), // 9: api.applicant.v1.UpsertApplicantAttributesRequest
+	(*timestamppb.Timestamp)(nil),            // 10: google.protobuf.Timestamp
 }
 var file_applicant_v1_applicant_proto_depIdxs = []int32{
-	8,  // 0: api.applicant.v1.ApplicantAttribute.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 0: api.applicant.v1.ApplicantAttribute.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 1: api.applicant.v1.Applicant.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	8,  // 2: api.applicant.v1.Applicant.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: api.applicant.v1.Applicant.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 2: api.applicant.v1.Applicant.created_at:type_name -> google.protobuf.Timestamp
+	10, // 3: api.applicant.v1.Applicant.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: api.applicant.v1.ApplicantAttributes.attributes:type_name -> api.applicant.v1.ApplicantAttribute
 	0,  // 5: api.applicant.v1.CreateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
 	0,  // 6: api.applicant.v1.UpdateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	0,  // 7: api.applicant.v1.UpsertApplicantAttributesRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	3,  // 8: api.applicant.v1.ApplicantService.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
-	4,  // 9: api.applicant.v1.ApplicantService.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
-	6,  // 10: api.applicant.v1.ApplicantService.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
-	5,  // 11: api.applicant.v1.ApplicantService.GetApplicantAttributes:input_type -> api.applicant.v1.GetApplicantAttributesRequest
-	7,  // 12: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:input_type -> api.applicant.v1.UpsertApplicantAttributesRequest
-	1,  // 13: api.applicant.v1.ApplicantService.CreateApplicant:output_type -> api.applicant.v1.Applicant
-	1,  // 14: api.applicant.v1.ApplicantService.GetApplicant:output_type -> api.applicant.v1.Applicant
-	1,  // 15: api.applicant.v1.ApplicantService.UpdateApplicant:output_type -> api.applicant.v1.Applicant
-	2,  // 16: api.applicant.v1.ApplicantService.GetApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
-	2,  // 17: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	1,  // 7: api.applicant.v1.ListApplicantsResponse.applicants:type_name -> api.applicant.v1.Applicant
+	0,  // 8: api.applicant.v1.UpsertApplicantAttributesRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	7,  // 9: api.applicant.v1.ApplicantService.ListApplicants:input_type -> api.applicant.v1.ListApplicantsRequest
+	3,  // 10: api.applicant.v1.ApplicantService.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
+	4,  // 11: api.applicant.v1.ApplicantService.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
+	6,  // 12: api.applicant.v1.ApplicantService.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
+	5,  // 13: api.applicant.v1.ApplicantService.GetApplicantAttributes:input_type -> api.applicant.v1.GetApplicantAttributesRequest
+	9,  // 14: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:input_type -> api.applicant.v1.UpsertApplicantAttributesRequest
+	8,  // 15: api.applicant.v1.ApplicantService.ListApplicants:output_type -> api.applicant.v1.ListApplicantsResponse
+	1,  // 16: api.applicant.v1.ApplicantService.CreateApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 17: api.applicant.v1.ApplicantService.GetApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 18: api.applicant.v1.ApplicantService.UpdateApplicant:output_type -> api.applicant.v1.Applicant
+	2,  // 19: api.applicant.v1.ApplicantService.GetApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
+	2,  // 20: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
+	15, // [15:21] is the sub-list for method output_type
+	9,  // [9:15] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_applicant_v1_applicant_proto_init() }
@@ -716,7 +834,7 @@ func file_applicant_v1_applicant_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_applicant_v1_applicant_proto_rawDesc), len(file_applicant_v1_applicant_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
