@@ -12,7 +12,7 @@ import (
 
 type Applicant struct {
 	ID                uuid.UUID      `json:"id"`
-	HeadType          string         `json:"head_type"`
+	ApplicantType     string         `json:"applicant_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
