@@ -150,10 +150,11 @@ INSERT INTO custom_column_attribute_registries (attribute_code, applies_to, scop
 
 -- 4. ENTITY: APPLICANTS (CORE fields only)
 INSERT INTO applicants (
-    id, head_type, identity_number, tax_id, full_name, birth_date
+    id, applicant_type, identity_number, tax_id, full_name, birth_date
 ) VALUES
 ('11111111-1111-1111-1111-111111111111', 'personal', '3171010101900001', '01.234.567.8', 'Budi Santoso', '1990-05-15'),
-('22222222-2222-2222-2222-222222222222', 'personal', '3273012008920005', '02.345.678.9', 'Rina Wijaya', '1992-08-20');
+('22222222-2222-2222-2222-222222222222', 'personal', '3273012008920005', '02.345.678.9', 'Rina Wijaya', '1992-08-20'),
+('33333333-3333-3333-3333-333333333333', 'personal', '3172021012850002', '03.456.789.0', 'Agus Prayogo', '1985-12-10');
 
 -- 5. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type) VALUES
@@ -172,7 +173,18 @@ INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
 ('22222222-2222-2222-2222-222222222222', 'tempat_lahir', 'Bandung', 'STRING'),
 ('22222222-2222-2222-2222-222222222222', 'no_hp_utama', '08134455667', 'STRING'),
 ('22222222-2222-2222-2222-222222222222', 'email_pribadi', 'rina.w@email.com', 'STRING'),
-('22222222-2222-2222-2222-222222222222', 'karakter_riwayat_gagal_bayar', 'false', 'BOOLEAN');
+('22222222-2222-2222-2222-222222222222', 'karakter_riwayat_gagal_bayar', 'false', 'BOOLEAN'),
+
+-- Agus Prayogo
+('33333333-3333-3333-3333-333333333333', 'tempat_lahir', 'Semarang', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'status_perkawinan', 'MENIKAH', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'no_hp_utama', '081299887766', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'email_pribadi', 'agus.prayogo@email.com', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'alamat_domisili', 'Jl. Melati No. 123, Jakarta Barat', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'pekerjaan_status', 'KARYAWAN TETAP', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'pekerjaan_nama_perusahaan', 'PT Teknologi Maju Jaya', 'STRING'),
+('33333333-3333-3333-3333-333333333333', 'pekerjaan_gaji_bersih', '12500000', 'NUMBER'),
+('33333333-3333-3333-3333-333333333333', 'karakter_disiplin_bayar', 'SANGAT DISIPLIN', 'STRING');
 
 -- 6. APPLICATIONS
 INSERT INTO applications (id, applicant_id, product_id, ao_id, loan_amount, tenor_months, status, branch_code, submitted_at) VALUES
