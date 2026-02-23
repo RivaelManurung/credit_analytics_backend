@@ -50,9 +50,10 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 				}
 				w.Header().Set("Access-Control-Allow-Origin", origin)
 				w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
-				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Grpc-Web, X-User-Agent, Connect-Protocol-Version, Grpc-Timeout")
-				w.Header().Set("Access-Control-Expose-Headers", "Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin, Connect-Error-Code, Connect-Error-Message")
+				w.Header().Set("Access-Control-Allow-Headers", "*")
+				w.Header().Set("Access-Control-Expose-Headers", "*")
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				w.Header().Set("Access-Control-Max-Age", "86400")
 
 				// 2. Handle Preflight OPTIONS
 				if r.Method == "OPTIONS" {
