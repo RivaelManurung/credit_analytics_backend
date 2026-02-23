@@ -167,6 +167,8 @@ func (r *applicantRepo) List(ctx context.Context, params biz.PaginationParams) (
 		return nil, err
 	}
 
+	r.log.Infof("SQL ListApplicants found %d items", len(applicants))
+
 	hasNext := false
 	if len(applicants) > int(limit) {
 		hasNext = true
