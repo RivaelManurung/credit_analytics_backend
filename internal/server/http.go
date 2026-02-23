@@ -60,12 +60,11 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server, grpcweb.WithOriginFunc(func(origin string) bool { return true }))
 			h := log.NewHelper(logger)
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				h.Infof("HTTP Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))
+
 				isGrpcWeb := wrappedGrpc.IsGrpcWebRequest(r)
 				if isGrpcWeb {
-					h.Infof("Incoming gRPC-Web Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))
-				}
-
-				if isGrpcWeb {
+					h.Infof("Detected gRPC-Web Request: %s %s", r.Method, r.URL.Path)
 					wrappedGrpc.ServeHTTP(w, r)
 					return
 				}
