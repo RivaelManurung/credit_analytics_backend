@@ -1,0 +1,13 @@
+version: v2
+modules:
+  - path: api
+    name: buf.build/dots-credit-analytics/credit-analytics
+# Kita gunakan official Google APIs dari BSR daripada menggunakan folder local third_party
+deps:
+  - buf.build/googleapis/googleapis
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE

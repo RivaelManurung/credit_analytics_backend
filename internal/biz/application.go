@@ -11,6 +11,18 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// Pagination
+type PaginationParams struct {
+	Cursor   string
+	PageSize int32
+}
+
+type PaginatedList[T any] struct {
+	Items      []T
+	NextCursor string
+	HasNext    bool
+}
+
 // Value Objects
 type Money struct {
 	Amount   decimal.Decimal
@@ -39,7 +51,7 @@ type ApplicationStatus string
 const (
 	StatusDraft     ApplicationStatus = "DRAFT"
 	StatusSubmitted ApplicationStatus = "SUBMITTED"
-	StatusIntake    ApplicationStatus = "INTAKE" 
+	StatusIntake    ApplicationStatus = "INTAKE"
 	StatusSlikCheck ApplicationStatus = "SLIK_CHECK"
 	StatusPolicy    ApplicationStatus = "POLICY_GATE"
 	StatusAnalysis  ApplicationStatus = "ANALYSIS"
@@ -215,6 +227,7 @@ type ApplicationRepo interface {
 	Save(context.Context, *Application) (uuid.UUID, error)
 	Update(context.Context, *Application) error
 	FindByID(context.Context, uuid.UUID) (*Application, error)
+	List(ctx context.Context, params PaginationParams, status string, applicantID uuid.UUID) (*PaginatedList[*Application], error)
 	ListAll(context.Context) ([]*Application, error)
 
 	// Party Related
@@ -358,7 +371,12 @@ func (uc *ApplicationUsecase) Get(ctx context.Context, id uuid.UUID) (*Applicati
 	return uc.repo.FindByID(ctx, id)
 }
 
-func (uc *ApplicationUsecase) List(ctx context.Context) ([]*Application, error) {
+func (uc *ApplicationUsecase) List(ctx context.Context, params PaginationParams, status string, applicantID uuid.UUID) (*PaginatedList[*Application], error) {
+	uc.log.WithContext(ctx).Info("Listing Applications with pagination")
+	return uc.repo.List(ctx, params, status, applicantID)
+}
+
+func (uc *ApplicationUsecase) ListAll(ctx context.Context) ([]*Application, error) {
 	uc.log.WithContext(ctx).Info("Listing all Applications")
 	return uc.repo.ListAll(ctx)
 }

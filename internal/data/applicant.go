@@ -5,10 +5,39 @@ import (
 	"credit-analytics-backend/internal/biz"
 	"credit-analytics-backend/internal/data/db"
 	"database/sql"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 )
+
+type applicantCursorData struct {
+	CreatedAt time.Time `json:"t"`
+	ID        uuid.UUID `json:"i"`
+}
+
+func encodeApplicantCursor(t time.Time, id uuid.UUID) string {
+	data, _ := json.Marshal(applicantCursorData{CreatedAt: t, ID: id})
+	return base64.StdEncoding.EncodeToString(data)
+}
+
+func decodeApplicantCursor(s string) (time.Time, uuid.UUID, error) {
+	if s == "" {
+		return time.Time{}, uuid.Nil, nil
+	}
+	data, err := base64.StdEncoding.DecodeString(s)
+	if err != nil {
+		return time.Time{}, uuid.Nil, err
+	}
+	var c applicantCursorData
+	if err := json.Unmarshal(data, &c); err != nil {
+		return time.Time{}, uuid.Nil, err
+	}
+	return c.CreatedAt, c.ID, nil
+}
 
 type applicantRepo struct {
 	data *Data
@@ -111,14 +140,41 @@ func (r *applicantRepo) FindByID(ctx context.Context, id uuid.UUID) (*biz.Applic
 	return res, nil
 }
 
-func (r *applicantRepo) ListAll(ctx context.Context) ([]*biz.Applicant, error) {
-	applicants, err := r.data.db.ListApplicants(ctx)
+func (r *applicantRepo) List(ctx context.Context, params biz.PaginationParams) (*biz.PaginatedList[*biz.Applicant], error) {
+	limit := params.PageSize
+	if limit <= 0 {
+		limit = 10
+	}
+	if limit > 100 {
+		limit = 100
+	}
+
+	cursorTime, cursorID, err := decodeApplicantCursor(params.Cursor)
+	if err != nil {
+		return nil, fmt.Errorf("invalid cursor: %w", err)
+	}
+
+	arg := db.ListApplicantsParams{
+		Limit: limit + 1,
+	}
+	if !cursorTime.IsZero() && cursorID != uuid.Nil {
+		arg.CursorCreatedAt = sql.NullTime{Time: cursorTime, Valid: true}
+		arg.CursorID = uuid.NullUUID{UUID: cursorID, Valid: true}
+	}
+
+	applicants, err := r.data.db.ListApplicants(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
+	hasNext := false
+	if len(applicants) > int(limit) {
+		hasNext = true
+		applicants = applicants[:limit]
+	}
+
 	if len(applicants) == 0 {
-		return []*biz.Applicant{}, nil
+		return &biz.PaginatedList[*biz.Applicant]{Items: []*biz.Applicant{}, HasNext: false}, nil
 	}
 
 	ids := make([]uuid.UUID, len(applicants))
@@ -136,6 +192,30 @@ func (r *applicantRepo) ListAll(ctx context.Context) ([]*biz.Applicant, error) {
 		item := mapApplicantToBiz(&a)
 		item.Attributes = attrMap[a.ID]
 		res = append(res, item)
+	}
+
+	nextCursor := ""
+	if hasNext && len(res) > 0 {
+		last := res[len(res)-1]
+		nextCursor = encodeApplicantCursor(last.CreatedAt, last.ID)
+	}
+
+	return &biz.PaginatedList[*biz.Applicant]{
+		Items:      res,
+		HasNext:    hasNext,
+		NextCursor: nextCursor,
+	}, nil
+}
+
+func (r *applicantRepo) ListAll(ctx context.Context) ([]*biz.Applicant, error) {
+	applicants, err := r.data.db.ListApplicants(ctx, db.ListApplicantsParams{Limit: 1000})
+	if err != nil {
+		return nil, err
+	}
+	// ... mapper logic
+	var res []*biz.Applicant
+	for _, a := range applicants {
+		res = append(res, mapApplicantToBiz(&a))
 	}
 	return res, nil
 }
@@ -167,5 +247,7 @@ func mapApplicantToBiz(a *db.Applicant) *biz.Applicant {
 		BirthDate:         a.BirthDate.Time,
 		EstablishmentDate: a.EstablishmentDate.Time,
 		CreatedBy:         a.CreatedBy.UUID,
+		CreatedAt:         a.CreatedAt.Time,
+		UpdatedAt:         a.UpdatedAt.Time,
 	}
 }

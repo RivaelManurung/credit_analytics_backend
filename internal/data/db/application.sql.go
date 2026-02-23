@@ -338,11 +338,34 @@ func (q *Queries) ListApplicationAttributesByIDs(ctx context.Context, dollar_1 [
 }
 
 const listApplications = `-- name: ListApplications :many
-SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at FROM applications WHERE deleted_at IS NULL
+SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at FROM applications 
+WHERE deleted_at IS NULL
+  AND ($2::text IS NULL OR status = $2)
+  AND ($3::uuid IS NULL OR applicant_id = $3)
+  AND (
+    ($4::timestamp IS NULL AND $5::uuid IS NULL)
+    OR (created_at, id) < ($4::timestamp, $5::uuid)
+  )
+ORDER BY created_at DESC, id DESC
+LIMIT $1
 `
 
-func (q *Queries) ListApplications(ctx context.Context) ([]Application, error) {
-	rows, err := q.db.QueryContext(ctx, listApplications)
+type ListApplicationsParams struct {
+	Limit           int32          `json:"limit"`
+	Status          sql.NullString `json:"status"`
+	ApplicantID     uuid.NullUUID  `json:"applicant_id"`
+	CursorCreatedAt sql.NullTime   `json:"cursor_created_at"`
+	CursorID        uuid.NullUUID  `json:"cursor_id"`
+}
+
+func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsParams) ([]Application, error) {
+	rows, err := q.db.QueryContext(ctx, listApplications,
+		arg.Limit,
+		arg.Status,
+		arg.ApplicantID,
+		arg.CursorCreatedAt,
+		arg.CursorID,
+	)
 	if err != nil {
 		return nil, err
 	}

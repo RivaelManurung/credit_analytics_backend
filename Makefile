@@ -34,7 +34,7 @@ config:
 	       $(INTERNAL_PROTO_FILES)
 
 .PHONY: api
-# generate api proto
+# generate api proto using protoc
 api:
 	protoc --proto_path=./api \
 	       --proto_path=./third_party \
@@ -43,6 +43,16 @@ api:
  	       --go-grpc_out=paths=source_relative:./api \
 	       --openapi_out=fq_schema_naming=true,default_response=false:internal/server \
 	       $(API_PROTO_FILES)
+
+.PHONY: buf
+# generate api proto using buf
+buf:
+	buf generate
+
+.PHONY: push
+# push to buf schema registry
+push:
+	buf push
 
 .PHONY: build
 # build

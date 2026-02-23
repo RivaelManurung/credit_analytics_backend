@@ -645,10 +645,15 @@ func (x *GetApplicationRequest) GetId() string {
 }
 
 type ListApplicationsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Cursor        string                 `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
-	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
-	ApplicantId   string                 `protobuf:"bytes,3,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Cursor dari response sebelumnya (opaque token). Jika kosong, ambil halaman pertama.
+	Cursor string `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	// Jumlah data per halaman. Default 10, Max 100.
+	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Filter status aplikasi
+	Status string `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
+	// Filter berdasarkan ID Applicant
+	ApplicantId   string `protobuf:"bytes,4,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -690,6 +695,13 @@ func (x *ListApplicationsRequest) GetCursor() string {
 	return ""
 }
 
+func (x *ListApplicationsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 func (x *ListApplicationsRequest) GetStatus() string {
 	if x != nil {
 		return x.Status
@@ -705,9 +717,12 @@ func (x *ListApplicationsRequest) GetApplicantId() string {
 }
 
 type ListApplicationsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Applications  []*Application         `protobuf:"bytes,1,rep,name=applications,proto3" json:"applications,omitempty"`
-	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Applications []*Application         `protobuf:"bytes,1,rep,name=applications,proto3" json:"applications,omitempty"`
+	// Token untuk mengambil halaman berikutnya (opaque token).
+	NextCursor string `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	// Flag apakah ada halaman berikutnya.
+	HasNext       bool `protobuf:"varint,3,opt,name=has_next,json=hasNext,proto3" json:"has_next,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -754,6 +769,13 @@ func (x *ListApplicationsResponse) GetNextCursor() string {
 		return x.NextCursor
 	}
 	return ""
+}
+
+func (x *ListApplicationsResponse) GetHasNext() bool {
+	if x != nil {
+		return x.HasNext
+	}
+	return false
 }
 
 type UpdateApplicationRequest struct {
@@ -1581,15 +1603,17 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"attributes\x18\v \x03(\v2(.api.application.v1.ApplicationAttributeR\n" +
 	"attributes\"'\n" +
 	"\x15GetApplicationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"l\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x89\x01\n" +
 	"\x17ListApplicationsRequest\x12\x16\n" +
-	"\x06cursor\x18\x01 \x01(\tR\x06cursor\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
-	"\fapplicant_id\x18\x03 \x01(\tR\vapplicantId\"\x80\x01\n" +
+	"\x06cursor\x18\x01 \x01(\tR\x06cursor\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\x12!\n" +
+	"\fapplicant_id\x18\x04 \x01(\tR\vapplicantId\"\x9b\x01\n" +
 	"\x18ListApplicationsResponse\x12C\n" +
 	"\fapplications\x18\x01 \x03(\v2\x1f.api.application.v1.ApplicationR\fapplications\x12\x1f\n" +
 	"\vnext_cursor\x18\x02 \x01(\tR\n" +
-	"nextCursor\"\x94\x03\n" +
+	"nextCursor\x12\x19\n" +
+	"\bhas_next\x18\x03 \x01(\bR\ahasNext\"\x94\x03\n" +
 	"\x18UpdateApplicationRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fapplicant_id\x18\x02 \x01(\tR\vapplicantId\x12\x1d\n" +

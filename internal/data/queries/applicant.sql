@@ -28,7 +28,14 @@ ON CONFLICT (applicant_id, attr_key) DO UPDATE SET
 RETURNING *;
 
 -- name: ListApplicants :many
-SELECT * FROM applicants WHERE deleted_at IS NULL;
+SELECT * FROM applicants 
+WHERE deleted_at IS NULL
+  AND (
+    (sqlc.narg('cursor_created_at')::timestamp IS NULL AND sqlc.narg('cursor_id')::uuid IS NULL)
+    OR (created_at, id) < (sqlc.narg('cursor_created_at')::timestamp, sqlc.narg('cursor_id')::uuid)
+  )
+ORDER BY created_at DESC, id DESC
+LIMIT $1;
 
 -- name: GetApplicantAttributes :many
 SELECT * FROM applicant_attributes WHERE applicant_id = $1;

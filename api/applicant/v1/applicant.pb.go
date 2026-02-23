@@ -532,8 +532,11 @@ func (x *UpdateApplicantRequest) GetAttributes() []*ApplicantAttribute {
 }
 
 type ListApplicantsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Cursor        string                 `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Cursor dari response sebelumnya (opaque token).
+	Cursor string `protobuf:"bytes,1,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	// Jumlah data per halaman.
+	PageSize      int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -575,10 +578,20 @@ func (x *ListApplicantsRequest) GetCursor() string {
 	return ""
 }
 
+func (x *ListApplicantsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 type ListApplicantsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Applicants    []*Applicant           `protobuf:"bytes,1,rep,name=applicants,proto3" json:"applicants,omitempty"`
-	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Applicants []*Applicant           `protobuf:"bytes,1,rep,name=applicants,proto3" json:"applicants,omitempty"`
+	// Token untuk mengambil halaman berikutnya (opaque token).
+	NextCursor string `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	// Flag apakah ada halaman berikutnya.
+	HasNext       bool `protobuf:"varint,3,opt,name=has_next,json=hasNext,proto3" json:"has_next,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -625,6 +638,13 @@ func (x *ListApplicantsResponse) GetNextCursor() string {
 		return x.NextCursor
 	}
 	return ""
+}
+
+func (x *ListApplicantsResponse) GetHasNext() bool {
+	if x != nil {
+		return x.HasNext
+	}
+	return false
 }
 
 type UpsertApplicantAttributesRequest struct {
@@ -737,15 +757,17 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x12establishment_date\x18\a \x01(\tR\x11establishmentDate\x12D\n" +
 	"\n" +
 	"attributes\x18\b \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"/\n" +
+	"attributes\"L\n" +
 	"\x15ListApplicantsRequest\x12\x16\n" +
-	"\x06cursor\x18\x01 \x01(\tR\x06cursor\"v\n" +
+	"\x06cursor\x18\x01 \x01(\tR\x06cursor\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"\x91\x01\n" +
 	"\x16ListApplicantsResponse\x12;\n" +
 	"\n" +
 	"applicants\x18\x01 \x03(\v2\x1b.api.applicant.v1.ApplicantR\n" +
 	"applicants\x12\x1f\n" +
 	"\vnext_cursor\x18\x02 \x01(\tR\n" +
-	"nextCursor\"\x8b\x01\n" +
+	"nextCursor\x12\x19\n" +
+	"\bhas_next\x18\x03 \x01(\bR\ahasNext\"\x8b\x01\n" +
 	" UpsertApplicantAttributesRequest\x12!\n" +
 	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\x12D\n" +
 	"\n" +

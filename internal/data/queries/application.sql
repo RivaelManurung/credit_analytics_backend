@@ -11,7 +11,16 @@ INSERT INTO applications (
 SELECT * FROM applications WHERE id = $1 AND deleted_at IS NULL LIMIT 1;
 
 -- name: ListApplications :many
-SELECT * FROM applications WHERE deleted_at IS NULL;
+SELECT * FROM applications 
+WHERE deleted_at IS NULL
+  AND (sqlc.narg('status')::text IS NULL OR status = sqlc.narg('status'))
+  AND (sqlc.narg('applicant_id')::uuid IS NULL OR applicant_id = sqlc.narg('applicant_id'))
+  AND (
+    (sqlc.narg('cursor_created_at')::timestamp IS NULL AND sqlc.narg('cursor_id')::uuid IS NULL)
+    OR (created_at, id) < (sqlc.narg('cursor_created_at')::timestamp, sqlc.narg('cursor_id')::uuid)
+  )
+ORDER BY created_at DESC, id DESC
+LIMIT $1;
 
 -- name: UpdateApplication :one
 UPDATE applications SET 

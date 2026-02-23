@@ -193,11 +193,24 @@ func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []u
 }
 
 const listApplicants = `-- name: ListApplicants :many
-SELECT id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants WHERE deleted_at IS NULL
+SELECT id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants 
+WHERE deleted_at IS NULL
+  AND (
+    ($2::timestamp IS NULL AND $3::uuid IS NULL)
+    OR (created_at, id) < ($2::timestamp, $3::uuid)
+  )
+ORDER BY created_at DESC, id DESC
+LIMIT $1
 `
 
-func (q *Queries) ListApplicants(ctx context.Context) ([]Applicant, error) {
-	rows, err := q.db.QueryContext(ctx, listApplicants)
+type ListApplicantsParams struct {
+	Limit           int32         `json:"limit"`
+	CursorCreatedAt sql.NullTime  `json:"cursor_created_at"`
+	CursorID        uuid.NullUUID `json:"cursor_id"`
+}
+
+func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) ([]Applicant, error) {
+	rows, err := q.db.QueryContext(ctx, listApplicants, arg.Limit, arg.CursorCreatedAt, arg.CursorID)
 	if err != nil {
 		return nil, err
 	}

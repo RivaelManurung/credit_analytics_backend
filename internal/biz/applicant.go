@@ -18,6 +18,8 @@ type Applicant struct {
 	BirthDate         time.Time
 	EstablishmentDate time.Time
 	CreatedBy         uuid.UUID
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 	Attributes        []ApplicantAttribute
 }
 
@@ -32,6 +34,7 @@ type ApplicantRepo interface {
 	Save(context.Context, *Applicant) (uuid.UUID, error)
 	Update(context.Context, *Applicant) error
 	FindByID(context.Context, uuid.UUID) (*Applicant, error)
+	List(ctx context.Context, params PaginationParams) (*PaginatedList[*Applicant], error)
 	ListAll(context.Context) ([]*Applicant, error)
 }
 
@@ -58,9 +61,9 @@ func (uc *ApplicantUsecase) Get(ctx context.Context, id uuid.UUID) (*Applicant, 
 	return uc.repo.FindByID(ctx, id)
 }
 
-func (uc *ApplicantUsecase) ListAll(ctx context.Context) ([]*Applicant, error) {
-	uc.log.WithContext(ctx).Infof("Listing all Applicants")
-	return uc.repo.ListAll(ctx)
+func (uc *ApplicantUsecase) List(ctx context.Context, params PaginationParams) (*PaginatedList[*Applicant], error) {
+	uc.log.WithContext(ctx).Infof("Listing Applicants with pagination")
+	return uc.repo.List(ctx, params)
 }
 
 func (uc *ApplicantUsecase) Update(ctx context.Context, a *Applicant) error {

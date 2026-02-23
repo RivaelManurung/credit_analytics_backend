@@ -1,0 +1,25 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: credit-analytics-backend/api
+plugins:
+  # Generate Go code (Standard)
+  - remote: buf.build/protocolbuffers/go:v1.31.0
+    out: api
+    opt: paths=source_relative
+  # Generate gRPC code for Go
+  - remote: buf.build/grpc/go:v1.3.0
+    out: api
+    opt: paths=source_relative
+  # Generate Kratos HTTP code for Go (Local plugin)
+  - name: go-http
+    out: api
+    opt: paths=source_relative
+  # Generate OpenAPI documentation (Local plugin)
+  - name: openapi
+    out: internal/server
+    opt: 
+      - fq_schema_naming=true
+      - default_response=false

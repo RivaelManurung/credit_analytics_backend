@@ -110,17 +110,25 @@ func (s *ApplicantService) UpsertApplicantAttributes(ctx context.Context, req *p
 }
 
 func (s *ApplicantService) ListApplicants(ctx context.Context, req *pb.ListApplicantsRequest) (*pb.ListApplicantsResponse, error) {
-	applicants, err := s.uc.ListAll(ctx)
+	params := biz.PaginationParams{
+		Cursor:   req.Cursor,
+		PageSize: req.PageSize,
+	}
+
+	result, err := s.uc.List(ctx, params)
 	if err != nil {
 		return nil, err
 	}
+
 	var res []*pb.Applicant
-	for _, a := range applicants {
+	for _, a := range result.Items {
 		res = append(res, mapBizToProto(a))
 	}
+
 	return &pb.ListApplicantsResponse{
 		Applicants: res,
-		NextCursor: "", // Set to empty for now as placeholder
+		NextCursor: result.NextCursor,
+		HasNext:    result.HasNext,
 	}, nil
 }
 

@@ -124,15 +124,28 @@ func (s *ApplicationService) ChangeApplicationStatus(ctx context.Context, req *p
 }
 
 func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListApplicationsRequest) (*pb.ListApplicationsResponse, error) {
-	apps, err := s.uc.List(ctx)
+	applicantID, _ := uuid.Parse(req.ApplicantId)
+
+	params := biz.PaginationParams{
+		Cursor:   req.Cursor,
+		PageSize: req.PageSize,
+	}
+
+	result, err := s.uc.List(ctx, params, req.Status, applicantID)
 	if err != nil {
 		return nil, err
 	}
+
 	var res []*pb.Application
-	for _, app := range apps {
+	for _, app := range result.Items {
 		res = append(res, mapAppBizToProto(app))
 	}
-	return &pb.ListApplicationsResponse{Applications: res, NextCursor: ""}, nil
+
+	return &pb.ListApplicationsResponse{
+		Applications: res,
+		NextCursor:   result.NextCursor,
+		HasNext:      result.HasNext,
+	}, nil
 }
 
 func (s *ApplicationService) UploadApplicationDocument(ctx context.Context, req *pb.UploadApplicationDocumentRequest) (*pb.ApplicationDocument, error) {
