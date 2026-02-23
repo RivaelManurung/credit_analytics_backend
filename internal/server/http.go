@@ -19,7 +19,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	khttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/gorilla/handlers"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 )
 
@@ -36,26 +35,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 		khttp.Middleware(
 			recovery.Recovery(),
 		),
-		khttp.Filter(handlers.CORS(
-			handlers.AllowedOrigins([]string{"*", "https://credit-analytics-frontend-git-james-develop-rivaels-projects.vercel.app"}),
-			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
-			handlers.AllowedHeaders([]string{
-				"Content-Type",
-				"Authorization",
-				"X-Requested-With",
-				"Accept",
-				"Origin",
-				"x-grpc-web",
-				"x-user-agent",
-				"connect-protocol-version",
-				"grpc-timeout",
-			}),
-			handlers.ExposedHeaders([]string{
-				"grpc-status",
-				"grpc-message",
-				"grpc-status-details-bin",
-			}),
-		)),
 		khttp.Filter(func(next http.Handler) http.Handler {
 			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server,
 				grpcweb.WithOriginFunc(func(origin string) bool { return true }),
@@ -64,14 +43,32 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			)
 			h := log.NewHelper(logger)
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				// 1. Manual CORS Headers
+				origin := r.Header.Get("Origin")
+				if origin == "" {
+					origin = "*"
+				}
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Grpc-Web, X-User-Agent, Connect-Protocol-Version, Grpc-Timeout")
+				w.Header().Set("Access-Control-Expose-Headers", "Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin, Connect-Error-Code, Connect-Error-Message")
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+				// 2. Handle Preflight OPTIONS
+				if r.Method == "OPTIONS" {
+					w.WriteHeader(http.StatusOK)
+					return
+				}
+
 				h.Infof("HTTP Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))
 
-				isGrpcWeb := wrappedGrpc.IsGrpcWebRequest(r)
-				if isGrpcWeb {
+				// 3. Handle gRPC-Web
+				if wrappedGrpc.IsGrpcWebRequest(r) {
 					h.Infof("Detected gRPC-Web Request: %s %s", r.Method, r.URL.Path)
 					wrappedGrpc.ServeHTTP(w, r)
 					return
 				}
+
 				next.ServeHTTP(w, r)
 			})
 		}),
