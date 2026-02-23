@@ -121,3 +121,21 @@ func (r *referenceRepo) ListFinancialGLAccounts(ctx context.Context) ([]*biz.Fin
 	}
 	return res, nil
 }
+
+func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.AttributeRegistry, error) {
+	attrs, err := r.data.db.ListAttributeRegistry(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var res []*biz.AttributeRegistry
+	for _, a := range attrs {
+		res = append(res, &biz.AttributeRegistry{
+			AttrKey:    a.AttributeCode,
+			AttrName:   a.Description.String,
+			DataType:   a.ValueType,
+			Category:   a.Category.String,
+			IsRequired: a.IsRequired.Bool,
+		})
+	}
+	return res, nil
+}

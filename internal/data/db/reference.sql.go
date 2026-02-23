@@ -61,6 +61,42 @@ func (q *Queries) ListApplicationStatuses(ctx context.Context) ([]ApplicationSta
 	return items, nil
 }
 
+const listAttributeRegistry = `-- name: ListAttributeRegistry :many
+SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description FROM custom_column_attribute_registries
+`
+
+func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttributeRegistry, error) {
+	rows, err := q.db.QueryContext(ctx, listAttributeRegistry)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CustomColumnAttributeRegistry
+	for rows.Next() {
+		var i CustomColumnAttributeRegistry
+		if err := rows.Scan(
+			&i.AttributeCode,
+			&i.AppliesTo,
+			&i.Scope,
+			&i.ValueType,
+			&i.Category,
+			&i.IsRequired,
+			&i.RiskRelevant,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listBranches = `-- name: ListBranches :many
 SELECT branch_code, branch_name, region_code FROM branches
 `

@@ -46,17 +46,17 @@ SELECT * FROM applicant_attributes WHERE applicant_id = ANY($1::uuid[]);
 -- name: DeleteApplicantAttributes :exec
 DELETE FROM applicant_attributes WHERE applicant_id = $1;
 
--- name: ListAttributeRegistry :many
-SELECT * FROM custom_column_attribute_registries;
-
 -- name: CreateAttributeRegistry :exec
 INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, risk_relevant, description
+    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description
 ) VALUES (
-    $1, $2, $3, $4, $5, $6
+    $1, $2, $3, $4, $5, $6, $7, $8
 ) ON CONFLICT (attribute_code) DO UPDATE SET
     applies_to = EXCLUDED.applies_to,
     scope = EXCLUDED.scope,
     value_type = EXCLUDED.value_type,
+    category = EXCLUDED.category,
+    is_required = EXCLUDED.is_required,
     risk_relevant = EXCLUDED.risk_relevant,
     description = EXCLUDED.description;
+

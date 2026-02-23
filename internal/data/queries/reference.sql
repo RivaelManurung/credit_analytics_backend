@@ -15,3 +15,7 @@ SELECT * FROM application_status_refs;
 
 -- name: ListFinancialGLAccounts :many
 SELECT * FROM financial_gl_accounts;
+
+-- name: ListAttributeRegistry :many
+SELECT * FROM custom_column_attribute_registries;
+

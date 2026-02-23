@@ -15,14 +15,14 @@ import (
 
 const createApplicant = `-- name: CreateApplicant :one
 INSERT INTO applicants (
-    applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
+    head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7
-) RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at
+) RETURNING id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at
 `
 
 type CreateApplicantParams struct {
-	ApplicantType     string         `json:"applicant_type"`
+	HeadType          string         `json:"head_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
@@ -33,7 +33,7 @@ type CreateApplicantParams struct {
 
 func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams) (Applicant, error) {
 	row := q.db.QueryRowContext(ctx, createApplicant,
-		arg.ApplicantType,
+		arg.HeadType,
 		arg.IdentityNumber,
 		arg.TaxID,
 		arg.FullName,
@@ -44,7 +44,7 @@ func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams
 	var i Applicant
 	err := row.Scan(
 		&i.ID,
-		&i.ApplicantType,
+		&i.HeadType,
 		&i.IdentityNumber,
 		&i.TaxID,
 		&i.FullName,
@@ -60,13 +60,15 @@ func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams
 
 const createAttributeRegistry = `-- name: CreateAttributeRegistry :exec
 INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, risk_relevant, description
+    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description
 ) VALUES (
-    $1, $2, $3, $4, $5, $6
+    $1, $2, $3, $4, $5, $6, $7, $8
 ) ON CONFLICT (attribute_code) DO UPDATE SET
     applies_to = EXCLUDED.applies_to,
     scope = EXCLUDED.scope,
     value_type = EXCLUDED.value_type,
+    category = EXCLUDED.category,
+    is_required = EXCLUDED.is_required,
     risk_relevant = EXCLUDED.risk_relevant,
     description = EXCLUDED.description
 `
@@ -76,6 +78,8 @@ type CreateAttributeRegistryParams struct {
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
 	ValueType     string         `json:"value_type"`
+	Category      sql.NullString `json:"category"`
+	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
 }
@@ -86,6 +90,8 @@ func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttribu
 		arg.AppliesTo,
 		arg.Scope,
 		arg.ValueType,
+		arg.Category,
+		arg.IsRequired,
 		arg.RiskRelevant,
 		arg.Description,
 	)
@@ -102,7 +108,7 @@ func (q *Queries) DeleteApplicantAttributes(ctx context.Context, applicantID uui
 }
 
 const getApplicant = `-- name: GetApplicant :one
-SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants WHERE id = $1 LIMIT 1
+SELECT id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, error) {
@@ -110,7 +116,7 @@ func (q *Queries) GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, er
 	var i Applicant
 	err := row.Scan(
 		&i.ID,
-		&i.ApplicantType,
+		&i.HeadType,
 		&i.IdentityNumber,
 		&i.TaxID,
 		&i.FullName,
@@ -193,8 +199,9 @@ func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []u
 }
 
 const listApplicants = `-- name: ListApplicants :many
-SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants 
-WHERE (
+SELECT id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants 
+WHERE deleted_at IS NULL
+  AND (
     ($2::timestamp IS NULL AND $3::uuid IS NULL)
     OR (created_at, id) < ($2::timestamp, $3::uuid)
   )
@@ -219,7 +226,7 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 		var i Applicant
 		if err := rows.Scan(
 			&i.ID,
-			&i.ApplicantType,
+			&i.HeadType,
 			&i.IdentityNumber,
 			&i.TaxID,
 			&i.FullName,
@@ -243,54 +250,20 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 	return items, nil
 }
 
-const listAttributeRegistry = `-- name: ListAttributeRegistry :many
-SELECT attribute_code, applies_to, scope, value_type, risk_relevant, description FROM custom_column_attribute_registries
-`
-
-func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttributeRegistry, error) {
-	rows, err := q.db.QueryContext(ctx, listAttributeRegistry)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []CustomColumnAttributeRegistry
-	for rows.Next() {
-		var i CustomColumnAttributeRegistry
-		if err := rows.Scan(
-			&i.AttributeCode,
-			&i.AppliesTo,
-			&i.Scope,
-			&i.ValueType,
-			&i.RiskRelevant,
-			&i.Description,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const updateApplicant = `-- name: UpdateApplicant :one
 UPDATE applicants SET 
-    applicant_type = $2,
+    head_type = $2,
     identity_number = $3,
     tax_id = $4,
     full_name = $5,
     birth_date = $6,
     establishment_date = $7
-WHERE id = $1 RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at
+WHERE id = $1 RETURNING id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at
 `
 
 type UpdateApplicantParams struct {
 	ID                uuid.UUID      `json:"id"`
-	ApplicantType     string         `json:"applicant_type"`
+	HeadType          string         `json:"head_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
@@ -301,7 +274,7 @@ type UpdateApplicantParams struct {
 func (q *Queries) UpdateApplicant(ctx context.Context, arg UpdateApplicantParams) (Applicant, error) {
 	row := q.db.QueryRowContext(ctx, updateApplicant,
 		arg.ID,
-		arg.ApplicantType,
+		arg.HeadType,
 		arg.IdentityNumber,
 		arg.TaxID,
 		arg.FullName,
@@ -311,7 +284,7 @@ func (q *Queries) UpdateApplicant(ctx context.Context, arg UpdateApplicantParams
 	var i Applicant
 	err := row.Scan(
 		&i.ID,
-		&i.ApplicantType,
+		&i.HeadType,
 		&i.IdentityNumber,
 		&i.TaxID,
 		&i.FullName,

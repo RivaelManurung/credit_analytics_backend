@@ -34,9 +34,12 @@ CREATE TABLE custom_column_attribute_registries (
     applies_to VARCHAR(20) NOT NULL, -- PERSONAL | CORPORATE | BOTH
     scope VARCHAR(20) NOT NULL,      -- APPLICANT | APPLICATION | BOTH
     value_type VARCHAR(20) NOT NULL, -- STRING | NUMBER | BOOLEAN | DATE
+    category VARCHAR(100),           -- UI Grouping
+    is_required BOOLEAN DEFAULT FALSE,
     risk_relevant BOOLEAN DEFAULT FALSE,
     description VARCHAR(255)
 );
+
 
 CREATE TABLE branches (
     branch_code VARCHAR(50) PRIMARY KEY,

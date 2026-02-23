@@ -131,7 +131,21 @@ func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *emp
 }
 
 func (s *ReferenceService) ListAttributeRegistry(ctx context.Context, req *emptypb.Empty) (*pb.ListAttributeRegistryResponse, error) {
-	return &pb.ListAttributeRegistryResponse{}, nil
+	attrs, err := s.uc.ListAttributeRegistry(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var res []*pb.AttributeRegistry
+	for _, a := range attrs {
+		res = append(res, &pb.AttributeRegistry{
+			AttrKey:  a.AttrKey,
+			AttrName: a.AttrName,
+			DataType: a.DataType,
+			Category: a.Category,
+			Required: a.IsRequired,
+		})
+	}
+	return &pb.ListAttributeRegistryResponse{Attributes: res}, nil
 }
 
 func (s *ReferenceService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesResponse, error) {

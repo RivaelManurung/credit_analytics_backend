@@ -45,6 +45,14 @@ type FinancialGLAccount struct {
 	Description   string
 }
 
+type AttributeRegistry struct {
+	AttrKey    string
+	AttrName   string
+	DataType   string
+	Category   string
+	IsRequired bool
+}
+
 type ReferenceRepo interface {
 	ListLoanProducts(ctx context.Context) ([]*LoanProduct, error)
 	GetLoanProduct(ctx context.Context, id uuid.UUID) (*LoanProduct, error)
@@ -52,6 +60,7 @@ type ReferenceRepo interface {
 	ListLoanOfficers(ctx context.Context, branchCode string) ([]*LoanOfficer, error)
 	ListApplicationStatuses(ctx context.Context) ([]*ApplicationStatusRef, error)
 	ListFinancialGLAccounts(ctx context.Context) ([]*FinancialGLAccount, error)
+	ListAttributeRegistry(ctx context.Context) ([]*AttributeRegistry, error)
 }
 
 type ReferenceUsecase struct {
@@ -85,4 +94,8 @@ func (uc *ReferenceUsecase) ListApplicationStatuses(ctx context.Context) ([]*App
 
 func (uc *ReferenceUsecase) ListFinancialGLAccounts(ctx context.Context) ([]*FinancialGLAccount, error) {
 	return uc.repo.ListFinancialGLAccounts(ctx)
+}
+
+func (uc *ReferenceUsecase) ListAttributeRegistry(ctx context.Context) ([]*AttributeRegistry, error) {
+	return uc.repo.ListAttributeRegistry(ctx)
 }

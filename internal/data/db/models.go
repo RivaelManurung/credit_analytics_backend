@@ -12,7 +12,7 @@ import (
 
 type Applicant struct {
 	ID                uuid.UUID      `json:"id"`
-	ApplicantType     string         `json:"applicant_type"`
+	HeadType          string         `json:"head_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
@@ -245,6 +245,8 @@ type CustomColumnAttributeRegistry struct {
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
 	ValueType     string         `json:"value_type"`
+	Category      sql.NullString `json:"category"`
+	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
 }
