@@ -58,8 +58,14 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 		)),
 		khttp.Filter(func(next http.Handler) http.Handler {
 			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server, grpcweb.WithOriginFunc(func(origin string) bool { return true }))
+			h := log.NewHelper(logger)
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if wrappedGrpc.IsGrpcWebRequest(r) {
+				isGrpcWeb := wrappedGrpc.IsGrpcWebRequest(r)
+				if isGrpcWeb {
+					h.Infof("Incoming gRPC-Web Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))
+				}
+
+				if isGrpcWeb {
 					wrappedGrpc.ServeHTTP(w, r)
 					return
 				}
