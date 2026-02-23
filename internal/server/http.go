@@ -39,8 +39,22 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 		khttp.Filter(handlers.CORS(
 			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
-			handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "x-grpc-web", "x-user-agent"}),
-			handlers.ExposedHeaders([]string{"grpc-status", "grpc-message"}),
+			handlers.AllowedHeaders([]string{
+				"Content-Type",
+				"Authorization",
+				"X-Requested-With",
+				"Accept",
+				"Origin",
+				"x-grpc-web",
+				"x-user-agent",
+				"connect-protocol-version",
+				"grpc-timeout",
+			}),
+			handlers.ExposedHeaders([]string{
+				"grpc-status",
+				"grpc-message",
+				"grpc-status-details-bin",
+			}),
 		)),
 		khttp.Filter(func(next http.Handler) http.Handler {
 			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server, grpcweb.WithOriginFunc(func(origin string) bool { return true }))
