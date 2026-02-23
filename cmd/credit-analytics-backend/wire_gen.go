@@ -53,7 +53,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	decisionService := service.NewDecisionService(decisionUsecase, logger)
 	committeeService := service.NewCommitteeService(decisionUsecase, logger)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, applicationService, partyService, applicantService, referenceService, surveyService, financialService, decisionService, committeeService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, applicationService, partyService, applicantService, referenceService, surveyService, financialService, decisionService, committeeService, logger)
+	httpServer := server.NewHTTPServer(confServer, greeterService, applicationService, partyService, applicantService, referenceService, surveyService, financialService, decisionService, committeeService, grpcServer, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

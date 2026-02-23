@@ -16,9 +16,11 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
 	khttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/handlers"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 )
 
 //go:embed openapi.yaml
@@ -28,7 +30,8 @@ var OpenApiFile embed.FS
 func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application *service.ApplicationService,
 	party *service.PartyService, applicant *service.ApplicantService, reference *service.ReferenceService,
 	survey *service.SurveyService, financial *service.FinancialService,
-	decision *service.DecisionService, committee *service.CommitteeService, logger log.Logger) *khttp.Server {
+	decision *service.DecisionService, committee *service.CommitteeService,
+	grpcServer *grpc.Server, logger log.Logger) *khttp.Server {
 	var opts = []khttp.ServerOption{
 		khttp.Middleware(
 			recovery.Recovery(),
@@ -36,8 +39,19 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 		khttp.Filter(handlers.CORS(
 			handlers.AllowedOrigins([]string{"*"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
-			handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"}),
+			handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "x-grpc-web", "x-user-agent"}),
+			handlers.ExposedHeaders([]string{"grpc-status", "grpc-message"}),
 		)),
+		khttp.Filter(func(next http.Handler) http.Handler {
+			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server, grpcweb.WithOriginFunc(func(origin string) bool { return true }))
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if wrappedGrpc.IsGrpcWebRequest(r) {
+					wrappedGrpc.ServeHTTP(w, r)
+					return
+				}
+				next.ServeHTTP(w, r)
+			})
+		}),
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, khttp.Network(c.Http.Network))
