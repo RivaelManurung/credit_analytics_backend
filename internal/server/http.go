@@ -37,7 +37,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			recovery.Recovery(),
 		),
 		khttp.Filter(handlers.CORS(
-			handlers.AllowedOrigins([]string{"*"}),
+			handlers.AllowedOrigins([]string{"*", "https://credit-analytics-frontend-git-james-develop-rivaels-projects.vercel.app"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}),
 			handlers.AllowedHeaders([]string{
 				"Content-Type",
@@ -57,7 +57,11 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 			}),
 		)),
 		khttp.Filter(func(next http.Handler) http.Handler {
-			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server, grpcweb.WithOriginFunc(func(origin string) bool { return true }))
+			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server,
+				grpcweb.WithOriginFunc(func(origin string) bool { return true }),
+				grpcweb.WithWebsockets(true),
+				grpcweb.WithWebsocketOriginFunc(func(req *http.Request) bool { return true }),
+			)
 			h := log.NewHelper(logger)
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				h.Infof("HTTP Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))

@@ -194,8 +194,7 @@ func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []u
 
 const listApplicants = `-- name: ListApplicants :many
 SELECT id, head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by, updated_at, deleted_at FROM applicants 
-WHERE deleted_at IS NULL
-  AND (
+WHERE (
     ($2::timestamp IS NULL AND $3::uuid IS NULL)
     OR (created_at, id) < ($2::timestamp, $3::uuid)
   )
