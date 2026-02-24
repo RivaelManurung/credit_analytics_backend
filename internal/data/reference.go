@@ -137,6 +137,8 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 			DataType:   a.ValueType,
 			Category:   a.Category.String,
 			IsRequired: a.IsRequired.Bool,
+			UiIcon:     a.UiIcon.String,
+			UiLabel:    a.UiLabel.String,
 		})
 	}
 	return res, nil
@@ -151,5 +153,7 @@ func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.A
 		Category:      sql.NullString{String: attr.Category, Valid: true},
 		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
 		Description:   sql.NullString{String: attr.AttrName, Valid: true},
+		UiIcon:        sql.NullString{String: attr.UiIcon, Valid: true},
+		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: true},
 	})
 }

@@ -245,6 +245,8 @@ type CustomColumnAttributeRegistry struct {
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
+	UiIcon        sql.NullString `json:"ui_icon"`
+	UiLabel       sql.NullString `json:"ui_label"`
 }
 
 type FinancialGlAccount struct {

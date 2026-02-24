@@ -51,6 +51,8 @@ type AttributeRegistry struct {
 	DataType   string
 	Category   string
 	IsRequired bool
+	UiIcon     string
+	UiLabel    string
 }
 
 type ReferenceRepo interface {

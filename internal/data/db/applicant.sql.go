@@ -58,9 +58,9 @@ func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams
 
 const createAttributeRegistry = `-- name: CreateAttributeRegistry :exec
 INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description
+    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
 ) ON CONFLICT (attribute_code) DO UPDATE SET
     applies_to = EXCLUDED.applies_to,
     scope = EXCLUDED.scope,
@@ -68,7 +68,9 @@ INSERT INTO custom_column_attribute_registries (
     category = EXCLUDED.category,
     is_required = EXCLUDED.is_required,
     risk_relevant = EXCLUDED.risk_relevant,
-    description = EXCLUDED.description
+    description = EXCLUDED.description,
+    ui_icon = EXCLUDED.ui_icon,
+    ui_label = EXCLUDED.ui_label
 `
 
 type CreateAttributeRegistryParams struct {
@@ -80,6 +82,8 @@ type CreateAttributeRegistryParams struct {
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
+	UiIcon        sql.NullString `json:"ui_icon"`
+	UiLabel       sql.NullString `json:"ui_label"`
 }
 
 func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error {
@@ -92,6 +96,8 @@ func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttribu
 		arg.IsRequired,
 		arg.RiskRelevant,
 		arg.Description,
+		arg.UiIcon,
+		arg.UiLabel,
 	)
 	return err
 }
@@ -244,7 +250,7 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 }
 
 const listAttributeRegistries = `-- name: ListAttributeRegistries :many
-SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description FROM custom_column_attribute_registries
+SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label FROM custom_column_attribute_registries
 WHERE ($1::text IS NULL OR applies_to = $1 OR applies_to = 'BOTH')
   AND ($2::text IS NULL OR scope = $2 OR scope = 'BOTH')
 ORDER BY category, attribute_code
@@ -273,6 +279,8 @@ func (q *Queries) ListAttributeRegistries(ctx context.Context, arg ListAttribute
 			&i.IsRequired,
 			&i.RiskRelevant,
 			&i.Description,
+			&i.UiIcon,
+			&i.UiLabel,
 		); err != nil {
 			return nil, err
 		}

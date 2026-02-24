@@ -143,6 +143,8 @@ func (s *ReferenceService) ListAttributeRegistry(ctx context.Context, req *empty
 			DataType: a.DataType,
 			Category: a.Category,
 			Required: a.IsRequired,
+			UiIcon:   a.UiIcon,
+			UiLabel:  a.UiLabel,
 		})
 	}
 	return &pb.ListAttributeRegistryResponse{Attributes: res}, nil
@@ -155,6 +157,8 @@ func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.
 		DataType:   req.ValueType,
 		Category:   req.Category,
 		IsRequired: req.IsRequired,
+		UiIcon:     req.UiIcon,
+		UiLabel:    req.UiLabel,
 	})
 	if err != nil {
 		return nil, err

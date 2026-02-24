@@ -35,7 +35,9 @@ CREATE TABLE custom_column_attribute_registries (
     category VARCHAR(100),           -- UI Grouping
     is_required BOOLEAN DEFAULT FALSE,
     risk_relevant BOOLEAN DEFAULT FALSE,
-    description VARCHAR(255)
+    description VARCHAR(255),
+    ui_icon VARCHAR(100),            -- Icon name (Lucide/Heroicons)
+    ui_label VARCHAR(255)            -- Custom label for UI
 );
 
 

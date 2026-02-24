@@ -33,6 +33,8 @@ type CreateAttributeRegistryRequest struct {
 	IsRequired    bool                   `protobuf:"varint,6,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
 	RiskRelevant  bool                   `protobuf:"varint,7,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
 	Description   string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
+	UiIcon        string                 `protobuf:"bytes,9,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
+	UiLabel       string                 `protobuf:"bytes,10,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,6 +121,20 @@ func (x *CreateAttributeRegistryRequest) GetRiskRelevant() bool {
 func (x *CreateAttributeRegistryRequest) GetDescription() string {
 	if x != nil {
 		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateAttributeRegistryRequest) GetUiIcon() string {
+	if x != nil {
+		return x.UiIcon
+	}
+	return ""
+}
+
+func (x *CreateAttributeRegistryRequest) GetUiLabel() string {
+	if x != nil {
+		return x.UiLabel
 	}
 	return ""
 }
@@ -394,6 +410,8 @@ type AttributeRegistry struct {
 	DataType      string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
 	Category      string                 `protobuf:"bytes,4,opt,name=category,proto3" json:"category,omitempty"`
 	Required      bool                   `protobuf:"varint,5,opt,name=required,proto3" json:"required,omitempty"`
+	UiIcon        string                 `protobuf:"bytes,6,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
+	UiLabel       string                 `protobuf:"bytes,7,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -461,6 +479,20 @@ func (x *AttributeRegistry) GetRequired() bool {
 		return x.Required
 	}
 	return false
+}
+
+func (x *AttributeRegistry) GetUiIcon() string {
+	if x != nil {
+		return x.UiIcon
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetUiLabel() string {
+	if x != nil {
+		return x.UiLabel
+	}
+	return ""
 }
 
 type SurveyTemplate struct {
@@ -1091,7 +1123,7 @@ var File_reference_v1_reference_proto protoreflect.FileDescriptor
 
 const file_reference_v1_reference_proto_rawDesc = "" +
 	"\n" +
-	"\x1creference/v1/reference.proto\x12\x10api.reference.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x9f\x02\n" +
+	"\x1creference/v1/reference.proto\x12\x10api.reference.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xd3\x02\n" +
 	"\x1eCreateAttributeRegistryRequest\x12%\n" +
 	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
 	"\n" +
@@ -1103,7 +1135,10 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\vis_required\x18\x06 \x01(\bR\n" +
 	"isRequired\x12#\n" +
 	"\rrisk_relevant\x18\a \x01(\bR\friskRelevant\x12 \n" +
-	"\vdescription\x18\b \x01(\tR\vdescription\"\x95\x01\n" +
+	"\vdescription\x18\b \x01(\tR\vdescription\x12\x17\n" +
+	"\aui_icon\x18\t \x01(\tR\x06uiIcon\x12\x19\n" +
+	"\bui_label\x18\n" +
+	" \x01(\tR\auiLabel\"\x95\x01\n" +
 	"\vLoanProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fproduct_code\x18\x02 \x01(\tR\vproductCode\x12!\n" +
@@ -1128,13 +1163,15 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\fstatus_group\x18\x02 \x01(\tR\vstatusGroup\x12\x1f\n" +
 	"\vis_terminal\x18\x03 \x01(\bR\n" +
 	"isTerminal\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xa0\x01\n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xd4\x01\n" +
 	"\x11AttributeRegistry\x12\x19\n" +
 	"\battr_key\x18\x01 \x01(\tR\aattrKey\x12\x1b\n" +
 	"\tattr_name\x18\x02 \x01(\tR\battrName\x12\x1b\n" +
 	"\tdata_type\x18\x03 \x01(\tR\bdataType\x12\x1a\n" +
 	"\bcategory\x18\x04 \x01(\tR\bcategory\x12\x1a\n" +
-	"\brequired\x18\x05 \x01(\bR\brequired\"\xb0\x01\n" +
+	"\brequired\x18\x05 \x01(\bR\brequired\x12\x17\n" +
+	"\aui_icon\x18\x06 \x01(\tR\x06uiIcon\x12\x19\n" +
+	"\bui_label\x18\a \x01(\tR\auiLabel\"\xb0\x01\n" +
 	"\x0eSurveyTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rtemplate_code\x18\x02 \x01(\tR\ftemplateCode\x12#\n" +

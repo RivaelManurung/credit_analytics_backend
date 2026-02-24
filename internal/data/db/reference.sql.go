@@ -62,7 +62,7 @@ func (q *Queries) ListApplicationStatuses(ctx context.Context) ([]ApplicationSta
 }
 
 const listAttributeRegistry = `-- name: ListAttributeRegistry :many
-SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description FROM custom_column_attribute_registries
+SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label FROM custom_column_attribute_registries
 `
 
 func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttributeRegistry, error) {
@@ -83,6 +83,8 @@ func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttr
 			&i.IsRequired,
 			&i.RiskRelevant,
 			&i.Description,
+			&i.UiIcon,
+			&i.UiLabel,
 		); err != nil {
 			return nil, err
 		}
