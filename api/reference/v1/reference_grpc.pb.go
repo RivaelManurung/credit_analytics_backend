@@ -8,6 +8,7 @@ package v1
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -29,6 +30,7 @@ const (
 	ReferenceService_ListSurveyTemplates_FullMethodName     = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
 	ReferenceService_ListFinancialGLAccounts_FullMethodName = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
 	ReferenceService_CreateAttributeRegistry_FullMethodName = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
+	ReferenceService_UpdateAttributeRegistry_FullMethodName = "/api.reference.v1.ReferenceService/UpdateAttributeRegistry"
 )
 
 // ReferenceServiceClient is the client API for ReferenceService service.
@@ -44,6 +46,7 @@ type ReferenceServiceClient interface {
 	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
 	ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error)
 	CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateAttributeRegistry(ctx context.Context, in *UpdateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type referenceServiceClient struct {
@@ -144,6 +147,16 @@ func (c *referenceServiceClient) CreateAttributeRegistry(ctx context.Context, in
 	return out, nil
 }
 
+func (c *referenceServiceClient) UpdateAttributeRegistry(ctx context.Context, in *UpdateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ReferenceService_UpdateAttributeRegistry_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReferenceServiceServer is the server API for ReferenceService service.
 // All implementations must embed UnimplementedReferenceServiceServer
 // for forward compatibility.
@@ -157,6 +170,7 @@ type ReferenceServiceServer interface {
 	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
 	ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error)
 	CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error)
+	UpdateAttributeRegistry(context.Context, *UpdateAttributeRegistryRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedReferenceServiceServer()
 }
 
@@ -193,6 +207,9 @@ func (UnimplementedReferenceServiceServer) ListFinancialGLAccounts(context.Conte
 }
 func (UnimplementedReferenceServiceServer) CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateAttributeRegistry not implemented")
+}
+func (UnimplementedReferenceServiceServer) UpdateAttributeRegistry(context.Context, *UpdateAttributeRegistryRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateAttributeRegistry not implemented")
 }
 func (UnimplementedReferenceServiceServer) mustEmbedUnimplementedReferenceServiceServer() {}
 func (UnimplementedReferenceServiceServer) testEmbeddedByValue()                          {}
@@ -377,6 +394,24 @@ func _ReferenceService_CreateAttributeRegistry_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReferenceService_UpdateAttributeRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAttributeRegistryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).UpdateAttributeRegistry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_UpdateAttributeRegistry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).UpdateAttributeRegistry(ctx, req.(*UpdateAttributeRegistryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReferenceService_ServiceDesc is the grpc.ServiceDesc for ReferenceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -419,6 +454,10 @@ var ReferenceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateAttributeRegistry",
 			Handler:    _ReferenceService_CreateAttributeRegistry_Handler,
+		},
+		{
+			MethodName: "UpdateAttributeRegistry",
+			Handler:    _ReferenceService_UpdateAttributeRegistry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

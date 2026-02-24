@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -97,6 +98,49 @@ func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttr
 		return nil, err
 	}
 	return items, nil
+}
+
+type UpdateAttributeRegistryParams struct {
+	AttributeCode string         `json:"attribute_code"`
+	AppliesTo     string         `json:"applies_to"`
+	Scope         string         `json:"scope"`
+	ValueType     string         `json:"value_type"`
+	Category      sql.NullString `json:"category"`
+	IsRequired    sql.NullBool   `json:"is_required"`
+	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	Description   sql.NullString `json:"description"`
+	UiIcon        sql.NullString `json:"ui_icon"`
+	UiLabel       sql.NullString `json:"ui_label"`
+}
+
+const updateAttributeRegistry = `-- name: UpdateAttributeRegistry :exec
+UPDATE custom_column_attribute_registries SET
+    applies_to = $2,
+    scope = $3,
+    value_type = $4,
+    category = $5,
+    is_required = $6,
+    risk_relevant = $7,
+    description = $8,
+    ui_icon = $9,
+    ui_label = $10
+WHERE attribute_code = $1
+`
+
+func (q *Queries) UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error {
+	_, err := q.db.ExecContext(ctx, updateAttributeRegistry,
+		arg.AttributeCode,
+		arg.AppliesTo,
+		arg.Scope,
+		arg.ValueType,
+		arg.Category,
+		arg.IsRequired,
+		arg.RiskRelevant,
+		arg.Description,
+		arg.UiIcon,
+		arg.UiLabel,
+	)
+	return err
 }
 
 const listBranches = `-- name: ListBranches :many

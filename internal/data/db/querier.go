@@ -61,6 +61,7 @@ type Querier interface {
 	UpdateApplicant(ctx context.Context, arg UpdateApplicantParams) (Applicant, error)
 	UpdateApplication(ctx context.Context, arg UpdateApplicationParams) (Application, error)
 	UpdateAsset(ctx context.Context, arg UpdateAssetParams) (ApplicationAsset, error)
+	UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error
 	UpdateLiability(ctx context.Context, arg UpdateLiabilityParams) (ApplicationLiability, error)
 	UpdateSurveyStatus(ctx context.Context, arg UpdateSurveyStatusParams) (ApplicationSurvey, error)
 	UpsertApplicantAttribute(ctx context.Context, arg UpsertApplicantAttributeParams) (ApplicantAttribute, error)

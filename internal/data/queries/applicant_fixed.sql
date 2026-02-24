@@ -44,3 +44,26 @@ SELECT * FROM applicant_attributes WHERE applicant_id = ANY($1::uuid[]);
 
 -- name: DeleteApplicantAttributes :exec
 DELETE FROM applicant_attributes WHERE applicant_id = $1;
+
+-- name: CreateAttributeRegistry :exec
+INSERT INTO custom_column_attribute_registries (
+    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+) ON CONFLICT (attribute_code) DO UPDATE SET
+    applies_to = EXCLUDED.applies_to,
+    scope = EXCLUDED.scope,
+    value_type = EXCLUDED.value_type,
+    category = EXCLUDED.category,
+    is_required = EXCLUDED.is_required,
+    risk_relevant = EXCLUDED.risk_relevant,
+    description = EXCLUDED.description,
+    ui_icon = EXCLUDED.ui_icon,
+    ui_label = EXCLUDED.ui_label;
+
+-- name: ListAttributeRegistries :many
+SELECT * FROM custom_column_attribute_registries
+WHERE (sqlc.narg('applies_to')::text IS NULL OR applies_to = sqlc.arg('applies_to') OR applies_to = 'BOTH')
+  AND (sqlc.narg('scope')::text IS NULL OR scope = sqlc.arg('scope') OR scope = 'BOTH')
+ORDER BY category, attribute_code;
+

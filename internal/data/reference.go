@@ -147,11 +147,26 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
 	return r.data.db.CreateAttributeRegistry(ctx, db.CreateAttributeRegistryParams{
 		AttributeCode: attr.AttrKey,
-		AppliesTo:     "BOTH", // Default to BOTH for Registry creation
+		AppliesTo:     "BOTH",
 		Scope:         "APPLICANT",
 		ValueType:     attr.DataType,
 		Category:      sql.NullString{String: attr.Category, Valid: true},
 		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
+		Description:   sql.NullString{String: attr.AttrName, Valid: true},
+		UiIcon:        sql.NullString{String: attr.UiIcon, Valid: true},
+		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: true},
+	})
+}
+
+func (r *referenceRepo) UpdateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
+	return r.data.db.UpdateAttributeRegistry(ctx, db.UpdateAttributeRegistryParams{
+		AttributeCode: attr.AttrKey,
+		AppliesTo:     "BOTH",
+		Scope:         "APPLICANT",
+		ValueType:     attr.DataType,
+		Category:      sql.NullString{String: attr.Category, Valid: true},
+		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
+		RiskRelevant:  sql.NullBool{Bool: false, Valid: true},
 		Description:   sql.NullString{String: attr.AttrName, Valid: true},
 		UiIcon:        sql.NullString{String: attr.UiIcon, Valid: true},
 		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: true},
