@@ -81,7 +81,6 @@ type Application struct {
 	Attributes         []ApplicationAttribute
 	Parties            []ApplicationParty // Added to support Related Party
 	CreatedAt          time.Time
-	UpdatedAt          time.Time
 
 	// Domain Events
 	events []interface{}
@@ -147,7 +146,6 @@ func (a *Application) Submit() error {
 		return fmt.Errorf("loan amount cannot be zero")
 	}
 	a.Status = StatusSubmitted
-	a.UpdatedAt = time.Now()
 	// a.AddEvent(ApplicationSubmittedEvent{ApplicationID: a.ID})
 	return nil
 }
@@ -176,7 +174,6 @@ func (a *Application) TransitionTo(newStatus ApplicationStatus) error {
 	}
 
 	a.Status = newStatus
-	a.UpdatedAt = time.Now()
 
 	// Logic for POINT 22: Archiving & Audit Log
 	// If a status is terminal, we can consider it "Archived" for future edits
@@ -278,7 +275,7 @@ func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, 
 
 	// 2. Logic: Auto-add Related Party (Borrorwer as main party)
 	borID, err := uc.repo.SaveParty(ctx, &Party{
-		PartyType:   applicant.HeadType,
+		PartyType:   applicant.ApplicantType,
 		Name:        applicant.FullName,
 		Identifier:  applicant.IdentityNumber,
 		DateOfBirth: applicant.BirthDate,
@@ -288,7 +285,7 @@ func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, 
 	}
 
 	// Logic: If Individual, try to find spouse in attributes or mock spouse
-	if applicant.HeadType == "personal" {
+	if applicant.ApplicantType == "personal" {
 		// Mock: automatically add spouse if exists in attributes
 		uc.repo.AddPartyToApplication(ctx, id, uuid.New(), "SPOUSE", true)
 	}

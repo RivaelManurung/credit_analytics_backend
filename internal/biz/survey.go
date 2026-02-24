@@ -10,12 +10,12 @@ import (
 )
 
 type SurveyTemplate struct {
-	ID           uuid.UUID
-	TemplateCode string
-	TemplateName string
-	HeadType     string
-	ProductID    uuid.UUID
-	Active       bool
+	ID            uuid.UUID
+	TemplateCode  string
+	TemplateName  string
+	ApplicantType string
+	ProductID     uuid.UUID
+	Active        bool
 }
 
 type ApplicationSurvey struct {

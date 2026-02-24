@@ -42,22 +42,22 @@ func (s *SurveyService) ListSurveysByApplication(ctx context.Context, req *pb.Li
 func (s *SurveyService) CreateSurveyTemplate(ctx context.Context, req *pb.CreateSurveyTemplateRequest) (*pb.SurveyTemplate, error) {
 	productID, _ := uuid.Parse(req.ProductId)
 	t, err := s.uc.CreateSurveyTemplate(ctx, &biz.SurveyTemplate{
-		TemplateCode: req.TemplateCode,
-		TemplateName: req.TemplateName,
-		HeadType:     req.HeadType,
-		ProductID:    productID,
-		Active:       req.Active,
+		TemplateCode:  req.TemplateCode,
+		TemplateName:  req.TemplateName,
+		ApplicantType: req.ApplicantType,
+		ProductID:     productID,
+		Active:        req.Active,
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &pb.SurveyTemplate{
-		Id:           t.ID.String(),
-		TemplateCode: t.TemplateCode,
-		TemplateName: t.TemplateName,
-		HeadType:     t.HeadType,
-		ProductId:    t.ProductID.String(),
-		Active:       t.Active,
+		Id:            t.ID.String(),
+		TemplateCode:  t.TemplateCode,
+		TemplateName:  t.TemplateName,
+		ApplicantType: t.ApplicantType,
+		ProductId:     t.ProductID.String(),
+		Active:        t.Active,
 	}, nil
 }
 
@@ -69,12 +69,12 @@ func (s *SurveyService) ListSurveyTemplates(ctx context.Context, req *pb.ListSur
 	var res []*pb.SurveyTemplate
 	for _, t := range templates {
 		res = append(res, &pb.SurveyTemplate{
-			Id:           t.ID.String(),
-			TemplateCode: t.TemplateCode,
-			TemplateName: t.TemplateName,
-			HeadType:     t.HeadType,
-			ProductId:    t.ProductID.String(),
-			Active:       t.Active,
+			Id:            t.ID.String(),
+			TemplateCode:  t.TemplateCode,
+			TemplateName:  t.TemplateName,
+			ApplicantType: t.ApplicantType,
+			ProductId:     t.ProductID.String(),
+			Active:        t.Active,
 		})
 	}
 	return &pb.ListSurveyTemplatesResponse{Templates: res}, nil

@@ -140,7 +140,7 @@ message ListAttributeRegistryResponse {
 }
 
 message ListSurveyTemplatesRequest {
-  string head_type = 1;
+  string applicant_type = 1;
   string product_id = 2;
 }
 

@@ -7,16 +7,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE applicants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    head_type VARCHAR(20) NOT NULL, -- personal | corporate
+    applicant_type VARCHAR(20) NOT NULL, -- personal | corporate
     identity_number VARCHAR(100),
     tax_id VARCHAR(100),
     full_name VARCHAR(255),
     birth_date DATE,
     establishment_date DATE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP WITH TIME ZONE
+    created_by UUID
 );
 
 CREATE TABLE applicant_attributes (
@@ -77,9 +75,7 @@ CREATE TABLE applications (
     branch_code VARCHAR(50) NOT NULL REFERENCES branches(branch_code),
     submitted_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_by UUID,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP WITH TIME ZONE
+    created_by UUID
 );
 
 CREATE TABLE application_attributes (
@@ -143,7 +139,7 @@ CREATE TABLE survey_templates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     template_code VARCHAR(100) UNIQUE,
     template_name VARCHAR(255),
-    head_type VARCHAR(20), -- personal | corporate | both
+    applicant_type VARCHAR(20), -- personal | corporate | both
     product_id UUID REFERENCES loan_products(id),
     active BOOLEAN DEFAULT TRUE
 );

@@ -20,7 +20,7 @@ INSERT INTO applications (
     status, branch_code, created_by
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
-) RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at
+) RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
 `
 
 type CreateApplicationParams struct {
@@ -70,8 +70,6 @@ func (q *Queries) CreateApplication(ctx context.Context, arg CreateApplicationPa
 		&i.SubmittedAt,
 		&i.CreatedAt,
 		&i.CreatedBy,
-		&i.UpdatedAt,
-		&i.DeletedAt,
 	)
 	return i, err
 }
@@ -191,7 +189,7 @@ func (q *Queries) DeleteApplicationAttributes(ctx context.Context, applicationID
 }
 
 const getApplication = `-- name: GetApplication :one
-SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at FROM applications WHERE id = $1 AND deleted_at IS NULL LIMIT 1
+SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by FROM applications WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (Application, error) {
@@ -213,8 +211,6 @@ func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (Application
 		&i.SubmittedAt,
 		&i.CreatedAt,
 		&i.CreatedBy,
-		&i.UpdatedAt,
-		&i.DeletedAt,
 	)
 	return i, err
 }
@@ -338,9 +334,8 @@ func (q *Queries) ListApplicationAttributesByIDs(ctx context.Context, dollar_1 [
 }
 
 const listApplications = `-- name: ListApplications :many
-SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at FROM applications 
-WHERE deleted_at IS NULL
-  AND ($2::text IS NULL OR status = $2)
+SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by FROM applications 
+WHERE ($2::text IS NULL OR status = $2)
   AND ($3::uuid IS NULL OR applicant_id = $3)
   AND (
     ($4::timestamp IS NULL AND $5::uuid IS NULL)
@@ -389,8 +384,6 @@ func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsPara
 			&i.SubmittedAt,
 			&i.CreatedAt,
 			&i.CreatedBy,
-			&i.UpdatedAt,
-			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -440,15 +433,6 @@ func (q *Queries) ListStatusLogs(ctx context.Context, applicationID uuid.UUID) (
 	return items, nil
 }
 
-const softDeleteApplication = `-- name: SoftDeleteApplication :exec
-UPDATE applications SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1
-`
-
-func (q *Queries) SoftDeleteApplication(ctx context.Context, id uuid.UUID) error {
-	_, err := q.db.ExecContext(ctx, softDeleteApplication, id)
-	return err
-}
-
 const updateApplication = `-- name: UpdateApplication :one
 UPDATE applications SET 
     applicant_id = $2, 
@@ -459,9 +443,8 @@ UPDATE applications SET
     interest_type = $7,
     interest_rate = $8,
     loan_purpose = $9,
-    status = $10,
-    updated_at = CURRENT_TIMESTAMP 
-WHERE id = $1 RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by, updated_at, deleted_at
+    status = $10
+WHERE id = $1 RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
 `
 
 type UpdateApplicationParams struct {
@@ -507,8 +490,6 @@ func (q *Queries) UpdateApplication(ctx context.Context, arg UpdateApplicationPa
 		&i.SubmittedAt,
 		&i.CreatedAt,
 		&i.CreatedBy,
-		&i.UpdatedAt,
-		&i.DeletedAt,
 	)
 	return i, err
 }

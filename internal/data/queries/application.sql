@@ -8,12 +8,11 @@ INSERT INTO applications (
 ) RETURNING *;
 
 -- name: GetApplication :one
-SELECT * FROM applications WHERE id = $1 AND deleted_at IS NULL LIMIT 1;
+SELECT * FROM applications WHERE id = $1 LIMIT 1;
 
 -- name: ListApplications :many
 SELECT * FROM applications 
-WHERE deleted_at IS NULL
-  AND (sqlc.narg('status')::text IS NULL OR status = sqlc.narg('status'))
+WHERE (sqlc.narg('status')::text IS NULL OR status = sqlc.narg('status'))
   AND (sqlc.narg('applicant_id')::uuid IS NULL OR applicant_id = sqlc.narg('applicant_id'))
   AND (
     (sqlc.narg('cursor_created_at')::timestamp IS NULL AND sqlc.narg('cursor_id')::uuid IS NULL)
@@ -32,12 +31,9 @@ UPDATE applications SET
     interest_type = $7,
     interest_rate = $8,
     loan_purpose = $9,
-    status = $10,
-    updated_at = CURRENT_TIMESTAMP 
+    status = $10
 WHERE id = $1 RETURNING *;
 
--- name: SoftDeleteApplication :exec
-UPDATE applications SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1;
 
 -- name: GetApplicationAttributes :many
 SELECT * FROM application_attributes WHERE application_id = $1;

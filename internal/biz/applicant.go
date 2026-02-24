@@ -11,7 +11,7 @@ import (
 // Applicant Domain Model
 type Applicant struct {
 	ID                uuid.UUID
-	HeadType          string
+	ApplicantType     string
 	IdentityNumber    string
 	TaxID             string
 	FullName          string
@@ -19,7 +19,6 @@ type Applicant struct {
 	EstablishmentDate time.Time
 	CreatedBy         uuid.UUID
 	CreatedAt         time.Time
-	UpdatedAt         time.Time
 	Attributes        []ApplicantAttribute
 }
 

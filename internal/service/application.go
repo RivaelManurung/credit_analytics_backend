@@ -266,7 +266,6 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 		})
 	}
 	res.CreatedAt = timestamppb.New(app.CreatedAt)
-	res.UpdatedAt = timestamppb.New(app.UpdatedAt)
 	return res
 }
 

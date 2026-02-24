@@ -382,6 +382,5 @@ func mapToBiz(app *db.Application) *biz.Application {
 		Status:             biz.ApplicationStatus(app.Status),
 		BranchCode:         app.BranchCode,
 		CreatedAt:          app.CreatedAt.Time,
-		UpdatedAt:          app.UpdatedAt.Time,
 	}
 }

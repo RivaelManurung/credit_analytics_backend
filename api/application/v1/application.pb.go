@@ -145,7 +145,6 @@ type Application struct {
 	Attributes         []*ApplicationAttribute `protobuf:"bytes,13,rep,name=attributes,proto3" json:"attributes,omitempty"`
 	SubmittedAt        *timestamppb.Timestamp  `protobuf:"bytes,14,opt,name=submitted_at,json=submittedAt,proto3" json:"submitted_at,omitempty"`
 	CreatedAt          *timestamppb.Timestamp  `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt          *timestamppb.Timestamp  `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -281,13 +280,6 @@ func (x *Application) GetSubmittedAt() *timestamppb.Timestamp {
 func (x *Application) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *Application) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
 	}
 	return nil
 }
@@ -1538,7 +1530,7 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"\x15ApplicationAttributes\x12H\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2(.api.application.v1.ApplicationAttributeR\n" +
-	"attributes\"\x8e\x05\n" +
+	"attributes\"\xd3\x04\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fapplicant_id\x18\x02 \x01(\tR\vapplicantId\x12\x1d\n" +
@@ -1561,9 +1553,7 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"attributes\x12=\n" +
 	"\fsubmitted_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\vsubmittedAt\x129\n" +
 	"\n" +
-	"created_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xee\x01\n" +
+	"created_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xee\x01\n" +
 	"\x13ApplicationDocument\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplication_id\x18\x02 \x01(\tR\rapplicationId\x12#\n" +
@@ -1732,45 +1722,44 @@ var file_application_v1_application_proto_depIdxs = []int32{
 	0,  // 1: api.application.v1.Application.attributes:type_name -> api.application.v1.ApplicationAttribute
 	22, // 2: api.application.v1.Application.submitted_at:type_name -> google.protobuf.Timestamp
 	22, // 3: api.application.v1.Application.created_at:type_name -> google.protobuf.Timestamp
-	22, // 4: api.application.v1.Application.updated_at:type_name -> google.protobuf.Timestamp
-	22, // 5: api.application.v1.ApplicationDocument.uploaded_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: api.application.v1.CreateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
-	2,  // 7: api.application.v1.ListApplicationsResponse.applications:type_name -> api.application.v1.Application
-	0,  // 8: api.application.v1.UpdateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
-	0,  // 9: api.application.v1.UpsertApplicationAttributesRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
-	4,  // 10: api.application.v1.ListApplicationPartiesResponse.parties:type_name -> api.application.v1.ApplicationParty
-	3,  // 11: api.application.v1.ListApplicationDocumentsResponse.documents:type_name -> api.application.v1.ApplicationDocument
-	5,  // 12: api.application.v1.ApplicationService.CreateApplication:input_type -> api.application.v1.CreateApplicationRequest
-	6,  // 13: api.application.v1.ApplicationService.GetApplication:input_type -> api.application.v1.GetApplicationRequest
-	7,  // 14: api.application.v1.ApplicationService.ListApplications:input_type -> api.application.v1.ListApplicationsRequest
-	9,  // 15: api.application.v1.ApplicationService.UpdateApplication:input_type -> api.application.v1.UpdateApplicationRequest
-	10, // 16: api.application.v1.ApplicationService.GetApplicationAttributes:input_type -> api.application.v1.GetApplicationAttributesRequest
-	11, // 17: api.application.v1.ApplicationService.UpsertApplicationAttributes:input_type -> api.application.v1.UpsertApplicationAttributesRequest
-	12, // 18: api.application.v1.ApplicationService.ChangeApplicationStatus:input_type -> api.application.v1.ChangeApplicationStatusRequest
-	17, // 19: api.application.v1.ApplicationService.UploadApplicationDocument:input_type -> api.application.v1.UploadApplicationDocumentRequest
-	18, // 20: api.application.v1.ApplicationService.ListApplicationDocuments:input_type -> api.application.v1.ListApplicationDocumentsRequest
-	20, // 21: api.application.v1.ApplicationService.GetPresignedUrl:input_type -> api.application.v1.GetPresignedUrlRequest
-	13, // 22: api.application.v1.PartyService.AddPartyToApplication:input_type -> api.application.v1.AddPartyToApplicationRequest
-	14, // 23: api.application.v1.PartyService.RemovePartyFromApplication:input_type -> api.application.v1.RemovePartyFromApplicationRequest
-	15, // 24: api.application.v1.PartyService.ListApplicationParties:input_type -> api.application.v1.ListApplicationPartiesRequest
-	2,  // 25: api.application.v1.ApplicationService.CreateApplication:output_type -> api.application.v1.Application
-	2,  // 26: api.application.v1.ApplicationService.GetApplication:output_type -> api.application.v1.Application
-	8,  // 27: api.application.v1.ApplicationService.ListApplications:output_type -> api.application.v1.ListApplicationsResponse
-	2,  // 28: api.application.v1.ApplicationService.UpdateApplication:output_type -> api.application.v1.Application
-	1,  // 29: api.application.v1.ApplicationService.GetApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
-	1,  // 30: api.application.v1.ApplicationService.UpsertApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
-	2,  // 31: api.application.v1.ApplicationService.ChangeApplicationStatus:output_type -> api.application.v1.Application
-	3,  // 32: api.application.v1.ApplicationService.UploadApplicationDocument:output_type -> api.application.v1.ApplicationDocument
-	19, // 33: api.application.v1.ApplicationService.ListApplicationDocuments:output_type -> api.application.v1.ListApplicationDocumentsResponse
-	21, // 34: api.application.v1.ApplicationService.GetPresignedUrl:output_type -> api.application.v1.GetPresignedUrlResponse
-	4,  // 35: api.application.v1.PartyService.AddPartyToApplication:output_type -> api.application.v1.ApplicationParty
-	23, // 36: api.application.v1.PartyService.RemovePartyFromApplication:output_type -> google.protobuf.Empty
-	16, // 37: api.application.v1.PartyService.ListApplicationParties:output_type -> api.application.v1.ListApplicationPartiesResponse
-	25, // [25:38] is the sub-list for method output_type
-	12, // [12:25] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	22, // 4: api.application.v1.ApplicationDocument.uploaded_at:type_name -> google.protobuf.Timestamp
+	0,  // 5: api.application.v1.CreateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
+	2,  // 6: api.application.v1.ListApplicationsResponse.applications:type_name -> api.application.v1.Application
+	0,  // 7: api.application.v1.UpdateApplicationRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
+	0,  // 8: api.application.v1.UpsertApplicationAttributesRequest.attributes:type_name -> api.application.v1.ApplicationAttribute
+	4,  // 9: api.application.v1.ListApplicationPartiesResponse.parties:type_name -> api.application.v1.ApplicationParty
+	3,  // 10: api.application.v1.ListApplicationDocumentsResponse.documents:type_name -> api.application.v1.ApplicationDocument
+	5,  // 11: api.application.v1.ApplicationService.CreateApplication:input_type -> api.application.v1.CreateApplicationRequest
+	6,  // 12: api.application.v1.ApplicationService.GetApplication:input_type -> api.application.v1.GetApplicationRequest
+	7,  // 13: api.application.v1.ApplicationService.ListApplications:input_type -> api.application.v1.ListApplicationsRequest
+	9,  // 14: api.application.v1.ApplicationService.UpdateApplication:input_type -> api.application.v1.UpdateApplicationRequest
+	10, // 15: api.application.v1.ApplicationService.GetApplicationAttributes:input_type -> api.application.v1.GetApplicationAttributesRequest
+	11, // 16: api.application.v1.ApplicationService.UpsertApplicationAttributes:input_type -> api.application.v1.UpsertApplicationAttributesRequest
+	12, // 17: api.application.v1.ApplicationService.ChangeApplicationStatus:input_type -> api.application.v1.ChangeApplicationStatusRequest
+	17, // 18: api.application.v1.ApplicationService.UploadApplicationDocument:input_type -> api.application.v1.UploadApplicationDocumentRequest
+	18, // 19: api.application.v1.ApplicationService.ListApplicationDocuments:input_type -> api.application.v1.ListApplicationDocumentsRequest
+	20, // 20: api.application.v1.ApplicationService.GetPresignedUrl:input_type -> api.application.v1.GetPresignedUrlRequest
+	13, // 21: api.application.v1.PartyService.AddPartyToApplication:input_type -> api.application.v1.AddPartyToApplicationRequest
+	14, // 22: api.application.v1.PartyService.RemovePartyFromApplication:input_type -> api.application.v1.RemovePartyFromApplicationRequest
+	15, // 23: api.application.v1.PartyService.ListApplicationParties:input_type -> api.application.v1.ListApplicationPartiesRequest
+	2,  // 24: api.application.v1.ApplicationService.CreateApplication:output_type -> api.application.v1.Application
+	2,  // 25: api.application.v1.ApplicationService.GetApplication:output_type -> api.application.v1.Application
+	8,  // 26: api.application.v1.ApplicationService.ListApplications:output_type -> api.application.v1.ListApplicationsResponse
+	2,  // 27: api.application.v1.ApplicationService.UpdateApplication:output_type -> api.application.v1.Application
+	1,  // 28: api.application.v1.ApplicationService.GetApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
+	1,  // 29: api.application.v1.ApplicationService.UpsertApplicationAttributes:output_type -> api.application.v1.ApplicationAttributes
+	2,  // 30: api.application.v1.ApplicationService.ChangeApplicationStatus:output_type -> api.application.v1.Application
+	3,  // 31: api.application.v1.ApplicationService.UploadApplicationDocument:output_type -> api.application.v1.ApplicationDocument
+	19, // 32: api.application.v1.ApplicationService.ListApplicationDocuments:output_type -> api.application.v1.ListApplicationDocumentsResponse
+	21, // 33: api.application.v1.ApplicationService.GetPresignedUrl:output_type -> api.application.v1.GetPresignedUrlResponse
+	4,  // 34: api.application.v1.PartyService.AddPartyToApplication:output_type -> api.application.v1.ApplicationParty
+	23, // 35: api.application.v1.PartyService.RemovePartyFromApplication:output_type -> google.protobuf.Empty
+	16, // 36: api.application.v1.PartyService.ListApplicationParties:output_type -> api.application.v1.ListApplicationPartiesResponse
+	24, // [24:37] is the sub-list for method output_type
+	11, // [11:24] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_application_v1_application_proto_init() }

@@ -849,7 +849,7 @@ func (x *ListAttributeRegistryResponse) GetAttributes() []*AttributeRegistry {
 
 type ListSurveyTemplatesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	HeadType      string                 `protobuf:"bytes,1,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
+	ApplicantType string                 `protobuf:"bytes,1,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
 	ProductId     string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -885,9 +885,9 @@ func (*ListSurveyTemplatesRequest) Descriptor() ([]byte, []int) {
 	return file_reference_v1_reference_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *ListSurveyTemplatesRequest) GetHeadType() string {
+func (x *ListSurveyTemplatesRequest) GetApplicantType() string {
 	if x != nil {
-		return x.HeadType
+		return x.ApplicantType
 	}
 	return ""
 }
@@ -1055,9 +1055,9 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\x1dListAttributeRegistryResponse\x12C\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2#.api.reference.v1.AttributeRegistryR\n" +
-	"attributes\"X\n" +
-	"\x1aListSurveyTemplatesRequest\x12\x1b\n" +
-	"\thead_type\x18\x01 \x01(\tR\bheadType\x12\x1d\n" +
+	"attributes\"b\n" +
+	"\x1aListSurveyTemplatesRequest\x12%\n" +
+	"\x0eapplicant_type\x18\x01 \x01(\tR\rapplicantType\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x02 \x01(\tR\tproductId\"]\n" +
 	"\x1bListSurveyTemplatesResponse\x12>\n" +

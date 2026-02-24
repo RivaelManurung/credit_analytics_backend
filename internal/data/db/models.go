@@ -12,7 +12,7 @@ import (
 
 type Applicant struct {
 	ID                uuid.UUID      `json:"id"`
-	HeadType          string         `json:"head_type"`
+	ApplicantType     string         `json:"applicant_type"`
 	IdentityNumber    sql.NullString `json:"identity_number"`
 	TaxID             sql.NullString `json:"tax_id"`
 	FullName          sql.NullString `json:"full_name"`
@@ -20,8 +20,6 @@ type Applicant struct {
 	EstablishmentDate sql.NullTime   `json:"establishment_date"`
 	CreatedAt         sql.NullTime   `json:"created_at"`
 	CreatedBy         uuid.NullUUID  `json:"created_by"`
-	UpdatedAt         sql.NullTime   `json:"updated_at"`
-	DeletedAt         sql.NullTime   `json:"deleted_at"`
 }
 
 type ApplicantAttribute struct {
@@ -49,8 +47,6 @@ type Application struct {
 	SubmittedAt        sql.NullTime   `json:"submitted_at"`
 	CreatedAt          sql.NullTime   `json:"created_at"`
 	CreatedBy          uuid.NullUUID  `json:"created_by"`
-	UpdatedAt          sql.NullTime   `json:"updated_at"`
-	DeletedAt          sql.NullTime   `json:"deleted_at"`
 }
 
 type ApplicationAsset struct {
@@ -349,10 +345,10 @@ type SurveySection struct {
 }
 
 type SurveyTemplate struct {
-	ID           uuid.UUID      `json:"id"`
-	TemplateCode sql.NullString `json:"template_code"`
-	TemplateName sql.NullString `json:"template_name"`
-	HeadType     sql.NullString `json:"head_type"`
-	ProductID    uuid.NullUUID  `json:"product_id"`
-	Active       sql.NullBool   `json:"active"`
+	ID            uuid.UUID      `json:"id"`
+	TemplateCode  sql.NullString `json:"template_code"`
+	TemplateName  sql.NullString `json:"template_name"`
+	ApplicantType sql.NullString `json:"applicant_type"`
+	ProductID     uuid.NullUUID  `json:"product_id"`
+	Active        sql.NullBool   `json:"active"`
 }

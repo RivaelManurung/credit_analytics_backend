@@ -1,6 +1,6 @@
 -- name: CreateSurveyTemplate :one
 INSERT INTO survey_templates (
-    template_code, template_name, head_type, product_id, active
+    template_code, template_name, applicant_type, product_id, active
 ) VALUES ($1, $2, $3, $4, $5) RETURNING *;
 
 -- name: ListSurveyTemplates :many

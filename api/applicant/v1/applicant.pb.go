@@ -94,7 +94,7 @@ func (x *ApplicantAttribute) GetUpdatedAt() *timestamppb.Timestamp {
 type Applicant struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	HeadType          string                 `protobuf:"bytes,2,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
+	ApplicantType     string                 `protobuf:"bytes,2,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,3,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,4,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,5,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -102,7 +102,6 @@ type Applicant struct {
 	EstablishmentDate string                 `protobuf:"bytes,7,opt,name=establishment_date,json=establishmentDate,proto3" json:"establishment_date,omitempty"`
 	Attributes        []*ApplicantAttribute  `protobuf:"bytes,8,rep,name=attributes,proto3" json:"attributes,omitempty"`
 	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -144,9 +143,9 @@ func (x *Applicant) GetId() string {
 	return ""
 }
 
-func (x *Applicant) GetHeadType() string {
+func (x *Applicant) GetApplicantType() string {
 	if x != nil {
-		return x.HeadType
+		return x.ApplicantType
 	}
 	return ""
 }
@@ -200,13 +199,6 @@ func (x *Applicant) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Applicant) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
 type ApplicantAttributes struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Attributes    []*ApplicantAttribute  `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty"`
@@ -253,7 +245,7 @@ func (x *ApplicantAttributes) GetAttributes() []*ApplicantAttribute {
 
 type CreateApplicantRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	HeadType          string                 `protobuf:"bytes,1,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
+	ApplicantType     string                 `protobuf:"bytes,1,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,2,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,3,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,4,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -294,9 +286,9 @@ func (*CreateApplicantRequest) Descriptor() ([]byte, []int) {
 	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateApplicantRequest) GetHeadType() string {
+func (x *CreateApplicantRequest) GetApplicantType() string {
 	if x != nil {
-		return x.HeadType
+		return x.ApplicantType
 	}
 	return ""
 }
@@ -434,7 +426,7 @@ func (x *GetApplicantAttributesRequest) GetApplicantId() string {
 type UpdateApplicantRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	HeadType          string                 `protobuf:"bytes,2,opt,name=head_type,json=headType,proto3" json:"head_type,omitempty"`
+	ApplicantType     string                 `protobuf:"bytes,2,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
 	IdentityNumber    string                 `protobuf:"bytes,3,opt,name=identity_number,json=identityNumber,proto3" json:"identity_number,omitempty"`
 	TaxId             string                 `protobuf:"bytes,4,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`
 	FullName          string                 `protobuf:"bytes,5,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
@@ -482,9 +474,9 @@ func (x *UpdateApplicantRequest) GetId() string {
 	return ""
 }
 
-func (x *UpdateApplicantRequest) GetHeadType() string {
+func (x *UpdateApplicantRequest) GetApplicantType() string {
 	if x != nil {
-		return x.HeadType
+		return x.ApplicantType
 	}
 	return ""
 }
@@ -709,10 +701,10 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1b\n" +
 	"\tdata_type\x18\x03 \x01(\tR\bdataType\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9f\x03\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xee\x02\n" +
 	"\tApplicant\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
-	"\thead_type\x18\x02 \x01(\tR\bheadType\x12'\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
 	"\x0fidentity_number\x18\x03 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x04 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x05 \x01(\tR\bfullName\x12\x1d\n" +
@@ -723,16 +715,13 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"attributes\x18\b \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
 	"attributes\x129\n" +
 	"\n" +
-	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"[\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"[\n" +
 	"\x13ApplicantAttributes\x12D\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2$.api.applicant.v1.ApplicantAttributeR\n" +
-	"attributes\"\xa6\x02\n" +
-	"\x16CreateApplicantRequest\x12\x1b\n" +
-	"\thead_type\x18\x01 \x01(\tR\bheadType\x12'\n" +
+	"attributes\"\xb0\x02\n" +
+	"\x16CreateApplicantRequest\x12%\n" +
+	"\x0eapplicant_type\x18\x01 \x01(\tR\rapplicantType\x12'\n" +
 	"\x0fidentity_number\x18\x02 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x03 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x04 \x01(\tR\bfullName\x12\x1d\n" +
@@ -745,10 +734,10 @@ const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\x13GetApplicantRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"B\n" +
 	"\x1dGetApplicantAttributesRequest\x12!\n" +
-	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\"\xb6\x02\n" +
+	"\fapplicant_id\x18\x01 \x01(\tR\vapplicantId\"\xc0\x02\n" +
 	"\x16UpdateApplicantRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
-	"\thead_type\x18\x02 \x01(\tR\bheadType\x12'\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +
 	"\x0fidentity_number\x18\x03 \x01(\tR\x0eidentityNumber\x12\x15\n" +
 	"\x06tax_id\x18\x04 \x01(\tR\x05taxId\x12\x1b\n" +
 	"\tfull_name\x18\x05 \x01(\tR\bfullName\x12\x1d\n" +
@@ -812,29 +801,28 @@ var file_applicant_v1_applicant_proto_depIdxs = []int32{
 	10, // 0: api.applicant.v1.ApplicantAttribute.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 1: api.applicant.v1.Applicant.attributes:type_name -> api.applicant.v1.ApplicantAttribute
 	10, // 2: api.applicant.v1.Applicant.created_at:type_name -> google.protobuf.Timestamp
-	10, // 3: api.applicant.v1.Applicant.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: api.applicant.v1.ApplicantAttributes.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	0,  // 5: api.applicant.v1.CreateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	0,  // 6: api.applicant.v1.UpdateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	1,  // 7: api.applicant.v1.ListApplicantsResponse.applicants:type_name -> api.applicant.v1.Applicant
-	0,  // 8: api.applicant.v1.UpsertApplicantAttributesRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
-	7,  // 9: api.applicant.v1.ApplicantService.ListApplicants:input_type -> api.applicant.v1.ListApplicantsRequest
-	3,  // 10: api.applicant.v1.ApplicantService.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
-	4,  // 11: api.applicant.v1.ApplicantService.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
-	6,  // 12: api.applicant.v1.ApplicantService.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
-	5,  // 13: api.applicant.v1.ApplicantService.GetApplicantAttributes:input_type -> api.applicant.v1.GetApplicantAttributesRequest
-	9,  // 14: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:input_type -> api.applicant.v1.UpsertApplicantAttributesRequest
-	8,  // 15: api.applicant.v1.ApplicantService.ListApplicants:output_type -> api.applicant.v1.ListApplicantsResponse
-	1,  // 16: api.applicant.v1.ApplicantService.CreateApplicant:output_type -> api.applicant.v1.Applicant
-	1,  // 17: api.applicant.v1.ApplicantService.GetApplicant:output_type -> api.applicant.v1.Applicant
-	1,  // 18: api.applicant.v1.ApplicantService.UpdateApplicant:output_type -> api.applicant.v1.Applicant
-	2,  // 19: api.applicant.v1.ApplicantService.GetApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
-	2,  // 20: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
-	15, // [15:21] is the sub-list for method output_type
-	9,  // [9:15] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	0,  // 3: api.applicant.v1.ApplicantAttributes.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	0,  // 4: api.applicant.v1.CreateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	0,  // 5: api.applicant.v1.UpdateApplicantRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	1,  // 6: api.applicant.v1.ListApplicantsResponse.applicants:type_name -> api.applicant.v1.Applicant
+	0,  // 7: api.applicant.v1.UpsertApplicantAttributesRequest.attributes:type_name -> api.applicant.v1.ApplicantAttribute
+	7,  // 8: api.applicant.v1.ApplicantService.ListApplicants:input_type -> api.applicant.v1.ListApplicantsRequest
+	3,  // 9: api.applicant.v1.ApplicantService.CreateApplicant:input_type -> api.applicant.v1.CreateApplicantRequest
+	4,  // 10: api.applicant.v1.ApplicantService.GetApplicant:input_type -> api.applicant.v1.GetApplicantRequest
+	6,  // 11: api.applicant.v1.ApplicantService.UpdateApplicant:input_type -> api.applicant.v1.UpdateApplicantRequest
+	5,  // 12: api.applicant.v1.ApplicantService.GetApplicantAttributes:input_type -> api.applicant.v1.GetApplicantAttributesRequest
+	9,  // 13: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:input_type -> api.applicant.v1.UpsertApplicantAttributesRequest
+	8,  // 14: api.applicant.v1.ApplicantService.ListApplicants:output_type -> api.applicant.v1.ListApplicantsResponse
+	1,  // 15: api.applicant.v1.ApplicantService.CreateApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 16: api.applicant.v1.ApplicantService.GetApplicant:output_type -> api.applicant.v1.Applicant
+	1,  // 17: api.applicant.v1.ApplicantService.UpdateApplicant:output_type -> api.applicant.v1.Applicant
+	2,  // 18: api.applicant.v1.ApplicantService.GetApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
+	2,  // 19: api.applicant.v1.ApplicantService.UpsertApplicantAttributes:output_type -> api.applicant.v1.ApplicantAttributes
+	14, // [14:20] is the sub-list for method output_type
+	8,  // [8:14] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_applicant_v1_applicant_proto_init() }

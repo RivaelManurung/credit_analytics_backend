@@ -56,7 +56,6 @@ type Querier interface {
 	ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, error)
 	ListSurveysByApplication(ctx context.Context, applicationID uuid.NullUUID) ([]ApplicationSurvey, error)
 	RecordFinalDecision(ctx context.Context, arg RecordFinalDecisionParams) (ApplicationDecision, error)
-	SoftDeleteApplication(ctx context.Context, id uuid.UUID) error
 	SubmitCommitteeVote(ctx context.Context, arg SubmitCommitteeVoteParams) (ApplicationCommitteeVote, error)
 	UpdateApplicant(ctx context.Context, arg UpdateApplicantParams) (Applicant, error)
 	UpdateApplication(ctx context.Context, arg UpdateApplicationParams) (Application, error)

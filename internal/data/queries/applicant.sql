@@ -1,6 +1,6 @@
 -- name: CreateApplicant :one
 INSERT INTO applicants (
-    head_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
+    applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7
 ) RETURNING *;
@@ -10,7 +10,7 @@ SELECT * FROM applicants WHERE id = $1 LIMIT 1;
 
 -- name: UpdateApplicant :one
 UPDATE applicants SET 
-    head_type = $2,
+    applicant_type = $2,
     identity_number = $3,
     tax_id = $4,
     full_name = $5,
@@ -29,8 +29,7 @@ RETURNING *;
 
 -- name: ListApplicants :many
 SELECT * FROM applicants 
-WHERE deleted_at IS NULL
-  AND (
+WHERE (
     (sqlc.narg('cursor_created_at')::timestamp IS NULL AND sqlc.narg('cursor_id')::uuid IS NULL)
     OR (created_at, id) < (sqlc.narg('cursor_created_at')::timestamp, sqlc.narg('cursor_id')::uuid)
   )
