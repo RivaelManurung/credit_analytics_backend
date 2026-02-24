@@ -20,6 +20,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationReferenceServiceCreateAttributeRegistry = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
 const OperationReferenceServiceGetLoanProduct = "/api.reference.v1.ReferenceService/GetLoanProduct"
 const OperationReferenceServiceListApplicationStatuses = "/api.reference.v1.ReferenceService/ListApplicationStatuses"
 const OperationReferenceServiceListAttributeRegistry = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
@@ -30,6 +31,7 @@ const OperationReferenceServiceListLoanProducts = "/api.reference.v1.ReferenceSe
 const OperationReferenceServiceListSurveyTemplates = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
 
 type ReferenceServiceHTTPServer interface {
+	CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error)
 	GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error)
 	ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error)
 	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
@@ -50,6 +52,7 @@ func RegisterReferenceServiceHTTPServer(s *http.Server, srv ReferenceServiceHTTP
 	r.GET("/v1/reference/attribute-registry", _ReferenceService_ListAttributeRegistry0_HTTP_Handler(srv))
 	r.GET("/v1/reference/survey-templates", _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv))
 	r.GET("/v1/reference/gl-accounts", _ReferenceService_ListFinancialGLAccounts0_HTTP_Handler(srv))
+	r.POST("/v1/reference/attribute-registry", _ReferenceService_CreateAttributeRegistry0_HTTP_Handler(srv))
 }
 
 func _ReferenceService_ListLoanProducts0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
@@ -210,7 +213,30 @@ func _ReferenceService_ListFinancialGLAccounts0_HTTP_Handler(srv ReferenceServic
 	}
 }
 
+func _ReferenceService_CreateAttributeRegistry0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateAttributeRegistryRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceCreateAttributeRegistry)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateAttributeRegistry(ctx, req.(*CreateAttributeRegistryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ReferenceServiceHTTPClient interface {
+	CreateAttributeRegistry(ctx context.Context, req *CreateAttributeRegistryRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	GetLoanProduct(ctx context.Context, req *GetLoanProductRequest, opts ...http.CallOption) (rsp *LoanProduct, err error)
 	ListApplicationStatuses(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListApplicationStatusesResponse, err error)
 	ListAttributeRegistry(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListAttributeRegistryResponse, err error)
@@ -227,6 +253,19 @@ type ReferenceServiceHTTPClientImpl struct {
 
 func NewReferenceServiceHTTPClient(client *http.Client) ReferenceServiceHTTPClient {
 	return &ReferenceServiceHTTPClientImpl{client}
+}
+
+func (c *ReferenceServiceHTTPClientImpl) CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/v1/reference/attribute-registry"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationReferenceServiceCreateAttributeRegistry))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 func (c *ReferenceServiceHTTPClientImpl) GetLoanProduct(ctx context.Context, in *GetLoanProductRequest, opts ...http.CallOption) (*LoanProduct, error) {

@@ -44,6 +44,7 @@ type Querier interface {
 	ListApplicationStatuses(ctx context.Context) ([]ApplicationStatusRef, error)
 	ListApplications(ctx context.Context, arg ListApplicationsParams) ([]Application, error)
 	ListAssets(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAsset, error)
+	ListAttributeRegistries(ctx context.Context, arg ListAttributeRegistriesParams) ([]CustomColumnAttributeRegistry, error)
 	ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttributeRegistry, error)
 	ListBranches(ctx context.Context) ([]Branch, error)
 	ListFinancialFacts(ctx context.Context, applicationID uuid.UUID) ([]ApplicationFinancialFact, error)

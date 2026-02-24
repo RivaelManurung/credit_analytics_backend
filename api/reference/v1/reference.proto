@@ -55,6 +55,24 @@ service ReferenceService {
       get: "/v1/reference/gl-accounts"
     };
   }
+
+  rpc CreateAttributeRegistry (CreateAttributeRegistryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/reference/attribute-registry",
+      body: "*"
+    };
+  }
+}
+
+message CreateAttributeRegistryRequest {
+  string attribute_code = 1;
+  string applies_to = 2;
+  string scope = 3;
+  string value_type = 4;
+  string category = 5;
+  bool is_required = 6;
+  bool risk_relevant = 7;
+  string description = 8;
 }
 
 message LoanProduct {

@@ -243,6 +243,50 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 	return items, nil
 }
 
+const listAttributeRegistries = `-- name: ListAttributeRegistries :many
+SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description FROM custom_column_attribute_registries
+WHERE ($1::text IS NULL OR applies_to = $1 OR applies_to = 'BOTH')
+  AND ($2::text IS NULL OR scope = $2 OR scope = 'BOTH')
+ORDER BY category, attribute_code
+`
+
+type ListAttributeRegistriesParams struct {
+	AppliesTo sql.NullString `json:"applies_to"`
+	Scope     sql.NullString `json:"scope"`
+}
+
+func (q *Queries) ListAttributeRegistries(ctx context.Context, arg ListAttributeRegistriesParams) ([]CustomColumnAttributeRegistry, error) {
+	rows, err := q.db.QueryContext(ctx, listAttributeRegistries, arg.AppliesTo, arg.Scope)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []CustomColumnAttributeRegistry
+	for rows.Next() {
+		var i CustomColumnAttributeRegistry
+		if err := rows.Scan(
+			&i.AttributeCode,
+			&i.AppliesTo,
+			&i.Scope,
+			&i.ValueType,
+			&i.Category,
+			&i.IsRequired,
+			&i.RiskRelevant,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateApplicant = `-- name: UpdateApplicant :one
 UPDATE applicants SET 
     applicant_type = $2,

@@ -28,6 +28,7 @@ const (
 	ReferenceService_ListAttributeRegistry_FullMethodName   = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
 	ReferenceService_ListSurveyTemplates_FullMethodName     = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
 	ReferenceService_ListFinancialGLAccounts_FullMethodName = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
+	ReferenceService_CreateAttributeRegistry_FullMethodName = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
 )
 
 // ReferenceServiceClient is the client API for ReferenceService service.
@@ -42,6 +43,7 @@ type ReferenceServiceClient interface {
 	ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error)
 	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
 	ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error)
+	CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type referenceServiceClient struct {
@@ -132,6 +134,16 @@ func (c *referenceServiceClient) ListFinancialGLAccounts(ctx context.Context, in
 	return out, nil
 }
 
+func (c *referenceServiceClient) CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ReferenceService_CreateAttributeRegistry_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReferenceServiceServer is the server API for ReferenceService service.
 // All implementations must embed UnimplementedReferenceServiceServer
 // for forward compatibility.
@@ -144,6 +156,7 @@ type ReferenceServiceServer interface {
 	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
 	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
 	ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error)
+	CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedReferenceServiceServer()
 }
 
@@ -177,6 +190,9 @@ func (UnimplementedReferenceServiceServer) ListSurveyTemplates(context.Context, 
 }
 func (UnimplementedReferenceServiceServer) ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListFinancialGLAccounts not implemented")
+}
+func (UnimplementedReferenceServiceServer) CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateAttributeRegistry not implemented")
 }
 func (UnimplementedReferenceServiceServer) mustEmbedUnimplementedReferenceServiceServer() {}
 func (UnimplementedReferenceServiceServer) testEmbeddedByValue()                          {}
@@ -343,6 +359,24 @@ func _ReferenceService_ListFinancialGLAccounts_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReferenceService_CreateAttributeRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAttributeRegistryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).CreateAttributeRegistry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_CreateAttributeRegistry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).CreateAttributeRegistry(ctx, req.(*CreateAttributeRegistryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReferenceService_ServiceDesc is the grpc.ServiceDesc for ReferenceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -381,6 +415,10 @@ var ReferenceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListFinancialGLAccounts",
 			Handler:    _ReferenceService_ListFinancialGLAccounts_Handler,
+		},
+		{
+			MethodName: "CreateAttributeRegistry",
+			Handler:    _ReferenceService_CreateAttributeRegistry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

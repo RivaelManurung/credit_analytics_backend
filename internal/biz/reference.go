@@ -61,6 +61,7 @@ type ReferenceRepo interface {
 	ListApplicationStatuses(ctx context.Context) ([]*ApplicationStatusRef, error)
 	ListFinancialGLAccounts(ctx context.Context) ([]*FinancialGLAccount, error)
 	ListAttributeRegistry(ctx context.Context) ([]*AttributeRegistry, error)
+	CreateAttributeRegistry(ctx context.Context, attr *AttributeRegistry) error
 }
 
 type ReferenceUsecase struct {
@@ -98,4 +99,8 @@ func (uc *ReferenceUsecase) ListFinancialGLAccounts(ctx context.Context) ([]*Fin
 
 func (uc *ReferenceUsecase) ListAttributeRegistry(ctx context.Context) ([]*AttributeRegistry, error) {
 	return uc.repo.ListAttributeRegistry(ctx)
+}
+
+func (uc *ReferenceUsecase) CreateAttributeRegistry(ctx context.Context, attr *AttributeRegistry) error {
+	return uc.repo.CreateAttributeRegistry(ctx, attr)
 }

@@ -3,6 +3,8 @@ package data
 import (
 	"context"
 	"credit-analytics-backend/internal/biz"
+	"credit-analytics-backend/internal/data/db"
+	"database/sql"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -138,4 +140,16 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 		})
 	}
 	return res, nil
+}
+
+func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
+	return r.data.db.CreateAttributeRegistry(ctx, db.CreateAttributeRegistryParams{
+		AttributeCode: attr.AttrKey,
+		AppliesTo:     "BOTH", // Default to BOTH for Registry creation
+		Scope:         "APPLICANT",
+		ValueType:     attr.DataType,
+		Category:      sql.NullString{String: attr.Category, Valid: true},
+		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
+		Description:   sql.NullString{String: attr.AttrName, Valid: true},
+	})
 }

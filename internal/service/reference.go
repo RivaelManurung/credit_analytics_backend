@@ -148,6 +148,20 @@ func (s *ReferenceService) ListAttributeRegistry(ctx context.Context, req *empty
 	return &pb.ListAttributeRegistryResponse{Attributes: res}, nil
 }
 
+func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
+	err := s.uc.CreateAttributeRegistry(ctx, &biz.AttributeRegistry{
+		AttrKey:    req.AttributeCode,
+		AttrName:   req.Description,
+		DataType:   req.ValueType,
+		Category:   req.Category,
+		IsRequired: req.IsRequired,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *ReferenceService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesResponse, error) {
 	return &pb.ListSurveyTemplatesResponse{}, nil
 }

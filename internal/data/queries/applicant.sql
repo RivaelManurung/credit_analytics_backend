@@ -59,3 +59,9 @@ INSERT INTO custom_column_attribute_registries (
     risk_relevant = EXCLUDED.risk_relevant,
     description = EXCLUDED.description;
 
+-- name: ListAttributeRegistries :many
+SELECT * FROM custom_column_attribute_registries
+WHERE (sqlc.narg('applies_to')::text IS NULL OR applies_to = sqlc.arg('applies_to') OR applies_to = 'BOTH')
+  AND (sqlc.narg('scope')::text IS NULL OR scope = sqlc.arg('scope') OR scope = 'BOTH')
+ORDER BY category, attribute_code;
+
