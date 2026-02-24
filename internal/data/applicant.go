@@ -209,12 +209,12 @@ func (r *applicantRepo) List(ctx context.Context, params biz.PaginationParams) (
 	}, nil
 }
 
+// ListAll is for admin/internal use — prefer List() with pagination for user-facing APIs.
 func (r *applicantRepo) ListAll(ctx context.Context) ([]*biz.Applicant, error) {
-	applicants, err := r.data.db.ListApplicants(ctx, db.ListApplicantsParams{Limit: 1000})
+	applicants, err := r.data.db.ListApplicants(ctx, db.ListApplicantsParams{Limit: 100})
 	if err != nil {
 		return nil, err
 	}
-	// ... mapper logic
 	var res []*biz.Applicant
 	for _, a := range applicants {
 		res = append(res, mapApplicantToBiz(&a))

@@ -5,9 +5,12 @@ import (
 
 	pb "credit-analytics-backend/api/decision/v1"
 	"credit-analytics-backend/internal/biz"
+	"credit-analytics-backend/pkg/grpcerr"
+	"credit-analytics-backend/pkg/validate"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -38,14 +41,17 @@ func NewCommitteeService(uc *biz.DecisionUsecase, logger log.Logger) *CommitteeS
 }
 
 func (s *CommitteeService) CreateCommitteeSession(ctx context.Context, req *pb.CreateCommitteeSessionRequest) (*pb.CommitteeSession, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	res, err := s.uc.CreateCommitteeSession(ctx, &biz.CommitteeSession{
 		ApplicationID:   appID,
 		SessionSequence: req.SessionSequence,
 		ScheduledAt:     req.ScheduledAt.AsTime(),
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &pb.CommitteeSession{
 		Id:              res.ID.String(),
@@ -59,8 +65,14 @@ func (s *CommitteeService) CreateCommitteeSession(ctx context.Context, req *pb.C
 }
 
 func (s *CommitteeService) SubmitCommitteeVote(ctx context.Context, req *pb.SubmitCommitteeVoteRequest) (*pb.CommitteeVote, error) {
-	sessionID, _ := uuid.Parse(req.CommitteeSessionId)
-	userID, _ := uuid.Parse(req.UserId)
+	sessionID, err := validate.UUID("committee_session_id", req.CommitteeSessionId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	userID, err := validate.UUID("user_id", req.UserId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	res, err := s.uc.SubmitCommitteeVote(ctx, &biz.CommitteeVote{
 		CommitteeSessionID: sessionID,
 		UserID:             userID,
@@ -68,7 +80,7 @@ func (s *CommitteeService) SubmitCommitteeVote(ctx context.Context, req *pb.Subm
 		VoteReason:         req.VoteReason,
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &pb.CommitteeVote{
 		Id:                 res.ID.String(),
@@ -81,7 +93,10 @@ func (s *CommitteeService) SubmitCommitteeVote(ctx context.Context, req *pb.Subm
 }
 
 func (s *CommitteeService) FinalizeCommitteeDecision(ctx context.Context, req *pb.FinalizeCommitteeDecisionRequest) (*pb.CommitteeDecision, error) {
-	sessionID, _ := uuid.Parse(req.CommitteeSessionId)
+	sessionID, err := validate.UUID("committee_session_id", req.CommitteeSessionId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	res, err := s.uc.FinalizeCommitteeDecision(ctx, &biz.CommitteeDecision{
 		CommitteeSessionID:    sessionID,
 		Decision:              req.Decision,
@@ -92,7 +107,7 @@ func (s *CommitteeService) FinalizeCommitteeDecision(ctx context.Context, req *p
 		RequiresNextCommittee: req.RequiresNextCommittee,
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &pb.CommitteeDecision{
 		Id:                    res.ID.String(),
@@ -108,16 +123,21 @@ func (s *CommitteeService) FinalizeCommitteeDecision(ctx context.Context, req *p
 }
 
 func (s *CommitteeService) GetCommitteeSession(ctx context.Context, req *pb.GetCommitteeSessionRequest) (*pb.CommitteeSession, error) {
-	return &pb.CommitteeSession{}, nil
+	// TODO: add GetCommitteeSession to DecisionRepo and DecisionUsecase
+	return nil, status.Errorf(codes.Unimplemented, "GetCommitteeSession not yet implemented")
 }
 
 func (s *CommitteeService) ListCommitteeSessionsByApplication(ctx context.Context, req *pb.ListCommitteeSessionsByApplicationRequest) (*pb.ListCommitteeSessionsResponse, error) {
-	return &pb.ListCommitteeSessionsResponse{}, nil
+	// TODO: add ListCommitteeSessionsByApplication to DecisionRepo and DecisionUsecase
+	return nil, status.Errorf(codes.Unimplemented, "ListCommitteeSessionsByApplication not yet implemented")
 }
 
 func (s *DecisionService) RecordFinalDecision(ctx context.Context, req *pb.RecordFinalDecisionRequest) (*pb.ApplicationDecision, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
-	decidedBy, _ := uuid.Parse(req.DecidedBy)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	decidedBy, _ := validate.OptionalUUID("decided_by", req.DecidedBy)
 	res, err := s.uc.RecordFinalDecision(ctx, &biz.FinalDecision{
 		ApplicationID:     appID,
 		Decision:          req.Decision,
@@ -129,26 +149,31 @@ func (s *DecisionService) RecordFinalDecision(ctx context.Context, req *pb.Recor
 		DecidedBy:         decidedBy,
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return mapFinalDecisionToPb(res), nil
 }
 
 func (s *DecisionService) GetApplicationDecision(ctx context.Context, req *pb.GetApplicationDecisionRequest) (*pb.ApplicationDecision, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	res, err := s.uc.GetApplicationDecision(ctx, appID)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return mapFinalDecisionToPb(res), nil
 }
 
 func (s *DecisionService) AddDecisionCondition(ctx context.Context, req *pb.AddDecisionConditionRequest) (*pb.DecisionCondition, error) {
-	return &pb.DecisionCondition{}, nil
+	// TODO: implement AddDecisionCondition in repo/usecase
+	return nil, status.Errorf(codes.Unimplemented, "AddDecisionCondition not yet implemented")
 }
 
 func (s *DecisionService) ListDecisionConditions(ctx context.Context, req *pb.ListDecisionConditionsRequest) (*pb.ListDecisionConditionsResponse, error) {
-	return &pb.ListDecisionConditionsResponse{}, nil
+	// TODO: implement ListDecisionConditions in repo/usecase
+	return nil, status.Errorf(codes.Unimplemented, "ListDecisionConditions not yet implemented")
 }
 
 func mapFinalDecisionToPb(d *biz.FinalDecision) *pb.ApplicationDecision {

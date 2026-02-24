@@ -5,6 +5,8 @@ import (
 
 	pb "credit-analytics-backend/api/application/v1"
 	"credit-analytics-backend/internal/biz"
+	"credit-analytics-backend/pkg/grpcerr"
+	"credit-analytics-backend/pkg/validate"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -24,9 +26,15 @@ func NewApplicationService(uc *biz.ApplicationUsecase) *ApplicationService {
 }
 
 func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.CreateApplicationRequest) (*pb.Application, error) {
-	applicantID, _ := uuid.Parse(req.ApplicantId)
-	productID, _ := uuid.Parse(req.ProductId)
-	aoID, _ := uuid.Parse(req.AoId)
+	applicantID, err := validate.UUID("applicant_id", req.ApplicantId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	productID, err := validate.UUID("product_id", req.ProductId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	aoID, _ := validate.OptionalUUID("ao_id", req.AoId)
 
 	amount, _ := decimal.NewFromString(req.LoanAmount)
 	rate, _ := decimal.NewFromString(req.InterestRate)
@@ -53,34 +61,43 @@ func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.Crea
 
 	id, err := s.uc.Create(ctx, app)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 
 	created, err := s.uc.Get(ctx, id)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 
 	return mapAppBizToProto(created), nil
 }
 
 func (s *ApplicationService) GetApplication(ctx context.Context, req *pb.GetApplicationRequest) (*pb.Application, error) {
-	id, err := uuid.Parse(req.Id)
+	id, err := validate.UUID("id", req.Id)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	app, err := s.uc.Get(ctx, id)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return mapAppBizToProto(app), nil
 }
 
 func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.UpdateApplicationRequest) (*pb.Application, error) {
-	id, _ := uuid.Parse(req.Id)
-	applicantID, _ := uuid.Parse(req.ApplicantId)
-	productID, _ := uuid.Parse(req.ProductId)
-	aoID, _ := uuid.Parse(req.AoId)
+	id, err := validate.UUID("id", req.Id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	applicantID, err := validate.UUID("applicant_id", req.ApplicantId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	productID, err := validate.UUID("product_id", req.ProductId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	aoID, _ := validate.OptionalUUID("ao_id", req.AoId)
 
 	amount, _ := decimal.NewFromString(req.LoanAmount)
 	rate, _ := decimal.NewFromString(req.InterestRate)
@@ -104,41 +121,120 @@ func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.Upda
 			DataType: attr.DataType,
 		})
 	}
-	err := s.uc.Update(ctx, app)
-	if err != nil {
-		return nil, err
+	if err := s.uc.Update(ctx, app); err != nil {
+		return nil, grpcerr.From(err)
 	}
-	return mapAppBizToProto(app), nil
+	// Fetch up-to-date state from DB
+	updated, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return mapAppBizToProto(updated), nil
 }
 
 func (s *ApplicationService) GetApplicationAttributes(ctx context.Context, req *pb.GetApplicationAttributesRequest) (*pb.ApplicationAttributes, error) {
-	return &pb.ApplicationAttributes{}, nil
+	id, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	app, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	res := &pb.ApplicationAttributes{}
+	for _, attr := range app.Attributes {
+		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
+			Key:      attr.Key,
+			Value:    attr.Value,
+			DataType: attr.DataType,
+		})
+	}
+	return res, nil
 }
 
 func (s *ApplicationService) UpsertApplicationAttributes(ctx context.Context, req *pb.UpsertApplicationAttributesRequest) (*pb.ApplicationAttributes, error) {
-	return &pb.ApplicationAttributes{}, nil
+	id, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+
+	app, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+
+	app.Attributes = nil
+	for _, attr := range req.Attributes {
+		app.Attributes = append(app.Attributes, biz.ApplicationAttribute{
+			Key:      attr.Key,
+			Value:    attr.Value,
+			DataType: attr.DataType,
+		})
+	}
+	if err := s.uc.Update(ctx, app); err != nil {
+		return nil, grpcerr.From(err)
+	}
+
+	res := &pb.ApplicationAttributes{}
+	for _, attr := range app.Attributes {
+		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
+			Key:      attr.Key,
+			Value:    attr.Value,
+			DataType: attr.DataType,
+		})
+	}
+	return res, nil
 }
 
+// ChangeApplicationStatus transitions the application status via the domain state machine.
 func (s *ApplicationService) ChangeApplicationStatus(ctx context.Context, req *pb.ChangeApplicationStatusRequest) (*pb.Application, error) {
-	return &pb.Application{}, nil
+	id, err := validate.UUID("id", req.Id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	if !biz.IsValidStatus(req.NewStatus) {
+		return nil, grpcerr.From(&biz.ErrInvalidArgument{
+			Field:   "new_status",
+			Message: "unknown application status: " + req.NewStatus,
+		})
+	}
+
+	app, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	if err := app.TransitionTo(biz.ApplicationStatus(req.NewStatus)); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	if err := s.uc.Update(ctx, app); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	updated, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return mapAppBizToProto(updated), nil
 }
 
 func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListApplicationsRequest) (*pb.ListApplicationsResponse, error) {
-	applicantID, _ := uuid.Parse(req.ApplicantId)
+	applicantID, _ := validate.OptionalUUID("applicant_id", req.ApplicantId)
 
 	params := biz.PaginationParams{
 		Cursor:   req.Cursor,
-		PageSize: req.PageSize,
+		PageSize: validate.PageSize(req.PageSize, 10, 100),
 	}
 
 	result, err := s.uc.List(ctx, params, req.Status, applicantID)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 
 	var res []*pb.Application
 	for _, app := range result.Items {
 		res = append(res, mapAppBizToProto(app))
+	}
+	if res == nil {
+		res = []*pb.Application{}
 	}
 
 	return &pb.ListApplicationsResponse{
@@ -149,43 +245,61 @@ func (s *ApplicationService) ListApplications(ctx context.Context, req *pb.ListA
 }
 
 func (s *ApplicationService) UploadApplicationDocument(ctx context.Context, req *pb.UploadApplicationDocumentRequest) (*pb.ApplicationDocument, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	doc := &biz.ApplicationDocument{
 		ApplicationID: appID,
 		DocumentName:  req.DocumentName,
 		FileURL:       req.FileUrl,
 		DocumentType:  req.DocumentType,
 	}
-	err := s.uc.UploadDocument(ctx, doc)
-	if err != nil {
-		return nil, err
+	if err := s.uc.UploadDocument(ctx, doc); err != nil {
+		return nil, grpcerr.From(err)
 	}
 	return mapDocBizToProto(doc), nil
 }
 
 func (s *ApplicationService) ListApplicationDocuments(ctx context.Context, req *pb.ListApplicationDocumentsRequest) (*pb.ListApplicationDocumentsResponse, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	docs, err := s.uc.ListDocuments(ctx, appID)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.ApplicationDocument
 	for _, doc := range docs {
 		res = append(res, mapDocBizToProto(&doc))
 	}
+	if res == nil {
+		res = []*pb.ApplicationDocument{}
+	}
 	return &pb.ListApplicationDocumentsResponse{Documents: res}, nil
 }
 
 func (s *ApplicationService) GetPresignedUrl(ctx context.Context, req *pb.GetPresignedUrlRequest) (*pb.GetPresignedUrlResponse, error) {
+	if err := validate.NotEmpty("file_name", req.FileName); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	if err := validate.NotEmpty("file_type", req.FileType); err != nil {
+		return nil, grpcerr.From(err)
+	}
 	uploadURL, fileURL, err := s.uc.GetPresignedUrl(ctx, req.FileName, req.FileType)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &pb.GetPresignedUrlResponse{
 		UploadUrl: uploadURL,
 		FileUrl:   fileURL,
 	}, nil
 }
+
+// ---------------------------------------------------------------------------
+// PartyService
+// ---------------------------------------------------------------------------
 
 type PartyService struct {
 	pb.UnimplementedPartyServiceServer
@@ -201,12 +315,20 @@ func NewPartyService(uc *biz.ApplicationUsecase, logger log.Logger) *PartyServic
 }
 
 func (s *PartyService) AddPartyToApplication(ctx context.Context, req *pb.AddPartyToApplicationRequest) (*pb.ApplicationParty, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
-	partyID, _ := uuid.Parse(req.PartyId)
-
-	err := s.uc.AddPartyToApplication(ctx, appID, partyID, req.RoleCode, req.SlikRequired)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
+	}
+	partyID, err := validate.UUID("party_id", req.PartyId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	if err := validate.NotEmpty("role_code", req.RoleCode); err != nil {
+		return nil, grpcerr.From(err)
+	}
+
+	if err := s.uc.AddPartyToApplication(ctx, appID, partyID, req.RoleCode, req.SlikRequired); err != nil {
+		return nil, grpcerr.From(err)
 	}
 
 	return &pb.ApplicationParty{
@@ -218,14 +340,26 @@ func (s *PartyService) AddPartyToApplication(ctx context.Context, req *pb.AddPar
 }
 
 func (s *PartyService) RemovePartyFromApplication(ctx context.Context, req *pb.RemovePartyFromApplicationRequest) (*emptypb.Empty, error) {
+	_, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	_, err = validate.UUID("party_id", req.PartyId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	// TODO: implement RemoveParty in repo when soft-delete is needed
 	return &emptypb.Empty{}, nil
 }
 
 func (s *PartyService) ListApplicationParties(ctx context.Context, req *pb.ListApplicationPartiesRequest) (*pb.ListApplicationPartiesResponse, error) {
-	appID, _ := uuid.Parse(req.ApplicationId)
+	appID, err := validate.UUID("application_id", req.ApplicationId)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
 	parties, err := s.uc.GetParties(ctx, appID)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.ApplicationParty
 	for _, p := range parties {
@@ -240,8 +374,15 @@ func (s *PartyService) ListApplicationParties(ctx context.Context, req *pb.ListA
 			SlikRequired:    p.SlikRequired,
 		})
 	}
+	if res == nil {
+		res = []*pb.ApplicationParty{}
+	}
 	return &pb.ListApplicationPartiesResponse{Parties: res}, nil
 }
+
+// ---------------------------------------------------------------------------
+// Mappers
+// ---------------------------------------------------------------------------
 
 func mapAppBizToProto(app *biz.Application) *pb.Application {
 	res := &pb.Application{
@@ -257,6 +398,7 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 		ApplicationChannel: app.ApplicationChannel,
 		Status:             string(app.Status),
 		BranchCode:         app.BranchCode,
+		CreatedAt:          timestamppb.New(app.CreatedAt),
 	}
 	for _, attr := range app.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
@@ -265,7 +407,6 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 			DataType: attr.DataType,
 		})
 	}
-	res.CreatedAt = timestamppb.New(app.CreatedAt)
 	return res
 }
 
@@ -279,3 +420,6 @@ func mapDocBizToProto(doc *biz.ApplicationDocument) *pb.ApplicationDocument {
 		UploadedAt:    timestamppb.New(doc.UploadedAt),
 	}
 }
+
+// parseOptionalUUIDApp is unused but kept as a compile-time reminder.
+var _ = uuid.Nil

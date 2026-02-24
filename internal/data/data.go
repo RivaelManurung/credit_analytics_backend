@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -22,7 +23,7 @@ type Data struct {
 	sqlDB *sql.DB
 }
 
-// NewData .
+// NewData initializes the database connection with proper pool settings.
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	l := log.NewHelper(logger)
 
@@ -32,13 +33,21 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		return nil, nil, err
 	}
 
+	// Production-grade connection pool settings.
+	// MaxOpenConns prevents exhausting the DB server connection limit.
+	d.SetMaxOpenConns(25)
+	d.SetMaxIdleConns(10)
+	d.SetConnMaxLifetime(5 * time.Minute)
+	d.SetConnMaxIdleTime(2 * time.Minute)
+
 	// Ping database to ensure connection is valid
 	if err := d.Ping(); err != nil {
 		l.Errorf("failed pinging database: %v", err)
 		return nil, nil, err
 	}
 
-	// Auto migration & Seeding if DB_AUTO_MIGRATE=true
+	// Auto migration & Seeding — only runs when DB_AUTO_MIGRATE=true.
+	// WARNING: seed_dummy.sql must use INSERT ... ON CONFLICT DO NOTHING to be idempotent.
 	if os.Getenv("DB_AUTO_MIGRATE") == "true" {
 		l.Info("Starting database migration & seeding...")
 
@@ -58,11 +67,11 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 				l.Warnf("failed to read schema file %s: %v", path, err)
 				continue
 			} else {
-				l.Infof("Preparing to execute schema: %s", path)
+				l.Infof("Executing schema: %s", path)
 				if _, err := d.Exec(string(content)); err != nil {
 					l.Errorf("failed to execute schema %s: %v", path, err)
 				} else {
-					l.Infof("successfully executed %s", path)
+					l.Infof("Successfully executed %s", path)
 				}
 			}
 		}
@@ -79,7 +88,8 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	}, cleanup, nil
 }
 
-// Transaction helper for SQLC
+// InTx wraps a function in a database transaction.
+// Rolls back automatically if the function returns an error.
 func (d *Data) InTx(ctx context.Context, fn func(queries *db.Queries) error) error {
 	tx, err := d.sqlDB.BeginTx(ctx, nil)
 	if err != nil {

@@ -243,13 +243,14 @@ func (r *applicationRepo) List(ctx context.Context, params biz.PaginationParams,
 	}, nil
 }
 
-func (r *applicationRepo) ListAll(ctx context.Context) ([]*biz.Application, error) {
-	// Simple fallback or implementation
-	apps, err := r.data.db.ListApplications(ctx, db.ListApplicationsParams{Limit: 1000})
+func (r *applicationRepo) ListAll(ctx context.Context, limit int32) ([]*biz.Application, error) {
+	if limit <= 0 {
+		limit = 100
+	}
+	apps, err := r.data.db.ListApplications(ctx, db.ListApplicationsParams{Limit: limit})
 	if err != nil {
 		return nil, err
 	}
-	// ... (rest of mapper logic)
 	var res []*biz.Application
 	for _, app := range apps {
 		res = append(res, mapToBiz(&app))

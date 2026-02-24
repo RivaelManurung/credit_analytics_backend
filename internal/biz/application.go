@@ -64,6 +64,16 @@ func (s ApplicationStatus) IsTerminal() bool {
 	return s == StatusApproved || s == StatusRejected || s == StatusCancelled
 }
 
+// IsValidStatus checks whether the status value is one of the defined constants.
+func IsValidStatus(s string) bool {
+	switch ApplicationStatus(s) {
+	case StatusDraft, StatusSubmitted, StatusIntake, StatusSlikCheck,
+		StatusPolicy, StatusAnalysis, StatusApproved, StatusRejected, StatusCancelled:
+		return true
+	}
+	return false
+}
+
 // Domain Models
 type Application struct {
 	ID                 uuid.UUID
@@ -103,30 +113,23 @@ func (a *Application) Events() []interface{} {
 // Step 3 & 5: Early Policy Gate & Intake Validation
 func (a *Application) ValidateIntake() error {
 	if a.LoanAmount.IsZero() {
-		return fmt.Errorf("loan amount is required (Intake)")
+		return &ErrInvalidArgument{Field: "loan_amount", Message: "must not be zero (Intake)"}
 	}
 	if a.TenorMonths <= 0 {
-		return fmt.Errorf("tenor is required (Intake)")
+		return &ErrInvalidArgument{Field: "tenor_months", Message: "must be greater than zero (Intake)"}
 	}
 	if a.ProductID == uuid.Nil {
-		return fmt.Errorf("product is required (Intake)")
+		return &ErrInvalidArgument{Field: "product_id", Message: "must not be empty (Intake)"}
 	}
 	return nil
 }
 
-// Step 4: Early SLIK Check (Mock Logic)
+// CheckEarlySLIK performs a preliminary SLIK creditworthiness check.
+// In production this should call the actual SLIK API via an injected SLIKService interface.
+// For now it always passes — integrate the real provider here.
 func (a *Application) CheckEarlySLIK() (bool, string) {
-	// Logic: If any party has low confidence or blacklist attribute (as mock)
-	for _, p := range a.Parties {
-		if p.SlikRequired {
-			// In real world, call SLIK API here.
-			// Mock: If name contains "BAD", reject.
-			if p.Party.Name == "BAD DEBTOR" {
-				return false, "Blacklisted in SLIK"
-			}
-		}
-	}
-	return true, "Passed Early SLIK"
+	// TODO: Inject a real SLIKService and call it for each SlikRequired party.
+	return true, "SLIK check passed (stub — integrate real provider)"
 }
 
 // Step 5: Early Policy Gate
@@ -140,52 +143,48 @@ func (a *Application) CheckPolicyGate() (bool, string) {
 }
 func (a *Application) Submit() error {
 	if a.Status != StatusDraft {
-		return fmt.Errorf("cannot submit application in %s status", a.Status)
+		return &ErrConflict{Message: fmt.Sprintf("cannot submit application in %s status", a.Status)}
 	}
 	if a.LoanAmount.IsZero() {
-		return fmt.Errorf("loan amount cannot be zero")
+		return &ErrInvalidArgument{Field: "loan_amount", Message: "cannot be zero"}
 	}
 	a.Status = StatusSubmitted
-	// a.AddEvent(ApplicationSubmittedEvent{ApplicationID: a.ID})
 	return nil
 }
 
 func (a *Application) TransitionTo(newStatus ApplicationStatus) error {
-	// Simple state machine enforcement
 	allowed := false
 	switch a.Status {
 	case StatusDraft:
-		allowed = (newStatus == StatusSubmitted || newStatus == StatusCancelled)
+		allowed = newStatus == StatusSubmitted || newStatus == StatusCancelled
 	case StatusSubmitted:
-		allowed = (newStatus == StatusIntake || newStatus == StatusSlikCheck || newStatus == StatusCancelled)
+		allowed = newStatus == StatusIntake || newStatus == StatusSlikCheck || newStatus == StatusCancelled
 	case StatusIntake:
-		allowed = (newStatus == StatusSlikCheck || newStatus == StatusCancelled)
+		allowed = newStatus == StatusSlikCheck || newStatus == StatusCancelled
 	case StatusSlikCheck:
-		allowed = (newStatus == StatusPolicy || newStatus == StatusRejected || newStatus == StatusCancelled)
+		allowed = newStatus == StatusPolicy || newStatus == StatusRejected || newStatus == StatusCancelled
 	case StatusPolicy:
-		allowed = (newStatus == StatusAnalysis || newStatus == StatusRejected || newStatus == StatusCancelled)
+		allowed = newStatus == StatusAnalysis || newStatus == StatusRejected || newStatus == StatusCancelled
 	case StatusAnalysis:
-		allowed = (newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled)
+		allowed = newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled
 	}
 
-	// Admin or system might override, but for domain logic we enforce this
 	if !allowed && a.Status != newStatus {
-		return fmt.Errorf("invalid status transition from %s to %s", a.Status, newStatus)
+		return &ErrConflict{
+			Message: fmt.Sprintf("invalid status transition from %s to %s", a.Status, newStatus),
+		}
 	}
 
 	a.Status = newStatus
-
-	// Logic for POINT 22: Archiving & Audit Log
-	// If a status is terminal, we can consider it "Archived" for future edits
 	return nil
 }
 
 func (a *Application) Archive() error {
 	if !a.Status.IsTerminal() {
-		return fmt.Errorf("cannot archive application that is not in terminal state (APPROVED/REJECTED/CANCELLED)")
+		return &ErrConflict{
+			Message: "cannot archive application that is not in terminal state (APPROVED/REJECTED/CANCELLED)",
+		}
 	}
-	// Here we could add logic for physical archival if needed,
-	// but IsLocked() already handles the logical penguncian.
 	return nil
 }
 
@@ -219,20 +218,19 @@ type ApplicationDocument struct {
 	UploadedAt    time.Time
 }
 
-// Repository Interface
 type ApplicationRepo interface {
 	Save(context.Context, *Application) (uuid.UUID, error)
 	Update(context.Context, *Application) error
 	FindByID(context.Context, uuid.UUID) (*Application, error)
 	List(ctx context.Context, params PaginationParams, status string, applicantID uuid.UUID) (*PaginatedList[*Application], error)
-	ListAll(context.Context) ([]*Application, error)
+	ListAll(ctx context.Context, limit int32) ([]*Application, error)
 
 	// Party Related
 	SaveParty(context.Context, *Party) (uuid.UUID, error)
 	AddPartyToApplication(ctx context.Context, appID uuid.UUID, partyID uuid.UUID, role string, slikRequired bool) error
 	GetParties(ctx context.Context, appID uuid.UUID) ([]ApplicationParty, error)
 
-	// Step 2: AO Assignment Helpers
+	// AO Assignment Helpers
 	ListAvailableAOs(ctx context.Context, branchCode string) ([]uuid.UUID, error)
 
 	// Document Related
@@ -265,37 +263,38 @@ func (uc *ApplicationUsecase) Create(ctx context.Context, app *Application) (uui
 	return uc.repo.Save(ctx, app)
 }
 
-// Step 1: Create Lead (Complete)
+// CreateLead creates an application and auto-assigns a borrower party and AO.
 func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, applicant *Applicant) (uuid.UUID, error) {
-	// 1. Save Application
 	id, err := uc.Create(ctx, app)
 	if err != nil {
 		return uuid.Nil, err
 	}
 
-	// 2. Logic: Auto-add Related Party (Borrorwer as main party)
+	// Auto-add Borrower as the primary party.
 	borID, err := uc.repo.SaveParty(ctx, &Party{
 		PartyType:   applicant.ApplicantType,
 		Name:        applicant.FullName,
 		Identifier:  applicant.IdentityNumber,
 		DateOfBirth: applicant.BirthDate,
 	})
-	if err == nil {
-		uc.repo.AddPartyToApplication(ctx, id, borID, "BORROWER", true)
+	if err != nil {
+		uc.log.WithContext(ctx).Warnf("CreateLead: failed to save borrower party for app %s: %v", id, err)
+	} else {
+		if linkErr := uc.repo.AddPartyToApplication(ctx, id, borID, "BORROWER", true); linkErr != nil {
+			uc.log.WithContext(ctx).Warnf("CreateLead: failed to link borrower party %s to app %s: %v", borID, id, linkErr)
+		}
 	}
 
-	// Logic: If Individual, try to find spouse in attributes or mock spouse
-	if applicant.ApplicantType == "personal" {
-		// Mock: automatically add spouse if exists in attributes
-		uc.repo.AddPartyToApplication(ctx, id, uuid.New(), "SPOUSE", true)
-	}
-
-	// Step 2: AO Auto-assignment logic (simple workload mock)
-	if app.AoID == uuid.Nil {
-		aos, _ := uc.repo.ListAvailableAOs(ctx, app.BranchCode)
-		if len(aos) > 0 {
-			app.AoID = aos[0] // Simple: pick first available
-			uc.repo.Update(ctx, app)
+	// AO Auto-assignment: pick the first available AO for the branch.
+	if app.AoID == uuid.Nil && app.BranchCode != "" {
+		aos, aoErr := uc.repo.ListAvailableAOs(ctx, app.BranchCode)
+		if aoErr != nil {
+			uc.log.WithContext(ctx).Warnf("CreateLead: failed to list AOs for branch %s: %v", app.BranchCode, aoErr)
+		} else if len(aos) > 0 {
+			app.AoID = aos[0]
+			if updateErr := uc.repo.Update(ctx, app); updateErr != nil {
+				uc.log.WithContext(ctx).Warnf("CreateLead: failed to assign AO %s to app %s: %v", app.AoID, id, updateErr)
+			}
 		}
 	}
 
@@ -354,10 +353,12 @@ func (uc *ApplicationUsecase) Submit(ctx context.Context, id uuid.UUID) error {
 func (uc *ApplicationUsecase) Update(ctx context.Context, app *Application) error {
 	uc.log.WithContext(ctx).Infof("Updating Application: ID=%s", app.ID)
 
-	// POINT 22: Penguncian Data (Data Locking)
 	existing, err := uc.repo.FindByID(ctx, app.ID)
-	if err == nil && existing.IsLocked() {
-		return fmt.Errorf("application %s is locked (Status: %s) and cannot be modified", app.ID, existing.Status)
+	if err != nil {
+		return err
+	}
+	if existing.IsLocked() {
+		return &ErrLocked{Resource: "application", ID: app.ID.String(), Status: string(existing.Status)}
 	}
 
 	return uc.repo.Update(ctx, app)
@@ -373,9 +374,10 @@ func (uc *ApplicationUsecase) List(ctx context.Context, params PaginationParams,
 	return uc.repo.List(ctx, params, status, applicantID)
 }
 
-func (uc *ApplicationUsecase) ListAll(ctx context.Context) ([]*Application, error) {
-	uc.log.WithContext(ctx).Info("Listing all Applications")
-	return uc.repo.ListAll(ctx)
+// ListAll is reserved for internal/admin use only. Prefer List() with pagination for user-facing APIs.
+func (uc *ApplicationUsecase) ListAll(ctx context.Context, limit int32) ([]*Application, error) {
+	uc.log.WithContext(ctx).Info("Listing all Applications (admin)")
+	return uc.repo.ListAll(ctx, limit)
 }
 
 func (uc *ApplicationUsecase) AddPartyToApplication(ctx context.Context, appID, partyID uuid.UUID, role string, slikRequired bool) error {
