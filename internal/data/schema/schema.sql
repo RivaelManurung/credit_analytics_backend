@@ -5,6 +5,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CORE TABLES
 -- ==========================
 
+-- Explicitly drop columns that were removed from schema to ensure live DB is synced
+-- (Necessary because CREATE TABLE doesn't remove existing columns)
+ALTER TABLE applicants DROP COLUMN IF EXISTS updated_at;
+ALTER TABLE applicants DROP COLUMN IF EXISTS deleted_at;
+ALTER TABLE applications DROP COLUMN IF EXISTS updated_at;
+ALTER TABLE applications DROP COLUMN IF EXISTS deleted_at;
+
+
 CREATE TABLE applicants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     applicant_type VARCHAR(20) NOT NULL, -- personal | corporate
