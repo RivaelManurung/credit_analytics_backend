@@ -16,25 +16,92 @@ SELECT * FROM application_status_refs;
 -- name: ListFinancialGLAccounts :many
 SELECT * FROM financial_gl_accounts;
 
+-- ==============================================================
+-- ATTRIBUTE CATEGORIES (dinamis: icon ada di sini)
+-- ==============================================================
+
+-- name: ListAttributeCategories :many
+SELECT category_code, category_name, ui_icon, display_order, description
+FROM attribute_categories
+ORDER BY display_order, category_code;
+
+-- name: GetAttributeCategory :one
+SELECT category_code, category_name, ui_icon, display_order, description
+FROM attribute_categories
+WHERE category_code = $1;
+
+-- name: CreateAttributeCategory :exec
+INSERT INTO attribute_categories (category_code, category_name, ui_icon, display_order, description)
+VALUES ($1, $2, $3, $4, $5);
+
+-- name: UpdateAttributeCategory :exec
+UPDATE attribute_categories SET
+    category_name  = $2,
+    ui_icon        = $3,
+    display_order  = $4,
+    description    = $5
+WHERE category_code = $1;
+
+-- name: DeleteAttributeCategory :exec
+DELETE FROM attribute_categories WHERE category_code = $1;
+
+-- ==============================================================
+-- ATTRIBUTE REGISTRIES (category_code = FK, icon tidak di sini)
+-- ==============================================================
+
 -- name: ListAttributeRegistry :many
-SELECT * FROM custom_column_attribute_registries ORDER BY category, attribute_code;
+SELECT
+    r.attribute_code,
+    r.applies_to,
+    r.scope,
+    r.value_type,
+    r.category_code,
+    r.ui_label,
+    r.is_required,
+    r.risk_relevant,
+    r.description,
+    c.category_name,
+    c.ui_icon  AS category_icon
+FROM custom_column_attribute_registries r
+LEFT JOIN attribute_categories c ON r.category_code = c.category_code
+ORDER BY c.display_order, r.attribute_code;
+
+-- name: ListAttributeRegistryByCategory :many
+SELECT
+    r.attribute_code,
+    r.applies_to,
+    r.scope,
+    r.value_type,
+    r.category_code,
+    r.ui_label,
+    r.is_required,
+    r.risk_relevant,
+    r.description,
+    c.category_name,
+    c.ui_icon AS category_icon
+FROM custom_column_attribute_registries r
+LEFT JOIN attribute_categories c ON r.category_code = c.category_code
+WHERE r.category_code = $1
+ORDER BY r.attribute_code;
 
 -- name: CreateAttributeRegistry :exec
 INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label
+    attribute_code, applies_to, scope, value_type, category_code, ui_label, is_required, risk_relevant, description
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
 );
 
 -- name: UpdateAttributeRegistry :exec
 UPDATE custom_column_attribute_registries SET
-    applies_to = $2,
-    scope = $3,
-    value_type = $4,
-    category = $5,
-    is_required = $6,
-    risk_relevant = $7,
-    description = $8,
-    ui_icon = $9,
-    ui_label = $10
+    applies_to    = $2,
+    scope         = $3,
+    value_type    = $4,
+    category_code = $5,
+    ui_label      = $6,
+    is_required   = $7,
+    risk_relevant = $8,
+    description   = $9
 WHERE attribute_code = $1;
+
+-- name: DeleteAttributeRegistry :exec
+DELETE FROM custom_column_attribute_registries WHERE attribute_code = $1;

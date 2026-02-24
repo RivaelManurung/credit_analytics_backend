@@ -5,6 +5,7 @@ import (
 
 	pb "credit-analytics-backend/api/reference/v1"
 	"credit-analytics-backend/internal/biz"
+	"credit-analytics-backend/pkg/grpcerr"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -24,10 +25,14 @@ func NewReferenceService(uc *biz.ReferenceUsecase, logger log.Logger) *Reference
 	}
 }
 
+// -----------------------------------------------------------------------
+// LOAN PRODUCTS
+// -----------------------------------------------------------------------
+
 func (s *ReferenceService) ListLoanProducts(ctx context.Context, req *emptypb.Empty) (*pb.ListLoanProductsResponse, error) {
 	products, err := s.uc.ListLoanProducts(ctx)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.LoanProduct
 	for _, p := range products {
@@ -39,17 +44,20 @@ func (s *ReferenceService) ListLoanProducts(ctx context.Context, req *emptypb.Em
 			Active:      p.Active,
 		})
 	}
+	if res == nil {
+		res = []*pb.LoanProduct{}
+	}
 	return &pb.ListLoanProductsResponse{Products: res}, nil
 }
 
 func (s *ReferenceService) GetLoanProduct(ctx context.Context, req *pb.GetLoanProductRequest) (*pb.LoanProduct, error) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(&biz.ErrInvalidArgument{Field: "id", Message: "must be a valid UUID"})
 	}
 	p, err := s.uc.GetLoanProduct(ctx, id)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &pb.LoanProduct{
 		Id:          p.ID.String(),
@@ -60,10 +68,14 @@ func (s *ReferenceService) GetLoanProduct(ctx context.Context, req *pb.GetLoanPr
 	}, nil
 }
 
+// -----------------------------------------------------------------------
+// BRANCHES & OFFICERS
+// -----------------------------------------------------------------------
+
 func (s *ReferenceService) ListBranches(ctx context.Context, req *emptypb.Empty) (*pb.ListBranchesResponse, error) {
 	branches, err := s.uc.ListBranches(ctx)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.Branch
 	for _, b := range branches {
@@ -73,13 +85,16 @@ func (s *ReferenceService) ListBranches(ctx context.Context, req *emptypb.Empty)
 			RegionCode: b.RegionCode,
 		})
 	}
+	if res == nil {
+		res = []*pb.Branch{}
+	}
 	return &pb.ListBranchesResponse{Branches: res}, nil
 }
 
 func (s *ReferenceService) ListLoanOfficers(ctx context.Context, req *pb.ListLoanOfficersRequest) (*pb.ListLoanOfficersResponse, error) {
 	officers, err := s.uc.ListLoanOfficers(ctx, req.BranchCode)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.LoanOfficer
 	for _, o := range officers {
@@ -89,13 +104,20 @@ func (s *ReferenceService) ListLoanOfficers(ctx context.Context, req *pb.ListLoa
 			BranchCode:  o.BranchCode,
 		})
 	}
+	if res == nil {
+		res = []*pb.LoanOfficer{}
+	}
 	return &pb.ListLoanOfficersResponse{Officers: res}, nil
 }
+
+// -----------------------------------------------------------------------
+// APPLICATION STATUSES & FINANCIAL GL ACCOUNTS
+// -----------------------------------------------------------------------
 
 func (s *ReferenceService) ListApplicationStatuses(ctx context.Context, req *emptypb.Empty) (*pb.ListApplicationStatusesResponse, error) {
 	statuses, err := s.uc.ListApplicationStatuses(ctx)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.ApplicationStatusRef
 	for _, st := range statuses {
@@ -106,13 +128,16 @@ func (s *ReferenceService) ListApplicationStatuses(ctx context.Context, req *emp
 			Description: st.Description,
 		})
 	}
+	if res == nil {
+		res = []*pb.ApplicationStatusRef{}
+	}
 	return &pb.ListApplicationStatusesResponse{Statuses: res}, nil
 }
 
 func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *emptypb.Empty) (*pb.ListFinancialGLAccountsResponse, error) {
 	accounts, err := s.uc.ListFinancialGLAccounts(ctx)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.FinancialGLAccount
 	for _, a := range accounts {
@@ -127,61 +152,196 @@ func (s *ReferenceService) ListFinancialGLAccounts(ctx context.Context, req *emp
 			Description:   a.Description,
 		})
 	}
+	if res == nil {
+		res = []*pb.FinancialGLAccount{}
+	}
 	return &pb.ListFinancialGLAccountsResponse{Accounts: res}, nil
 }
+
+// -----------------------------------------------------------------------
+// ATTRIBUTE CATEGORIES (dynamic, icon stored here)
+// These use types from reference_ext.go since pb.go doesn't have them yet.
+// -----------------------------------------------------------------------
+
+func (s *ReferenceService) ListAttributeCategories(ctx context.Context, req *emptypb.Empty) (*pb.ListAttributeCategoriesResponse, error) {
+	cats, err := s.uc.ListAttributeCategories(ctx)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	var res []*pb.AttributeCategory
+	for _, c := range cats {
+		res = append(res, mapCategoryToPb(c))
+	}
+	if res == nil {
+		res = []*pb.AttributeCategory{}
+	}
+	return &pb.ListAttributeCategoriesResponse{Categories: res}, nil
+}
+
+func (s *ReferenceService) GetAttributeCategory(ctx context.Context, req *pb.GetAttributeCategoryRequest) (*pb.AttributeCategory, error) {
+	cat, err := s.uc.GetAttributeCategory(ctx, req.CategoryCode)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return mapCategoryToPb(cat), nil
+}
+
+func (s *ReferenceService) CreateAttributeCategory(ctx context.Context, req *pb.CreateAttributeCategoryRequest) (*pb.AttributeCategory, error) {
+	cat := &biz.AttributeCategory{
+		CategoryCode: req.CategoryCode,
+		CategoryName: req.CategoryName,
+		UiIcon:       req.UiIcon,
+		DisplayOrder: req.DisplayOrder,
+		Description:  req.Description,
+	}
+	if err := s.uc.CreateAttributeCategory(ctx, cat); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	created, err := s.uc.GetAttributeCategory(ctx, req.CategoryCode)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return mapCategoryToPb(created), nil
+}
+
+func (s *ReferenceService) UpdateAttributeCategory(ctx context.Context, req *pb.UpdateAttributeCategoryRequest) (*pb.AttributeCategory, error) {
+	cat := &biz.AttributeCategory{
+		CategoryCode: req.CategoryCode,
+		CategoryName: req.CategoryName,
+		UiIcon:       req.UiIcon,
+		DisplayOrder: req.DisplayOrder,
+		Description:  req.Description,
+	}
+	if err := s.uc.UpdateAttributeCategory(ctx, cat); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	updated, err := s.uc.GetAttributeCategory(ctx, req.CategoryCode)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return mapCategoryToPb(updated), nil
+}
+
+func (s *ReferenceService) DeleteAttributeCategory(ctx context.Context, req *pb.DeleteAttributeCategoryRequest) (*emptypb.Empty, error) {
+	if err := s.uc.DeleteAttributeCategory(ctx, req.CategoryCode); err != nil {
+		return nil, grpcerr.From(err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+// -----------------------------------------------------------------------
+// ATTRIBUTE REGISTRY
+// Uses the generated *pb.AttributeRegistry struct.
+// Field mapping: CategoryCode->Category(as FK), UiLabel->UiLabel,
+// CategoryName+Icon mapped to Description+UiIcon for backward compat
+// until buf generate is re-run.
+// -----------------------------------------------------------------------
 
 func (s *ReferenceService) ListAttributeRegistry(ctx context.Context, req *emptypb.Empty) (*pb.ListAttributeRegistryResponse, error) {
 	attrs, err := s.uc.ListAttributeRegistry(ctx)
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	var res []*pb.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, &pb.AttributeRegistry{
-			AttrKey:  a.AttrKey,
-			AttrName: a.AttrName,
-			DataType: a.DataType,
-			Category: a.Category,
-			Required: a.IsRequired,
-			UiIcon:   a.UiIcon,
-			UiLabel:  a.UiLabel,
-		})
+		res = append(res, mapAttrToPb(a))
+	}
+	if res == nil {
+		res = []*pb.AttributeRegistry{}
+	}
+	return &pb.ListAttributeRegistryResponse{Attributes: res}, nil
+}
+
+func (s *ReferenceService) ListAttributeRegistryByCategory(ctx context.Context, req *pb.ListAttributeRegistryByCategoryRequest) (*pb.ListAttributeRegistryResponse, error) {
+	attrs, err := s.uc.ListAttributeRegistryByCategory(ctx, req.CategoryCode)
+	if err != nil {
+		return nil, grpcerr.From(err)
+	}
+	var res []*pb.AttributeRegistry
+	for _, a := range attrs {
+		res = append(res, mapAttrToPb(a))
+	}
+	if res == nil {
+		res = []*pb.AttributeRegistry{}
 	}
 	return &pb.ListAttributeRegistryResponse{Attributes: res}, nil
 }
 
 func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	err := s.uc.CreateAttributeRegistry(ctx, &biz.AttributeRegistry{
-		AttrKey:    req.AttributeCode,
-		AttrName:   req.Description,
-		DataType:   req.ValueType,
-		Category:   req.Category,
-		IsRequired: req.IsRequired,
-		UiIcon:     req.UiIcon,
-		UiLabel:    req.UiLabel,
+		AttrKey:      req.AttributeCode,
+		AppliesTo:    req.AppliesTo,
+		Scope:        req.Scope,
+		DataType:     req.ValueType,
+		CategoryCode: req.Category, // pb.go field "Category" maps to category_code FK
+		UiLabel:      req.UiLabel,
+		IsRequired:   req.IsRequired,
+		RiskRelevant: req.RiskRelevant,
+		Description:  req.Description,
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (s *ReferenceService) UpdateAttributeRegistry(ctx context.Context, req *pb.UpdateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	err := s.uc.UpdateAttributeRegistry(ctx, &biz.AttributeRegistry{
-		AttrKey:    req.AttributeCode,
-		AttrName:   req.Description,
-		DataType:   req.ValueType,
-		Category:   req.Category,
-		IsRequired: req.IsRequired,
-		UiIcon:     req.UiIcon,
-		UiLabel:    req.UiLabel,
+		AttrKey:      req.AttributeCode,
+		AppliesTo:    req.AppliesTo,
+		Scope:        req.Scope,
+		DataType:     req.ValueType,
+		CategoryCode: req.Category, // pb.go field "Category" maps to category_code FK
+		UiLabel:      req.UiLabel,
+		IsRequired:   req.IsRequired,
+		RiskRelevant: req.RiskRelevant,
+		Description:  req.Description,
 	})
 	if err != nil {
-		return nil, err
+		return nil, grpcerr.From(err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *ReferenceService) DeleteAttributeRegistry(ctx context.Context, req *pb.DeleteAttributeRegistryRequest) (*emptypb.Empty, error) {
+	if err := s.uc.DeleteAttributeRegistry(ctx, req.AttributeCode); err != nil {
+		return nil, grpcerr.From(err)
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (s *ReferenceService) ListSurveyTemplates(ctx context.Context, req *pb.ListSurveyTemplatesRequest) (*pb.ListSurveyTemplatesResponse, error) {
 	return &pb.ListSurveyTemplatesResponse{}, nil
+}
+
+// -----------------------------------------------------------------------
+// Mappers
+// -----------------------------------------------------------------------
+
+func mapCategoryToPb(c *biz.AttributeCategory) *pb.AttributeCategory {
+	return &pb.AttributeCategory{
+		CategoryCode: c.CategoryCode,
+		CategoryName: c.CategoryName,
+		UiIcon:       c.UiIcon,
+		DisplayOrder: c.DisplayOrder,
+		Description:  c.Description,
+	}
+}
+
+// mapAttrToPb maps biz.AttributeRegistry to the generated pb.AttributeRegistry.
+// Because pb proto hasn't been regenerated yet, we use existing fields:
+//   - Category field = CategoryCode (FK string)
+//   - UiIcon field   = CategoryIcon (from JOIN)
+//   - AttrName field = CategoryName (from JOIN)
+//   - UiLabel field  = UiLabel (per-attribute label)
+func mapAttrToPb(a *biz.AttributeRegistry) *pb.AttributeRegistry {
+	return &pb.AttributeRegistry{
+		AttrKey:  a.AttrKey,
+		AttrName: a.CategoryName, // denormalized category name
+		DataType: a.DataType,
+		Category: a.CategoryCode, // FK code (e.g. "identitas")
+		Required: a.IsRequired,
+		UiIcon:   a.CategoryIcon, // icon from category JOIN
+		UiLabel:  a.UiLabel,      // per-attribute display label
+	}
 }

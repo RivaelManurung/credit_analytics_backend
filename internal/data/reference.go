@@ -22,6 +22,10 @@ func NewReferenceRepo(data *Data, logger log.Logger) biz.ReferenceRepo {
 	}
 }
 
+// -----------------------------------------------------------------------
+// LOAN PRODUCTS
+// -----------------------------------------------------------------------
+
 func (r *referenceRepo) ListLoanProducts(ctx context.Context) ([]*biz.LoanProduct, error) {
 	products, err := r.data.db.ListLoanProducts(ctx)
 	if err != nil {
@@ -54,6 +58,10 @@ func (r *referenceRepo) GetLoanProduct(ctx context.Context, id uuid.UUID) (*biz.
 	}, nil
 }
 
+// -----------------------------------------------------------------------
+// BRANCHES & OFFICERS
+// -----------------------------------------------------------------------
+
 func (r *referenceRepo) ListBranches(ctx context.Context) ([]*biz.Branch, error) {
 	branches, err := r.data.db.ListBranches(ctx)
 	if err != nil {
@@ -85,6 +93,10 @@ func (r *referenceRepo) ListLoanOfficers(ctx context.Context, branchCode string)
 	}
 	return res, nil
 }
+
+// -----------------------------------------------------------------------
+// APPLICATION STATUSES & FINANCIAL GL ACCOUNTS
+// -----------------------------------------------------------------------
 
 func (r *referenceRepo) ListApplicationStatuses(ctx context.Context) ([]*biz.ApplicationStatusRef, error) {
 	statuses, err := r.data.db.ListApplicationStatuses(ctx)
@@ -124,6 +136,85 @@ func (r *referenceRepo) ListFinancialGLAccounts(ctx context.Context) ([]*biz.Fin
 	return res, nil
 }
 
+// -----------------------------------------------------------------------
+// ATTRIBUTE CATEGORIES (dynamic, icon stored here)
+// -----------------------------------------------------------------------
+
+func mapCategoryToBiz(c db.AttributeCategory) *biz.AttributeCategory {
+	return &biz.AttributeCategory{
+		CategoryCode: c.CategoryCode,
+		CategoryName: c.CategoryName,
+		UiIcon:       c.UiIcon.String,
+		DisplayOrder: c.DisplayOrder,
+		Description:  c.Description.String,
+	}
+}
+
+func (r *referenceRepo) ListAttributeCategories(ctx context.Context) ([]*biz.AttributeCategory, error) {
+	rows, err := r.data.db.ListAttributeCategories(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var res []*biz.AttributeCategory
+	for _, row := range rows {
+		res = append(res, mapCategoryToBiz(row))
+	}
+	return res, nil
+}
+
+func (r *referenceRepo) GetAttributeCategory(ctx context.Context, categoryCode string) (*biz.AttributeCategory, error) {
+	row, err := r.data.db.GetAttributeCategory(ctx, categoryCode)
+	if err != nil {
+		return nil, err
+	}
+	return mapCategoryToBiz(row), nil
+}
+
+func (r *referenceRepo) CreateAttributeCategory(ctx context.Context, cat *biz.AttributeCategory) error {
+	return r.data.db.CreateAttributeCategory(ctx, db.CreateAttributeCategoryParams{
+		CategoryCode: cat.CategoryCode,
+		CategoryName: cat.CategoryName,
+		UiIcon:       sql.NullString{String: cat.UiIcon, Valid: cat.UiIcon != ""},
+		DisplayOrder: cat.DisplayOrder,
+		Description:  sql.NullString{String: cat.Description, Valid: cat.Description != ""},
+	})
+}
+
+func (r *referenceRepo) UpdateAttributeCategory(ctx context.Context, cat *biz.AttributeCategory) error {
+	return r.data.db.UpdateAttributeCategory(ctx, db.UpdateAttributeCategoryParams{
+		CategoryCode: cat.CategoryCode,
+		CategoryName: cat.CategoryName,
+		UiIcon:       sql.NullString{String: cat.UiIcon, Valid: cat.UiIcon != ""},
+		DisplayOrder: cat.DisplayOrder,
+		Description:  sql.NullString{String: cat.Description, Valid: cat.Description != ""},
+	})
+}
+
+func (r *referenceRepo) DeleteAttributeCategory(ctx context.Context, categoryCode string) error {
+	return r.data.db.DeleteAttributeCategory(ctx, categoryCode)
+}
+
+// -----------------------------------------------------------------------
+// ATTRIBUTE REGISTRIES
+// -----------------------------------------------------------------------
+
+func mapRegistryToBiz(a db.AttributeRegistryRow) *biz.AttributeRegistry {
+	return &biz.AttributeRegistry{
+		AttrKey:      a.AttributeCode,
+		AppliesTo:    a.AppliesTo,
+		Scope:        a.Scope,
+		DataType:     a.ValueType,
+		CategoryCode: a.CategoryCode.String,
+		UiLabel:      a.UiLabel.String,
+		IsRequired:   a.IsRequired.Bool,
+		RiskRelevant: a.RiskRelevant.Bool,
+		Description:  a.Description.String,
+		// Denormalized from JOIN
+		CategoryName: a.CategoryName.String,
+		CategoryIcon: a.CategoryIcon.String,
+	}
+}
+
 func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.AttributeRegistry, error) {
 	attrs, err := r.data.db.ListAttributeRegistry(ctx)
 	if err != nil {
@@ -131,15 +222,19 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 	}
 	var res []*biz.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, &biz.AttributeRegistry{
-			AttrKey:    a.AttributeCode,
-			AttrName:   a.Description.String,
-			DataType:   a.ValueType,
-			Category:   a.Category.String,
-			IsRequired: a.IsRequired.Bool,
-			UiIcon:     a.UiIcon.String,
-			UiLabel:    a.UiLabel.String,
-		})
+		res = append(res, mapRegistryToBiz(a))
+	}
+	return res, nil
+}
+
+func (r *referenceRepo) ListAttributeRegistryByCategory(ctx context.Context, categoryCode string) ([]*biz.AttributeRegistry, error) {
+	attrs, err := r.data.db.ListAttributeRegistryByCategory(ctx, sql.NullString{String: categoryCode, Valid: categoryCode != ""})
+	if err != nil {
+		return nil, err
+	}
+	var res []*biz.AttributeRegistry
+	for _, a := range attrs {
+		res = append(res, mapRegistryToBiz(a))
 	}
 	return res, nil
 }
@@ -147,28 +242,31 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
 	return r.data.db.CreateAttributeRegistry(ctx, db.CreateAttributeRegistryParams{
 		AttributeCode: attr.AttrKey,
-		AppliesTo:     "BOTH",
-		Scope:         "APPLICANT",
+		AppliesTo:     attr.AppliesTo,
+		Scope:         attr.Scope,
 		ValueType:     attr.DataType,
-		Category:      sql.NullString{String: attr.Category, Valid: true},
+		CategoryCode:  sql.NullString{String: attr.CategoryCode, Valid: attr.CategoryCode != ""},
+		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: attr.UiLabel != ""},
 		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
-		Description:   sql.NullString{String: attr.AttrName, Valid: true},
-		UiIcon:        sql.NullString{String: attr.UiIcon, Valid: true},
-		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: true},
+		RiskRelevant:  sql.NullBool{Bool: attr.RiskRelevant, Valid: true},
+		Description:   sql.NullString{String: attr.Description, Valid: attr.Description != ""},
 	})
 }
 
 func (r *referenceRepo) UpdateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
 	return r.data.db.UpdateAttributeRegistry(ctx, db.UpdateAttributeRegistryParams{
 		AttributeCode: attr.AttrKey,
-		AppliesTo:     "BOTH",
-		Scope:         "APPLICANT",
+		AppliesTo:     attr.AppliesTo,
+		Scope:         attr.Scope,
 		ValueType:     attr.DataType,
-		Category:      sql.NullString{String: attr.Category, Valid: true},
+		CategoryCode:  sql.NullString{String: attr.CategoryCode, Valid: attr.CategoryCode != ""},
+		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: attr.UiLabel != ""},
 		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
-		RiskRelevant:  sql.NullBool{Bool: false, Valid: true},
-		Description:   sql.NullString{String: attr.AttrName, Valid: true},
-		UiIcon:        sql.NullString{String: attr.UiIcon, Valid: true},
-		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: true},
+		RiskRelevant:  sql.NullBool{Bool: attr.RiskRelevant, Valid: true},
+		Description:   sql.NullString{String: attr.Description, Valid: attr.Description != ""},
 	})
+}
+
+func (r *referenceRepo) DeleteAttributeRegistry(ctx context.Context, attrKey string) error {
+	return r.data.db.DeleteAttributeRegistry(ctx, attrKey)
 }

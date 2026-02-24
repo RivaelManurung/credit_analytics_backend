@@ -241,11 +241,10 @@ type CustomColumnAttributeRegistry struct {
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
 	ValueType     string         `json:"value_type"`
-	Category      sql.NullString `json:"category"`
+	CategoryCode  sql.NullString `json:"category_code"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
-	UiIcon        sql.NullString `json:"ui_icon"`
 	UiLabel       sql.NullString `json:"ui_label"`
 }
 

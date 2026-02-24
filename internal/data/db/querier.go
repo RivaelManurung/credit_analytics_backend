@@ -6,6 +6,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -17,7 +18,7 @@ type Querier interface {
 	CreateApplicationDocument(ctx context.Context, arg CreateApplicationDocumentParams) (ApplicationDocument, error)
 	CreateApplicationParty(ctx context.Context, arg CreateApplicationPartyParams) (ApplicationParty, error)
 	CreateAsset(ctx context.Context, arg CreateAssetParams) (ApplicationAsset, error)
-	CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error
+	CreateAttributeRegistryUpsert(ctx context.Context, arg CreateAttributeRegistryUpsertParams) error
 	CreateCommitteeSession(ctx context.Context, arg CreateCommitteeSessionParams) (ApplicationCommitteeSession, error)
 	CreateLiability(ctx context.Context, arg CreateLiabilityParams) (ApplicationLiability, error)
 	CreateParty(ctx context.Context, arg CreatePartyParams) (Party, error)
@@ -45,7 +46,6 @@ type Querier interface {
 	ListApplications(ctx context.Context, arg ListApplicationsParams) ([]Application, error)
 	ListAssets(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAsset, error)
 	ListAttributeRegistries(ctx context.Context, arg ListAttributeRegistriesParams) ([]CustomColumnAttributeRegistry, error)
-	ListAttributeRegistry(ctx context.Context) ([]CustomColumnAttributeRegistry, error)
 	ListBranches(ctx context.Context) ([]Branch, error)
 	ListFinancialFacts(ctx context.Context, applicationID uuid.UUID) ([]ApplicationFinancialFact, error)
 	ListFinancialGLAccounts(ctx context.Context) ([]FinancialGlAccount, error)
@@ -61,7 +61,6 @@ type Querier interface {
 	UpdateApplicant(ctx context.Context, arg UpdateApplicantParams) (Applicant, error)
 	UpdateApplication(ctx context.Context, arg UpdateApplicationParams) (Application, error)
 	UpdateAsset(ctx context.Context, arg UpdateAssetParams) (ApplicationAsset, error)
-	UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error
 	UpdateLiability(ctx context.Context, arg UpdateLiabilityParams) (ApplicationLiability, error)
 	UpdateSurveyStatus(ctx context.Context, arg UpdateSurveyStatusParams) (ApplicationSurvey, error)
 	UpsertApplicantAttribute(ctx context.Context, arg UpsertApplicantAttributeParams) (ApplicantAttribute, error)
@@ -69,6 +68,20 @@ type Querier interface {
 	UpsertFinancialFact(ctx context.Context, arg UpsertFinancialFactParams) (ApplicationFinancialFact, error)
 	UpsertFinancialRatio(ctx context.Context, arg UpsertFinancialRatioParams) (ApplicationFinancialRatio, error)
 	UpsertSurveyAnswer(ctx context.Context, arg UpsertSurveyAnswerParams) (SurveyAnswer, error)
+
+	// --- Attribute Categories (dynamic, from reference.sql.go) ---
+	ListAttributeCategories(ctx context.Context) ([]AttributeCategory, error)
+	GetAttributeCategory(ctx context.Context, categoryCode string) (AttributeCategory, error)
+	CreateAttributeCategory(ctx context.Context, arg CreateAttributeCategoryParams) error
+	UpdateAttributeCategory(ctx context.Context, arg UpdateAttributeCategoryParams) error
+	DeleteAttributeCategory(ctx context.Context, categoryCode string) error
+
+	// --- Attribute Registry (JOIN-based, from reference.sql.go) ---
+	ListAttributeRegistry(ctx context.Context) ([]AttributeRegistryRow, error)
+	ListAttributeRegistryByCategory(ctx context.Context, categoryCode sql.NullString) ([]AttributeRegistryRow, error)
+	CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error
+	UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error
+	DeleteAttributeRegistry(ctx context.Context, attributeCode string) error
 }
 
 var _ Querier = (*Queries)(nil)

@@ -27,27 +27,40 @@ CREATE TABLE IF NOT EXISTS applicant_attributes (
     UNIQUE (applicant_id, attr_key)
 );
 
-CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
-    attribute_code VARCHAR(100) PRIMARY KEY,
-    applies_to VARCHAR(20) NOT NULL, -- PERSONAL | CORPORATE | BOTH
-    scope VARCHAR(20) NOT NULL,      -- APPLICANT | APPLICATION | BOTH
-    value_type VARCHAR(20) NOT NULL, -- STRING | NUMBER | BOOLEAN | DATE
-    category VARCHAR(100),           -- UI Grouping
-    is_required BOOLEAN DEFAULT FALSE,
-    risk_relevant BOOLEAN DEFAULT FALSE,
-    description VARCHAR(255)
+-- Tabel kategori atribut yang bisa dikelola secara dinamis via API.
+-- Icon dan label disimpan di sini (satu icon per kategori, bukan per atribut).
+CREATE TABLE IF NOT EXISTS attribute_categories (
+    category_code   VARCHAR(100) PRIMARY KEY,
+    category_name   VARCHAR(255) NOT NULL,
+    ui_icon         VARCHAR(100),         -- Lucide / Heroicons icon name
+    display_order   INT DEFAULT 0,
+    description     VARCHAR(255)
 );
 
--- Ensure dynamic UI columns exist
+CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
+    attribute_code  VARCHAR(100) PRIMARY KEY,
+    applies_to      VARCHAR(20) NOT NULL, -- PERSONAL | CORPORATE | BOTH
+    scope           VARCHAR(20) NOT NULL, -- APPLICANT | APPLICATION | BOTH
+    value_type      VARCHAR(20) NOT NULL, -- STRING | NUMBER | BOOLEAN | DATE
+    category_code   VARCHAR(100) REFERENCES attribute_categories(category_code) ON UPDATE CASCADE ON DELETE SET NULL,
+    ui_label        VARCHAR(255),         -- Label yang tampil di UI per atribut
+    is_required     BOOLEAN DEFAULT FALSE,
+    risk_relevant   BOOLEAN DEFAULT FALSE,
+    description     VARCHAR(255)
+);
+
+-- Backward-compat: pastikan kolom baru ada jika tabel sudah terbuat sebelumnya
+ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
+ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
+ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS display_order INT DEFAULT 0;
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS applies_to VARCHAR(20);
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS scope VARCHAR(20);
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS value_type VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS category VARCHAR(100);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS is_required BOOLEAN DEFAULT FALSE;
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS description VARCHAR(255);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
 
 
 CREATE TABLE IF NOT EXISTS branches (

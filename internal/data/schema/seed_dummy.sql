@@ -1,9 +1,10 @@
 -- ============================================================
 -- FULL INTEGRATED SEED DATA (PRODUCTION-LIKE)
 -- Includes all 8 Categories and 74 Attributes via EAV
+-- attribute_categories: dinamis via API, icon di sini
 -- ============================================================
 
--- 1. CLEAN UP
+-- 1. CLEAN UP (urutan penting karena FK)
 TRUNCATE TABLE credit_authority_matrices CASCADE;
 TRUNCATE TABLE application_decision_conditions CASCADE;
 TRUNCATE TABLE application_decisions CASCADE;
@@ -35,7 +36,8 @@ TRUNCATE TABLE applications CASCADE;
 TRUNCATE TABLE loan_officers CASCADE;
 TRUNCATE TABLE loan_products CASCADE;
 TRUNCATE TABLE branches CASCADE;
-TRUNCATE TABLE custom_column_attribute_registries CASCADE; 
+TRUNCATE TABLE custom_column_attribute_registries CASCADE;
+TRUNCATE TABLE attribute_categories CASCADE;
 TRUNCATE TABLE applicant_attributes CASCADE;
 TRUNCATE TABLE applicants CASCADE;
 
@@ -59,97 +61,115 @@ INSERT INTO financial_gl_accounts (gl_code, gl_name, statement_type, category, s
 ('EXP001', 'Biaya Rumah Tangga', 'PL', 'EXPENSE', -1, false, true),
 ('LIA001', 'Angsuran Bank Lain', 'BS', 'LIABILITY', -1, true, false);
 
--- 3. LOAD REGISTRY (Full 8 Categories)
-INSERT INTO custom_column_attribute_registries (attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description) VALUES
 
--- 1. Identitas (Core fields like Nama, NIK, Tgl Lahir are usually in CORE table but we keep registry for labeling)
-('tempat_lahir', 'PERSONAL', 'APPLICANT', 'STRING', '1. Identitas', true, false, 'Tempat Lahir'),
-('jenis_kelamin', 'PERSONAL', 'APPLICANT', 'STRING', '1. Identitas', true, false, 'Jenis Kelamin'),
-('kewarganegaraan', 'PERSONAL', 'APPLICANT', 'STRING', '1. Identitas', true, false, 'Kewarganegaraan'),
-('status_perkawinan', 'PERSONAL', 'APPLICANT', 'STRING', '1. Identitas', true, true, 'Status Perkawinan'),
-('nama_ibu_kandung', 'PERSONAL', 'APPLICANT', 'STRING', '1. Identitas', true, true, 'Nama Ibu Kandung'),
+-- 3. ATTRIBUTE CATEGORIES (Dinamis, icon disimpan di sini)
+-- category_code = kunci unik (FK dari registries)
+-- ui_icon = nama icon Lucide/Heroicons yang dipakai di frontend
+INSERT INTO attribute_categories (category_code, category_name, ui_icon, display_order, description) VALUES
+('identitas',        '1. Identitas',             'id-card',          1,  'Data identitas pribadi debitur'),
+('pasangan',         '2. Pasangan',              'users',            2,  'Data pasangan hidup atau suami/istri'),
+('kontak_alamat',    '3. Kontak & Alamat',       'map-pin',          3,  'Nomor kontak dan alamat tinggal'),
+('profil_rt',        '4. Profil Rumah Tangga',   'home',             4,  'Data komposisi dan keuangan rumah tangga'),
+('pendidikan_sosial','5. Pendidikan & Sosial',   'graduation-cap',  5,  'Riwayat pendidikan dan peran sosial'),
+('pekerjaan',        '6. Pekerjaan',             'briefcase',        6,  'Data pekerjaan dan penghasilan'),
+('usaha',            '7. Usaha',                 'store',            7,  'Data usaha atau bisnis yang dijalankan'),
+('karakter',         '8. Karakter & Perilaku',   'shield-check',     8,  'Penilaian karakter dan rekam jejak perilaku');
 
--- 2. Pasangan (Optional)
-('pasangan_nama_lengkap', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'Nama Lengkap Pasangan'),
-('pasangan_nik', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, true, 'NIK Pasangan'),
-('pasangan_tempat_lahir', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'Tempat Lahir Pasangan'),
-('pasangan_tanggal_lahir', 'BOTH', 'APPLICANT', 'DATE', '2. Pasangan', false, false, 'Tanggal Lahir Pasangan'),
-('pasangan_jenis_kelamin', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'Jenis Kelamin Pasangan'),
-('pasangan_kewarganegaraan', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'Kewarganegaraan Pasangan'),
-('pasangan_nama_ibu_kandung', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'Nama Ibu Kandung Pasangan'),
-('pasangan_npwp', 'BOTH', 'APPLICANT', 'STRING', '2. Pasangan', false, false, 'NPWP Pasangan'),
-('pasangan_perkawinan_ke', 'BOTH', 'APPLICANT', 'NUMBER', '2. Pasangan', false, false, 'Perkawinan Ke'),
+
+-- 4. LOAD REGISTRY (ui_icon TIDAK di sini lagi — ada di attribute_categories)
+-- ui_label = label tampilan khusus per atribut (boleh berbeda dari description)
+INSERT INTO custom_column_attribute_registries
+    (attribute_code, applies_to, scope, value_type, category_code, ui_label, is_required, risk_relevant, description)
+VALUES
+
+-- 1. Identitas
+('tempat_lahir',        'PERSONAL', 'APPLICANT', 'STRING',  'identitas',        'Tempat Lahir',             true,  false, 'Tempat Lahir'),
+('jenis_kelamin',       'PERSONAL', 'APPLICANT', 'STRING',  'identitas',        'Jenis Kelamin',            true,  false, 'Jenis Kelamin'),
+('kewarganegaraan',     'PERSONAL', 'APPLICANT', 'STRING',  'identitas',        'Kewarganegaraan',          true,  false, 'Kewarganegaraan'),
+('status_perkawinan',   'PERSONAL', 'APPLICANT', 'STRING',  'identitas',        'Status Perkawinan',        true,  true,  'Status Perkawinan'),
+('nama_ibu_kandung',    'PERSONAL', 'APPLICANT', 'STRING',  'identitas',        'Nama Ibu Kandung',         true,  true,  'Nama Ibu Kandung'),
+
+-- 2. Pasangan
+('pasangan_nama_lengkap',    'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'Nama Lengkap Pasangan',     false, false, 'Nama Lengkap Pasangan'),
+('pasangan_nik',             'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'NIK Pasangan',              false, true,  'NIK Pasangan'),
+('pasangan_tempat_lahir',    'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'Tempat Lahir Pasangan',     false, false, 'Tempat Lahir Pasangan'),
+('pasangan_tanggal_lahir',   'BOTH', 'APPLICANT', 'DATE',   'pasangan', 'Tanggal Lahir Pasangan',    false, false, 'Tanggal Lahir Pasangan'),
+('pasangan_jenis_kelamin',   'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'Jenis Kelamin Pasangan',    false, false, 'Jenis Kelamin Pasangan'),
+('pasangan_kewarganegaraan', 'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'Kewarganegaraan Pasangan',  false, false, 'Kewarganegaraan Pasangan'),
+('pasangan_nama_ibu_kandung','BOTH', 'APPLICANT', 'STRING', 'pasangan', 'Nama Ibu Kandung Pasangan', false, false, 'Nama Ibu Kandung Pasangan'),
+('pasangan_npwp',            'BOTH', 'APPLICANT', 'STRING', 'pasangan', 'NPWP Pasangan',             false, false, 'NPWP Pasangan'),
+('pasangan_perkawinan_ke',   'BOTH', 'APPLICANT', 'NUMBER', 'pasangan', 'Perkawinan Ke',             false, false, 'Perkawinan Ke'),
 
 -- 3. Kontak & Alamat
-('no_hp_utama', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', true, true, 'No HP Utama'),
-('no_hp_alternatif', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'No HP Alternatif'),
-('email_pribadi', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', true, false, 'Email'),
-('alamat_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Alamat sesuai KTP'),
-('kelurahan_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kelurahan sesuai KTP'),
-('kecamatan_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kecamatan sesuai KTP'),
-('kota_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kota sesuai KTP'),
-('provinsi_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Provinsi sesuai KTP'),
-('kode_pos_ktp', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kode Pos sesuai KTP'),
-('alamat_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', true, true, 'Alamat sesuai Domisili'),
-('kelurahan_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kelurahan sesuai Domisili'),
-('kecamatan_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kecamatan sesuai Domisili'),
-('kota_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kota sesuai Domisili'),
-('provinsi_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Provinsi sesuai Domisili'),
-('kode_pos_domisili', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, false, 'Kode Pos sesuai Domisili'),
-('lama_tinggal_tahun', 'BOTH', 'APPLICANT', 'NUMBER', '3. Kontak & Alamat', false, false, 'Lama tinggal di alamat ini'),
-('status_kepemilikan_rumah', 'BOTH', 'APPLICANT', 'STRING', '3. Kontak & Alamat', false, true, 'Status kepemilikan rumah'),
-('jarak_ke_cabang', 'BOTH', 'APPLICANT', 'NUMBER', '3. Kontak & Alamat', false, false, 'Perkiraan jarak kantor cabang'),
+('no_hp_utama',              'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'No HP Utama',                  true,  true,  'No HP Utama'),
+('no_hp_alternatif',         'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'No HP Alternatif',             false, false, 'No HP Alternatif'),
+('email_pribadi',            'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Email',                        true,  false, 'Email'),
+('alamat_ktp',               'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Alamat sesuai KTP',            false, false, 'Alamat sesuai KTP'),
+('kelurahan_ktp',            'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kelurahan (KTP)',               false, false, 'Kelurahan sesuai KTP'),
+('kecamatan_ktp',            'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kecamatan (KTP)',               false, false, 'Kecamatan sesuai KTP'),
+('kota_ktp',                 'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kota (KTP)',                    false, false, 'Kota sesuai KTP'),
+('provinsi_ktp',             'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Provinsi (KTP)',                false, false, 'Provinsi sesuai KTP'),
+('kode_pos_ktp',             'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kode Pos (KTP)',                false, false, 'Kode Pos sesuai KTP'),
+('alamat_domisili',          'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Alamat Domisili',               true,  true,  'Alamat sesuai Domisili'),
+('kelurahan_domisili',       'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kelurahan (Domisili)',          false, false, 'Kelurahan sesuai Domisili'),
+('kecamatan_domisili',       'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kecamatan (Domisili)',          false, false, 'Kecamatan sesuai Domisili'),
+('kota_domisili',            'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kota (Domisili)',               false, false, 'Kota sesuai Domisili'),
+('provinsi_domisili',        'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Provinsi (Domisili)',           false, false, 'Provinsi sesuai Domisili'),
+('kode_pos_domisili',        'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Kode Pos (Domisili)',           false, false, 'Kode Pos sesuai Domisili'),
+('lama_tinggal_tahun',       'BOTH', 'APPLICANT', 'NUMBER', 'kontak_alamat', 'Lama Tinggal (Tahun)',          false, false, 'Lama tinggal di alamat ini'),
+('status_kepemilikan_rumah', 'BOTH', 'APPLICANT', 'STRING', 'kontak_alamat', 'Status Kepemilikan Rumah',      false, true,  'Status kepemilikan rumah'),
+('jarak_ke_cabang',          'BOTH', 'APPLICANT', 'NUMBER', 'kontak_alamat', 'Jarak ke Cabang (KM)',          false, false, 'Perkiraan jarak kantor cabang'),
 
--- 4. Profil Rumah Tangga (Optional)
-('jumlah_tanggungan', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, true, 'Jumlah tanggungan'),
-('jumlah_anggota_rt', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, false, 'Jumlah anggota rumah tangga'),
-('jumlah_anggota_rt_berpenghasilan', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, false, 'Jumlah anggota rumah tangga berpenghasilan'),
-('jumlah_anggota_rt_berhutang', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, true, 'Jumlah anggota rumah tangga berhutang'),
-('pasangan_pekerjaan_status', 'PERSONAL', 'APPLICANT', 'STRING', '4. Profil Rumah Tangga', false, false, 'Status pekerjaan pasangan'),
-('pasangan_penghasilan_bulanan', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, true, 'Penghasilan pasangan'),
-('total_penghasilan_rt', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, true, 'Total penghasilan rumah tangga'),
-('total_pengeluaran_rt', 'PERSONAL', 'APPLICANT', 'NUMBER', '4. Profil Rumah Tangga', false, true, 'Total pengeluaran rumah tangga'),
+-- 4. Profil Rumah Tangga
+('jumlah_tanggungan',                  'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Jumlah Tanggungan',                          false, true,  'Jumlah tanggungan'),
+('jumlah_anggota_rt',                  'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Jumlah Anggota RT',                          false, false, 'Jumlah anggota rumah tangga'),
+('jumlah_anggota_rt_berpenghasilan',   'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Anggota RT Berpenghasilan',                  false, false, 'Jumlah anggota rumah tangga berpenghasilan'),
+('jumlah_anggota_rt_berhutang',        'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Anggota RT Berhutang',                       false, true,  'Jumlah anggota rumah tangga berhutang'),
+('pasangan_pekerjaan_status',          'PERSONAL', 'APPLICANT', 'STRING', 'profil_rt', 'Pekerjaan Pasangan',                         false, false, 'Status pekerjaan pasangan'),
+('pasangan_penghasilan_bulanan',       'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Penghasilan Pasangan (Rp)',                   false, true,  'Penghasilan pasangan'),
+('total_penghasilan_rt',               'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Total Penghasilan RT (Rp)',                   false, true,  'Total penghasilan rumah tangga'),
+('total_pengeluaran_rt',               'PERSONAL', 'APPLICANT', 'NUMBER', 'profil_rt', 'Total Pengeluaran RT (Rp)',                   false, true,  'Total pengeluaran rumah tangga'),
 
 -- 5. Pendidikan & Sosial
-('pendidikan_terakhir', 'PERSONAL', 'APPLICANT', 'STRING', '5. Pendidikan & Sosial', false, false, 'Pendidikan terakhir'),
-('jurusan_pendidikan', 'PERSONAL', 'APPLICANT', 'STRING', '5. Pendidikan & Sosial', false, false, 'Jurusan pendidikan'),
-('sertifikasi_profesi', 'PERSONAL', 'APPLICANT', 'STRING', '5. Pendidikan & Sosial', false, false, 'Sertifikasi profesi'),
-('peran_sosial', 'PERSONAL', 'APPLICANT', 'STRING', '5. Pendidikan & Sosial', false, false, 'Peran sosial di masyarakat'),
-('dikenal_lingkungan_sekitar', 'PERSONAL', 'APPLICANT', 'BOOLEAN', '5. Pendidikan & Sosial', false, false, 'Apakah dikenal lingkungan setempat'),
+('pendidikan_terakhir',         'PERSONAL', 'APPLICANT', 'STRING',  'pendidikan_sosial', 'Pendidikan Terakhir',           false, false, 'Pendidikan terakhir'),
+('jurusan_pendidikan',          'PERSONAL', 'APPLICANT', 'STRING',  'pendidikan_sosial', 'Jurusan Pendidikan',            false, false, 'Jurusan pendidikan'),
+('sertifikasi_profesi',         'PERSONAL', 'APPLICANT', 'STRING',  'pendidikan_sosial', 'Sertifikasi Profesi',           false, false, 'Sertifikasi profesi'),
+('peran_sosial',                'PERSONAL', 'APPLICANT', 'STRING',  'pendidikan_sosial', 'Peran Sosial',                  false, false, 'Peran sosial di masyarakat'),
+('dikenal_lingkungan_sekitar',  'PERSONAL', 'APPLICANT', 'BOOLEAN', 'pendidikan_sosial', 'Dikenal Lingkungan',            false, false, 'Apakah dikenal lingkungan setempat'),
 
 -- 6. Pekerjaan
-('pekerjaan_status', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, true, 'Status pekerjaan'),
-('pekerjaan_nama_perusahaan', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Nama perusahaan'),
-('pekerjaan_industri', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Industri perusahaan'),
-('pekerjaan_alamat', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Alamat tempat kerja'),
-('pekerjaan_jabatan', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Jabatan'),
-('pekerjaan_lama_bekerja', 'PERSONAL', 'APPLICANT', 'NUMBER', '6. Pekerjaan', false, false, 'Lama bekerja (Tahun)'),
-('pekerjaan_telp_perusahaan', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'No telp perusahaan'),
-('pekerjaan_gaji_bersih', 'PERSONAL', 'APPLICANT', 'NUMBER', '6. Pekerjaan', false, true, 'Gaji bersih bulanan'),
-('pekerjaan_penghasilan_lain', 'PERSONAL', 'APPLICANT', 'NUMBER', '6. Pekerjaan', false, false, 'Penghasilan lain rutin'),
-('pekerjaan_metode_pembayaran', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Metode pembayaran gaji (bulanan/2 minggu)'),
-('pekerjaan_status_verifikasi', 'PERSONAL', 'APPLICANT', 'STRING', '6. Pekerjaan', false, false, 'Status verifikasi pekerjaan'),
+('pekerjaan_status',              'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Status Pekerjaan',             false, true,  'Status pekerjaan'),
+('pekerjaan_nama_perusahaan',     'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Nama Perusahaan',              false, false, 'Nama perusahaan'),
+('pekerjaan_industri',            'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Industri',                     false, false, 'Industri perusahaan'),
+('pekerjaan_alamat',              'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Alamat Tempat Kerja',          false, false, 'Alamat tempat kerja'),
+('pekerjaan_jabatan',             'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Jabatan',                      false, false, 'Jabatan'),
+('pekerjaan_lama_bekerja',        'PERSONAL', 'APPLICANT', 'NUMBER', 'pekerjaan', 'Lama Bekerja (Tahun)',         false, false, 'Lama bekerja (Tahun)'),
+('pekerjaan_telp_perusahaan',     'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Telp Perusahaan',              false, false, 'No telp perusahaan'),
+('pekerjaan_gaji_bersih',         'PERSONAL', 'APPLICANT', 'NUMBER', 'pekerjaan', 'Gaji Bersih (Rp)',             false, true,  'Gaji bersih bulanan'),
+('pekerjaan_penghasilan_lain',    'PERSONAL', 'APPLICANT', 'NUMBER', 'pekerjaan', 'Penghasilan Lain (Rp)',        false, false, 'Penghasilan lain rutin'),
+('pekerjaan_metode_pembayaran',   'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Metode Pembayaran Gaji',       false, false, 'Metode pembayaran gaji'),
+('pekerjaan_status_verifikasi',   'PERSONAL', 'APPLICANT', 'STRING', 'pekerjaan', 'Status Verifikasi Pekerjaan',  false, false, 'Status verifikasi pekerjaan'),
 
 -- 7. Usaha
-('usaha_nama', 'PERSONAL', 'APPLICANT', 'STRING', '7. Usaha', false, false, 'Nama usaha'),
-('usaha_jenis', 'PERSONAL', 'APPLICANT', 'STRING', '7. Usaha', false, false, 'Jenis usaha'),
-('usaha_sektor', 'PERSONAL', 'APPLICANT', 'STRING', '7. Usaha', false, false, 'Sektor usaha'),
-('usaha_lama_berusaha', 'PERSONAL', 'APPLICANT', 'NUMBER', '7. Usaha', false, false, 'lama berusaha (Tahun)'),
-('usaha_alamat', 'PERSONAL', 'APPLICANT', 'STRING', '7. Usaha', false, false, 'Alamat usaha'),
-('usaha_status_kepemilikan_tempat', 'PERSONAL', 'APPLICANT', 'STRING', '7. Usaha', false, false, 'Status kepemilikan tempat usaha'),
-('usaha_jumlah_karyawan', 'PERSONAL', 'APPLICANT', 'NUMBER', '7. Usaha', false, false, 'Jumlah karyawan'),
-('usaha_penghasilan_bulanan', 'PERSONAL', 'APPLICANT', 'NUMBER', '7. Usaha', false, true, 'Penghasilan bulanan'),
+('usaha_nama',                        'PERSONAL', 'APPLICANT', 'STRING', 'usaha', 'Nama Usaha',                          false, false, 'Nama usaha'),
+('usaha_jenis',                       'PERSONAL', 'APPLICANT', 'STRING', 'usaha', 'Jenis Usaha',                         false, false, 'Jenis usaha'),
+('usaha_sektor',                      'PERSONAL', 'APPLICANT', 'STRING', 'usaha', 'Sektor Usaha',                        false, false, 'Sektor usaha'),
+('usaha_lama_berusaha',               'PERSONAL', 'APPLICANT', 'NUMBER', 'usaha', 'Lama Berusaha (Tahun)',               false, false, 'Lama berusaha (Tahun)'),
+('usaha_alamat',                      'PERSONAL', 'APPLICANT', 'STRING', 'usaha', 'Alamat Usaha',                        false, false, 'Alamat usaha'),
+('usaha_status_kepemilikan_tempat',   'PERSONAL', 'APPLICANT', 'STRING', 'usaha', 'Status Kepemilikan Tempat Usaha',     false, false, 'Status kepemilikan tempat usaha'),
+('usaha_jumlah_karyawan',             'PERSONAL', 'APPLICANT', 'NUMBER', 'usaha', 'Jumlah Karyawan',                    false, false, 'Jumlah karyawan'),
+('usaha_penghasilan_bulanan',         'PERSONAL', 'APPLICANT', 'NUMBER', 'usaha', 'Penghasilan Bulanan Usaha (Rp)',      false, true,  'Penghasilan bulanan'),
 
 -- 8. Karakter & Perilaku
-('karakter_disiplin_bayar', 'BOTH', 'APPLICANT', 'STRING', '8. Karakter & Perilaku', false, true, 'Persepsi kedisipinan bayar'),
-('karakter_riwayat_gagal_bayar', 'BOTH', 'APPLICANT', 'BOOLEAN', '8. Karakter & Perilaku', false, true, 'Riwayat gagal bayar (internal)'),
-('karakter_frekuensi_pindah_kerja', 'PERSONAL', 'APPLICANT', 'NUMBER', '8. Karakter & Perilaku', false, true, 'Frekuensi pindah kerja'),
-('karakter_frekuensi_pindah_alamat', 'BOTH', 'APPLICANT', 'NUMBER', '8. Karakter & Perilaku', false, true, 'Frekuensi pindah alamat'),
-('karakter_gaya_hidup_mewah', 'BOTH', 'APPLICANT', 'BOOLEAN', '8. Karakter & Perilaku', false, true, 'Indikasi gaya hidup lebih besar dari penghasilan'),
-('karakter_indikasi_fraud', 'BOTH', 'APPLICANT', 'BOOLEAN', '8. Karakter & Perilaku', false, true, 'Indikasi fraud');
+('karakter_disiplin_bayar',        'BOTH', 'APPLICANT', 'STRING',  'karakter', 'Kedisiplinan Bayar',               false, true, 'Persepsi kedisiplinan bayar'),
+('karakter_riwayat_gagal_bayar',   'BOTH', 'APPLICANT', 'BOOLEAN', 'karakter', 'Riwayat Gagal Bayar',              false, true, 'Riwayat gagal bayar (internal)'),
+('karakter_frekuensi_pindah_kerja','PERSONAL', 'APPLICANT', 'NUMBER', 'karakter', 'Frekuensi Pindah Kerja',        false, true, 'Frekuensi pindah kerja'),
+('karakter_frekuensi_pindah_alamat','BOTH', 'APPLICANT', 'NUMBER', 'karakter', 'Frekuensi Pindah Alamat',         false, true, 'Frekuensi pindah alamat'),
+('karakter_gaya_hidup_mewah',      'BOTH', 'APPLICANT', 'BOOLEAN', 'karakter', 'Gaya Hidup Mewah',                 false, true, 'Indikasi gaya hidup lebih besar dari penghasilan'),
+('karakter_indikasi_fraud',        'BOTH', 'APPLICANT', 'BOOLEAN', 'karakter', 'Indikasi Fraud',                   false, true, 'Indikasi fraud');
 
 
--- 4. ENTITY: APPLICANTS (CORE fields only)
+-- 5. ENTITY: APPLICANTS (CORE fields only)
 INSERT INTO applicants (
     id, applicant_type, identity_number, tax_id, full_name, birth_date
 ) VALUES
@@ -157,7 +177,7 @@ INSERT INTO applicants (
 ('22222222-2222-2222-2222-222222222222', 'personal', '3273012008920005', '02.345.678.9', 'Rina Wijaya', '1992-08-20'),
 ('33333333-3333-3333-3333-333333333333', 'personal', '3172021012850002', '03.456.789.0', 'Agus Prayogo', '1985-12-10');
 
--- 5. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
+-- 6. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type) VALUES
 -- Budi Santoso
 ('11111111-1111-1111-1111-111111111111', 'tempat_lahir', 'Jakarta', 'STRING'),
@@ -187,15 +207,15 @@ INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
 ('33333333-3333-3333-3333-333333333333', 'pekerjaan_gaji_bersih', '12500000', 'NUMBER'),
 ('33333333-3333-3333-3333-333333333333', 'karakter_disiplin_bayar', 'SANGAT DISIPLIN', 'STRING');
 
--- 6. APPLICATIONS
+-- 7. APPLICATIONS
 INSERT INTO applications (id, applicant_id, product_id, ao_id, loan_amount, tenor_months, status, branch_code, submitted_at) VALUES
 ('APP-001', '11111111-1111-1111-1111-111111111111', 'p002', 'u001', 75000000, 36, 'ANALYSIS', 'JKT01', CURRENT_TIMESTAMP - interval '2 days'),
 ('APP-002', '22222222-2222-2222-2222-222222222222', 'p001', 'u001', 25000000, 12, 'INTAKE', 'JKT01', CURRENT_TIMESTAMP);
 
--- 7. FINANCIAL DATA
-INSERT INTO application_financial_facts (application_id, gl_code, period_type, amount, source) VALUES
-('APP-001', 'INC001', 'MONTHLY', 15000000, 'SYSTEM');
+-- 8. FINANCIAL DATA
+INSERT INTO application_financial_facts (application_id, gl_code, period_type, period_label, amount, source) VALUES
+('APP-001', 'INC001', 'MONTHLY', '2025-01', 15000000, 'SYSTEM');
 
--- 8. STATUS LOGS
+-- 9. STATUS LOGS
 INSERT INTO application_status_logs (application_id, from_status, to_status, change_reason) VALUES
 ('APP-001', 'INTAKE', 'SURVEY', 'Dokumen awal valid');

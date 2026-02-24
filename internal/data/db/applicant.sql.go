@@ -56,47 +56,44 @@ func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams
 	return i, err
 }
 
-const createAttributeRegistry = `-- name: CreateAttributeRegistry :exec
+const createAttributeRegistryUpsert = `-- name: CreateAttributeRegistryUpsert :exec
 INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label
+    attribute_code, applies_to, scope, value_type, category_code, is_required, risk_relevant, description, ui_label
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
 ) ON CONFLICT (attribute_code) DO UPDATE SET
     applies_to = EXCLUDED.applies_to,
     scope = EXCLUDED.scope,
     value_type = EXCLUDED.value_type,
-    category = EXCLUDED.category,
+    category_code = EXCLUDED.category_code,
     is_required = EXCLUDED.is_required,
     risk_relevant = EXCLUDED.risk_relevant,
     description = EXCLUDED.description,
-    ui_icon = EXCLUDED.ui_icon,
     ui_label = EXCLUDED.ui_label
 `
 
-type CreateAttributeRegistryParams struct {
+type CreateAttributeRegistryUpsertParams struct {
 	AttributeCode string         `json:"attribute_code"`
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
 	ValueType     string         `json:"value_type"`
-	Category      sql.NullString `json:"category"`
+	CategoryCode  sql.NullString `json:"category_code"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
-	UiIcon        sql.NullString `json:"ui_icon"`
 	UiLabel       sql.NullString `json:"ui_label"`
 }
 
-func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error {
-	_, err := q.db.ExecContext(ctx, createAttributeRegistry,
+func (q *Queries) CreateAttributeRegistryUpsert(ctx context.Context, arg CreateAttributeRegistryUpsertParams) error {
+	_, err := q.db.ExecContext(ctx, createAttributeRegistryUpsert,
 		arg.AttributeCode,
 		arg.AppliesTo,
 		arg.Scope,
 		arg.ValueType,
-		arg.Category,
+		arg.CategoryCode,
 		arg.IsRequired,
 		arg.RiskRelevant,
 		arg.Description,
-		arg.UiIcon,
 		arg.UiLabel,
 	)
 	return err
@@ -250,10 +247,10 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 }
 
 const listAttributeRegistries = `-- name: ListAttributeRegistries :many
-SELECT attribute_code, applies_to, scope, value_type, category, is_required, risk_relevant, description, ui_icon, ui_label FROM custom_column_attribute_registries
+SELECT attribute_code, applies_to, scope, value_type, category_code, is_required, risk_relevant, description, ui_label FROM custom_column_attribute_registries
 WHERE ($1::text IS NULL OR applies_to = $1 OR applies_to = 'BOTH')
   AND ($2::text IS NULL OR scope = $2 OR scope = 'BOTH')
-ORDER BY category, attribute_code
+ORDER BY category_code, attribute_code
 `
 
 type ListAttributeRegistriesParams struct {
@@ -275,11 +272,10 @@ func (q *Queries) ListAttributeRegistries(ctx context.Context, arg ListAttribute
 			&i.AppliesTo,
 			&i.Scope,
 			&i.ValueType,
-			&i.Category,
+			&i.CategoryCode,
 			&i.IsRequired,
 			&i.RiskRelevant,
 			&i.Description,
-			&i.UiIcon,
 			&i.UiLabel,
 		); err != nil {
 			return nil, err
