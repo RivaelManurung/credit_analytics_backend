@@ -39,6 +39,13 @@ CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
 );
 
 -- Ensure dynamic UI columns exist
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS applies_to VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS scope VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS value_type VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS category VARCHAR(100);
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS is_required BOOLEAN DEFAULT FALSE;
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
+ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS description VARCHAR(255);
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
 ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
 
