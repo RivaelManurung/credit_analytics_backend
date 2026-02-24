@@ -54,17 +54,16 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 				path = filepath.Join("..", "..", file) // fallback for local dev
 			}
 
-			content, err := os.ReadFile(path)
-			if err != nil {
+			if content, err := os.ReadFile(path); err != nil {
 				l.Warnf("failed to read schema file %s: %v", path, err)
 				continue
-			}
-
-			if _, err := d.Exec(string(content)); err != nil {
-				l.Errorf("failed to execute schema %s: %v", path, err)
-				// Continue to next file even if one fails
 			} else {
-				l.Infof("successfully executed %s", path)
+				l.Infof("Preparing to execute schema: %s", path)
+				if _, err := d.Exec(string(content)); err != nil {
+					l.Errorf("failed to execute schema %s: %v", path, err)
+				} else {
+					l.Infof("successfully executed %s", path)
+				}
 			}
 		}
 	}
