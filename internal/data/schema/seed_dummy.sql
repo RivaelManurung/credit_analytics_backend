@@ -80,7 +80,7 @@ INSERT INTO financial_gl_accounts (
         is_operating
     )
 VALUES (
-        'INC001',
+        'INC_SALARY',
         'Gaji Pokok',
         'PL',
         'REVENUE',
@@ -89,8 +89,17 @@ VALUES (
         true
     ),
     (
-        'EXP001',
-        'Biaya Rumah Tangga',
+        'INC_BUSINESS',
+        'Penghasilan Usaha',
+        'PL',
+        'REVENUE',
+        1,
+        false,
+        true
+    ),
+    (
+        'EXP_LIVING',
+        'Biaya Hidup Rutin',
         'PL',
         'EXPENSE',
         -1,
@@ -98,8 +107,17 @@ VALUES (
         true
     ),
     (
-        'LIA001',
-        'Angsuran Bank Lain',
+        'EXP_UTILITIES',
+        'Biaya Listrik/Air/Tlp',
+        'PL',
+        'EXPENSE',
+        -1,
+        false,
+        true
+    ),
+    (
+        'DEBT_INSTALLMENT',
+        'Angsuran Pinjaman Lain',
         'BS',
         'LIABILITY',
         -1,
