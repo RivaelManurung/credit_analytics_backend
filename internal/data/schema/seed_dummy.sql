@@ -3626,7 +3626,7 @@ VALUES (
     (
         '0195b1b2-0001-7000-bb34-000000000001',
         'ANALYSIS',
-        'APPROVE',
+        'APPROVED',
         false,
         'ANALYST'
     ),
