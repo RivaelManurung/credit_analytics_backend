@@ -46,22 +46,30 @@ VALUES ('JKT01', 'Jakarta Pusat Utama', 'REG01'),
     ('SUB01', 'Surabaya Basuki Rahmat', 'REG03');
 INSERT INTO loan_products (id, product_code, product_name, segment, active)
 VALUES (
-        'p001',
+        '0195b1b2-0001-7000-bb34-000000000001',
         'KUR_MIKRO',
         'KUR Mikro Pemerintah',
         'UMKM',
         true
     ),
     (
-        'p002',
+        '0195b1b2-0001-7000-bb34-000000000002',
         'KMG_KARYAWAN',
         'Kredit Multi Guna Karyawan',
         'RETAIL',
         true
     );
 INSERT INTO loan_officers (id, officer_code, branch_code)
-VALUES ('u001', 'AO_BUDI', 'JKT01'),
-    ('u002', 'AO_SITI', 'JKT02');
+VALUES (
+        '0195c1c2-0001-7000-bb34-000000000001',
+        'AO_BUDI',
+        'JKT01'
+    ),
+    (
+        '0195c1c2-0001-7000-bb34-000000000002',
+        'AO_SITI',
+        'JKT02'
+    );
 INSERT INTO financial_gl_accounts (
         gl_code,
         gl_name,
@@ -3186,8 +3194,8 @@ VALUES -- Budi Santoso (sedang ANALYSIS)
     (
         '0195a1a2-0001-7000-bb34-000000000001',
         '0195383f-427c-7000-bb34-317101010190',
-        'p002',
-        'u001',
+        '0195b1b2-0001-7000-bb34-000000000002',
+        '0195c1c2-0001-7000-bb34-000000000001',
         75000000,
         36,
         'ANALYSIS',
@@ -3198,8 +3206,8 @@ VALUES -- Budi Santoso (sedang ANALYSIS)
     (
         '0195a1a2-0001-7000-bb34-000000000002',
         '0195383f-427d-7000-bb34-327301200892',
-        'p001',
-        'u001',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
         25000000,
         12,
         'INTAKE',
@@ -3547,11 +3555,41 @@ INSERT INTO product_status_flows (
         is_default,
         requires_role
     )
-VALUES ('p001', 'INTAKE', 'SURVEY', true, 'AO'),
-    ('p001', 'SURVEY', 'ANALYSIS', true, 'AO'),
-    ('p001', 'ANALYSIS', 'APPROVE', false, 'ANALYST'),
-    ('p001', 'ANALYSIS', 'COMMITTEE', true, 'ANALYST'),
-    ('p002', 'INTAKE', 'SURVEY', true, 'AO');
+VALUES (
+        '0195b1b2-0001-7000-bb34-000000000001',
+        'INTAKE',
+        'SURVEY',
+        true,
+        'AO'
+    ),
+    (
+        '0195b1b2-0001-7000-bb34-000000000001',
+        'SURVEY',
+        'ANALYSIS',
+        true,
+        'AO'
+    ),
+    (
+        '0195b1b2-0001-7000-bb34-000000000001',
+        'ANALYSIS',
+        'APPROVE',
+        false,
+        'ANALYST'
+    ),
+    (
+        '0195b1b2-0001-7000-bb34-000000000001',
+        'ANALYSIS',
+        'COMMITTEE',
+        true,
+        'ANALYST'
+    ),
+    (
+        '0195b1b2-0001-7000-bb34-000000000002',
+        'INTAKE',
+        'SURVEY',
+        true,
+        'AO'
+    );
 -- 11. PARTIES (Spouse, Guarantor, etc)
 INSERT INTO parties (id, party_type, identifier, name, date_of_birth)
 VALUES (
@@ -3596,7 +3634,7 @@ VALUES (
         'SURVEY_RETAIL',
         'Template Survey Retail',
         'personal',
-        'p002',
+        '0195b1b2-0001-7000-bb34-000000000002',
         true
     );
 INSERT INTO survey_sections (
