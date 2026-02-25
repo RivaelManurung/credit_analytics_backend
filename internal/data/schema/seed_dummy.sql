@@ -1452,1721 +1452,1725 @@ VALUES -- Budi Santoso
         'BOOLEAN'
     );
 -- Rina Wijaya (0195383f-427d-7000-bb34-327301200892)
--- 1 IDENTITAS
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'tempat_lahir',
-    'Bandung',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jenis_kelamin',
-    'PEREMPUAN',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'status_perkawinan',
-    'BELUM MENIKAH',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'nama_ibu_kandung',
-    'Ratna Sari',
-    'STRING'
-),
--- 2 PASANGAN
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_nama_lengkap',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_nik',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_tempat_lahir',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_tanggal_lahir',
-    '',
-    'DATE'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_jenis_kelamin',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_kewarganegaraan',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_nama_ibu_kandung',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_npwp',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_perkawinan_ke',
-    '0',
-    'NUMBER'
-),
--- 3 KONTAK & ALAMAT
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'no_hp_utama',
-    '08134455667',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'no_hp_alternatif',
-    '081355667788',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'email_pribadi',
-    'rina.w@email.com',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'alamat_ktp',
-    'Jl. Sukajadi No.88',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kelurahan_ktp',
-    'Sukajadi',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kecamatan_ktp',
-    'Sukajadi',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kota_ktp',
-    'Bandung',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'provinsi_ktp',
-    'Jawa Barat',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kode_pos_ktp',
-    '40162',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'alamat_domisili',
-    'Jl. Sukajadi No.88',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kelurahan_domisili',
-    'Sukajadi',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kecamatan_domisili',
-    'Sukajadi',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kota_domisili',
-    'Bandung',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'provinsi_domisili',
-    'Jawa Barat',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'kode_pos_domisili',
-    '40162',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'lama_tinggal_tahun',
-    '5',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'status_kepemilikan_rumah',
-    'KONTRAK',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jarak_ke_cabang',
-    '3',
-    'NUMBER'
-),
--- 4 PROFIL RUMAH TANGGA
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jumlah_tanggungan',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jumlah_anggota_rt',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jumlah_anggota_rt_berpenghasilan',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jumlah_anggota_rt_berhutang',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_pekerjaan_status',
-    '',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pasangan_penghasilan_bulanan',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'total_penghasilan_rt',
-    '9000000',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'total_pengeluaran_rt',
-    '4000000',
-    'NUMBER'
-),
--- 5 PENDIDIKAN & SOSIAL
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pendidikan_terakhir',
-    'S1',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'jurusan_pendidikan',
-    'Akuntansi',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'sertifikasi_profesi',
-    'Brevet Pajak',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'peran_sosial',
-    'Relawan Komunitas',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'dikenal_lingkungan_sekitar',
-    'true',
-    'BOOLEAN'
-),
--- 6 PEKERJAAN
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_status',
-    'KARYAWAN TETAP',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_nama_perusahaan',
-    'PT Finansial Sejahtera',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_industri',
-    'Keuangan',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_alamat',
-    'Jl. Asia Afrika No.10',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_jabatan',
-    'Account Officer',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_lama_bekerja',
-    '4',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_telp_perusahaan',
-    '0225551234',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_gaji_bersih',
-    '8500000',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_penghasilan_lain',
-    '1500000',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_metode_pembayaran',
-    'TRANSFER',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'pekerjaan_status_verifikasi',
-    'TERVERIFIKASI',
-    'STRING'
-),
--- 7 USAHA
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_nama',
-    'Online Shop Rina',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_jenis',
-    'PERDAGANGAN ONLINE',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_sektor',
-    'Retail',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_lama_berusaha',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_alamat',
-    'Online',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_status_kepemilikan_tempat',
-    'ONLINE',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_jumlah_karyawan',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'usaha_penghasilan_bulanan',
-    '1500000',
-    'NUMBER'
-),
--- 8 KARAKTER
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_disiplin_bayar',
-    'BAIK',
-    'STRING'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_riwayat_gagal_bayar',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_frekuensi_pindah_kerja',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_frekuensi_pindah_alamat',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_gaya_hidup_mewah',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427d-7000-bb34-327301200892',
-    'karakter_indikasi_fraud',
-    'false',
-    'BOOLEAN'
-);
+INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
+VALUES -- 1 IDENTITAS
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'tempat_lahir',
+        'Bandung',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jenis_kelamin',
+        'PEREMPUAN',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'status_perkawinan',
+        'BELUM MENIKAH',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'nama_ibu_kandung',
+        'Ratna Sari',
+        'STRING'
+    ),
+    -- 2 PASANGAN
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_nama_lengkap',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_nik',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_tempat_lahir',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_tanggal_lahir',
+        '',
+        'DATE'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_jenis_kelamin',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_kewarganegaraan',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_nama_ibu_kandung',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_npwp',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_perkawinan_ke',
+        '0',
+        'NUMBER'
+    ),
+    -- 3 KONTAK & ALAMAT
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'no_hp_utama',
+        '08134455667',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'no_hp_alternatif',
+        '081355667788',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'email_pribadi',
+        'rina.w@email.com',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'alamat_ktp',
+        'Jl. Sukajadi No.88',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kelurahan_ktp',
+        'Sukajadi',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kecamatan_ktp',
+        'Sukajadi',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kota_ktp',
+        'Bandung',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'provinsi_ktp',
+        'Jawa Barat',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kode_pos_ktp',
+        '40162',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'alamat_domisili',
+        'Jl. Sukajadi No.88',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kelurahan_domisili',
+        'Sukajadi',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kecamatan_domisili',
+        'Sukajadi',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kota_domisili',
+        'Bandung',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'provinsi_domisili',
+        'Jawa Barat',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'kode_pos_domisili',
+        '40162',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'lama_tinggal_tahun',
+        '5',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'status_kepemilikan_rumah',
+        'KONTRAK',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jarak_ke_cabang',
+        '3',
+        'NUMBER'
+    ),
+    -- 4 PROFIL RUMAH TANGGA
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jumlah_tanggungan',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jumlah_anggota_rt',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jumlah_anggota_rt_berpenghasilan',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jumlah_anggota_rt_berhutang',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_pekerjaan_status',
+        '',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pasangan_penghasilan_bulanan',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'total_penghasilan_rt',
+        '9000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'total_pengeluaran_rt',
+        '4000000',
+        'NUMBER'
+    ),
+    -- 5 PENDIDIKAN & SOSIAL
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pendidikan_terakhir',
+        'S1',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'jurusan_pendidikan',
+        'Akuntansi',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'sertifikasi_profesi',
+        'Brevet Pajak',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'peran_sosial',
+        'Relawan Komunitas',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'dikenal_lingkungan_sekitar',
+        'true',
+        'BOOLEAN'
+    ),
+    -- 6 PEKERJAAN
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_status',
+        'KARYAWAN TETAP',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_nama_perusahaan',
+        'PT Finansial Sejahtera',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_industri',
+        'Keuangan',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_alamat',
+        'Jl. Asia Afrika No.10',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_jabatan',
+        'Account Officer',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_lama_bekerja',
+        '4',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_telp_perusahaan',
+        '0225551234',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_gaji_bersih',
+        '8500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_penghasilan_lain',
+        '1500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_metode_pembayaran',
+        'TRANSFER',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'pekerjaan_status_verifikasi',
+        'TERVERIFIKASI',
+        'STRING'
+    ),
+    -- 7 USAHA
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_nama',
+        'Online Shop Rina',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_jenis',
+        'PERDAGANGAN ONLINE',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_sektor',
+        'Retail',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_lama_berusaha',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_alamat',
+        'Online',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_status_kepemilikan_tempat',
+        'ONLINE',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_jumlah_karyawan',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'usaha_penghasilan_bulanan',
+        '1500000',
+        'NUMBER'
+    ),
+    -- 8 KARAKTER
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_disiplin_bayar',
+        'BAIK',
+        'STRING'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_riwayat_gagal_bayar',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_frekuensi_pindah_kerja',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_frekuensi_pindah_alamat',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_gaya_hidup_mewah',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427d-7000-bb34-327301200892',
+        'karakter_indikasi_fraud',
+        'false',
+        'BOOLEAN'
+    );
 -- Agus Prayogo (0195383f-427e-7000-bb34-317202101285)
--- 1 IDENTITAS
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'tempat_lahir',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jenis_kelamin',
-    'LAKI-LAKI',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'status_perkawinan',
-    'MENIKAH',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'nama_ibu_kandung',
-    'Sulastri',
-    'STRING'
-),
--- 2 PASANGAN
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_nama_lengkap',
-    'Maya Sari',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_nik',
-    '3172021012860002',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_tempat_lahir',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_tanggal_lahir',
-    '1989-07-12',
-    'DATE'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_jenis_kelamin',
-    'PEREMPUAN',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_nama_ibu_kandung',
-    'Wahyuni',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_npwp',
-    '45.123.987.6',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_perkawinan_ke',
-    '1',
-    'NUMBER'
-),
--- 3 KONTAK & ALAMAT
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'no_hp_utama',
-    '081299887766',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'no_hp_alternatif',
-    '081211223344',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'email_pribadi',
-    'agus.prayogo@email.com',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'alamat_ktp',
-    'Jl. Pandanaran No.20',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kelurahan_ktp',
-    'Pekunden',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kecamatan_ktp',
-    'Semarang Tengah',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kota_ktp',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'provinsi_ktp',
-    'Jawa Tengah',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kode_pos_ktp',
-    '50134',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'alamat_domisili',
-    'Jl. Melati No.123',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kelurahan_domisili',
-    'Kembangan',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kecamatan_domisili',
-    'Kembangan',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kota_domisili',
-    'Jakarta Barat',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'provinsi_domisili',
-    'DKI Jakarta',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'kode_pos_domisili',
-    '11610',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'lama_tinggal_tahun',
-    '6',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'status_kepemilikan_rumah',
-    'KPR',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jarak_ke_cabang',
-    '7',
-    'NUMBER'
-),
--- 4 PROFIL RUMAH TANGGA
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jumlah_tanggungan',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jumlah_anggota_rt',
-    '3',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jumlah_anggota_rt_berpenghasilan',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jumlah_anggota_rt_berhutang',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_pekerjaan_status',
-    'KARYAWAN',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pasangan_penghasilan_bulanan',
-    '5000000',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'total_penghasilan_rt',
-    '17500000',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'total_pengeluaran_rt',
-    '9000000',
-    'NUMBER'
-),
--- 5 PENDIDIKAN & SOSIAL
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pendidikan_terakhir',
-    'S1',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'jurusan_pendidikan',
-    'Teknik Industri',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'sertifikasi_profesi',
-    'Lean Six Sigma',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'peran_sosial',
-    'Pengurus Masjid',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'dikenal_lingkungan_sekitar',
-    'true',
-    'BOOLEAN'
-),
--- 6 PEKERJAAN
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_status',
-    'KARYAWAN TETAP',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_nama_perusahaan',
-    'PT Teknologi Maju Jaya',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_industri',
-    'Teknologi',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_alamat',
-    'Jl. Sudirman No.88',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_jabatan',
-    'IT Manager',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_lama_bekerja',
-    '8',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_telp_perusahaan',
-    '021888999',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_gaji_bersih',
-    '12500000',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_penghasilan_lain',
-    '2500000',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_metode_pembayaran',
-    'TRANSFER',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'pekerjaan_status_verifikasi',
-    'TERVERIFIKASI',
-    'STRING'
-),
--- 7 USAHA
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_nama',
-    'Rental Mobil Agus',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_jenis',
-    'JASA',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_sektor',
-    'Transportasi',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_lama_berusaha',
-    '4',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_alamat',
-    'Jl. Meruya Selatan',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_status_kepemilikan_tempat',
-    'MILIK SENDIRI',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_jumlah_karyawan',
-    '3',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'usaha_penghasilan_bulanan',
-    '4000000',
-    'NUMBER'
-),
--- 8 KARAKTER
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_disiplin_bayar',
-    'SANGAT DISIPLIN',
-    'STRING'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_riwayat_gagal_bayar',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_frekuensi_pindah_kerja',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_frekuensi_pindah_alamat',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_gaya_hidup_mewah',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427e-7000-bb34-317202101285',
-    'karakter_indikasi_fraud',
-    'false',
-    'BOOLEAN'
-);
+INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
+VALUES -- 1 IDENTITAS
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'tempat_lahir',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jenis_kelamin',
+        'LAKI-LAKI',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'status_perkawinan',
+        'MENIKAH',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'nama_ibu_kandung',
+        'Sulastri',
+        'STRING'
+    ),
+    -- 2 PASANGAN
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_nama_lengkap',
+        'Maya Sari',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_nik',
+        '3172021012860002',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_tempat_lahir',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_tanggal_lahir',
+        '1989-07-12',
+        'DATE'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_jenis_kelamin',
+        'PEREMPUAN',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_nama_ibu_kandung',
+        'Wahyuni',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_npwp',
+        '45.123.987.6',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_perkawinan_ke',
+        '1',
+        'NUMBER'
+    ),
+    -- 3 KONTAK & ALAMAT
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'no_hp_utama',
+        '081299887766',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'no_hp_alternatif',
+        '081211223344',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'email_pribadi',
+        'agus.prayogo@email.com',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'alamat_ktp',
+        'Jl. Pandanaran No.20',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kelurahan_ktp',
+        'Pekunden',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kecamatan_ktp',
+        'Semarang Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kota_ktp',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'provinsi_ktp',
+        'Jawa Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kode_pos_ktp',
+        '50134',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'alamat_domisili',
+        'Jl. Melati No.123',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kelurahan_domisili',
+        'Kembangan',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kecamatan_domisili',
+        'Kembangan',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kota_domisili',
+        'Jakarta Barat',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'provinsi_domisili',
+        'DKI Jakarta',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'kode_pos_domisili',
+        '11610',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'lama_tinggal_tahun',
+        '6',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'status_kepemilikan_rumah',
+        'KPR',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jarak_ke_cabang',
+        '7',
+        'NUMBER'
+    ),
+    -- 4 PROFIL RUMAH TANGGA
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jumlah_tanggungan',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jumlah_anggota_rt',
+        '3',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jumlah_anggota_rt_berpenghasilan',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jumlah_anggota_rt_berhutang',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_pekerjaan_status',
+        'KARYAWAN',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pasangan_penghasilan_bulanan',
+        '5000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'total_penghasilan_rt',
+        '17500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'total_pengeluaran_rt',
+        '9000000',
+        'NUMBER'
+    ),
+    -- 5 PENDIDIKAN & SOSIAL
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pendidikan_terakhir',
+        'S1',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'jurusan_pendidikan',
+        'Teknik Industri',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'sertifikasi_profesi',
+        'Lean Six Sigma',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'peran_sosial',
+        'Pengurus Masjid',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'dikenal_lingkungan_sekitar',
+        'true',
+        'BOOLEAN'
+    ),
+    -- 6 PEKERJAAN
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_status',
+        'KARYAWAN TETAP',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_nama_perusahaan',
+        'PT Teknologi Maju Jaya',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_industri',
+        'Teknologi',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_alamat',
+        'Jl. Sudirman No.88',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_jabatan',
+        'IT Manager',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_lama_bekerja',
+        '8',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_telp_perusahaan',
+        '021888999',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_gaji_bersih',
+        '12500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_penghasilan_lain',
+        '2500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_metode_pembayaran',
+        'TRANSFER',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'pekerjaan_status_verifikasi',
+        'TERVERIFIKASI',
+        'STRING'
+    ),
+    -- 7 USAHA
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_nama',
+        'Rental Mobil Agus',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_jenis',
+        'JASA',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_sektor',
+        'Transportasi',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_lama_berusaha',
+        '4',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_alamat',
+        'Jl. Meruya Selatan',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_status_kepemilikan_tempat',
+        'MILIK SENDIRI',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_jumlah_karyawan',
+        '3',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'usaha_penghasilan_bulanan',
+        '4000000',
+        'NUMBER'
+    ),
+    -- 8 KARAKTER
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_disiplin_bayar',
+        'SANGAT DISIPLIN',
+        'STRING'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_riwayat_gagal_bayar',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_frekuensi_pindah_kerja',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_frekuensi_pindah_alamat',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_gaya_hidup_mewah',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427e-7000-bb34-317202101285',
+        'karakter_indikasi_fraud',
+        'false',
+        'BOOLEAN'
+    );
 -- Dewi Lestari (0195383f-427f-7000-bb34-320101440595)
--- IDENTITAS
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'tempat_lahir',
-    'Bogor',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jenis_kelamin',
-    'PEREMPUAN',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'status_perkawinan',
-    'MENIKAH',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'nama_ibu_kandung',
-    'Nurhayati',
-    'STRING'
-),
--- PASANGAN
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_nama_lengkap',
-    'Andi Saputra',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_nik',
-    '3201014405960003',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_tempat_lahir',
-    'Bogor',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_tanggal_lahir',
-    '1994-05-21',
-    'DATE'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_jenis_kelamin',
-    'LAKI-LAKI',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_nama_ibu_kandung',
-    'Sri Mulyani',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_npwp',
-    '76.555.333.2',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_perkawinan_ke',
-    '1',
-    'NUMBER'
-),
--- KONTAK
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'no_hp_utama',
-    '081233445566',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'no_hp_alternatif',
-    '081222333444',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'email_pribadi',
-    'dewi.lestari@email.com',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'alamat_ktp',
-    'Jl. Pajajaran No.12',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kelurahan_ktp',
-    'Babakan',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kecamatan_ktp',
-    'Bogor Tengah',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kota_ktp',
-    'Bogor',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'provinsi_ktp',
-    'Jawa Barat',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kode_pos_ktp',
-    '16122',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'alamat_domisili',
-    'Jl. Pajajaran No.12',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kelurahan_domisili',
-    'Babakan',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kecamatan_domisili',
-    'Bogor Tengah',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kota_domisili',
-    'Bogor',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'provinsi_domisili',
-    'Jawa Barat',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'kode_pos_domisili',
-    '16122',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'lama_tinggal_tahun',
-    '10',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'status_kepemilikan_rumah',
-    'MILIK SENDIRI',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jarak_ke_cabang',
-    '4',
-    'NUMBER'
-),
--- RUMAH TANGGA
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jumlah_tanggungan',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jumlah_anggota_rt',
-    '4',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jumlah_anggota_rt_berpenghasilan',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jumlah_anggota_rt_berhutang',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_pekerjaan_status',
-    'WIRASWASTA',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pasangan_penghasilan_bulanan',
-    '4000000',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'total_penghasilan_rt',
-    '9000000',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'total_pengeluaran_rt',
-    '5000000',
-    'NUMBER'
-),
--- PENDIDIKAN
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pendidikan_terakhir',
-    'D3',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'jurusan_pendidikan',
-    'Administrasi',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'sertifikasi_profesi',
-    '-',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'peran_sosial',
-    'PKK',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'dikenal_lingkungan_sekitar',
-    'true',
-    'BOOLEAN'
-),
--- PEKERJAAN
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_status',
-    'WIRASWASTA',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_nama_perusahaan',
-    'Warung Dewi',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_industri',
-    'Kuliner',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_alamat',
-    'Jl. Pajajaran No.12',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_jabatan',
-    'Pemilik',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_lama_bekerja',
-    '6',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_telp_perusahaan',
-    '-',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_gaji_bersih',
-    '5000000',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_penghasilan_lain',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_metode_pembayaran',
-    'CASH',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'pekerjaan_status_verifikasi',
-    'TERVERIFIKASI',
-    'STRING'
-),
--- USAHA
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_nama',
-    'Warung Dewi',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_jenis',
-    'PERDAGANGAN',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_sektor',
-    'Kuliner',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_lama_berusaha',
-    '6',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_alamat',
-    'Jl. Pajajaran No.12',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_status_kepemilikan_tempat',
-    'MILIK SENDIRI',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_jumlah_karyawan',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'usaha_penghasilan_bulanan',
-    '5000000',
-    'NUMBER'
-),
--- KARAKTER
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_disiplin_bayar',
-    'BAIK',
-    'STRING'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_riwayat_gagal_bayar',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_frekuensi_pindah_kerja',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_frekuensi_pindah_alamat',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_gaya_hidup_mewah',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-427f-7000-bb34-320101440595',
-    'karakter_indikasi_fraud',
-    'false',
-    'BOOLEAN'
-);
+INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
+VALUES -- IDENTITAS
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'tempat_lahir',
+        'Bogor',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jenis_kelamin',
+        'PEREMPUAN',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'status_perkawinan',
+        'MENIKAH',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'nama_ibu_kandung',
+        'Nurhayati',
+        'STRING'
+    ),
+    -- PASANGAN
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_nama_lengkap',
+        'Andi Saputra',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_nik',
+        '3201014405960003',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_tempat_lahir',
+        'Bogor',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_tanggal_lahir',
+        '1994-05-21',
+        'DATE'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_jenis_kelamin',
+        'LAKI-LAKI',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_nama_ibu_kandung',
+        'Sri Mulyani',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_npwp',
+        '76.555.333.2',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_perkawinan_ke',
+        '1',
+        'NUMBER'
+    ),
+    -- KONTAK
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'no_hp_utama',
+        '081233445566',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'no_hp_alternatif',
+        '081222333444',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'email_pribadi',
+        'dewi.lestari@email.com',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'alamat_ktp',
+        'Jl. Pajajaran No.12',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kelurahan_ktp',
+        'Babakan',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kecamatan_ktp',
+        'Bogor Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kota_ktp',
+        'Bogor',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'provinsi_ktp',
+        'Jawa Barat',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kode_pos_ktp',
+        '16122',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'alamat_domisili',
+        'Jl. Pajajaran No.12',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kelurahan_domisili',
+        'Babakan',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kecamatan_domisili',
+        'Bogor Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kota_domisili',
+        'Bogor',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'provinsi_domisili',
+        'Jawa Barat',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'kode_pos_domisili',
+        '16122',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'lama_tinggal_tahun',
+        '10',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'status_kepemilikan_rumah',
+        'MILIK SENDIRI',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jarak_ke_cabang',
+        '4',
+        'NUMBER'
+    ),
+    -- RUMAH TANGGA
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jumlah_tanggungan',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jumlah_anggota_rt',
+        '4',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jumlah_anggota_rt_berpenghasilan',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jumlah_anggota_rt_berhutang',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_pekerjaan_status',
+        'WIRASWASTA',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pasangan_penghasilan_bulanan',
+        '4000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'total_penghasilan_rt',
+        '9000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'total_pengeluaran_rt',
+        '5000000',
+        'NUMBER'
+    ),
+    -- PENDIDIKAN
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pendidikan_terakhir',
+        'D3',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'jurusan_pendidikan',
+        'Administrasi',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'sertifikasi_profesi',
+        '-',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'peran_sosial',
+        'PKK',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'dikenal_lingkungan_sekitar',
+        'true',
+        'BOOLEAN'
+    ),
+    -- PEKERJAAN
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_status',
+        'WIRASWASTA',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_nama_perusahaan',
+        'Warung Dewi',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_industri',
+        'Kuliner',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_alamat',
+        'Jl. Pajajaran No.12',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_jabatan',
+        'Pemilik',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_lama_bekerja',
+        '6',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_telp_perusahaan',
+        '-',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_gaji_bersih',
+        '5000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_penghasilan_lain',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_metode_pembayaran',
+        'CASH',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'pekerjaan_status_verifikasi',
+        'TERVERIFIKASI',
+        'STRING'
+    ),
+    -- USAHA
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_nama',
+        'Warung Dewi',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_jenis',
+        'PERDAGANGAN',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_sektor',
+        'Kuliner',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_lama_berusaha',
+        '6',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_alamat',
+        'Jl. Pajajaran No.12',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_status_kepemilikan_tempat',
+        'MILIK SENDIRI',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_jumlah_karyawan',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'usaha_penghasilan_bulanan',
+        '5000000',
+        'NUMBER'
+    ),
+    -- KARAKTER
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_disiplin_bayar',
+        'BAIK',
+        'STRING'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_riwayat_gagal_bayar',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_frekuensi_pindah_kerja',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_frekuensi_pindah_alamat',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_gaya_hidup_mewah',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-427f-7000-bb34-320101440595',
+        'karakter_indikasi_fraud',
+        'false',
+        'BOOLEAN'
+    );
 -- Bambang Heru (0195383f-4280-7000-bb34-337402121288)
--- IDENTITAS
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'tempat_lahir',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jenis_kelamin',
-    'LAKI-LAKI',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'status_perkawinan',
-    'MENIKAH',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'nama_ibu_kandung',
-    'Kartini',
-    'STRING'
-),
--- PASANGAN
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_nama_lengkap',
-    'Siti Nurhaliza',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_nik',
-    '3374021212890004',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_tempat_lahir',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_tanggal_lahir',
-    '1988-11-02',
-    'DATE'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_jenis_kelamin',
-    'PEREMPUAN',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_kewarganegaraan',
-    'WNI',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_nama_ibu_kandung',
-    'Fatimah',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_npwp',
-    '11.222.333.4',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_perkawinan_ke',
-    '1',
-    'NUMBER'
-),
--- KONTAK & ALAMAT
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'no_hp_utama',
-    '085611223344',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'no_hp_alternatif',
-    '085622334455',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'email_pribadi',
-    'bambang.heru@email.com',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'alamat_ktp',
-    'Jl. Gajah Mada No.9',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kelurahan_ktp',
-    'Kembangsari',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kecamatan_ktp',
-    'Semarang Tengah',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kota_ktp',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'provinsi_ktp',
-    'Jawa Tengah',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kode_pos_ktp',
-    '50135',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'alamat_domisili',
-    'Jl. Pandanaran No.77',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kelurahan_domisili',
-    'Pekunden',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kecamatan_domisili',
-    'Semarang Tengah',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kota_domisili',
-    'Semarang',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'provinsi_domisili',
-    'Jawa Tengah',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'kode_pos_domisili',
-    '50134',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'lama_tinggal_tahun',
-    '12',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'status_kepemilikan_rumah',
-    'MILIK SENDIRI',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jarak_ke_cabang',
-    '6',
-    'NUMBER'
-),
--- PROFIL RUMAH TANGGA
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jumlah_tanggungan',
-    '3',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jumlah_anggota_rt',
-    '5',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jumlah_anggota_rt_berpenghasilan',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jumlah_anggota_rt_berhutang',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_pekerjaan_status',
-    'IBU RUMAH TANGGA',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pasangan_penghasilan_bulanan',
-    '0',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'total_penghasilan_rt',
-    '9500000',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'total_pengeluaran_rt',
-    '7000000',
-    'NUMBER'
-),
--- PENDIDIKAN & SOSIAL
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pendidikan_terakhir',
-    'SMA',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'jurusan_pendidikan',
-    'IPA',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'sertifikasi_profesi',
-    'Teknisi Elektronik',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'peran_sosial',
-    'Karang Taruna',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'dikenal_lingkungan_sekitar',
-    'true',
-    'BOOLEAN'
-),
--- PEKERJAAN
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_status',
-    'KARYAWAN KONTRAK',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_nama_perusahaan',
-    'PT Elektronik Nusantara',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_industri',
-    'Elektronik',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_alamat',
-    'Jl. Industri No.5',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_jabatan',
-    'Teknisi',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_lama_bekerja',
-    '3',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_telp_perusahaan',
-    '024777888',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_gaji_bersih',
-    '7500000',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_penghasilan_lain',
-    '1000000',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_metode_pembayaran',
-    'TRANSFER',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'pekerjaan_status_verifikasi',
-    'TERVERIFIKASI',
-    'STRING'
-),
--- USAHA
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_nama',
-    'Servis Elektronik Bambang',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_jenis',
-    'JASA',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_sektor',
-    'Elektronik',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_lama_berusaha',
-    '5',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_alamat',
-    'Jl. Pandanaran No.80',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_status_kepemilikan_tempat',
-    'SEWA',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_jumlah_karyawan',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'usaha_penghasilan_bulanan',
-    '2000000',
-    'NUMBER'
-),
--- KARAKTER
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_disiplin_bayar',
-    'CUKUP',
-    'STRING'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_riwayat_gagal_bayar',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_frekuensi_pindah_kerja',
-    '2',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_frekuensi_pindah_alamat',
-    '1',
-    'NUMBER'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_gaya_hidup_mewah',
-    'false',
-    'BOOLEAN'
-),
-(
-    '0195383f-4280-7000-bb34-337402121288',
-    'karakter_indikasi_fraud',
-    'false',
-    'BOOLEAN'
-);
+INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
+VALUES -- IDENTITAS
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'tempat_lahir',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jenis_kelamin',
+        'LAKI-LAKI',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'status_perkawinan',
+        'MENIKAH',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'nama_ibu_kandung',
+        'Kartini',
+        'STRING'
+    ),
+    -- PASANGAN
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_nama_lengkap',
+        'Siti Nurhaliza',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_nik',
+        '3374021212890004',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_tempat_lahir',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_tanggal_lahir',
+        '1988-11-02',
+        'DATE'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_jenis_kelamin',
+        'PEREMPUAN',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_kewarganegaraan',
+        'WNI',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_nama_ibu_kandung',
+        'Fatimah',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_npwp',
+        '11.222.333.4',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_perkawinan_ke',
+        '1',
+        'NUMBER'
+    ),
+    -- KONTAK & ALAMAT
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'no_hp_utama',
+        '085611223344',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'no_hp_alternatif',
+        '085622334455',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'email_pribadi',
+        'bambang.heru@email.com',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'alamat_ktp',
+        'Jl. Gajah Mada No.9',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kelurahan_ktp',
+        'Kembangsari',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kecamatan_ktp',
+        'Semarang Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kota_ktp',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'provinsi_ktp',
+        'Jawa Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kode_pos_ktp',
+        '50135',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'alamat_domisili',
+        'Jl. Pandanaran No.77',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kelurahan_domisili',
+        'Pekunden',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kecamatan_domisili',
+        'Semarang Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kota_domisili',
+        'Semarang',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'provinsi_domisili',
+        'Jawa Tengah',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'kode_pos_domisili',
+        '50134',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'lama_tinggal_tahun',
+        '12',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'status_kepemilikan_rumah',
+        'MILIK SENDIRI',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jarak_ke_cabang',
+        '6',
+        'NUMBER'
+    ),
+    -- PROFIL RUMAH TANGGA
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jumlah_tanggungan',
+        '3',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jumlah_anggota_rt',
+        '5',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jumlah_anggota_rt_berpenghasilan',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jumlah_anggota_rt_berhutang',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_pekerjaan_status',
+        'IBU RUMAH TANGGA',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pasangan_penghasilan_bulanan',
+        '0',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'total_penghasilan_rt',
+        '9500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'total_pengeluaran_rt',
+        '7000000',
+        'NUMBER'
+    ),
+    -- PENDIDIKAN & SOSIAL
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pendidikan_terakhir',
+        'SMA',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'jurusan_pendidikan',
+        'IPA',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'sertifikasi_profesi',
+        'Teknisi Elektronik',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'peran_sosial',
+        'Karang Taruna',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'dikenal_lingkungan_sekitar',
+        'true',
+        'BOOLEAN'
+    ),
+    -- PEKERJAAN
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_status',
+        'KARYAWAN KONTRAK',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_nama_perusahaan',
+        'PT Elektronik Nusantara',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_industri',
+        'Elektronik',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_alamat',
+        'Jl. Industri No.5',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_jabatan',
+        'Teknisi',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_lama_bekerja',
+        '3',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_telp_perusahaan',
+        '024777888',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_gaji_bersih',
+        '7500000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_penghasilan_lain',
+        '1000000',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_metode_pembayaran',
+        'TRANSFER',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'pekerjaan_status_verifikasi',
+        'TERVERIFIKASI',
+        'STRING'
+    ),
+    -- USAHA
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_nama',
+        'Servis Elektronik Bambang',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_jenis',
+        'JASA',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_sektor',
+        'Elektronik',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_lama_berusaha',
+        '5',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_alamat',
+        'Jl. Pandanaran No.80',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_status_kepemilikan_tempat',
+        'SEWA',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_jumlah_karyawan',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'usaha_penghasilan_bulanan',
+        '2000000',
+        'NUMBER'
+    ),
+    -- KARAKTER
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_disiplin_bayar',
+        'CUKUP',
+        'STRING'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_riwayat_gagal_bayar',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_frekuensi_pindah_kerja',
+        '2',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_frekuensi_pindah_alamat',
+        '1',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_gaya_hidup_mewah',
+        'false',
+        'BOOLEAN'
+    ),
+    (
+        '0195383f-4280-7000-bb34-337402121288',
+        'karakter_indikasi_fraud',
+        'false',
+        'BOOLEAN'
+    );
 INSERT INTO applications (
         id,
         applicant_id,
@@ -3254,183 +3258,183 @@ VALUES -- BUDI
         '2025-01',
         1000000,
         'BUREAU'
+    ),
+    -- RINA WIJAYA
+    -- INCOME
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        'INC_SALARY',
+        'MONTHLY',
+        '2025-01',
+        15000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        'INC_BUSINESS',
+        'MONTHLY',
+        '2025-01',
+        2000000,
+        'SURVEY'
+    ),
+    -- EXPENSE
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        'EXP_LIVING',
+        'MONTHLY',
+        '2025-01',
+        5000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        'EXP_UTILITIES',
+        'MONTHLY',
+        '2025-01',
+        1500000,
+        'SURVEY'
+    ),
+    -- EXISTING DEBT (SLIK/Bureau)
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        'DEBT_INSTALLMENT',
+        'MONTHLY',
+        '2025-01',
+        1000000,
+        'BUREAU'
+    ),
+    -- AGUS PRAYOGO
+    -- INCOME
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        'INC_SALARY',
+        'MONTHLY',
+        '2025-01',
+        15000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        'INC_BUSINESS',
+        'MONTHLY',
+        '2025-01',
+        2000000,
+        'SURVEY'
+    ),
+    -- EXPENSE
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        'EXP_LIVING',
+        'MONTHLY',
+        '2025-01',
+        5000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        'EXP_UTILITIES',
+        'MONTHLY',
+        '2025-01',
+        1500000,
+        'SURVEY'
+    ),
+    -- EXISTING DEBT (SLIK/Bureau)
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        'DEBT_INSTALLMENT',
+        'MONTHLY',
+        '2025-01',
+        1000000,
+        'BUREAU'
+    ),
+    -- DEWI LESTARI
+    -- INCOME
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        'INC_SALARY',
+        'MONTHLY',
+        '2025-01',
+        15000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        'INC_BUSINESS',
+        'MONTHLY',
+        '2025-01',
+        2000000,
+        'SURVEY'
+    ),
+    -- EXPENSE
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        'EXP_LIVING',
+        'MONTHLY',
+        '2025-01',
+        5000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        'EXP_UTILITIES',
+        'MONTHLY',
+        '2025-01',
+        1500000,
+        'SURVEY'
+    ),
+    -- EXISTING DEBT (SLIK/Bureau)
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        'DEBT_INSTALLMENT',
+        'MONTHLY',
+        '2025-01',
+        1000000,
+        'BUREAU'
+    ),
+    -- BAMBANG HERU
+    -- INCOME
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        'INC_SALARY',
+        'MONTHLY',
+        '2025-01',
+        15000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        'INC_BUSINESS',
+        'MONTHLY',
+        '2025-01',
+        2000000,
+        'SURVEY'
+    ),
+    -- EXPENSE
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        'EXP_LIVING',
+        'MONTHLY',
+        '2025-01',
+        5000000,
+        'SURVEY'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        'EXP_UTILITIES',
+        'MONTHLY',
+        '2025-01',
+        1500000,
+        'SURVEY'
+    ),
+    -- EXISTING DEBT (SLIK/Bureau)
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        'DEBT_INSTALLMENT',
+        'MONTHLY',
+        '2025-01',
+        1000000,
+        'BUREAU'
     );
--- RINA
--- INCOME
-(
-    '0195a1a2-0001-7000-bb34-000000000002',
-    'INC_SALARY',
-    'MONTHLY',
-    '2025-01',
-    15000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000002',
-    'INC_BUSINESS',
-    'MONTHLY',
-    '2025-01',
-    2000000,
-    'SURVEY'
-),
--- EXPENSE
-(
-    '0195a1a2-0001-7000-bb34-000000000002',
-    'EXP_LIVING',
-    'MONTHLY',
-    '2025-01',
-    5000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000002',
-    'EXP_UTILITIES',
-    'MONTHLY',
-    '2025-01',
-    1500000,
-    'SURVEY'
-),
--- EXISTING DEBT (SLIK/Bureau)
-(
-    '0195a1a2-0001-7000-bb34-000000000002',
-    'DEBT_INSTALLMENT',
-    'MONTHLY',
-    '2025-01',
-    1000000,
-    'BUREAU'
-);
--- BAMBANG
--- INCOME
-(
-    '0195a1a2-0001-7000-bb34-000000000003',
-    'INC_SALARY',
-    'MONTHLY',
-    '2025-01',
-    15000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000003',
-    'INC_BUSINESS',
-    'MONTHLY',
-    '2025-01',
-    2000000,
-    'SURVEY'
-),
--- EXPENSE
-(
-    '0195a1a2-0001-7000-bb34-000000000003',
-    'EXP_LIVING',
-    'MONTHLY',
-    '2025-01',
-    5000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000003',
-    'EXP_UTILITIES',
-    'MONTHLY',
-    '2025-01',
-    1500000,
-    'SURVEY'
-),
--- EXISTING DEBT (SLIK/Bureau)
-(
-    '0195a1a2-0001-7000-bb34-000000000003',
-    'DEBT_INSTALLMENT',
-    'MONTHLY',
-    '2025-01',
-    1000000,
-    'BUREAU'
-);
--- SITI
--- INCOME
-(
-    '0195a1a2-0001-7000-bb34-000000000004',
-    'INC_SALARY',
-    'MONTHLY',
-    '2025-01',
-    15000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000004',
-    'INC_BUSINESS',
-    'MONTHLY',
-    '2025-01',
-    2000000,
-    'SURVEY'
-),
--- EXPENSE
-(
-    '0195a1a2-0001-7000-bb34-000000000004',
-    'EXP_LIVING',
-    'MONTHLY',
-    '2025-01',
-    5000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000004',
-    'EXP_UTILITIES',
-    'MONTHLY',
-    '2025-01',
-    1500000,
-    'SURVEY'
-),
--- EXISTING DEBT (SLIK/Bureau)
-(
-    '0195a1a2-0001-7000-bb34-000000000004',
-    'DEBT_INSTALLMENT',
-    'MONTHLY',
-    '2025-01',
-    1000000,
-    'BUREAU'
-);
--- BUDI
--- INCOME
-(
-    '0195a1a2-0001-7000-bb34-000000000005',
-    'INC_SALARY',
-    'MONTHLY',
-    '2025-01',
-    15000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000005',
-    'INC_BUSINESS',
-    'MONTHLY',
-    '2025-01',
-    2000000,
-    'SURVEY'
-),
--- EXPENSE
-(
-    '0195a1a2-0001-7000-bb34-000000000005',
-    'EXP_LIVING',
-    'MONTHLY',
-    '2025-01',
-    5000000,
-    'SURVEY'
-),
-(
-    '0195a1a2-0001-7000-bb34-000000000005',
-    'EXP_UTILITIES',
-    'MONTHLY',
-    '2025-01',
-    1500000,
-    'SURVEY'
-),
--- EXISTING DEBT (SLIK/Bureau)
-(
-    '0195a1a2-0001-7000-bb34-000000000005',
-    'DEBT_INSTALLMENT',
-    'MONTHLY',
-    '2025-01',
-    1000000,
-    'BUREAU'
-);
 -- 9. STATUS LOGS (Realistic history)
 INSERT INTO application_status_logs (
         application_id,

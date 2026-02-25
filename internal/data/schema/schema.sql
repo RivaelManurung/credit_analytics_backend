@@ -1,28 +1,39 @@
 -- Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
 -- Function to generate UUID v7
 CREATE OR REPLACE FUNCTION uuid_generate_v7() RETURNS uuid AS $$
-DECLARE
-  v_unix_t BIGINT;
-  v_uuid_bytes BYTEA;
-BEGIN
-  v_unix_t := (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT;
-  v_uuid_bytes := decode(lpad(to_hex(v_unix_t), 12, '0'), 'hex') || gen_random_bytes(10);
-  v_uuid_bytes := set_byte(v_uuid_bytes, 6, (get_byte(v_uuid_bytes, 6) & 15) | 112); -- version 7
-  v_uuid_bytes := set_byte(v_uuid_bytes, 8, (get_byte(v_uuid_bytes, 8) & 63) | 128); -- variant 1
-  RETURN encode(v_uuid_bytes, 'hex')::uuid;
+DECLARE v_unix_t BIGINT;
+v_uuid_bytes BYTEA;
+BEGIN v_unix_t := (
+    EXTRACT(
+        EPOCH
+        FROM NOW()
+    ) * 1000
+)::BIGINT;
+v_uuid_bytes := decode(lpad(to_hex(v_unix_t), 12, '0'), 'hex') || gen_random_bytes(10);
+v_uuid_bytes := set_byte(
+    v_uuid_bytes,
+    6,
+    (get_byte(v_uuid_bytes, 6) & 15) | 112
+);
+-- version 7
+v_uuid_bytes := set_byte(
+    v_uuid_bytes,
+    8,
+    (get_byte(v_uuid_bytes, 8) & 63) | 128
+);
+-- variant 1
+RETURN encode(v_uuid_bytes, 'hex')::uuid;
 END;
 $$ LANGUAGE plpgsql;
-
 -- ==========================
 -- CORE TABLES
 -- ==========================
-
 CREATE TABLE IF NOT EXISTS applicants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
-    applicant_type VARCHAR(20) NOT NULL, -- personal | corporate
+    applicant_type VARCHAR(20) NOT NULL,
+    -- personal | corporate
     identity_number VARCHAR(100),
     tax_id VARCHAR(100),
     full_name VARCHAR(255),
@@ -31,7 +42,6 @@ CREATE TABLE IF NOT EXISTS applicants (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by UUID
 );
-
 CREATE TABLE IF NOT EXISTS applicant_attributes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_id UUID NOT NULL REFERENCES applicants(id) ON DELETE CASCADE,
@@ -41,65 +51,74 @@ CREATE TABLE IF NOT EXISTS applicant_attributes (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (applicant_id, attr_key)
 );
-
 -- Tabel kategori atribut yang bisa dikelola secara dinamis via API.
 -- Icon dan label disimpan di sini (satu icon per kategori, bukan per atribut).
 CREATE TABLE IF NOT EXISTS attribute_categories (
-    category_code   VARCHAR(100) PRIMARY KEY,
-    category_name   VARCHAR(255) NOT NULL,
-    ui_icon         VARCHAR(100),         -- Lucide / Heroicons icon name
-    display_order   INT DEFAULT 0,
-    description     VARCHAR(255)
+    category_code VARCHAR(100) PRIMARY KEY,
+    category_name VARCHAR(255) NOT NULL,
+    ui_icon VARCHAR(100),
+    -- Lucide / Heroicons icon name
+    display_order INT DEFAULT 0,
+    description VARCHAR(255)
 );
-
-
 CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
-    attribute_code  VARCHAR(100) PRIMARY KEY,
-    applies_to      VARCHAR(20) NOT NULL, -- PERSONAL | CORPORATE | BOTH
-    scope           VARCHAR(20) NOT NULL, -- APPLICANT | APPLICATION | BOTH
-    value_type      VARCHAR(20) NOT NULL, -- STRING | NUMBER | BOOLEAN | DATE
-    category_code   VARCHAR(100) REFERENCES attribute_categories(category_code) ON UPDATE CASCADE ON DELETE SET NULL,
-    ui_label        VARCHAR(255),         -- Label yang tampil di UI per atribut
-    is_required     BOOLEAN DEFAULT FALSE,
-    risk_relevant   BOOLEAN DEFAULT FALSE,
-    description     VARCHAR(255)
+    attribute_code VARCHAR(100) PRIMARY KEY,
+    applies_to VARCHAR(20) NOT NULL,
+    -- PERSONAL | CORPORATE | BOTH
+    scope VARCHAR(20) NOT NULL,
+    -- APPLICANT | APPLICATION | BOTH
+    value_type VARCHAR(20) NOT NULL,
+    -- STRING | NUMBER | BOOLEAN | DATE
+    category_code VARCHAR(100) REFERENCES attribute_categories(category_code) ON UPDATE CASCADE ON DELETE
+    SET NULL,
+        ui_label VARCHAR(255),
+        -- Label yang tampil di UI per atribut
+        is_required BOOLEAN DEFAULT FALSE,
+        risk_relevant BOOLEAN DEFAULT FALSE,
+        description VARCHAR(255)
 );
-
 -- Backward-compat: pastikan kolom baru ada jika tabel sudah terbuat sebelumnya
-ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
-ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
-ALTER TABLE attribute_categories ADD COLUMN IF NOT EXISTS display_order INT DEFAULT 0;
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS applies_to VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS scope VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS value_type VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS is_required BOOLEAN DEFAULT FALSE;
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
-ALTER TABLE custom_column_attribute_registries ADD COLUMN IF NOT EXISTS description VARCHAR(255);
-
-
+ALTER TABLE attribute_categories
+ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
+ALTER TABLE attribute_categories
+ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
+ALTER TABLE attribute_categories
+ADD COLUMN IF NOT EXISTS display_order INT DEFAULT 0;
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS applies_to VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS scope VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS value_type VARCHAR(20);
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS is_required BOOLEAN DEFAULT FALSE;
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
+ALTER TABLE custom_column_attribute_registries
+ADD COLUMN IF NOT EXISTS description VARCHAR(255);
 CREATE TABLE IF NOT EXISTS branches (
     branch_code VARCHAR(50) PRIMARY KEY,
     branch_name VARCHAR(255),
     region_code VARCHAR(50)
 );
-
 CREATE TABLE IF NOT EXISTS loan_products (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     product_code VARCHAR(100) UNIQUE,
     product_name VARCHAR(255),
-    segment VARCHAR(20), -- RETAIL | UMKM | CORPORATE
+    segment VARCHAR(20),
+    -- RETAIL | UMKM | CORPORATE
     active BOOLEAN DEFAULT TRUE,
     assignment_mode VARCHAR(20) DEFAULT 'MANUAL' -- AUTO | CLAIM | MANUAL
 );
-
 CREATE TABLE IF NOT EXISTS loan_officers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     officer_code VARCHAR(100) UNIQUE,
     branch_code VARCHAR(50) NOT NULL REFERENCES branches(branch_code)
 );
-
 CREATE TABLE IF NOT EXISTS applications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_id UUID NOT NULL REFERENCES applicants(id),
@@ -107,17 +126,18 @@ CREATE TABLE IF NOT EXISTS applications (
     ao_id UUID NOT NULL REFERENCES loan_officers(id),
     loan_amount NUMERIC(20, 2),
     tenor_months INT,
-    interest_type VARCHAR(20), -- FIXED | FLOATING
+    interest_type VARCHAR(20),
+    -- FIXED | FLOATING
     interest_rate NUMERIC(10, 4),
     loan_purpose VARCHAR(255),
-    application_channel VARCHAR(20), -- CRM | WALK_IN | WEBSITE | API
+    application_channel VARCHAR(20),
+    -- CRM | WALK_IN | WEBSITE | API
     status VARCHAR(50) NOT NULL,
     branch_code VARCHAR(50) NOT NULL REFERENCES branches(branch_code),
     submitted_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by UUID
 );
-
 CREATE TABLE IF NOT EXISTS application_attributes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
@@ -127,23 +147,22 @@ CREATE TABLE IF NOT EXISTS application_attributes (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (application_id, attr_key)
 );
-
 CREATE TABLE IF NOT EXISTS application_status_refs (
     status_code VARCHAR(50) PRIMARY KEY,
-    status_group VARCHAR(20), -- INTAKE | SURVEY | ANALYSIS | DECISION | TERMINAL
+    status_group VARCHAR(20),
+    -- INTAKE | SURVEY | ANALYSIS | DECISION | TERMINAL
     is_terminal BOOLEAN DEFAULT FALSE,
     description VARCHAR(255)
 );
-
 CREATE TABLE IF NOT EXISTS product_status_flows (
     product_id UUID REFERENCES loan_products(id),
     from_status VARCHAR(50) REFERENCES application_status_refs(status_code),
     to_status VARCHAR(50) REFERENCES application_status_refs(status_code),
     is_default BOOLEAN DEFAULT FALSE,
-    requires_role VARCHAR(20), -- AO | ANALYST | COMMITTEE | SYSTEM
+    requires_role VARCHAR(20),
+    -- AO | ANALYST | COMMITTEE | SYSTEM
     PRIMARY KEY (product_id, from_status, to_status)
 );
-
 CREATE TABLE IF NOT EXISTS application_status_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
@@ -153,37 +172,35 @@ CREATE TABLE IF NOT EXISTS application_status_logs (
     change_reason VARCHAR(255),
     changed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS parties (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
-    party_type VARCHAR(20), -- PERSON | COMPANY
+    party_type VARCHAR(20),
+    -- PERSON | COMPANY
     identifier VARCHAR(100),
     name VARCHAR(255),
     date_of_birth DATE
 );
-
 CREATE TABLE IF NOT EXISTS application_parties (
     application_id UUID REFERENCES applications(id),
     party_id UUID REFERENCES parties(id),
-    role_code VARCHAR(50), -- BORROWER | SPOUSE | GUARANTOR | DIRECTOR | COMMISSIONER | SHAREHOLDER
+    role_code VARCHAR(50),
+    -- BORROWER | SPOUSE | GUARANTOR | DIRECTOR | COMMISSIONER | SHAREHOLDER
     legal_obligation BOOLEAN DEFAULT FALSE,
     slik_required BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (application_id, party_id, role_code)
 );
-
 -- ==========================
 -- SURVEY TABLES
 -- ==========================
-
 CREATE TABLE IF NOT EXISTS survey_templates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     template_code VARCHAR(100) UNIQUE,
     template_name VARCHAR(255),
-    applicant_type VARCHAR(20), -- personal | corporate | both
+    applicant_type VARCHAR(20),
+    -- personal | corporate | both
     product_id UUID REFERENCES loan_products(id),
     active BOOLEAN DEFAULT TRUE
 );
-
 CREATE TABLE IF NOT EXISTS survey_sections (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     template_id UUID REFERENCES survey_templates(id),
@@ -191,18 +208,17 @@ CREATE TABLE IF NOT EXISTS survey_sections (
     section_name VARCHAR(255),
     sequence INT
 );
-
 CREATE TABLE IF NOT EXISTS survey_questions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     section_id UUID REFERENCES survey_sections(id),
     question_code VARCHAR(100),
     question_text VARCHAR(255),
-    answer_type VARCHAR(20), -- TEXT | NUMBER | BOOLEAN | SELECT | DATE
+    answer_type VARCHAR(20),
+    -- TEXT | NUMBER | BOOLEAN | SELECT | DATE
     is_mandatory BOOLEAN DEFAULT FALSE,
     risk_relevant BOOLEAN DEFAULT FALSE,
     sequence INT
 );
-
 CREATE TABLE IF NOT EXISTS survey_question_options (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     question_id UUID REFERENCES survey_questions(id),
@@ -210,22 +226,23 @@ CREATE TABLE IF NOT EXISTS survey_question_options (
     option_label VARCHAR(255),
     sequence INT
 );
-
 CREATE TABLE IF NOT EXISTS application_surveys (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID REFERENCES applications(id),
     template_id UUID REFERENCES survey_templates(id),
-    survey_type VARCHAR(20), -- FIELD | DESK
-    status VARCHAR(20),      -- ASSIGNED | IN_PROGRESS | SUBMITTED | VERIFIED
+    survey_type VARCHAR(20),
+    -- FIELD | DESK
+    status VARCHAR(20),
+    -- ASSIGNED | IN_PROGRESS | SUBMITTED | VERIFIED
     submitted_by UUID,
     verified_by UUID,
     verified_at TIMESTAMP WITH TIME ZONE,
     assigned_to UUID,
-    survey_purpose VARCHAR(50), -- GENERAL | COLLATERAL | MANAGEMENT
+    survey_purpose VARCHAR(50),
+    -- GENERAL | COLLATERAL | MANAGEMENT
     started_at TIMESTAMP WITH TIME ZONE,
     submitted_at TIMESTAMP WITH TIME ZONE
 );
-
 CREATE TABLE IF NOT EXISTS survey_answers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     survey_id UUID REFERENCES application_surveys(id),
@@ -237,131 +254,141 @@ CREATE TABLE IF NOT EXISTS survey_answers (
     answered_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (survey_id, question_id)
 );
-
 CREATE TABLE IF NOT EXISTS survey_evidences (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     survey_id UUID REFERENCES application_surveys(id),
-    evidence_type VARCHAR(20), -- PHOTO | VIDEO | DOCUMENT
+    evidence_type VARCHAR(20),
+    -- PHOTO | VIDEO | DOCUMENT
     file_url VARCHAR(255),
     description VARCHAR(255),
     captured_at TIMESTAMP WITH TIME ZONE
 );
-
 CREATE TABLE IF NOT EXISTS survey_data_mappings (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     question_id UUID NOT NULL REFERENCES survey_questions(id),
-    target_type VARCHAR(20) NOT NULL, -- GL | APPLICANT_ATTR | APPLICATION_ATTR
+    target_type VARCHAR(20) NOT NULL,
+    -- GL | APPLICANT_ATTR | APPLICATION_ATTR
     target_code VARCHAR(100) NOT NULL,
-    transform_rule VARCHAR(50)      -- DIRECT | SUM | AVG | BOOLEAN_MAP
+    transform_rule VARCHAR(50) -- DIRECT | SUM | AVG | BOOLEAN_MAP
 );
-
 -- ==========================
 -- FINANCIAL TABLES
 -- ==========================
-
 CREATE TABLE IF NOT EXISTS financial_gl_accounts (
     gl_code VARCHAR(100) PRIMARY KEY,
     gl_name VARCHAR(255),
-    statement_type VARCHAR(10) NOT NULL, -- PL | CF | BS
-    category VARCHAR(20) NOT NULL,       -- REVENUE | EXPENSE | ASSET | LIABILITY | EQUITY | CASH_IN | CASH_OUT
-    sign INT NOT NULL,                   -- 1 or -1
+    statement_type VARCHAR(10) NOT NULL,
+    -- PL | CF | BS
+    category VARCHAR(20) NOT NULL,
+    -- REVENUE | EXPENSE | ASSET | LIABILITY | EQUITY | CASH_IN | CASH_OUT
+    sign INT NOT NULL,
+    -- 1 or -1
     is_debt_service BOOLEAN DEFAULT FALSE,
     is_operating BOOLEAN DEFAULT FALSE,
     description VARCHAR(255)
 );
-
 CREATE TABLE IF NOT EXISTS application_financial_facts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     gl_code VARCHAR(100) NOT NULL REFERENCES financial_gl_accounts(gl_code),
-    period_type VARCHAR(10) NOT NULL, -- MONTHLY | YEARLY
-    period_label VARCHAR(50) NOT NULL, -- 2025-01, 2025
+    period_type VARCHAR(10) NOT NULL,
+    -- MONTHLY | YEARLY
+    period_label VARCHAR(50) NOT NULL,
+    -- 2025-01, 2025
     amount NUMERIC(20, 2) NOT NULL,
-    source VARCHAR(20),               -- SURVEY | MANUAL | IMPORT
-    confidence_level VARCHAR(10),     -- LOW | MEDIUM | HIGH
+    source VARCHAR(20),
+    -- SURVEY | MANUAL | IMPORT
+    confidence_level VARCHAR(10),
+    -- LOW | MEDIUM | HIGH
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (application_id, gl_code, period_type, period_label)
+    UNIQUE (
+        application_id,
+        gl_code,
+        period_type,
+        period_label
+    )
 );
-
 CREATE TABLE IF NOT EXISTS asset_types (
     asset_type_code VARCHAR(100) PRIMARY KEY,
-    asset_category VARCHAR(20), -- VEHICLE | PROPERTY | INVENTORY | OTHER
+    asset_category VARCHAR(20),
+    -- VEHICLE | PROPERTY | INVENTORY | OTHER
     description VARCHAR(255)
 );
-
 CREATE TABLE IF NOT EXISTS application_assets (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     asset_type_code VARCHAR(100) REFERENCES asset_types(asset_type_code),
     asset_name VARCHAR(255),
-    ownership_status VARCHAR(20), -- OWNED | SPOUSE | JOINT
+    ownership_status VARCHAR(20),
+    -- OWNED | SPOUSE | JOINT
     acquisition_year INT,
     estimated_value NUMERIC(20, 2),
-    valuation_method VARCHAR(20), -- MARKET | NJOP | APPRAISAL
+    valuation_method VARCHAR(20),
+    -- MARKET | NJOP | APPRAISAL
     location_text VARCHAR(255),
     encumbered BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS application_liabilities (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     creditor_name VARCHAR(255),
-    liability_type VARCHAR(20), -- BANK | KOPERASI | LEASING | INDIVIDUAL
+    liability_type VARCHAR(20),
+    -- BANK | KOPERASI | LEASING | INDIVIDUAL
     outstanding_amount NUMERIC(20, 2),
     monthly_installment NUMERIC(20, 2),
     interest_rate NUMERIC(10, 4),
     maturity_date DATE,
-    source VARCHAR(20), -- SLIK | SURVEY | MANUAL
+    source VARCHAR(20),
+    -- SLIK | SURVEY | MANUAL
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS application_financial_ratios (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
-    ratio_code VARCHAR(50), -- DSR | IDIR | LTV | GPM | NPM
+    ratio_code VARCHAR(50),
+    -- DSR | IDIR | LTV | GPM | NPM
     ratio_value NUMERIC(10, 4),
     calculation_version VARCHAR(50),
     calculated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (application_id, ratio_code)
 );
-
 -- ==========================
 -- COMMITTEE TABLES
 -- ==========================
-
 CREATE TABLE IF NOT EXISTS application_committee_sessions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     session_sequence INT,
-    status VARCHAR(20), -- SCHEDULED | IN_SESSION | COMPLETED | CANCELLED
+    status VARCHAR(20),
+    -- SCHEDULED | IN_SESSION | COMPLETED | CANCELLED
     scheduled_at TIMESTAMP WITH TIME ZONE,
     started_at TIMESTAMP WITH TIME ZONE,
     completed_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS credit_committee_members (
     committee_session_id UUID REFERENCES application_committee_sessions(id),
     user_id UUID,
-    role VARCHAR(20), -- CHAIR | MEMBER | SECRETARY
+    role VARCHAR(20),
+    -- CHAIR | MEMBER | SECRETARY
     active BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (committee_session_id, user_id)
 );
-
 CREATE TABLE IF NOT EXISTS application_committee_votes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     committee_session_id UUID NOT NULL REFERENCES application_committee_sessions(id),
     user_id UUID NOT NULL,
-    vote VARCHAR(20), -- APPROVE | REJECT | CONDITIONAL
+    vote VARCHAR(20),
+    -- APPROVE | REJECT | CONDITIONAL
     vote_reason VARCHAR(255),
     voted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS application_committee_decisions (
-    id UUID PRIMARY KEY PRIMARY KEY DEFAULT uuid_generate_v7(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     committee_session_id UUID NOT NULL REFERENCES application_committee_sessions(id),
-    decision VARCHAR(20), -- APPROVED | REJECTED | CONDITIONAL
+    decision VARCHAR(20),
+    -- APPROVED | REJECTED | CONDITIONAL
     decision_reason VARCHAR(255),
     approved_amount NUMERIC(20, 2),
     approved_tenor INT,
@@ -369,16 +396,16 @@ CREATE TABLE IF NOT EXISTS application_committee_decisions (
     requires_next_committee BOOLEAN DEFAULT FALSE,
     decided_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 -- ==========================
 -- DECISION TABLES
 -- ==========================
-
 CREATE TABLE IF NOT EXISTS application_decisions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
-    decision VARCHAR(20),        -- APPROVED | REJECTED | CANCELLED
-    decision_source VARCHAR(20), -- COMMITTEE | SYSTEM | OVERRIDE
+    decision VARCHAR(20),
+    -- APPROVED | REJECTED | CANCELLED
+    decision_source VARCHAR(20),
+    -- COMMITTEE | SYSTEM | OVERRIDE
     final_amount NUMERIC(20, 2),
     final_tenor INT,
     final_interest_rate NUMERIC(10, 4),
@@ -386,29 +413,29 @@ CREATE TABLE IF NOT EXISTS application_decisions (
     decided_by UUID,
     decided_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS application_decision_conditions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_decision_id UUID NOT NULL REFERENCES application_decisions(id),
-    condition_type VARCHAR(20), -- PRE_DISBURSEMENT | POST_DISBURSEMENT
+    condition_type VARCHAR(20),
+    -- PRE_DISBURSEMENT | POST_DISBURSEMENT
     condition_text VARCHAR(255),
     mandatory BOOLEAN DEFAULT TRUE
 );
-
 CREATE TABLE IF NOT EXISTS credit_authority_matrices (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
-    committee_level INT, -- 1=Branch, 2=Regional, 3=HO
+    committee_level INT,
+    -- 1=Branch, 2=Regional, 3=HO
     product_id UUID REFERENCES loan_products(id),
     max_amount NUMERIC(20, 2),
     max_tenor INT,
     requires_committee BOOLEAN DEFAULT TRUE
 );
-
 CREATE TABLE IF NOT EXISTS application_documents (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
     document_name VARCHAR(255) NOT NULL,
     file_url TEXT NOT NULL,
-    document_type VARCHAR(50), -- KTP, NPWP, KK, etc.
+    document_type VARCHAR(50),
+    -- KTP, NPWP, KK, etc.
     uploaded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
