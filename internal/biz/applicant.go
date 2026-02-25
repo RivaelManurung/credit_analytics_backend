@@ -50,7 +50,7 @@ func NewApplicantUsecase(repo ApplicantRepo, logger log.Logger) *ApplicantUsecas
 func (uc *ApplicantUsecase) Create(ctx context.Context, a *Applicant) (uuid.UUID, error) {
 	uc.log.WithContext(ctx).Infof("Creating Applicant: %s", a.FullName)
 	if a.ID == uuid.Nil {
-		a.ID = uuid.New()
+		a.ID, _ = uuid.NewV7()
 	}
 	return uc.repo.Save(ctx, a)
 }

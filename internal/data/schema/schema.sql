@@ -1,12 +1,27 @@
 -- Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Function to generate UUID v7
+CREATE OR REPLACE FUNCTION uuid_generate_v7() RETURNS uuid AS $$
+DECLARE
+  v_unix_t BIGINT;
+  v_uuid_bytes BYTEA;
+BEGIN
+  v_unix_t := (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT;
+  v_uuid_bytes := decode(lpad(to_hex(v_unix_t), 12, '0'), 'hex') || gen_random_bytes(10);
+  v_uuid_bytes := set_byte(v_uuid_bytes, 6, (get_byte(v_uuid_bytes, 6) & 15) | 112); -- version 7
+  v_uuid_bytes := set_byte(v_uuid_bytes, 8, (get_byte(v_uuid_bytes, 8) & 63) | 128); -- variant 1
+  RETURN encode(v_uuid_bytes, 'hex')::uuid;
+END;
+$$ LANGUAGE plpgsql;
 
 -- ==========================
 -- CORE TABLES
 -- ==========================
 
 CREATE TABLE IF NOT EXISTS applicants (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_type VARCHAR(20) NOT NULL, -- personal | corporate
     identity_number VARCHAR(100),
     tax_id VARCHAR(100),
@@ -18,7 +33,7 @@ CREATE TABLE IF NOT EXISTS applicants (
 );
 
 CREATE TABLE IF NOT EXISTS applicant_attributes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_id UUID NOT NULL REFERENCES applicants(id) ON DELETE CASCADE,
     attr_key VARCHAR(100) NOT NULL,
     attr_value TEXT,
@@ -36,6 +51,7 @@ CREATE TABLE IF NOT EXISTS attribute_categories (
     display_order   INT DEFAULT 0,
     description     VARCHAR(255)
 );
+
 
 CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
     attribute_code  VARCHAR(100) PRIMARY KEY,
@@ -70,7 +86,7 @@ CREATE TABLE IF NOT EXISTS branches (
 );
 
 CREATE TABLE IF NOT EXISTS loan_products (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     product_code VARCHAR(100) UNIQUE,
     product_name VARCHAR(255),
     segment VARCHAR(20), -- RETAIL | UMKM | CORPORATE
@@ -79,13 +95,13 @@ CREATE TABLE IF NOT EXISTS loan_products (
 );
 
 CREATE TABLE IF NOT EXISTS loan_officers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     officer_code VARCHAR(100) UNIQUE,
     branch_code VARCHAR(50) NOT NULL REFERENCES branches(branch_code)
 );
 
 CREATE TABLE IF NOT EXISTS applications (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_id UUID NOT NULL REFERENCES applicants(id),
     product_id UUID NOT NULL REFERENCES loan_products(id),
     ao_id UUID NOT NULL REFERENCES loan_officers(id),
@@ -103,7 +119,7 @@ CREATE TABLE IF NOT EXISTS applications (
 );
 
 CREATE TABLE IF NOT EXISTS application_attributes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
     attr_key VARCHAR(100) NOT NULL,
     attr_value TEXT,
@@ -129,7 +145,7 @@ CREATE TABLE IF NOT EXISTS product_status_flows (
 );
 
 CREATE TABLE IF NOT EXISTS application_status_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     from_status VARCHAR(50),
     to_status VARCHAR(50),
@@ -139,7 +155,7 @@ CREATE TABLE IF NOT EXISTS application_status_logs (
 );
 
 CREATE TABLE IF NOT EXISTS parties (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     party_type VARCHAR(20), -- PERSON | COMPANY
     identifier VARCHAR(100),
     name VARCHAR(255),
@@ -160,7 +176,7 @@ CREATE TABLE IF NOT EXISTS application_parties (
 -- ==========================
 
 CREATE TABLE IF NOT EXISTS survey_templates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     template_code VARCHAR(100) UNIQUE,
     template_name VARCHAR(255),
     applicant_type VARCHAR(20), -- personal | corporate | both
@@ -169,7 +185,7 @@ CREATE TABLE IF NOT EXISTS survey_templates (
 );
 
 CREATE TABLE IF NOT EXISTS survey_sections (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     template_id UUID REFERENCES survey_templates(id),
     section_code VARCHAR(100),
     section_name VARCHAR(255),
@@ -177,7 +193,7 @@ CREATE TABLE IF NOT EXISTS survey_sections (
 );
 
 CREATE TABLE IF NOT EXISTS survey_questions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     section_id UUID REFERENCES survey_sections(id),
     question_code VARCHAR(100),
     question_text VARCHAR(255),
@@ -188,7 +204,7 @@ CREATE TABLE IF NOT EXISTS survey_questions (
 );
 
 CREATE TABLE IF NOT EXISTS survey_question_options (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     question_id UUID REFERENCES survey_questions(id),
     option_value VARCHAR(255),
     option_label VARCHAR(255),
@@ -196,7 +212,7 @@ CREATE TABLE IF NOT EXISTS survey_question_options (
 );
 
 CREATE TABLE IF NOT EXISTS application_surveys (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID REFERENCES applications(id),
     template_id UUID REFERENCES survey_templates(id),
     survey_type VARCHAR(20), -- FIELD | DESK
@@ -211,7 +227,7 @@ CREATE TABLE IF NOT EXISTS application_surveys (
 );
 
 CREATE TABLE IF NOT EXISTS survey_answers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     survey_id UUID REFERENCES application_surveys(id),
     question_id UUID REFERENCES survey_questions(id),
     answer_text VARCHAR(255),
@@ -223,7 +239,7 @@ CREATE TABLE IF NOT EXISTS survey_answers (
 );
 
 CREATE TABLE IF NOT EXISTS survey_evidences (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     survey_id UUID REFERENCES application_surveys(id),
     evidence_type VARCHAR(20), -- PHOTO | VIDEO | DOCUMENT
     file_url VARCHAR(255),
@@ -232,7 +248,7 @@ CREATE TABLE IF NOT EXISTS survey_evidences (
 );
 
 CREATE TABLE IF NOT EXISTS survey_data_mappings (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     question_id UUID NOT NULL REFERENCES survey_questions(id),
     target_type VARCHAR(20) NOT NULL, -- GL | APPLICANT_ATTR | APPLICATION_ATTR
     target_code VARCHAR(100) NOT NULL,
@@ -255,7 +271,7 @@ CREATE TABLE IF NOT EXISTS financial_gl_accounts (
 );
 
 CREATE TABLE IF NOT EXISTS application_financial_facts (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     gl_code VARCHAR(100) NOT NULL REFERENCES financial_gl_accounts(gl_code),
     period_type VARCHAR(10) NOT NULL, -- MONTHLY | YEARLY
@@ -274,7 +290,7 @@ CREATE TABLE IF NOT EXISTS asset_types (
 );
 
 CREATE TABLE IF NOT EXISTS application_assets (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     asset_type_code VARCHAR(100) REFERENCES asset_types(asset_type_code),
     asset_name VARCHAR(255),
@@ -288,7 +304,7 @@ CREATE TABLE IF NOT EXISTS application_assets (
 );
 
 CREATE TABLE IF NOT EXISTS application_liabilities (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     creditor_name VARCHAR(255),
     liability_type VARCHAR(20), -- BANK | KOPERASI | LEASING | INDIVIDUAL
@@ -301,7 +317,7 @@ CREATE TABLE IF NOT EXISTS application_liabilities (
 );
 
 CREATE TABLE IF NOT EXISTS application_financial_ratios (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     ratio_code VARCHAR(50), -- DSR | IDIR | LTV | GPM | NPM
     ratio_value NUMERIC(10, 4),
@@ -315,7 +331,7 @@ CREATE TABLE IF NOT EXISTS application_financial_ratios (
 -- ==========================
 
 CREATE TABLE IF NOT EXISTS application_committee_sessions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     session_sequence INT,
     status VARCHAR(20), -- SCHEDULED | IN_SESSION | COMPLETED | CANCELLED
@@ -334,7 +350,7 @@ CREATE TABLE IF NOT EXISTS credit_committee_members (
 );
 
 CREATE TABLE IF NOT EXISTS application_committee_votes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     committee_session_id UUID NOT NULL REFERENCES application_committee_sessions(id),
     user_id UUID NOT NULL,
     vote VARCHAR(20), -- APPROVE | REJECT | CONDITIONAL
@@ -343,7 +359,7 @@ CREATE TABLE IF NOT EXISTS application_committee_votes (
 );
 
 CREATE TABLE IF NOT EXISTS application_committee_decisions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY PRIMARY KEY DEFAULT uuid_generate_v7(),
     committee_session_id UUID NOT NULL REFERENCES application_committee_sessions(id),
     decision VARCHAR(20), -- APPROVED | REJECTED | CONDITIONAL
     decision_reason VARCHAR(255),
@@ -359,7 +375,7 @@ CREATE TABLE IF NOT EXISTS application_committee_decisions (
 -- ==========================
 
 CREATE TABLE IF NOT EXISTS application_decisions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id),
     decision VARCHAR(20),        -- APPROVED | REJECTED | CANCELLED
     decision_source VARCHAR(20), -- COMMITTEE | SYSTEM | OVERRIDE
@@ -372,7 +388,7 @@ CREATE TABLE IF NOT EXISTS application_decisions (
 );
 
 CREATE TABLE IF NOT EXISTS application_decision_conditions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_decision_id UUID NOT NULL REFERENCES application_decisions(id),
     condition_type VARCHAR(20), -- PRE_DISBURSEMENT | POST_DISBURSEMENT
     condition_text VARCHAR(255),
@@ -380,7 +396,7 @@ CREATE TABLE IF NOT EXISTS application_decision_conditions (
 );
 
 CREATE TABLE IF NOT EXISTS credit_authority_matrices (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     committee_level INT, -- 1=Branch, 2=Regional, 3=HO
     product_id UUID REFERENCES loan_products(id),
     max_amount NUMERIC(20, 2),
@@ -389,7 +405,7 @@ CREATE TABLE IF NOT EXISTS credit_authority_matrices (
 );
 
 CREATE TABLE IF NOT EXISTS application_documents (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
     document_name VARCHAR(255) NOT NULL,
     file_url TEXT NOT NULL,

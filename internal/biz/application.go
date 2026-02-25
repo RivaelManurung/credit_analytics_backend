@@ -257,7 +257,7 @@ func (uc *ApplicationUsecase) Create(ctx context.Context, app *Application) (uui
 	uc.log.WithContext(ctx).Infof("Creating Application: Applicant=%s", app.ApplicantID)
 	// Enforcement before save
 	if app.ID == uuid.Nil {
-		app.ID = uuid.New()
+		app.ID, _ = uuid.NewV7()
 	}
 	app.Status = StatusDraft
 	return uc.repo.Save(ctx, app)
@@ -390,7 +390,7 @@ func (uc *ApplicationUsecase) GetParties(ctx context.Context, appID uuid.UUID) (
 
 func (uc *ApplicationUsecase) UploadDocument(ctx context.Context, doc *ApplicationDocument) error {
 	if doc.ID == uuid.Nil {
-		doc.ID = uuid.New()
+		doc.ID, _ = uuid.NewV7()
 	}
 	if doc.UploadedAt.IsZero() {
 		doc.UploadedAt = time.Now()
@@ -420,7 +420,8 @@ func (uc *ApplicationUsecase) GetPresignedUrl(ctx context.Context, fileName, fil
 	if ext == "" {
 		ext = "." + fileType
 	}
-	uniqueName := fmt.Sprintf("%d_%s%s", time.Now().UnixNano(), uuid.New().String(), ext)
+	newID, _ := uuid.NewV7()
+	uniqueName := fmt.Sprintf("%d_%s%s", time.Now().UnixNano(), newID.String(), ext)
 
 	// Map generic file types to mime types
 	contentType := "application/octet-stream"
