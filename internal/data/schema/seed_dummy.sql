@@ -3231,6 +3231,42 @@ VALUES -- Budi Santoso (sedang ANALYSIS)
         'INTAKE',
         'JKT01',
         CURRENT_TIMESTAMP
+    ),
+    -- Agus Prayogo
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        '0195383f-427e-7000-bb34-317202101285',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        50000000,
+        24,
+        'SURVEY',
+        'JKT01',
+        CURRENT_TIMESTAMP - interval '3 days'
+    ),
+    -- Dewi Lestari
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        '0195383f-427f-7000-bb34-320101440595',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000002',
+        30000000,
+        18,
+        'SURVEY',
+        'JKT02',
+        CURRENT_TIMESTAMP - interval '1 days'
+    ),
+    -- Bambang Heru
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        '0195383f-4280-7000-bb34-337402121288',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        100000000,
+        48,
+        'ANALYSIS',
+        'JKT01',
+        CURRENT_TIMESTAMP - interval '4 days'
     );
 -- 8. FINANCIAL DATA
 INSERT INTO application_financial_facts (
