@@ -3502,15 +3502,279 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
     ),
     (
         '0195a1a2-0001-7000-bb34-000000000005',
-        'INTAKE',
-        'SURVEY',
-        'Dokumen terverifikasi',
-        CURRENT_TIMESTAMP - interval '3 days 20 hours'
-    ),
-    (
-        '0195a1a2-0001-7000-bb34-000000000005',
         'SURVEY',
         'ANALYSIS',
         'Data finansial sudah lengkap',
         CURRENT_TIMESTAMP - interval '3 days'
+    );
+-- 10. STATUS REFERENCES & FLOWS
+INSERT INTO application_status_refs (
+        status_code,
+        status_group,
+        is_terminal,
+        description
+    )
+VALUES ('INTAKE', 'INTAKE', false, 'Input data awal'),
+    (
+        'SURVEY',
+        'SURVEY',
+        false,
+        'Survey lapangan/desk survey'
+    ),
+    (
+        'ANALYSIS',
+        'ANALYSIS',
+        false,
+        'Analisa kelayakan kredit'
+    ),
+    (
+        'COMMITTEE',
+        'DECISION',
+        false,
+        'Sidang komite kredit'
+    ),
+    ('APPROVED', 'TERMINAL', true, 'Disetujui'),
+    ('REJECTED', 'TERMINAL', true, 'Ditolak'),
+    ('CANCELLED', 'TERMINAL', true, 'Dibatalkan');
+INSERT INTO product_status_flows (
+        product_id,
+        from_status,
+        to_status,
+        is_default,
+        requires_role
+    )
+VALUES ('p001', 'INTAKE', 'SURVEY', true, 'AO'),
+    ('p001', 'SURVEY', 'ANALYSIS', true, 'AO'),
+    ('p001', 'ANALYSIS', 'APPROVE', false, 'ANALYST'),
+    ('p001', 'ANALYSIS', 'COMMITTEE', true, 'ANALYST'),
+    ('p002', 'INTAKE', 'SURVEY', true, 'AO');
+-- 11. PARTIES (Spouse, Guarantor, etc)
+INSERT INTO parties (id, party_type, identifier, name, date_of_birth)
+VALUES (
+        '0195a1a2-0002-7000-bb34-000000000001',
+        'PERSON',
+        '3171010101920002',
+        'Ani Wijaya',
+        '1992-03-10'
+    ),
+    (
+        '0195a1a2-0002-7000-bb34-000000000002',
+        'PERSON',
+        '3171010101950005',
+        'Slamet Utomo',
+        '1975-10-20'
+    );
+INSERT INTO application_parties (
+        application_id,
+        party_id,
+        role_code,
+        legal_obligation,
+        slik_required
+    )
+VALUES (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        '0195a1a2-0002-7000-bb34-000000000001',
+        'SPOUSE',
+        true,
+        true
+    );
+-- 12. SURVEY TEMPLATES & QUESTIONS
+INSERT INTO survey_templates (
+        id,
+        template_code,
+        template_name,
+        applicant_type,
+        product_id,
+        active
+    )
+VALUES (
+        '0195a1a2-0003-7000-bb34-000000000001',
+        'SURVEY_RETAIL',
+        'Template Survey Retail',
+        'personal',
+        'p002',
+        true
+    );
+INSERT INTO survey_sections (
+        id,
+        template_id,
+        section_code,
+        section_name,
+        sequence
+    )
+VALUES (
+        '0195a1a2-0003-7001-bb34-000000000001',
+        '0195a1a2-0003-7000-bb34-000000000001',
+        'SEC_IDENTITY',
+        'Verifikasi Identitas',
+        1
+    ),
+    (
+        '0195a1a2-0003-7001-bb34-000000000002',
+        '0195a1a2-0003-7000-bb34-000000000001',
+        'SEC_BUSINESS',
+        'Kondisi Usaha',
+        2
+    );
+INSERT INTO survey_questions (
+        id,
+        section_id,
+        question_code,
+        question_text,
+        answer_type,
+        is_mandatory,
+        risk_relevant,
+        sequence
+    )
+VALUES (
+        '0195a1a2-0003-7002-bb34-000000000001',
+        '0195a1a2-0003-7001-bb34-000000000001',
+        'Q_HOME_OWNER',
+        'Apakah benar rumah milik sendiri?',
+        'BOOLEAN',
+        true,
+        true,
+        1
+    ),
+    (
+        '0195a1a2-0003-7002-bb34-000000000002',
+        '0195a1a2-0003-7001-bb34-000000000002',
+        'Q_BUSINESS_YEARS',
+        'Sudah berapa lama usaha berjalan?',
+        'NUMBER',
+        true,
+        true,
+        1
+    );
+-- Budi's Survey
+INSERT INTO application_surveys (
+        id,
+        application_id,
+        template_id,
+        survey_type,
+        status,
+        submitted_at
+    )
+VALUES (
+        '0195a1a2-0003-7003-bb34-000000000001',
+        '0195a1a2-0001-7000-bb34-000000000001',
+        '0195a1a2-0003-7000-bb34-000000000001',
+        'FIELD',
+        'SUBMITTED',
+        CURRENT_TIMESTAMP - interval '2 days'
+    );
+INSERT INTO survey_answers (
+        survey_id,
+        question_id,
+        answer_boolean,
+        answer_number
+    )
+VALUES (
+        '0195a1a2-0003-7003-bb34-000000000001',
+        '0195a1a2-0003-7002-bb34-000000000001',
+        true,
+        NULL
+    ),
+    (
+        '0195a1a2-0003-7003-bb34-000000000001',
+        '0195a1a2-0003-7002-bb34-000000000002',
+        NULL,
+        5
+    );
+-- 13. ASSETS & LIABILITIES
+INSERT INTO asset_types (asset_type_code, asset_category, description)
+VALUES (
+        'LAND_BUILDING',
+        'PROPERTY',
+        'Tanah dan Bangunan'
+    ),
+    ('VEHICLE_CAR', 'VEHICLE', 'Kendaraan Roda 4');
+INSERT INTO application_assets (
+        application_id,
+        asset_type_code,
+        asset_name,
+        ownership_status,
+        estimated_value
+    )
+VALUES (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        'LAND_BUILDING',
+        'Rumah Tinggal Kebon Jeruk',
+        'OWNED',
+        1500000000
+    );
+INSERT INTO application_liabilities (
+        application_id,
+        creditor_name,
+        liability_type,
+        outstanding_amount,
+        monthly_installment
+    )
+VALUES (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        'Bank Mandiri',
+        'BANK',
+        50000000,
+        2500000
+    );
+-- 14. COMMITTEE & DECISIONS
+-- Budi reached committee stage (for example)
+INSERT INTO application_committee_sessions (
+        id,
+        application_id,
+        session_sequence,
+        status,
+        scheduled_at
+    )
+VALUES (
+        '0195a1a2-0004-7000-bb34-000000000001',
+        '0195a1a2-0001-7000-bb34-000000000001',
+        1,
+        'COMPLETED',
+        CURRENT_TIMESTAMP - interval '1 days'
+    );
+INSERT INTO credit_committee_members (committee_session_id, user_id, role)
+VALUES (
+        '0195a1a2-0004-7000-bb34-000000000001',
+        '0195a1a2-0005-7000-bb34-000000000001',
+        'CHAIR'
+    ),
+    -- Head of Credit
+    (
+        '0195a1a2-0004-7000-bb34-000000000001',
+        '0195a1a2-0005-7000-bb34-000000000002',
+        'MEMBER'
+    );
+-- Risk Manager
+INSERT INTO application_committee_votes (committee_session_id, user_id, vote, vote_reason)
+VALUES (
+        '0195a1a2-0004-7000-bb34-000000000001',
+        '0195a1a2-0005-7000-bb34-000000000001',
+        'APPROVE',
+        'Kapasitas bayar memadai'
+    ),
+    (
+        '0195a1a2-0004-7000-bb34-000000000001',
+        '0195a1a2-0005-7000-bb34-000000000002',
+        'APPROVE',
+        'Aset jaminan solid'
+    );
+-- 15. DOCUMENTS
+INSERT INTO application_documents (
+        application_id,
+        document_name,
+        file_url,
+        document_type
+    )
+VALUES (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        'KTP_Budi.pdf',
+        'https://storage.cloud/docs/ktp_budi.pdf',
+        'KTP'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        'NPWP_Budi.pdf',
+        'https://storage.cloud/docs/npwp_budi.pdf',
+        'NPWP'
     );
