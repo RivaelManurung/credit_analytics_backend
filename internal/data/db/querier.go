@@ -44,7 +44,7 @@ type Querier interface {
 	GetPartiesByApplication(ctx context.Context, applicationID uuid.UUID) ([]GetPartiesByApplicationRow, error)
 	GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurvey, error)
 	GetSurveyTemplateWithSections(ctx context.Context, id uuid.UUID) ([]GetSurveyTemplateWithSectionsRow, error)
-	ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicantAttribute, error)
+	ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []string) ([]ApplicantAttribute, error)
 	ListApplicants(ctx context.Context, arg ListApplicantsParams) ([]Applicant, error)
 	ListApplicationAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicationAttribute, error)
 	ListApplicationDocuments(ctx context.Context, applicationID uuid.UUID) ([]ApplicationDocument, error)

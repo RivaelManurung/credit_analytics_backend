@@ -226,7 +226,11 @@ func (r *applicantRepo) ListAll(ctx context.Context) ([]*biz.Applicant, error) {
 }
 
 func (r *applicantRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID][]biz.ApplicantAttribute, error) {
-	attrs, err := r.data.db.ListApplicantAttributesByIDs(ctx, ids)
+	strIDs := make([]string, len(ids))
+	for i, id := range ids {
+		strIDs[i] = id.String()
+	}
+	attrs, err := r.data.db.ListApplicantAttributesByIDs(ctx, strIDs)
 	if err != nil {
 		return nil, err
 	}

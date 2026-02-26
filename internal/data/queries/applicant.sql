@@ -63,7 +63,7 @@ WHERE applicant_id = $1;
 -- name: ListApplicantAttributesByIDs :many
 SELECT *
 FROM applicant_attributes
-WHERE applicant_id = ANY($1::uuid []);
+WHERE applicant_id = ANY($1::text[]::uuid[]);
 -- name: DeleteApplicantAttributes :exec
 DELETE FROM applicant_attributes
 WHERE applicant_id = $1;

@@ -136,10 +136,10 @@ func (q *Queries) GetApplicantAttributes(ctx context.Context, applicantID uuid.U
 const listApplicantAttributesByIDs = `-- name: ListApplicantAttributesByIDs :many
 SELECT id, applicant_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 FROM applicant_attributes
-WHERE applicant_id = ANY($1::uuid [])
+WHERE applicant_id = ANY($1::text[]::uuid[])
 `
 
-func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicantAttribute, error) {
+func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []string) ([]ApplicantAttribute, error) {
 	rows, err := q.db.QueryContext(ctx, listApplicantAttributesByIDs, pq.Array(dollar_1))
 	if err != nil {
 		return nil, err
