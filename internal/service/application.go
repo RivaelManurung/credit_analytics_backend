@@ -388,6 +388,7 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 	res := &pb.Application{
 		Id:                 app.ID.String(),
 		ApplicantId:        app.ApplicantID.String(),
+		ApplicantName:      app.ApplicantName,
 		ProductId:          app.ProductID.String(),
 		AoId:               app.AoID.String(),
 		LoanAmount:         app.LoanAmount.Amount.String(),

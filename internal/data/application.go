@@ -146,7 +146,7 @@ func (r *applicationRepo) Update(ctx context.Context, a *biz.Application) error 
 }
 
 func (r *applicationRepo) FindByID(ctx context.Context, id uuid.UUID) (*biz.Application, error) {
-	app, err := r.data.db.GetApplication(ctx, id)
+	row, err := r.data.db.GetApplication(ctx, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("application not found: %s", id)
@@ -154,7 +154,7 @@ func (r *applicationRepo) FindByID(ctx context.Context, id uuid.UUID) (*biz.Appl
 		return nil, fmt.Errorf("failed to get application: %w", err)
 	}
 
-	res := mapToBiz(&app)
+	res := mapGetRowToBiz(&row)
 
 	attrs, err := r.data.db.GetApplicationAttributes(ctx, id)
 	if err != nil {
@@ -225,7 +225,7 @@ func (r *applicationRepo) List(ctx context.Context, params biz.PaginationParams,
 
 	var res []*biz.Application
 	for _, app := range apps {
-		item := mapToBiz(&app)
+		item := mapListRowToBiz(&app)
 		item.Attributes = attrMap[app.ID]
 		res = append(res, item)
 	}
@@ -253,7 +253,7 @@ func (r *applicationRepo) ListAll(ctx context.Context, limit int32) ([]*biz.Appl
 	}
 	var res []*biz.Application
 	for _, app := range apps {
-		res = append(res, mapToBiz(&app))
+		res = append(res, mapListRowToBiz(&app))
 	}
 	return res, nil
 }
@@ -383,5 +383,49 @@ func mapToBiz(app *db.Application) *biz.Application {
 		Status:             biz.ApplicationStatus(app.Status),
 		BranchCode:         app.BranchCode,
 		CreatedAt:          app.CreatedAt.Time,
+	}
+}
+
+func mapGetRowToBiz(row *db.GetApplicationRow) *biz.Application {
+	loanAmount, _ := decimal.NewFromString(row.LoanAmount.String)
+	interestRate, _ := decimal.NewFromString(row.InterestRate.String)
+
+	return &biz.Application{
+		ID:                 row.ID,
+		ApplicantID:        row.ApplicantID,
+		ApplicantName:      row.ApplicantName.String,
+		ProductID:          row.ProductID,
+		AoID:               row.AoID,
+		LoanAmount:         biz.NewMoney(loanAmount, "IDR"),
+		TenorMonths:        row.TenorMonths.Int32,
+		InterestType:       row.InterestType.String,
+		InterestRate:       biz.NewInterestRate(interestRate),
+		LoanPurpose:        row.LoanPurpose.String,
+		ApplicationChannel: row.ApplicationChannel.String,
+		Status:             biz.ApplicationStatus(row.Status),
+		BranchCode:         row.BranchCode,
+		CreatedAt:          row.CreatedAt.Time,
+	}
+}
+
+func mapListRowToBiz(row *db.ListApplicationsRow) *biz.Application {
+	loanAmount, _ := decimal.NewFromString(row.LoanAmount.String)
+	interestRate, _ := decimal.NewFromString(row.InterestRate.String)
+
+	return &biz.Application{
+		ID:                 row.ID,
+		ApplicantID:        row.ApplicantID,
+		ApplicantName:      row.ApplicantName.String,
+		ProductID:          row.ProductID,
+		AoID:               row.AoID,
+		LoanAmount:         biz.NewMoney(loanAmount, "IDR"),
+		TenorMonths:        row.TenorMonths.Int32,
+		InterestType:       row.InterestType.String,
+		InterestRate:       biz.NewInterestRate(interestRate),
+		LoanPurpose:        row.LoanPurpose.String,
+		ApplicationChannel: row.ApplicationChannel.String,
+		Status:             biz.ApplicationStatus(row.Status),
+		BranchCode:         row.BranchCode,
+		CreatedAt:          row.CreatedAt.Time,
 	}
 }

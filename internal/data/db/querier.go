@@ -34,7 +34,7 @@ type Querier interface {
 	FinalizeCommitteeDecision(ctx context.Context, arg FinalizeCommitteeDecisionParams) (ApplicationCommitteeDecision, error)
 	GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, error)
 	GetApplicantAttributes(ctx context.Context, applicantID uuid.UUID) ([]ApplicantAttribute, error)
-	GetApplication(ctx context.Context, id uuid.UUID) (Application, error)
+	GetApplication(ctx context.Context, id uuid.UUID) (GetApplicationRow, error)
 	GetApplicationAttributes(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAttribute, error)
 	GetApplicationDecision(ctx context.Context, applicationID uuid.UUID) (ApplicationDecision, error)
 	GetAttributeCategory(ctx context.Context, categoryCode string) (AttributeCategory, error)
@@ -47,7 +47,7 @@ type Querier interface {
 	ListApplicationAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicationAttribute, error)
 	ListApplicationDocuments(ctx context.Context, applicationID uuid.UUID) ([]ApplicationDocument, error)
 	ListApplicationStatuses(ctx context.Context) ([]ApplicationStatusRef, error)
-	ListApplications(ctx context.Context, arg ListApplicationsParams) ([]Application, error)
+	ListApplications(ctx context.Context, arg ListApplicationsParams) ([]ListApplicationsRow, error)
 	ListAssets(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAsset, error)
 	// ==============================================================
 	// ATTRIBUTE CATEGORIES (dinamis: icon ada di sini)

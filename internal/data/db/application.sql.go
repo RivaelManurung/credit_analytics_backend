@@ -15,12 +15,34 @@ import (
 
 const createApplication = `-- name: CreateApplication :one
 INSERT INTO applications (
-    applicant_id, product_id, ao_id, loan_amount, tenor_months, 
-    interest_type, interest_rate, loan_purpose, application_channel, 
-    status, branch_code, created_by
-) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
-) RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
+        applicant_id,
+        product_id,
+        ao_id,
+        loan_amount,
+        tenor_months,
+        interest_type,
+        interest_rate,
+        loan_purpose,
+        application_channel,
+        status,
+        branch_code,
+        created_by
+    )
+VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        $12
+    )
+RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
 `
 
 type CreateApplicationParams struct {
@@ -76,10 +98,14 @@ func (q *Queries) CreateApplication(ctx context.Context, arg CreateApplicationPa
 
 const createApplicationParty = `-- name: CreateApplicationParty :one
 INSERT INTO application_parties (
-    application_id, party_id, role_code, legal_obligation, slik_required
-) VALUES (
-    $1, $2, $3, $4, $5
-) RETURNING application_id, party_id, role_code, legal_obligation, slik_required
+        application_id,
+        party_id,
+        role_code,
+        legal_obligation,
+        slik_required
+    )
+VALUES ($1, $2, $3, $4, $5)
+RETURNING application_id, party_id, role_code, legal_obligation, slik_required
 `
 
 type CreateApplicationPartyParams struct {
@@ -111,10 +137,13 @@ func (q *Queries) CreateApplicationParty(ctx context.Context, arg CreateApplicat
 
 const createParty = `-- name: CreateParty :one
 INSERT INTO parties (
-    party_type, identifier, name, date_of_birth
-) VALUES (
-    $1, $2, $3, $4
-) RETURNING id, party_type, identifier, name, date_of_birth
+        party_type,
+        identifier,
+        name,
+        date_of_birth
+    )
+VALUES ($1, $2, $3, $4)
+RETURNING id, party_type, identifier, name, date_of_birth
 `
 
 type CreatePartyParams struct {
@@ -144,10 +173,14 @@ func (q *Queries) CreateParty(ctx context.Context, arg CreatePartyParams) (Party
 
 const createStatusLog = `-- name: CreateStatusLog :one
 INSERT INTO application_status_logs (
-    application_id, from_status, to_status, changed_by, change_reason
-) VALUES (
-    $1, $2, $3, $4, $5
-) RETURNING id, application_id, from_status, to_status, changed_by, change_reason, changed_at
+        application_id,
+        from_status,
+        to_status,
+        changed_by,
+        change_reason
+    )
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, application_id, from_status, to_status, changed_by, change_reason, changed_at
 `
 
 type CreateStatusLogParams struct {
@@ -180,7 +213,8 @@ func (q *Queries) CreateStatusLog(ctx context.Context, arg CreateStatusLogParams
 }
 
 const deleteApplicationAttributes = `-- name: DeleteApplicationAttributes :exec
-DELETE FROM application_attributes WHERE application_id = $1
+DELETE FROM application_attributes
+WHERE application_id = $1
 `
 
 func (q *Queries) DeleteApplicationAttributes(ctx context.Context, applicationID uuid.UUID) error {
@@ -189,12 +223,36 @@ func (q *Queries) DeleteApplicationAttributes(ctx context.Context, applicationID
 }
 
 const getApplication = `-- name: GetApplication :one
-SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by FROM applications WHERE id = $1 LIMIT 1
+SELECT a.id, a.applicant_id, a.product_id, a.ao_id, a.loan_amount, a.tenor_months, a.interest_type, a.interest_rate, a.loan_purpose, a.application_channel, a.status, a.branch_code, a.submitted_at, a.created_at, a.created_by,
+    app.full_name AS applicant_name
+FROM applications a
+    JOIN applicants app ON a.applicant_id = app.id
+WHERE a.id = $1
+LIMIT 1
 `
 
-func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (Application, error) {
+type GetApplicationRow struct {
+	ID                 uuid.UUID      `json:"id"`
+	ApplicantID        uuid.UUID      `json:"applicant_id"`
+	ProductID          uuid.UUID      `json:"product_id"`
+	AoID               uuid.UUID      `json:"ao_id"`
+	LoanAmount         sql.NullString `json:"loan_amount"`
+	TenorMonths        sql.NullInt32  `json:"tenor_months"`
+	InterestType       sql.NullString `json:"interest_type"`
+	InterestRate       sql.NullString `json:"interest_rate"`
+	LoanPurpose        sql.NullString `json:"loan_purpose"`
+	ApplicationChannel sql.NullString `json:"application_channel"`
+	Status             string         `json:"status"`
+	BranchCode         string         `json:"branch_code"`
+	SubmittedAt        sql.NullTime   `json:"submitted_at"`
+	CreatedAt          sql.NullTime   `json:"created_at"`
+	CreatedBy          uuid.NullUUID  `json:"created_by"`
+	ApplicantName      sql.NullString `json:"applicant_name"`
+}
+
+func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (GetApplicationRow, error) {
 	row := q.db.QueryRowContext(ctx, getApplication, id)
-	var i Application
+	var i GetApplicationRow
 	err := row.Scan(
 		&i.ID,
 		&i.ApplicantID,
@@ -211,12 +269,15 @@ func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (Application
 		&i.SubmittedAt,
 		&i.CreatedAt,
 		&i.CreatedBy,
+		&i.ApplicantName,
 	)
 	return i, err
 }
 
 const getApplicationAttributes = `-- name: GetApplicationAttributes :many
-SELECT id, application_id, attr_key, attr_value, data_type, updated_at FROM application_attributes WHERE application_id = $1
+SELECT id, application_id, attr_key, attr_value, data_type, updated_at
+FROM application_attributes
+WHERE application_id = $1
 `
 
 func (q *Queries) GetApplicationAttributes(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAttribute, error) {
@@ -250,9 +311,12 @@ func (q *Queries) GetApplicationAttributes(ctx context.Context, applicationID uu
 }
 
 const getPartiesByApplication = `-- name: GetPartiesByApplication :many
-SELECT p.id, p.party_type, p.identifier, p.name, p.date_of_birth, ap.role_code, ap.legal_obligation, ap.slik_required
+SELECT p.id, p.party_type, p.identifier, p.name, p.date_of_birth,
+    ap.role_code,
+    ap.legal_obligation,
+    ap.slik_required
 FROM parties p
-JOIN application_parties ap ON p.id = ap.party_id
+    JOIN application_parties ap ON p.id = ap.party_id
 WHERE ap.application_id = $1
 `
 
@@ -300,7 +364,9 @@ func (q *Queries) GetPartiesByApplication(ctx context.Context, applicationID uui
 }
 
 const listApplicationAttributesByIDs = `-- name: ListApplicationAttributesByIDs :many
-SELECT id, application_id, attr_key, attr_value, data_type, updated_at FROM application_attributes WHERE application_id = ANY($1::uuid[])
+SELECT id, application_id, attr_key, attr_value, data_type, updated_at
+FROM application_attributes
+WHERE application_id = ANY($1::uuid [])
 `
 
 func (q *Queries) ListApplicationAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicationAttribute, error) {
@@ -334,14 +400,30 @@ func (q *Queries) ListApplicationAttributesByIDs(ctx context.Context, dollar_1 [
 }
 
 const listApplications = `-- name: ListApplications :many
-SELECT id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by FROM applications 
-WHERE ($2::text IS NULL OR status = $2)
-  AND ($3::uuid IS NULL OR applicant_id = $3)
-  AND (
-    ($4::timestamp IS NULL AND $5::uuid IS NULL)
-    OR (created_at, id) < ($4::timestamp, $5::uuid)
-  )
-ORDER BY created_at DESC, id DESC
+SELECT a.id, a.applicant_id, a.product_id, a.ao_id, a.loan_amount, a.tenor_months, a.interest_type, a.interest_rate, a.loan_purpose, a.application_channel, a.status, a.branch_code, a.submitted_at, a.created_at, a.created_by,
+    app.full_name AS applicant_name
+FROM applications a
+    JOIN applicants app ON a.applicant_id = app.id
+WHERE (
+        $2::text IS NULL
+        OR a.status = $2
+    )
+    AND (
+        $3::uuid IS NULL
+        OR a.applicant_id = $3
+    )
+    AND (
+        (
+            $4::timestamp IS NULL
+            AND $5::uuid IS NULL
+        )
+        OR (a.created_at, a.id) < (
+            $4::timestamp,
+            $5::uuid
+        )
+    )
+ORDER BY a.created_at DESC,
+    a.id DESC
 LIMIT $1
 `
 
@@ -353,7 +435,26 @@ type ListApplicationsParams struct {
 	CursorID        uuid.NullUUID  `json:"cursor_id"`
 }
 
-func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsParams) ([]Application, error) {
+type ListApplicationsRow struct {
+	ID                 uuid.UUID      `json:"id"`
+	ApplicantID        uuid.UUID      `json:"applicant_id"`
+	ProductID          uuid.UUID      `json:"product_id"`
+	AoID               uuid.UUID      `json:"ao_id"`
+	LoanAmount         sql.NullString `json:"loan_amount"`
+	TenorMonths        sql.NullInt32  `json:"tenor_months"`
+	InterestType       sql.NullString `json:"interest_type"`
+	InterestRate       sql.NullString `json:"interest_rate"`
+	LoanPurpose        sql.NullString `json:"loan_purpose"`
+	ApplicationChannel sql.NullString `json:"application_channel"`
+	Status             string         `json:"status"`
+	BranchCode         string         `json:"branch_code"`
+	SubmittedAt        sql.NullTime   `json:"submitted_at"`
+	CreatedAt          sql.NullTime   `json:"created_at"`
+	CreatedBy          uuid.NullUUID  `json:"created_by"`
+	ApplicantName      sql.NullString `json:"applicant_name"`
+}
+
+func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsParams) ([]ListApplicationsRow, error) {
 	rows, err := q.db.QueryContext(ctx, listApplications,
 		arg.Limit,
 		arg.Status,
@@ -365,9 +466,9 @@ func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsPara
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Application
+	var items []ListApplicationsRow
 	for rows.Next() {
-		var i Application
+		var i ListApplicationsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.ApplicantID,
@@ -384,6 +485,7 @@ func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsPara
 			&i.SubmittedAt,
 			&i.CreatedAt,
 			&i.CreatedBy,
+			&i.ApplicantName,
 		); err != nil {
 			return nil, err
 		}
@@ -399,7 +501,10 @@ func (q *Queries) ListApplications(ctx context.Context, arg ListApplicationsPara
 }
 
 const listStatusLogs = `-- name: ListStatusLogs :many
-SELECT id, application_id, from_status, to_status, changed_by, change_reason, changed_at FROM application_status_logs WHERE application_id = $1 ORDER BY changed_at DESC
+SELECT id, application_id, from_status, to_status, changed_by, change_reason, changed_at
+FROM application_status_logs
+WHERE application_id = $1
+ORDER BY changed_at DESC
 `
 
 func (q *Queries) ListStatusLogs(ctx context.Context, applicationID uuid.UUID) ([]ApplicationStatusLog, error) {
@@ -434,9 +539,9 @@ func (q *Queries) ListStatusLogs(ctx context.Context, applicationID uuid.UUID) (
 }
 
 const updateApplication = `-- name: UpdateApplication :one
-UPDATE applications SET 
-    applicant_id = $2, 
-    product_id = $3, 
+UPDATE applications
+SET applicant_id = $2,
+    product_id = $3,
     ao_id = $4,
     loan_amount = $5,
     tenor_months = $6,
@@ -444,7 +549,8 @@ UPDATE applications SET
     interest_rate = $8,
     loan_purpose = $9,
     status = $10
-WHERE id = $1 RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
+WHERE id = $1
+RETURNING id, applicant_id, product_id, ao_id, loan_amount, tenor_months, interest_type, interest_rate, loan_purpose, application_channel, status, branch_code, submitted_at, created_at, created_by
 `
 
 type UpdateApplicationParams struct {
@@ -496,9 +602,9 @@ func (q *Queries) UpdateApplication(ctx context.Context, arg UpdateApplicationPa
 
 const upsertApplicationAttribute = `-- name: UpsertApplicationAttribute :one
 INSERT INTO application_attributes (application_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT (application_id, attr_key) DO UPDATE SET 
-    attr_value = EXCLUDED.attr_value,
+VALUES ($1, $2, $3, $4) ON CONFLICT (application_id, attr_key) DO
+UPDATE
+SET attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
 RETURNING id, application_id, attr_key, attr_value, data_type, updated_at

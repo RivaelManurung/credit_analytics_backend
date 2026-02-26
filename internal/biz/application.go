@@ -78,6 +78,7 @@ func IsValidStatus(s string) bool {
 type Application struct {
 	ID                 uuid.UUID
 	ApplicantID        uuid.UUID
+	ApplicantName      string
 	ProductID          uuid.UUID
 	AoID               uuid.UUID
 	LoanAmount         Money

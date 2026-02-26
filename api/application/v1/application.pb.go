@@ -132,6 +132,7 @@ type Application struct {
 	state              protoimpl.MessageState  `protogen:"open.v1"`
 	Id                 string                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ApplicantId        string                  `protobuf:"bytes,2,opt,name=applicant_id,json=applicantId,proto3" json:"applicant_id,omitempty"`
+	ApplicantName      string                  `protobuf:"bytes,16,opt,name=applicant_name,json=applicantName,proto3" json:"applicant_name,omitempty"`
 	ProductId          string                  `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	AoId               string                  `protobuf:"bytes,4,opt,name=ao_id,json=aoId,proto3" json:"ao_id,omitempty"`
 	LoanAmount         string                  `protobuf:"bytes,5,opt,name=loan_amount,json=loanAmount,proto3" json:"loan_amount,omitempty"`
@@ -189,6 +190,13 @@ func (x *Application) GetId() string {
 func (x *Application) GetApplicantId() string {
 	if x != nil {
 		return x.ApplicantId
+	}
+	return ""
+}
+
+func (x *Application) GetApplicantName() string {
+	if x != nil {
+		return x.ApplicantName
 	}
 	return ""
 }
@@ -1530,10 +1538,11 @@ const file_application_v1_application_proto_rawDesc = "" +
 	"\x15ApplicationAttributes\x12H\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2(.api.application.v1.ApplicationAttributeR\n" +
-	"attributes\"\xd3\x04\n" +
+	"attributes\"\xfa\x04\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fapplicant_id\x18\x02 \x01(\tR\vapplicantId\x12\x1d\n" +
+	"\fapplicant_id\x18\x02 \x01(\tR\vapplicantId\x12%\n" +
+	"\x0eapplicant_name\x18\x10 \x01(\tR\rapplicantName\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x03 \x01(\tR\tproductId\x12\x13\n" +
 	"\x05ao_id\x18\x04 \x01(\tR\x04aoId\x12\x1f\n" +

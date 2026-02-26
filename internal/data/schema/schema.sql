@@ -77,7 +77,6 @@ CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
         risk_relevant BOOLEAN DEFAULT FALSE,
         description VARCHAR(255)
 );
-
 -- Backward-compat: pastikan kolom baru ada jika tabel sudah terbuat sebelumnya
 ALTER TABLE attribute_categories
 ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);

@@ -3,42 +3,42 @@
 -- Format: COMPACT / MULTI-ROW INSERT (100% Original Data)
 -- ============================================================
 -- 1. CLEAN UP
-TRUNCATE TABLE credit_authority_matrices CASCADE;
-TRUNCATE TABLE application_decision_conditions CASCADE;
-TRUNCATE TABLE application_decisions CASCADE;
-TRUNCATE TABLE application_committee_decisions CASCADE;
-TRUNCATE TABLE application_committee_votes CASCADE;
-TRUNCATE TABLE credit_committee_members CASCADE;
-TRUNCATE TABLE application_committee_sessions CASCADE;
-TRUNCATE TABLE application_financial_ratios CASCADE;
-TRUNCATE TABLE application_liabilities CASCADE;
-TRUNCATE TABLE application_assets CASCADE;
-TRUNCATE TABLE asset_types CASCADE;
-TRUNCATE TABLE application_financial_facts CASCADE;
-TRUNCATE TABLE financial_gl_accounts CASCADE;
-TRUNCATE TABLE survey_data_mappings CASCADE;
-TRUNCATE TABLE survey_evidences CASCADE;
-TRUNCATE TABLE survey_answers CASCADE;
-TRUNCATE TABLE application_surveys CASCADE;
-TRUNCATE TABLE survey_question_options CASCADE;
-TRUNCATE TABLE survey_questions CASCADE;
-TRUNCATE TABLE survey_sections CASCADE;
-TRUNCATE TABLE survey_templates CASCADE;
-TRUNCATE TABLE application_parties CASCADE;
-TRUNCATE TABLE parties CASCADE;
-TRUNCATE TABLE application_status_logs CASCADE;
-TRUNCATE TABLE product_status_flows CASCADE;
-TRUNCATE TABLE application_status_refs CASCADE;
-TRUNCATE TABLE application_attributes CASCADE;
-TRUNCATE TABLE applications CASCADE;
-TRUNCATE TABLE loan_officers CASCADE;
-TRUNCATE TABLE loan_products CASCADE;
-TRUNCATE TABLE branches CASCADE;
-TRUNCATE TABLE attribute_options CASCADE;
-TRUNCATE TABLE custom_column_attribute_registries CASCADE;
-TRUNCATE TABLE attribute_categories CASCADE;
-TRUNCATE TABLE applicant_attributes CASCADE;
-TRUNCATE TABLE applicants CASCADE;
+TRUNCATE TABLE credit_authority_matrices,
+application_decision_conditions,
+application_decisions,
+application_committee_decisions,
+application_committee_votes,
+credit_committee_members,
+application_committee_sessions,
+application_financial_ratios,
+application_liabilities,
+application_assets,
+asset_types,
+application_financial_facts,
+financial_gl_accounts,
+survey_data_mappings,
+survey_evidences,
+survey_answers,
+application_surveys,
+survey_question_options,
+survey_questions,
+survey_sections,
+survey_templates,
+application_parties,
+parties,
+application_status_logs,
+product_status_flows,
+application_status_refs,
+application_attributes,
+applications,
+loan_officers,
+loan_products,
+branches,
+attribute_options,
+custom_column_attribute_registries,
+attribute_categories,
+applicant_attributes,
+applicants CASCADE;
 -- 2. MASTER REFERENCE DATA
 INSERT INTO branches (branch_code, branch_name, region_code)
 VALUES ('JKT01', 'Jakarta Pusat Utama', 'REG01'),
@@ -1289,7 +1289,8 @@ VALUES (
     );
 -- 6. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES (
+VALUES -- BUDI SANTOSO (0195383f-427c-7000-bb34-317101010190)
+    (
         '0195383f-427c-7000-bb34-317101010190',
         'tempat_lahir',
         'Jakarta',
