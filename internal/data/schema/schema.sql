@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS applicants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_type VARCHAR(20) NOT NULL,
     -- personal | corporate
-    identity_number VARCHAR(100),
-    tax_id VARCHAR(100),
+    identity_number VARCHAR(100) UNIQUE,
+    tax_id VARCHAR(100) UNIQUE,
     full_name VARCHAR(255),
     birth_date DATE,
     establishment_date DATE,
@@ -45,11 +45,13 @@ CREATE TABLE IF NOT EXISTS applicants (
 CREATE TABLE IF NOT EXISTS applicant_attributes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     applicant_id UUID NOT NULL REFERENCES applicants(id) ON DELETE CASCADE,
-    attr_key VARCHAR(100) NOT NULL,
-    attr_value TEXT,
-    data_type VARCHAR(20),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (applicant_id, attr_key)
+    attribute_id UUID NOT NULL REFERENCES custom_column_attribute_registries(id) ON DELETE CASCADE,
+    attribute_option_id UUID REFERENCES attribute_options(id) ON DELETE
+    SET NULL,
+        attr_value TEXT,
+        data_type VARCHAR(20),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (applicant_id, attribute_id)
 );
 -- Tabel kategori atribut yang bisa dikelola secara dinamis via API.
 -- Icon dan label disimpan di sini (satu icon per kategori, bukan per atribut).
@@ -62,52 +64,32 @@ CREATE TABLE IF NOT EXISTS attribute_categories (
     description VARCHAR(255)
 );
 CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
-    attribute_code VARCHAR(100) PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    attribute_code VARCHAR(100) UNIQUE NOT NULL,
     applies_to VARCHAR(20) NOT NULL,
     -- PERSONAL | CORPORATE | BOTH
     scope VARCHAR(20) NOT NULL,
     -- APPLICANT | APPLICATION | BOTH
     value_type VARCHAR(20) NOT NULL,
-    -- STRING | NUMBER | BOOLEAN | DATE
+    -- STRING | NUMBER | BOOLEAN | DATE | SELECT
     category_code VARCHAR(100) REFERENCES attribute_categories(category_code) ON UPDATE CASCADE ON DELETE
     SET NULL,
         ui_label VARCHAR(255),
         -- Label yang tampil di UI per atribut
         is_required BOOLEAN DEFAULT FALSE,
         risk_relevant BOOLEAN DEFAULT FALSE,
+        is_active BOOLEAN DEFAULT TRUE,
+        display_order INT DEFAULT 0,
         description VARCHAR(255)
 );
--- Backward-compat: pastikan kolom baru ada jika tabel sudah terbuat sebelumnya
-ALTER TABLE attribute_categories
-ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
-ALTER TABLE attribute_categories
-ADD COLUMN IF NOT EXISTS ui_icon VARCHAR(100);
-ALTER TABLE attribute_categories
-ADD COLUMN IF NOT EXISTS display_order INT DEFAULT 0;
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS applies_to VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS scope VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS value_type VARCHAR(20);
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS ui_label VARCHAR(255);
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS is_required BOOLEAN DEFAULT FALSE;
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
-ALTER TABLE custom_column_attribute_registries
-ADD COLUMN IF NOT EXISTS description VARCHAR(255);
 CREATE TABLE IF NOT EXISTS attribute_options (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
-    attribute_code VARCHAR(100) NOT NULL REFERENCES custom_column_attribute_registries(attribute_code) ON DELETE CASCADE,
+    attribute_id UUID NOT NULL REFERENCES custom_column_attribute_registries(id) ON DELETE CASCADE,
     option_value VARCHAR(100) NOT NULL,
     option_label VARCHAR(255) NOT NULL,
     display_order INT DEFAULT 0,
     is_active BOOLEAN DEFAULT TRUE,
-    UNIQUE (attribute_code, option_value)
+    UNIQUE (attribute_id, option_value)
 );
 CREATE TABLE IF NOT EXISTS branches (
     branch_code VARCHAR(50) PRIMARY KEY,
@@ -150,11 +132,13 @@ CREATE TABLE IF NOT EXISTS applications (
 CREATE TABLE IF NOT EXISTS application_attributes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
-    attr_key VARCHAR(100) NOT NULL,
-    attr_value TEXT,
-    data_type VARCHAR(20),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (application_id, attr_key)
+    attribute_id UUID NOT NULL REFERENCES custom_column_attribute_registries(id) ON DELETE CASCADE,
+    attribute_option_id UUID REFERENCES attribute_options(id) ON DELETE
+    SET NULL,
+        attr_value TEXT,
+        data_type VARCHAR(20),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (application_id, attribute_id)
 );
 CREATE TABLE IF NOT EXISTS application_status_refs (
     status_code VARCHAR(50) PRIMARY KEY,
@@ -241,8 +225,8 @@ CREATE TABLE IF NOT EXISTS application_surveys (
     template_id UUID REFERENCES survey_templates(id),
     survey_type VARCHAR(20),
     -- FIELD | DESK
-    status VARCHAR(20),
-    -- ASSIGNED | IN_PROGRESS | SUBMITTED | VERIFIED
+    status VARCHAR(20) DEFAULT 'UNASSIGNED',
+    -- UNASSIGNED | ASSIGNED | IN_PROGRESS | SUBMITTED | VERIFIED
     submitted_by UUID,
     verified_by UUID,
     verified_at TIMESTAMP WITH TIME ZONE,

@@ -42,7 +42,47 @@ func (q *Queries) CreateAttributeCategory(ctx context.Context, arg CreateAttribu
 	return err
 }
 
-const createAttributeRegistry = `-- name: CreateAttributeRegistry :exec
+const createAttributeOption = `-- name: CreateAttributeOption :one
+INSERT INTO attribute_options (
+        attribute_id,
+        option_value,
+        option_label,
+        display_order,
+        is_active
+    )
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, attribute_id, option_value, option_label, display_order, is_active
+`
+
+type CreateAttributeOptionParams struct {
+	AttributeID  uuid.UUID     `json:"attribute_id"`
+	OptionValue  string        `json:"option_value"`
+	OptionLabel  string        `json:"option_label"`
+	DisplayOrder sql.NullInt32 `json:"display_order"`
+	IsActive     sql.NullBool  `json:"is_active"`
+}
+
+func (q *Queries) CreateAttributeOption(ctx context.Context, arg CreateAttributeOptionParams) (AttributeOption, error) {
+	row := q.db.QueryRowContext(ctx, createAttributeOption,
+		arg.AttributeID,
+		arg.OptionValue,
+		arg.OptionLabel,
+		arg.DisplayOrder,
+		arg.IsActive,
+	)
+	var i AttributeOption
+	err := row.Scan(
+		&i.ID,
+		&i.AttributeID,
+		&i.OptionValue,
+		&i.OptionLabel,
+		&i.DisplayOrder,
+		&i.IsActive,
+	)
+	return i, err
+}
+
+const createAttributeRegistry = `-- name: CreateAttributeRegistry :one
 INSERT INTO custom_column_attribute_registries (
         attribute_code,
         applies_to,
@@ -52,9 +92,12 @@ INSERT INTO custom_column_attribute_registries (
         ui_label,
         is_required,
         risk_relevant,
+        is_active,
+        display_order,
         description
     )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+RETURNING id, attribute_code, applies_to, scope, value_type, category_code, ui_label, is_required, risk_relevant, is_active, display_order, description
 `
 
 type CreateAttributeRegistryParams struct {
@@ -66,11 +109,13 @@ type CreateAttributeRegistryParams struct {
 	UiLabel       sql.NullString `json:"ui_label"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	IsActive      sql.NullBool   `json:"is_active"`
+	DisplayOrder  sql.NullInt32  `json:"display_order"`
 	Description   sql.NullString `json:"description"`
 }
 
-func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error {
-	_, err := q.db.ExecContext(ctx, createAttributeRegistry,
+func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) (CustomColumnAttributeRegistry, error) {
+	row := q.db.QueryRowContext(ctx, createAttributeRegistry,
 		arg.AttributeCode,
 		arg.AppliesTo,
 		arg.Scope,
@@ -79,9 +124,26 @@ func (q *Queries) CreateAttributeRegistry(ctx context.Context, arg CreateAttribu
 		arg.UiLabel,
 		arg.IsRequired,
 		arg.RiskRelevant,
+		arg.IsActive,
+		arg.DisplayOrder,
 		arg.Description,
 	)
-	return err
+	var i CustomColumnAttributeRegistry
+	err := row.Scan(
+		&i.ID,
+		&i.AttributeCode,
+		&i.AppliesTo,
+		&i.Scope,
+		&i.ValueType,
+		&i.CategoryCode,
+		&i.UiLabel,
+		&i.IsRequired,
+		&i.RiskRelevant,
+		&i.IsActive,
+		&i.DisplayOrder,
+		&i.Description,
+	)
+	return i, err
 }
 
 const deleteAttributeCategory = `-- name: DeleteAttributeCategory :exec
@@ -96,11 +158,11 @@ func (q *Queries) DeleteAttributeCategory(ctx context.Context, categoryCode stri
 
 const deleteAttributeRegistry = `-- name: DeleteAttributeRegistry :exec
 DELETE FROM custom_column_attribute_registries
-WHERE attribute_code = $1
+WHERE id = $1
 `
 
-func (q *Queries) DeleteAttributeRegistry(ctx context.Context, attributeCode string) error {
-	_, err := q.db.ExecContext(ctx, deleteAttributeRegistry, attributeCode)
+func (q *Queries) DeleteAttributeRegistry(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteAttributeRegistry, id)
 	return err
 }
 
@@ -123,6 +185,54 @@ func (q *Queries) GetAttributeCategory(ctx context.Context, categoryCode string)
 		&i.UiIcon,
 		&i.DisplayOrder,
 		&i.Description,
+	)
+	return i, err
+}
+
+const getAttributeRegistry = `-- name: GetAttributeRegistry :one
+SELECT r.id, r.attribute_code, r.applies_to, r.scope, r.value_type, r.category_code, r.ui_label, r.is_required, r.risk_relevant, r.is_active, r.display_order, r.description,
+    c.category_name,
+    c.ui_icon AS category_icon
+FROM custom_column_attribute_registries r
+    LEFT JOIN attribute_categories c ON r.category_code = c.category_code
+WHERE r.id = $1
+`
+
+type GetAttributeRegistryRow struct {
+	ID            uuid.UUID      `json:"id"`
+	AttributeCode string         `json:"attribute_code"`
+	AppliesTo     string         `json:"applies_to"`
+	Scope         string         `json:"scope"`
+	ValueType     string         `json:"value_type"`
+	CategoryCode  sql.NullString `json:"category_code"`
+	UiLabel       sql.NullString `json:"ui_label"`
+	IsRequired    sql.NullBool   `json:"is_required"`
+	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	IsActive      sql.NullBool   `json:"is_active"`
+	DisplayOrder  sql.NullInt32  `json:"display_order"`
+	Description   sql.NullString `json:"description"`
+	CategoryName  sql.NullString `json:"category_name"`
+	CategoryIcon  sql.NullString `json:"category_icon"`
+}
+
+func (q *Queries) GetAttributeRegistry(ctx context.Context, id uuid.UUID) (GetAttributeRegistryRow, error) {
+	row := q.db.QueryRowContext(ctx, getAttributeRegistry, id)
+	var i GetAttributeRegistryRow
+	err := row.Scan(
+		&i.ID,
+		&i.AttributeCode,
+		&i.AppliesTo,
+		&i.Scope,
+		&i.ValueType,
+		&i.CategoryCode,
+		&i.UiLabel,
+		&i.IsRequired,
+		&i.RiskRelevant,
+		&i.IsActive,
+		&i.DisplayOrder,
+		&i.Description,
+		&i.CategoryName,
+		&i.CategoryIcon,
 	)
 	return i, err
 }
@@ -225,14 +335,14 @@ func (q *Queries) ListAttributeCategories(ctx context.Context) ([]AttributeCateg
 
 const listAttributeOptions = `-- name: ListAttributeOptions :many
 SELECT id,
-    attribute_code,
+    attribute_id,
     option_value,
     option_label,
     display_order,
     is_active
 FROM attribute_options
 WHERE is_active = TRUE
-ORDER BY attribute_code,
+ORDER BY attribute_id,
     display_order
 `
 
@@ -250,7 +360,7 @@ func (q *Queries) ListAttributeOptions(ctx context.Context) ([]AttributeOption, 
 		var i AttributeOption
 		if err := rows.Scan(
 			&i.ID,
-			&i.AttributeCode,
+			&i.AttributeID,
 			&i.OptionValue,
 			&i.OptionLabel,
 			&i.DisplayOrder,
@@ -271,19 +381,19 @@ func (q *Queries) ListAttributeOptions(ctx context.Context) ([]AttributeOption, 
 
 const listAttributeOptionsByAttribute = `-- name: ListAttributeOptionsByAttribute :many
 SELECT id,
-    attribute_code,
+    attribute_id,
     option_value,
     option_label,
     display_order,
     is_active
 FROM attribute_options
-WHERE attribute_code = $1
+WHERE attribute_id = $1
     AND is_active = TRUE
 ORDER BY display_order
 `
 
-func (q *Queries) ListAttributeOptionsByAttribute(ctx context.Context, attributeCode string) ([]AttributeOption, error) {
-	rows, err := q.db.QueryContext(ctx, listAttributeOptionsByAttribute, attributeCode)
+func (q *Queries) ListAttributeOptionsByAttribute(ctx context.Context, attributeID uuid.UUID) ([]AttributeOption, error) {
+	rows, err := q.db.QueryContext(ctx, listAttributeOptionsByAttribute, attributeID)
 	if err != nil {
 		return nil, err
 	}
@@ -293,7 +403,7 @@ func (q *Queries) ListAttributeOptionsByAttribute(ctx context.Context, attribute
 		var i AttributeOption
 		if err := rows.Scan(
 			&i.ID,
-			&i.AttributeCode,
+			&i.AttributeID,
 			&i.OptionValue,
 			&i.OptionLabel,
 			&i.DisplayOrder,
@@ -313,7 +423,8 @@ func (q *Queries) ListAttributeOptionsByAttribute(ctx context.Context, attribute
 }
 
 const listAttributeRegistry = `-- name: ListAttributeRegistry :many
-SELECT r.attribute_code,
+SELECT r.id,
+    r.attribute_code,
     r.applies_to,
     r.scope,
     r.value_type,
@@ -321,16 +432,20 @@ SELECT r.attribute_code,
     r.ui_label,
     r.is_required,
     r.risk_relevant,
+    r.is_active,
+    r.display_order,
     r.description,
     c.category_name,
     c.ui_icon AS category_icon
 FROM custom_column_attribute_registries r
     LEFT JOIN attribute_categories c ON r.category_code = c.category_code
 ORDER BY c.display_order,
+    r.display_order,
     r.attribute_code
 `
 
 type ListAttributeRegistryRow struct {
+	ID            uuid.UUID      `json:"id"`
 	AttributeCode string         `json:"attribute_code"`
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
@@ -339,6 +454,8 @@ type ListAttributeRegistryRow struct {
 	UiLabel       sql.NullString `json:"ui_label"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	IsActive      sql.NullBool   `json:"is_active"`
+	DisplayOrder  sql.NullInt32  `json:"display_order"`
 	Description   sql.NullString `json:"description"`
 	CategoryName  sql.NullString `json:"category_name"`
 	CategoryIcon  sql.NullString `json:"category_icon"`
@@ -357,6 +474,7 @@ func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]ListAttributeReg
 	for rows.Next() {
 		var i ListAttributeRegistryRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.AttributeCode,
 			&i.AppliesTo,
 			&i.Scope,
@@ -365,6 +483,8 @@ func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]ListAttributeReg
 			&i.UiLabel,
 			&i.IsRequired,
 			&i.RiskRelevant,
+			&i.IsActive,
+			&i.DisplayOrder,
 			&i.Description,
 			&i.CategoryName,
 			&i.CategoryIcon,
@@ -383,7 +503,8 @@ func (q *Queries) ListAttributeRegistry(ctx context.Context) ([]ListAttributeReg
 }
 
 const listAttributeRegistryByCategory = `-- name: ListAttributeRegistryByCategory :many
-SELECT r.attribute_code,
+SELECT r.id,
+    r.attribute_code,
     r.applies_to,
     r.scope,
     r.value_type,
@@ -391,16 +512,20 @@ SELECT r.attribute_code,
     r.ui_label,
     r.is_required,
     r.risk_relevant,
+    r.is_active,
+    r.display_order,
     r.description,
     c.category_name,
     c.ui_icon AS category_icon
 FROM custom_column_attribute_registries r
     LEFT JOIN attribute_categories c ON r.category_code = c.category_code
 WHERE r.category_code = $1
-ORDER BY r.attribute_code
+ORDER BY r.display_order,
+    r.attribute_code
 `
 
 type ListAttributeRegistryByCategoryRow struct {
+	ID            uuid.UUID      `json:"id"`
 	AttributeCode string         `json:"attribute_code"`
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
@@ -409,6 +534,8 @@ type ListAttributeRegistryByCategoryRow struct {
 	UiLabel       sql.NullString `json:"ui_label"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	IsActive      sql.NullBool   `json:"is_active"`
+	DisplayOrder  sql.NullInt32  `json:"display_order"`
 	Description   sql.NullString `json:"description"`
 	CategoryName  sql.NullString `json:"category_name"`
 	CategoryIcon  sql.NullString `json:"category_icon"`
@@ -424,6 +551,7 @@ func (q *Queries) ListAttributeRegistryByCategory(ctx context.Context, categoryC
 	for rows.Next() {
 		var i ListAttributeRegistryByCategoryRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.AttributeCode,
 			&i.AppliesTo,
 			&i.Scope,
@@ -432,6 +560,8 @@ func (q *Queries) ListAttributeRegistryByCategory(ctx context.Context, categoryC
 			&i.UiLabel,
 			&i.IsRequired,
 			&i.RiskRelevant,
+			&i.IsActive,
+			&i.DisplayOrder,
 			&i.Description,
 			&i.CategoryName,
 			&i.CategoryIcon,
@@ -607,7 +737,7 @@ func (q *Queries) UpdateAttributeCategory(ctx context.Context, arg UpdateAttribu
 	return err
 }
 
-const updateAttributeRegistry = `-- name: UpdateAttributeRegistry :exec
+const updateAttributeRegistry = `-- name: UpdateAttributeRegistry :one
 UPDATE custom_column_attribute_registries
 SET applies_to = $2,
     scope = $3,
@@ -616,25 +746,30 @@ SET applies_to = $2,
     ui_label = $6,
     is_required = $7,
     risk_relevant = $8,
-    description = $9
-WHERE attribute_code = $1
+    is_active = $9,
+    display_order = $10,
+    description = $11
+WHERE id = $1
+RETURNING id, attribute_code, applies_to, scope, value_type, category_code, ui_label, is_required, risk_relevant, is_active, display_order, description
 `
 
 type UpdateAttributeRegistryParams struct {
-	AttributeCode string         `json:"attribute_code"`
-	AppliesTo     string         `json:"applies_to"`
-	Scope         string         `json:"scope"`
-	ValueType     string         `json:"value_type"`
-	CategoryCode  sql.NullString `json:"category_code"`
-	UiLabel       sql.NullString `json:"ui_label"`
-	IsRequired    sql.NullBool   `json:"is_required"`
-	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
-	Description   sql.NullString `json:"description"`
+	ID           uuid.UUID      `json:"id"`
+	AppliesTo    string         `json:"applies_to"`
+	Scope        string         `json:"scope"`
+	ValueType    string         `json:"value_type"`
+	CategoryCode sql.NullString `json:"category_code"`
+	UiLabel      sql.NullString `json:"ui_label"`
+	IsRequired   sql.NullBool   `json:"is_required"`
+	RiskRelevant sql.NullBool   `json:"risk_relevant"`
+	IsActive     sql.NullBool   `json:"is_active"`
+	DisplayOrder sql.NullInt32  `json:"display_order"`
+	Description  sql.NullString `json:"description"`
 }
 
-func (q *Queries) UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error {
-	_, err := q.db.ExecContext(ctx, updateAttributeRegistry,
-		arg.AttributeCode,
+func (q *Queries) UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) (CustomColumnAttributeRegistry, error) {
+	row := q.db.QueryRowContext(ctx, updateAttributeRegistry,
+		arg.ID,
 		arg.AppliesTo,
 		arg.Scope,
 		arg.ValueType,
@@ -642,7 +777,24 @@ func (q *Queries) UpdateAttributeRegistry(ctx context.Context, arg UpdateAttribu
 		arg.UiLabel,
 		arg.IsRequired,
 		arg.RiskRelevant,
+		arg.IsActive,
+		arg.DisplayOrder,
 		arg.Description,
 	)
-	return err
+	var i CustomColumnAttributeRegistry
+	err := row.Scan(
+		&i.ID,
+		&i.AttributeCode,
+		&i.AppliesTo,
+		&i.Scope,
+		&i.ValueType,
+		&i.CategoryCode,
+		&i.UiLabel,
+		&i.IsRequired,
+		&i.RiskRelevant,
+		&i.IsActive,
+		&i.DisplayOrder,
+		&i.Description,
+	)
+	return i, err
 }

@@ -52,10 +52,13 @@ func (s *ApplicationService) CreateApplication(ctx context.Context, req *pb.Crea
 		BranchCode:         req.BranchCode,
 	}
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		app.Attributes = append(app.Attributes, biz.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 
@@ -115,10 +118,13 @@ func (s *ApplicationService) UpdateApplication(ctx context.Context, req *pb.Upda
 		Status:       biz.ApplicationStatus(req.Status),
 	}
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		app.Attributes = append(app.Attributes, biz.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	if err := s.uc.Update(ctx, app); err != nil {
@@ -144,9 +150,10 @@ func (s *ApplicationService) GetApplicationAttributes(ctx context.Context, req *
 	res := &pb.ApplicationAttributes{}
 	for _, attr := range app.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res, nil
@@ -165,10 +172,13 @@ func (s *ApplicationService) UpsertApplicationAttributes(ctx context.Context, re
 
 	app.Attributes = nil
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		app.Attributes = append(app.Attributes, biz.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	if err := s.uc.Update(ctx, app); err != nil {
@@ -178,9 +188,10 @@ func (s *ApplicationService) UpsertApplicationAttributes(ctx context.Context, re
 	res := &pb.ApplicationAttributes{}
 	for _, attr := range app.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res, nil
@@ -403,9 +414,10 @@ func mapAppBizToProto(app *biz.Application) *pb.Application {
 	}
 	for _, attr := range app.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicationAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res

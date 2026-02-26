@@ -79,10 +79,17 @@ SELECT *
 FROM application_attributes
 WHERE application_id = $1;
 -- name: UpsertApplicationAttribute :one
-INSERT INTO application_attributes (application_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4) ON CONFLICT (application_id, attr_key) DO
+INSERT INTO application_attributes (
+        application_id,
+        attribute_id,
+        attribute_option_id,
+        attr_value,
+        data_type
+    )
+VALUES ($1, $2, $3, $4, $5) ON CONFLICT (application_id, attribute_id) DO
 UPDATE
-SET attr_value = EXCLUDED.attr_value,
+SET attribute_option_id = EXCLUDED.attribute_option_id,
+    attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
 RETURNING *;

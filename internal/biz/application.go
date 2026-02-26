@@ -190,9 +190,10 @@ func (a *Application) Archive() error {
 }
 
 type ApplicationAttribute struct {
-	Key      string
-	Value    string
-	DataType string
+	AttributeID       uuid.UUID
+	AttributeOptionID uuid.UUID
+	Value             string
+	DataType          string
 }
 
 type Party struct {

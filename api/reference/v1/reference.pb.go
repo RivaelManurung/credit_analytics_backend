@@ -386,7 +386,7 @@ func (x *DeleteAttributeCategoryRequest) GetCategoryCode() string {
 type AttributeOption struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	AttributeCode string                 `protobuf:"bytes,2,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	AttributeId   string                 `protobuf:"bytes,2,opt,name=attribute_id,json=attributeId,proto3" json:"attribute_id,omitempty"`
 	OptionValue   string                 `protobuf:"bytes,3,opt,name=option_value,json=optionValue,proto3" json:"option_value,omitempty"`
 	OptionLabel   string                 `protobuf:"bytes,4,opt,name=option_label,json=optionLabel,proto3" json:"option_label,omitempty"`
 	DisplayOrder  int32                  `protobuf:"varint,5,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
@@ -432,9 +432,9 @@ func (x *AttributeOption) GetId() string {
 	return ""
 }
 
-func (x *AttributeOption) GetAttributeCode() string {
+func (x *AttributeOption) GetAttributeId() string {
 	if x != nil {
-		return x.AttributeCode
+		return x.AttributeId
 	}
 	return ""
 }
@@ -468,16 +468,19 @@ func (x *AttributeOption) GetIsActive() bool {
 }
 
 type AttributeRegistry struct {
-	state        protoimpl.MessageState `protogen:"open.v1"`
-	AttrKey      string                 `protobuf:"bytes,1,opt,name=attr_key,json=attrKey,proto3" json:"attr_key,omitempty"`
-	AppliesTo    string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
-	Scope        string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
-	DataType     string                 `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
-	CategoryCode string                 `protobuf:"bytes,5,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"` // FK ke attribute_categories
-	UiLabel      string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`                // Label per atribut (bisa beda dari description)
-	Required     bool                   `protobuf:"varint,7,opt,name=required,proto3" json:"required,omitempty"`
-	RiskRelevant bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
-	Description  string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,13,opt,name=id,proto3" json:"id,omitempty"`
+	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	AppliesTo     string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
+	Scope         string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
+	DataType      string                 `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	CategoryCode  string                 `protobuf:"bytes,5,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"` // FK ke attribute_categories
+	UiLabel       string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`                // Label per atribut (bisa beda dari description)
+	IsRequired    bool                   `protobuf:"varint,7,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
+	RiskRelevant  bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	IsActive      bool                   `protobuf:"varint,14,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,15,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
+	Description   string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
 	// Denormalized dari JOIN (read-only, tidak disimpan di tabel registry)
 	CategoryName  string             `protobuf:"bytes,10,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
 	CategoryIcon  string             `protobuf:"bytes,11,opt,name=category_icon,json=categoryIcon,proto3" json:"category_icon,omitempty"`
@@ -516,9 +519,16 @@ func (*AttributeRegistry) Descriptor() ([]byte, []int) {
 	return file_reference_v1_reference_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AttributeRegistry) GetAttrKey() string {
+func (x *AttributeRegistry) GetId() string {
 	if x != nil {
-		return x.AttrKey
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetAttributeCode() string {
+	if x != nil {
+		return x.AttributeCode
 	}
 	return ""
 }
@@ -558,9 +568,9 @@ func (x *AttributeRegistry) GetUiLabel() string {
 	return ""
 }
 
-func (x *AttributeRegistry) GetRequired() bool {
+func (x *AttributeRegistry) GetIsRequired() bool {
 	if x != nil {
-		return x.Required
+		return x.IsRequired
 	}
 	return false
 }
@@ -570,6 +580,20 @@ func (x *AttributeRegistry) GetRiskRelevant() bool {
 		return x.RiskRelevant
 	}
 	return false
+}
+
+func (x *AttributeRegistry) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *AttributeRegistry) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
 }
 
 func (x *AttributeRegistry) GetDescription() string {
@@ -698,6 +722,8 @@ type CreateAttributeRegistryRequest struct {
 	UiLabel       string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
 	IsRequired    bool                   `protobuf:"varint,7,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
 	RiskRelevant  bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,11,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
 	Description   string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -789,6 +815,20 @@ func (x *CreateAttributeRegistryRequest) GetRiskRelevant() bool {
 	return false
 }
 
+func (x *CreateAttributeRegistryRequest) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *CreateAttributeRegistryRequest) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
 func (x *CreateAttributeRegistryRequest) GetDescription() string {
 	if x != nil {
 		return x.Description
@@ -798,6 +838,7 @@ func (x *CreateAttributeRegistryRequest) GetDescription() string {
 
 type UpdateAttributeRegistryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,12,opt,name=id,proto3" json:"id,omitempty"`
 	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
 	AppliesTo     string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
 	Scope         string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
@@ -806,6 +847,8 @@ type UpdateAttributeRegistryRequest struct {
 	UiLabel       string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
 	IsRequired    bool                   `protobuf:"varint,7,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
 	RiskRelevant  bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,11,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
 	Description   string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -839,6 +882,13 @@ func (x *UpdateAttributeRegistryRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UpdateAttributeRegistryRequest.ProtoReflect.Descriptor instead.
 func (*UpdateAttributeRegistryRequest) Descriptor() ([]byte, []int) {
 	return file_reference_v1_reference_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UpdateAttributeRegistryRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *UpdateAttributeRegistryRequest) GetAttributeCode() string {
@@ -897,6 +947,20 @@ func (x *UpdateAttributeRegistryRequest) GetRiskRelevant() bool {
 	return false
 }
 
+func (x *UpdateAttributeRegistryRequest) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *UpdateAttributeRegistryRequest) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
 func (x *UpdateAttributeRegistryRequest) GetDescription() string {
 	if x != nil {
 		return x.Description
@@ -906,7 +970,7 @@ func (x *UpdateAttributeRegistryRequest) GetDescription() string {
 
 type DeleteAttributeRegistryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -941,9 +1005,9 @@ func (*DeleteAttributeRegistryRequest) Descriptor() ([]byte, []int) {
 	return file_reference_v1_reference_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *DeleteAttributeRegistryRequest) GetAttributeCode() string {
+func (x *DeleteAttributeRegistryRequest) GetId() string {
 	if x != nil {
-		return x.AttributeCode
+		return x.Id
 	}
 	return ""
 }
@@ -1822,24 +1886,28 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\rdisplay_order\x18\x04 \x01(\x05R\fdisplayOrder\x12 \n" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\"E\n" +
 	"\x1eDeleteAttributeCategoryRequest\x12#\n" +
-	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xd0\x01\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xcc\x01\n" +
 	"\x0fAttributeOption\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
-	"\x0eattribute_code\x18\x02 \x01(\tR\rattributeCode\x12!\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
+	"\fattribute_id\x18\x02 \x01(\tR\vattributeId\x12!\n" +
 	"\foption_value\x18\x03 \x01(\tR\voptionValue\x12!\n" +
 	"\foption_label\x18\x04 \x01(\tR\voptionLabel\x12#\n" +
 	"\rdisplay_order\x18\x05 \x01(\x05R\fdisplayOrder\x12\x1b\n" +
-	"\tis_active\x18\x06 \x01(\bR\bisActive\"\xaa\x03\n" +
-	"\x11AttributeRegistry\x12\x19\n" +
-	"\battr_key\x18\x01 \x01(\tR\aattrKey\x12\x1d\n" +
+	"\tis_active\x18\x06 \x01(\bR\bisActive\"\x8d\x04\n" +
+	"\x11AttributeRegistry\x12\x0e\n" +
+	"\x02id\x18\r \x01(\tR\x02id\x12%\n" +
+	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
 	"\n" +
 	"applies_to\x18\x02 \x01(\tR\tappliesTo\x12\x14\n" +
 	"\x05scope\x18\x03 \x01(\tR\x05scope\x12\x1b\n" +
 	"\tdata_type\x18\x04 \x01(\tR\bdataType\x12#\n" +
 	"\rcategory_code\x18\x05 \x01(\tR\fcategoryCode\x12\x19\n" +
-	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1a\n" +
-	"\brequired\x18\a \x01(\bR\brequired\x12#\n" +
-	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
+	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1f\n" +
+	"\vis_required\x18\a \x01(\bR\n" +
+	"isRequired\x12#\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12\x1b\n" +
+	"\tis_active\x18\x0e \x01(\bR\bisActive\x12#\n" +
+	"\rdisplay_order\x18\x0f \x01(\x05R\fdisplayOrder\x12 \n" +
 	"\vdescription\x18\t \x01(\tR\vdescription\x12#\n" +
 	"\rcategory_name\x18\n" +
 	" \x01(\tR\fcategoryName\x12#\n" +
@@ -1850,7 +1918,7 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"attributes\x18\x01 \x03(\v2#.api.reference.v1.AttributeRegistryR\n" +
 	"attributes\"M\n" +
 	"&ListAttributeRegistryByCategoryRequest\x12#\n" +
-	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xc3\x02\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\x85\x03\n" +
 	"\x1eCreateAttributeRegistryRequest\x12%\n" +
 	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
 	"\n" +
@@ -1862,9 +1930,13 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1f\n" +
 	"\vis_required\x18\a \x01(\bR\n" +
 	"isRequired\x12#\n" +
-	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
-	"\vdescription\x18\t \x01(\tR\vdescription\"\xc3\x02\n" +
-	"\x1eUpdateAttributeRegistryRequest\x12%\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12\x1b\n" +
+	"\tis_active\x18\n" +
+	" \x01(\bR\bisActive\x12#\n" +
+	"\rdisplay_order\x18\v \x01(\x05R\fdisplayOrder\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\"\x95\x03\n" +
+	"\x1eUpdateAttributeRegistryRequest\x12\x0e\n" +
+	"\x02id\x18\f \x01(\tR\x02id\x12%\n" +
 	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
 	"\n" +
 	"applies_to\x18\x02 \x01(\tR\tappliesTo\x12\x14\n" +
@@ -1875,10 +1947,13 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1f\n" +
 	"\vis_required\x18\a \x01(\bR\n" +
 	"isRequired\x12#\n" +
-	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
-	"\vdescription\x18\t \x01(\tR\vdescription\"G\n" +
-	"\x1eDeleteAttributeRegistryRequest\x12%\n" +
-	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\"\x95\x01\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12\x1b\n" +
+	"\tis_active\x18\n" +
+	" \x01(\bR\bisActive\x12#\n" +
+	"\rdisplay_order\x18\v \x01(\x05R\fdisplayOrder\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\"0\n" +
+	"\x1eDeleteAttributeRegistryRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x95\x01\n" +
 	"\vLoanProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fproduct_code\x18\x02 \x01(\tR\vproductCode\x12!\n" +
@@ -1940,7 +2015,7 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\n" +
 	"product_id\x18\x02 \x01(\tR\tproductId\"]\n" +
 	"\x1bListSurveyTemplatesResponse\x12>\n" +
-	"\ttemplates\x18\x01 \x03(\v2 .api.reference.v1.SurveyTemplateR\ttemplates2\xcd\x14\n" +
+	"\ttemplates\x18\x01 \x03(\v2 .api.reference.v1.SurveyTemplateR\ttemplates2\xc1\x14\n" +
 	"\x10ReferenceService\x12{\n" +
 	"\x10ListLoanProducts\x12\x16.google.protobuf.Empty\x1a*.api.reference.v1.ListLoanProductsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/reference/loan-products\x12\x82\x01\n" +
 	"\x0eGetLoanProduct\x12'.api.reference.v1.GetLoanProductRequest\x1a\x1d.api.reference.v1.LoanProduct\"(\x82\xd3\xe4\x93\x02\"\x12 /v1/reference/loan-products/{id}\x12n\n" +
@@ -1956,8 +2031,8 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\x15ListAttributeRegistry\x12\x16.google.protobuf.Empty\x1a/.api.reference.v1.ListAttributeRegistryResponse\"(\x82\xd3\xe4\x93\x02\"\x12 /v1/reference/attribute-registry\x12\xd2\x01\n" +
 	"\x1fListAttributeRegistryByCategory\x128.api.reference.v1.ListAttributeRegistryByCategoryRequest\x1a/.api.reference.v1.ListAttributeRegistryResponse\"D\x82\xd3\xe4\x93\x02>\x12</v1/reference/attribute-registry/by-category/{category_code}\x12\x90\x01\n" +
 	"\x17CreateAttributeRegistry\x120.api.reference.v1.CreateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/reference/attribute-registry\x12\xa1\x01\n" +
-	"\x17UpdateAttributeRegistry\x120.api.reference.v1.UpdateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"<\x82\xd3\xe4\x93\x026:\x01*\x1a1/v1/reference/attribute-registry/{attribute_code}\x12\x9e\x01\n" +
-	"\x17DeleteAttributeRegistry\x120.api.reference.v1.DeleteAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"9\x82\xd3\xe4\x93\x023*1/v1/reference/attribute-registry/{attribute_code}\x12\x9a\x01\n" +
+	"\x17UpdateAttributeRegistry\x120.api.reference.v1.UpdateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"<\x82\xd3\xe4\x93\x026:\x01*\x1a1/v1/reference/attribute-registry/{attribute_code}\x12\x92\x01\n" +
+	"\x17DeleteAttributeRegistry\x120.api.reference.v1.DeleteAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"-\x82\xd3\xe4\x93\x02'*%/v1/reference/attribute-registry/{id}\x12\x9a\x01\n" +
 	"\x13ListSurveyTemplates\x12,.api.reference.v1.ListSurveyTemplatesRequest\x1a-.api.reference.v1.ListSurveyTemplatesResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/v1/reference/survey-templatesBB\n" +
 	"\x10api.reference.v1P\x01Z,credit-analytics-backend/api/reference/v1;v1b\x06proto3"
 

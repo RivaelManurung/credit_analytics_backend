@@ -92,9 +92,10 @@ service PartyService {
 }
 
 message ApplicationAttribute {
-  string key = 1;
+  string attribute_id = 1;
   string value = 2;
   string data_type = 3;
+  string attribute_option_id = 4;
 }
 
 message ApplicationAttributes {

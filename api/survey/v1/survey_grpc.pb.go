@@ -22,25 +22,35 @@ const (
 	SurveyService_AssignSurvey_FullMethodName             = "/api.survey.v1.SurveyService/AssignSurvey"
 	SurveyService_GetSurvey_FullMethodName                = "/api.survey.v1.SurveyService/GetSurvey"
 	SurveyService_ListSurveysByApplication_FullMethodName = "/api.survey.v1.SurveyService/ListSurveysByApplication"
+	SurveyService_ListSurveys_FullMethodName              = "/api.survey.v1.SurveyService/ListSurveys"
 	SurveyService_StartSurvey_FullMethodName              = "/api.survey.v1.SurveyService/StartSurvey"
 	SurveyService_SubmitSurvey_FullMethodName             = "/api.survey.v1.SurveyService/SubmitSurvey"
 	SurveyService_VerifySurvey_FullMethodName             = "/api.survey.v1.SurveyService/VerifySurvey"
 	SurveyService_SubmitSurveyAnswer_FullMethodName       = "/api.survey.v1.SurveyService/SubmitSurveyAnswer"
 	SurveyService_UploadSurveyEvidence_FullMethodName     = "/api.survey.v1.SurveyService/UploadSurveyEvidence"
+	SurveyService_ListSurveyTemplates_FullMethodName      = "/api.survey.v1.SurveyService/ListSurveyTemplates"
 )
 
 // SurveyServiceClient is the client API for SurveyService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SurveyServiceClient interface {
+	// ===== ASSIGN & GET =====
 	AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
 	GetSurvey(ctx context.Context, in *GetSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
-	ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error)
+	// ===== LIST BY APPLICATION =====
+	ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysByApplicationResponse, error)
+	// ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+	ListSurveys(ctx context.Context, in *ListSurveysRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error)
+	// ===== WORKFLOW =====
 	StartSurvey(ctx context.Context, in *StartSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
 	SubmitSurvey(ctx context.Context, in *SubmitSurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
 	VerifySurvey(ctx context.Context, in *VerifySurveyRequest, opts ...grpc.CallOption) (*ApplicationSurvey, error)
+	// ===== ANSWERS & EVIDENCE =====
 	SubmitSurveyAnswer(ctx context.Context, in *SubmitSurveyAnswerRequest, opts ...grpc.CallOption) (*SurveyAnswer, error)
 	UploadSurveyEvidence(ctx context.Context, in *UploadSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error)
+	// ===== TEMPLATES (Optional Admin/Setup) =====
+	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
 }
 
 type surveyServiceClient struct {
@@ -71,10 +81,20 @@ func (c *surveyServiceClient) GetSurvey(ctx context.Context, in *GetSurveyReques
 	return out, nil
 }
 
-func (c *surveyServiceClient) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error) {
+func (c *surveyServiceClient) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...grpc.CallOption) (*ListSurveysByApplicationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSurveysByApplicationResponse)
+	err := c.cc.Invoke(ctx, SurveyService_ListSurveysByApplication_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *surveyServiceClient) ListSurveys(ctx context.Context, in *ListSurveysRequest, opts ...grpc.CallOption) (*ListSurveysResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListSurveysResponse)
-	err := c.cc.Invoke(ctx, SurveyService_ListSurveysByApplication_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, SurveyService_ListSurveys_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -131,18 +151,36 @@ func (c *surveyServiceClient) UploadSurveyEvidence(ctx context.Context, in *Uplo
 	return out, nil
 }
 
+func (c *surveyServiceClient) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSurveyTemplatesResponse)
+	err := c.cc.Invoke(ctx, SurveyService_ListSurveyTemplates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SurveyServiceServer is the server API for SurveyService service.
 // All implementations must embed UnimplementedSurveyServiceServer
 // for forward compatibility.
 type SurveyServiceServer interface {
+	// ===== ASSIGN & GET =====
 	AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error)
 	GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error)
-	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error)
+	// ===== LIST BY APPLICATION =====
+	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysByApplicationResponse, error)
+	// ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+	ListSurveys(context.Context, *ListSurveysRequest) (*ListSurveysResponse, error)
+	// ===== WORKFLOW =====
 	StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error)
 	SubmitSurvey(context.Context, *SubmitSurveyRequest) (*ApplicationSurvey, error)
 	VerifySurvey(context.Context, *VerifySurveyRequest) (*ApplicationSurvey, error)
+	// ===== ANSWERS & EVIDENCE =====
 	SubmitSurveyAnswer(context.Context, *SubmitSurveyAnswerRequest) (*SurveyAnswer, error)
 	UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error)
+	// ===== TEMPLATES (Optional Admin/Setup) =====
+	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
 	mustEmbedUnimplementedSurveyServiceServer()
 }
 
@@ -159,8 +197,11 @@ func (UnimplementedSurveyServiceServer) AssignSurvey(context.Context, *AssignSur
 func (UnimplementedSurveyServiceServer) GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSurvey not implemented")
 }
-func (UnimplementedSurveyServiceServer) ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error) {
+func (UnimplementedSurveyServiceServer) ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysByApplicationResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSurveysByApplication not implemented")
+}
+func (UnimplementedSurveyServiceServer) ListSurveys(context.Context, *ListSurveysRequest) (*ListSurveysResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSurveys not implemented")
 }
 func (UnimplementedSurveyServiceServer) StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error) {
 	return nil, status.Error(codes.Unimplemented, "method StartSurvey not implemented")
@@ -176,6 +217,9 @@ func (UnimplementedSurveyServiceServer) SubmitSurveyAnswer(context.Context, *Sub
 }
 func (UnimplementedSurveyServiceServer) UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadSurveyEvidence not implemented")
+}
+func (UnimplementedSurveyServiceServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
 }
 func (UnimplementedSurveyServiceServer) mustEmbedUnimplementedSurveyServiceServer() {}
 func (UnimplementedSurveyServiceServer) testEmbeddedByValue()                       {}
@@ -248,6 +292,24 @@ func _SurveyService_ListSurveysByApplication_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SurveyServiceServer).ListSurveysByApplication(ctx, req.(*ListSurveysByApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SurveyService_ListSurveys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSurveysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).ListSurveys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_ListSurveys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).ListSurveys(ctx, req.(*ListSurveysRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -342,6 +404,24 @@ func _SurveyService_UploadSurveyEvidence_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SurveyService_ListSurveyTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSurveyTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).ListSurveyTemplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_ListSurveyTemplates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SurveyService_ServiceDesc is the grpc.ServiceDesc for SurveyService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -362,6 +442,10 @@ var SurveyService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SurveyService_ListSurveysByApplication_Handler,
 		},
 		{
+			MethodName: "ListSurveys",
+			Handler:    _SurveyService_ListSurveys_Handler,
+		},
+		{
 			MethodName: "StartSurvey",
 			Handler:    _SurveyService_StartSurvey_Handler,
 		},
@@ -380,6 +464,10 @@ var SurveyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadSurveyEvidence",
 			Handler:    _SurveyService_UploadSurveyEvidence_Handler,
+		},
+		{
+			MethodName: "ListSurveyTemplates",
+			Handler:    _SurveyService_ListSurveyTemplates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

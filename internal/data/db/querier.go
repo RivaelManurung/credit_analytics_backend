@@ -19,7 +19,8 @@ type Querier interface {
 	CreateApplicationParty(ctx context.Context, arg CreateApplicationPartyParams) (ApplicationParty, error)
 	CreateAsset(ctx context.Context, arg CreateAssetParams) (ApplicationAsset, error)
 	CreateAttributeCategory(ctx context.Context, arg CreateAttributeCategoryParams) error
-	CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) error
+	CreateAttributeOption(ctx context.Context, arg CreateAttributeOptionParams) (AttributeOption, error)
+	CreateAttributeRegistry(ctx context.Context, arg CreateAttributeRegistryParams) (CustomColumnAttributeRegistry, error)
 	CreateCommitteeSession(ctx context.Context, arg CreateCommitteeSessionParams) (ApplicationCommitteeSession, error)
 	CreateLiability(ctx context.Context, arg CreateLiabilityParams) (ApplicationLiability, error)
 	CreateParty(ctx context.Context, arg CreatePartyParams) (Party, error)
@@ -30,7 +31,7 @@ type Querier interface {
 	DeleteApplicationAttributes(ctx context.Context, applicationID uuid.UUID) error
 	DeleteApplicationDocument(ctx context.Context, id uuid.UUID) error
 	DeleteAttributeCategory(ctx context.Context, categoryCode string) error
-	DeleteAttributeRegistry(ctx context.Context, attributeCode string) error
+	DeleteAttributeRegistry(ctx context.Context, id uuid.UUID) error
 	FinalizeCommitteeDecision(ctx context.Context, arg FinalizeCommitteeDecisionParams) (ApplicationCommitteeDecision, error)
 	GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, error)
 	GetApplicantAttributes(ctx context.Context, applicantID uuid.UUID) ([]ApplicantAttribute, error)
@@ -38,6 +39,7 @@ type Querier interface {
 	GetApplicationAttributes(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAttribute, error)
 	GetApplicationDecision(ctx context.Context, applicationID uuid.UUID) (ApplicationDecision, error)
 	GetAttributeCategory(ctx context.Context, categoryCode string) (AttributeCategory, error)
+	GetAttributeRegistry(ctx context.Context, id uuid.UUID) (GetAttributeRegistryRow, error)
 	GetLoanProduct(ctx context.Context, id uuid.UUID) (LoanProduct, error)
 	GetPartiesByApplication(ctx context.Context, applicationID uuid.UUID) ([]GetPartiesByApplicationRow, error)
 	GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurvey, error)
@@ -57,7 +59,7 @@ type Querier interface {
 	// ATTRIBUTE OPTIONS
 	// ==============================================================
 	ListAttributeOptions(ctx context.Context) ([]AttributeOption, error)
-	ListAttributeOptionsByAttribute(ctx context.Context, attributeCode string) ([]AttributeOption, error)
+	ListAttributeOptionsByAttribute(ctx context.Context, attributeID uuid.UUID) ([]AttributeOption, error)
 	// ==============================================================
 	// ATTRIBUTE REGISTRIES (category_code = FK, icon tidak di sini)
 	// ==============================================================
@@ -79,7 +81,7 @@ type Querier interface {
 	UpdateApplication(ctx context.Context, arg UpdateApplicationParams) (Application, error)
 	UpdateAsset(ctx context.Context, arg UpdateAssetParams) (ApplicationAsset, error)
 	UpdateAttributeCategory(ctx context.Context, arg UpdateAttributeCategoryParams) error
-	UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) error
+	UpdateAttributeRegistry(ctx context.Context, arg UpdateAttributeRegistryParams) (CustomColumnAttributeRegistry, error)
 	UpdateLiability(ctx context.Context, arg UpdateLiabilityParams) (ApplicationLiability, error)
 	UpdateSurveyStatus(ctx context.Context, arg UpdateSurveyStatusParams) (ApplicationSurvey, error)
 	UpsertApplicantAttribute(ctx context.Context, arg UpsertApplicantAttributeParams) (ApplicantAttribute, error)

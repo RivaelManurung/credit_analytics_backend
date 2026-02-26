@@ -275,7 +275,7 @@ func (q *Queries) GetApplication(ctx context.Context, id uuid.UUID) (GetApplicat
 }
 
 const getApplicationAttributes = `-- name: GetApplicationAttributes :many
-SELECT id, application_id, attr_key, attr_value, data_type, updated_at
+SELECT id, application_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 FROM application_attributes
 WHERE application_id = $1
 `
@@ -292,7 +292,8 @@ func (q *Queries) GetApplicationAttributes(ctx context.Context, applicationID uu
 		if err := rows.Scan(
 			&i.ID,
 			&i.ApplicationID,
-			&i.AttrKey,
+			&i.AttributeID,
+			&i.AttributeOptionID,
 			&i.AttrValue,
 			&i.DataType,
 			&i.UpdatedAt,
@@ -364,7 +365,7 @@ func (q *Queries) GetPartiesByApplication(ctx context.Context, applicationID uui
 }
 
 const listApplicationAttributesByIDs = `-- name: ListApplicationAttributesByIDs :many
-SELECT id, application_id, attr_key, attr_value, data_type, updated_at
+SELECT id, application_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 FROM application_attributes
 WHERE application_id = ANY($1::uuid [])
 `
@@ -381,7 +382,8 @@ func (q *Queries) ListApplicationAttributesByIDs(ctx context.Context, dollar_1 [
 		if err := rows.Scan(
 			&i.ID,
 			&i.ApplicationID,
-			&i.AttrKey,
+			&i.AttributeID,
+			&i.AttributeOptionID,
 			&i.AttrValue,
 			&i.DataType,
 			&i.UpdatedAt,
@@ -601,26 +603,35 @@ func (q *Queries) UpdateApplication(ctx context.Context, arg UpdateApplicationPa
 }
 
 const upsertApplicationAttribute = `-- name: UpsertApplicationAttribute :one
-INSERT INTO application_attributes (application_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4) ON CONFLICT (application_id, attr_key) DO
+INSERT INTO application_attributes (
+        application_id,
+        attribute_id,
+        attribute_option_id,
+        attr_value,
+        data_type
+    )
+VALUES ($1, $2, $3, $4, $5) ON CONFLICT (application_id, attribute_id) DO
 UPDATE
-SET attr_value = EXCLUDED.attr_value,
+SET attribute_option_id = EXCLUDED.attribute_option_id,
+    attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
-RETURNING id, application_id, attr_key, attr_value, data_type, updated_at
+RETURNING id, application_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 `
 
 type UpsertApplicationAttributeParams struct {
-	ApplicationID uuid.UUID      `json:"application_id"`
-	AttrKey       string         `json:"attr_key"`
-	AttrValue     sql.NullString `json:"attr_value"`
-	DataType      sql.NullString `json:"data_type"`
+	ApplicationID     uuid.UUID      `json:"application_id"`
+	AttributeID       uuid.UUID      `json:"attribute_id"`
+	AttributeOptionID uuid.NullUUID  `json:"attribute_option_id"`
+	AttrValue         sql.NullString `json:"attr_value"`
+	DataType          sql.NullString `json:"data_type"`
 }
 
 func (q *Queries) UpsertApplicationAttribute(ctx context.Context, arg UpsertApplicationAttributeParams) (ApplicationAttribute, error) {
 	row := q.db.QueryRowContext(ctx, upsertApplicationAttribute,
 		arg.ApplicationID,
-		arg.AttrKey,
+		arg.AttributeID,
+		arg.AttributeOptionID,
 		arg.AttrValue,
 		arg.DataType,
 	)
@@ -628,7 +639,8 @@ func (q *Queries) UpsertApplicationAttribute(ctx context.Context, arg UpsertAppl
 	err := row.Scan(
 		&i.ID,
 		&i.ApplicationID,
-		&i.AttrKey,
+		&i.AttributeID,
+		&i.AttributeOptionID,
 		&i.AttrValue,
 		&i.DataType,
 		&i.UpdatedAt,

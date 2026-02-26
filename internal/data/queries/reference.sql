@@ -62,7 +62,8 @@ WHERE category_code = $1;
 -- ATTRIBUTE REGISTRIES (category_code = FK, icon tidak di sini)
 -- ==============================================================
 -- name: ListAttributeRegistry :many
-SELECT r.attribute_code,
+SELECT r.id,
+    r.attribute_code,
     r.applies_to,
     r.scope,
     r.value_type,
@@ -70,15 +71,26 @@ SELECT r.attribute_code,
     r.ui_label,
     r.is_required,
     r.risk_relevant,
+    r.is_active,
+    r.display_order,
     r.description,
     c.category_name,
     c.ui_icon AS category_icon
 FROM custom_column_attribute_registries r
     LEFT JOIN attribute_categories c ON r.category_code = c.category_code
 ORDER BY c.display_order,
+    r.display_order,
     r.attribute_code;
+-- name: GetAttributeRegistry :one
+SELECT r.*,
+    c.category_name,
+    c.ui_icon AS category_icon
+FROM custom_column_attribute_registries r
+    LEFT JOIN attribute_categories c ON r.category_code = c.category_code
+WHERE r.id = $1;
 -- name: ListAttributeRegistryByCategory :many
-SELECT r.attribute_code,
+SELECT r.id,
+    r.attribute_code,
     r.applies_to,
     r.scope,
     r.value_type,
@@ -86,14 +98,17 @@ SELECT r.attribute_code,
     r.ui_label,
     r.is_required,
     r.risk_relevant,
+    r.is_active,
+    r.display_order,
     r.description,
     c.category_name,
     c.ui_icon AS category_icon
 FROM custom_column_attribute_registries r
     LEFT JOIN attribute_categories c ON r.category_code = c.category_code
 WHERE r.category_code = $1
-ORDER BY r.attribute_code;
--- name: CreateAttributeRegistry :exec
+ORDER BY r.display_order,
+    r.attribute_code;
+-- name: CreateAttributeRegistry :one
 INSERT INTO custom_column_attribute_registries (
         attribute_code,
         applies_to,
@@ -103,10 +118,13 @@ INSERT INTO custom_column_attribute_registries (
         ui_label,
         is_required,
         risk_relevant,
+        is_active,
+        display_order,
         description
     )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
--- name: UpdateAttributeRegistry :exec
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+RETURNING *;
+-- name: UpdateAttributeRegistry :one
 UPDATE custom_column_attribute_registries
 SET applies_to = $2,
     scope = $3,
@@ -115,33 +133,46 @@ SET applies_to = $2,
     ui_label = $6,
     is_required = $7,
     risk_relevant = $8,
-    description = $9
-WHERE attribute_code = $1;
+    is_active = $9,
+    display_order = $10,
+    description = $11
+WHERE id = $1
+RETURNING *;
 -- name: DeleteAttributeRegistry :exec
 DELETE FROM custom_column_attribute_registries
-WHERE attribute_code = $1;
+WHERE id = $1;
 -- ==============================================================
 -- ATTRIBUTE OPTIONS
 -- ==============================================================
 -- name: ListAttributeOptions :many
 SELECT id,
-    attribute_code,
+    attribute_id,
     option_value,
     option_label,
     display_order,
     is_active
 FROM attribute_options
 WHERE is_active = TRUE
-ORDER BY attribute_code,
+ORDER BY attribute_id,
     display_order;
 -- name: ListAttributeOptionsByAttribute :many
 SELECT id,
-    attribute_code,
+    attribute_id,
     option_value,
     option_label,
     display_order,
     is_active
 FROM attribute_options
-WHERE attribute_code = $1
+WHERE attribute_id = $1
     AND is_active = TRUE
 ORDER BY display_order;
+-- name: CreateAttributeOption :one
+INSERT INTO attribute_options (
+        attribute_id,
+        option_value,
+        option_label,
+        display_order,
+        is_active
+    )
+VALUES ($1, $2, $3, $4, $5)
+RETURNING *;

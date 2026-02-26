@@ -56,26 +56,29 @@ type AttributeCategory struct {
 }
 
 type AttributeOption struct {
-	ID            uuid.UUID
-	AttributeCode string
-	OptionValue   string
-	OptionLabel   string
-	DisplayOrder  int32
-	IsActive      bool
+	ID           uuid.UUID
+	AttributeID  uuid.UUID
+	OptionValue  string
+	OptionLabel  string
+	DisplayOrder int32
+	IsActive     bool
 }
 
 // AttributeRegistry adalah definisi sebuah atribut EAV.
 // Tidak membawa icon sendiri — icon diambil dari kategorinya.
 type AttributeRegistry struct {
-	AttrKey      string
-	AppliesTo    string
-	Scope        string
-	DataType     string
-	CategoryCode string
-	UiLabel      string // Label tampilan per atribut (bisa berbeda dari Description)
-	IsRequired   bool
-	RiskRelevant bool
-	Description  string
+	ID            uuid.UUID
+	AttributeCode string
+	AppliesTo     string
+	Scope         string
+	DataType      string
+	CategoryCode  string
+	UiLabel       string // Label tampilan per atribut (bisa berbeda dari Description)
+	IsRequired    bool
+	RiskRelevant  bool
+	IsActive      bool
+	DisplayOrder  int32
+	Description   string
 	// Denormalized dari JOIN (read-only, tidak disimpan di registries)
 	CategoryName string
 	CategoryIcon string
@@ -102,7 +105,7 @@ type ReferenceRepo interface {
 	ListAttributeRegistryByCategory(ctx context.Context, categoryCode string) ([]*AttributeRegistry, error)
 	CreateAttributeRegistry(ctx context.Context, attr *AttributeRegistry) error
 	UpdateAttributeRegistry(ctx context.Context, attr *AttributeRegistry) error
-	DeleteAttributeRegistry(ctx context.Context, attrKey string) error
+	DeleteAttributeRegistry(ctx context.Context, id uuid.UUID) error
 }
 
 type ReferenceUsecase struct {
@@ -187,6 +190,6 @@ func (uc *ReferenceUsecase) UpdateAttributeRegistry(ctx context.Context, attr *A
 	return uc.repo.UpdateAttributeRegistry(ctx, attr)
 }
 
-func (uc *ReferenceUsecase) DeleteAttributeRegistry(ctx context.Context, attrKey string) error {
-	return uc.repo.DeleteAttributeRegistry(ctx, attrKey)
+func (uc *ReferenceUsecase) DeleteAttributeRegistry(ctx context.Context, id uuid.UUID) error {
+	return uc.repo.DeleteAttributeRegistry(ctx, id)
 }

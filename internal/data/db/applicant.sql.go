@@ -97,7 +97,7 @@ func (q *Queries) GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, er
 }
 
 const getApplicantAttributes = `-- name: GetApplicantAttributes :many
-SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at
+SELECT id, applicant_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 FROM applicant_attributes
 WHERE applicant_id = $1
 `
@@ -114,7 +114,8 @@ func (q *Queries) GetApplicantAttributes(ctx context.Context, applicantID uuid.U
 		if err := rows.Scan(
 			&i.ID,
 			&i.ApplicantID,
-			&i.AttrKey,
+			&i.AttributeID,
+			&i.AttributeOptionID,
 			&i.AttrValue,
 			&i.DataType,
 			&i.UpdatedAt,
@@ -133,7 +134,7 @@ func (q *Queries) GetApplicantAttributes(ctx context.Context, applicantID uuid.U
 }
 
 const listApplicantAttributesByIDs = `-- name: ListApplicantAttributesByIDs :many
-SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at
+SELECT id, applicant_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 FROM applicant_attributes
 WHERE applicant_id = ANY($1::uuid [])
 `
@@ -150,7 +151,8 @@ func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []u
 		if err := rows.Scan(
 			&i.ID,
 			&i.ApplicantID,
-			&i.AttrKey,
+			&i.AttributeID,
+			&i.AttributeOptionID,
 			&i.AttrValue,
 			&i.DataType,
 			&i.UpdatedAt,
@@ -273,26 +275,35 @@ func (q *Queries) UpdateApplicant(ctx context.Context, arg UpdateApplicantParams
 }
 
 const upsertApplicantAttribute = `-- name: UpsertApplicantAttribute :one
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4) ON CONFLICT (applicant_id, attr_key) DO
+INSERT INTO applicant_attributes (
+        applicant_id,
+        attribute_id,
+        attribute_option_id,
+        attr_value,
+        data_type
+    )
+VALUES ($1, $2, $3, $4, $5) ON CONFLICT (applicant_id, attribute_id) DO
 UPDATE
-SET attr_value = EXCLUDED.attr_value,
+SET attribute_option_id = EXCLUDED.attribute_option_id,
+    attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
-RETURNING id, applicant_id, attr_key, attr_value, data_type, updated_at
+RETURNING id, applicant_id, attribute_id, attribute_option_id, attr_value, data_type, updated_at
 `
 
 type UpsertApplicantAttributeParams struct {
-	ApplicantID uuid.UUID      `json:"applicant_id"`
-	AttrKey     string         `json:"attr_key"`
-	AttrValue   sql.NullString `json:"attr_value"`
-	DataType    sql.NullString `json:"data_type"`
+	ApplicantID       uuid.UUID      `json:"applicant_id"`
+	AttributeID       uuid.UUID      `json:"attribute_id"`
+	AttributeOptionID uuid.NullUUID  `json:"attribute_option_id"`
+	AttrValue         sql.NullString `json:"attr_value"`
+	DataType          sql.NullString `json:"data_type"`
 }
 
 func (q *Queries) UpsertApplicantAttribute(ctx context.Context, arg UpsertApplicantAttributeParams) (ApplicantAttribute, error) {
 	row := q.db.QueryRowContext(ctx, upsertApplicantAttribute,
 		arg.ApplicantID,
-		arg.AttrKey,
+		arg.AttributeID,
+		arg.AttributeOptionID,
 		arg.AttrValue,
 		arg.DataType,
 	)
@@ -300,7 +311,8 @@ func (q *Queries) UpsertApplicantAttribute(ctx context.Context, arg UpsertApplic
 	err := row.Scan(
 		&i.ID,
 		&i.ApplicantID,
-		&i.AttrKey,
+		&i.AttributeID,
+		&i.AttributeOptionID,
 		&i.AttrValue,
 		&i.DataType,
 		&i.UpdatedAt,

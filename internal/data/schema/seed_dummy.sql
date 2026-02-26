@@ -197,7 +197,9 @@ INSERT INTO custom_column_attribute_registries (
         ui_label,
         is_required,
         risk_relevant,
-        description
+        description,
+        is_active,
+        display_order
     )
 VALUES (
         'tempat_lahir',
@@ -1003,7 +1005,7 @@ VALUES (
         'Indikasi fraud'
     );
 INSERT INTO attribute_options (
-        attribute_code,
+        attribute_id,
         option_value,
         option_label,
         display_order
@@ -1288,7 +1290,12 @@ VALUES (
         CURRENT_TIMESTAMP - interval '4 days'
     );
 -- 6. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
+INSERT INTO applicant_attributes (
+        applicant_id,
+        attribute_id,
+        attr_value,
+        data_type
+    )
 VALUES -- BUDI SANTOSO (0195383f-427c-7000-bb34-317101010190)
     (
         '0195383f-427c-7000-bb34-317101010190',
@@ -4075,4 +4082,247 @@ VALUES (
         'NPWP_Budi.pdf',
         'https://storage.cloud/docs/npwp_budi.pdf',
         'NPWP'
+    );
+-- ============================================================
+-- 15. SURVEY MASTER DATA
+-- ============================================================
+INSERT INTO survey_templates (
+        id,
+        template_code,
+        template_name,
+        applicant_type,
+        product_id,
+        active
+    )
+VALUES (
+        '0195d1d2-0001-7000-bb34-000000000001',
+        'SURVEY_PERSONAL',
+        'Survey Personal (Karyawan/Retail)',
+        'personal',
+        '0195b1b2-0001-7000-bb34-000000000002',
+        true
+    ),
+    (
+        '0195d1d2-0001-7000-bb34-000000000002',
+        'SURVEY_BUSINESS',
+        'Survey Usaha (UMKM/Commercial)',
+        'corporate',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        true
+    );
+INSERT INTO survey_sections (
+        id,
+        template_id,
+        section_code,
+        section_name,
+        sequence
+    )
+VALUES (
+        '0195e1e2-0001-7000-bb34-000000000001',
+        '0195d1d2-0001-7000-bb34-000000000001',
+        'IDENTITY_CHECK',
+        'Verifikasi Identitas & Lingkungan',
+        1
+    ),
+    (
+        '0195e1e2-0001-7000-bb34-000000000002',
+        '0195d1d2-0001-7000-bb34-000000000001',
+        'INCOME_VERIFICATION',
+        'Verifikasi Pekerjaan & Penghasilan',
+        2
+    ),
+    (
+        '0195e1e2-0001-7000-bb34-000000000003',
+        '0195d1d2-0001-7000-bb34-000000000002',
+        'BUSINESS_OPS',
+        'Operasional Usaha',
+        1
+    );
+INSERT INTO survey_questions (
+        id,
+        section_id,
+        question_code,
+        question_text,
+        answer_type,
+        is_mandatory,
+        risk_relevant,
+        sequence
+    )
+VALUES -- Section 1 (Personal)
+    (
+        '0195f1f2-0001-7000-bb34-000000000001',
+        '0195e1e2-0001-7000-bb34-000000000001',
+        'Q_ADDR_VALID',
+        'Apakah alamat tinggal sesuai dengan KTP?',
+        'BOOLEAN',
+        true,
+        true,
+        1
+    ),
+    (
+        '0195f1f2-0001-7000-bb34-000000000002',
+        '0195e1e2-0001-7000-bb34-000000000001',
+        'Q_ENV_REPUTATION',
+        'Bagaimana reputasi debitur di mata lingkungan sekitar?',
+        'SELECT',
+        true,
+        true,
+        2
+    ),
+    -- Section 2 (Personal)
+    (
+        '0195f1f2-0001-7000-bb34-000000000003',
+        '0195e1e2-0001-7000-bb34-000000000002',
+        'Q_WORK_TENURE',
+        'Sudah berapa lama bekerja di perusahaan saat ini?',
+        'NUMBER',
+        true,
+        false,
+        1
+    ),
+    -- Section 3 (Business)
+    (
+        '0195f1f2-0001-7000-bb34-000000000004',
+        '0195e1e2-0001-7000-bb34-000000000003',
+        'Q_BIZ_OWNERSHIP',
+        'Apakah tempat usaha milik pribadi?',
+        'BOOLEAN',
+        true,
+        true,
+        1
+    ),
+    (
+        '0195f1f2-0001-7000-bb34-000000000005',
+        '0195e1e2-0001-7000-bb34-000000000003',
+        'Q_BIZ_DAILY_TURNOVER',
+        'Rata-rata omzet harian yang terobservasi?',
+        'NUMBER',
+        true,
+        true,
+        2
+    );
+INSERT INTO survey_question_options (
+        id,
+        question_id,
+        option_value,
+        option_label,
+        sequence
+    )
+VALUES (
+        uuid_generate_v7(),
+        '0195f1f2-0001-7000-bb34-000000000002',
+        'BAIK',
+        'Baik / Positif',
+        1
+    ),
+    (
+        uuid_generate_v7(),
+        '0195f1f2-0001-7000-bb34-000000000002',
+        'RESIKO_SEDANG',
+        'Cukup / Ada catatan kecil',
+        2
+    ),
+    (
+        uuid_generate_v7(),
+        '0195f1f2-0001-7000-bb34-000000000002',
+        'BURUK',
+        'Buruk / Negatif',
+        3
+    );
+-- ============================================================
+-- 16. SURVEY TRANSACTIONAL DATA
+-- ============================================================
+INSERT INTO application_surveys (
+        id,
+        application_id,
+        template_id,
+        survey_type,
+        status,
+        assigned_to,
+        survey_purpose,
+        started_at,
+        submitted_at
+    )
+VALUES (
+        '01951112-0001-7000-bb34-000000000001',
+        '0195a1a2-0001-7000-bb34-000000000001',
+        '0195d1d2-0001-7000-bb34-000000000001',
+        'FIELD',
+        'VERIFIED',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        'GENERAL',
+        CURRENT_TIMESTAMP - interval '2 days',
+        CURRENT_TIMESTAMP - interval '1 days 22 hours'
+    ),
+    (
+        '01951112-0001-7000-bb34-000000000002',
+        '0195a1a2-0001-7000-bb34-000000000002',
+        '0195d1d2-0001-7000-bb34-000000000002',
+        'FIELD',
+        'IN_PROGRESS',
+        '0195c1c2-0001-7000-bb34-000000000002',
+        'COLLATERAL',
+        CURRENT_TIMESTAMP - interval '5 hours',
+        NULL
+    );
+INSERT INTO survey_answers (
+        id,
+        survey_id,
+        question_id,
+        answer_text,
+        answer_number,
+        answer_boolean,
+        answer_date
+    )
+VALUES -- Survey 1 (Verified)
+    (
+        uuid_generate_v7(),
+        '01951112-0001-7000-bb34-000000000001',
+        '0195f1f2-0001-7000-bb34-000000000001',
+        NULL,
+        NULL,
+        true,
+        NULL
+    ),
+    (
+        uuid_generate_v7(),
+        '01951112-0001-7000-bb34-000000000001',
+        '0195f1f2-0001-7000-bb34-000000000002',
+        'BAIK',
+        NULL,
+        NULL,
+        NULL
+    ),
+    (
+        uuid_generate_v7(),
+        '01951112-0001-7000-bb34-000000000001',
+        '0195f1f2-0001-7000-bb34-000000000003',
+        NULL,
+        8,
+        NULL,
+        NULL
+    );
+INSERT INTO survey_evidences (
+        id,
+        survey_id,
+        evidence_type,
+        file_url,
+        description,
+        captured_at
+    )
+VALUES (
+        uuid_generate_v7(),
+        '01951112-0001-7000-bb34-000000000001',
+        'PHOTO',
+        'https://storage.cloud/surveys/budi_house.jpg',
+        'Foto Rumah Tampak Depan',
+        CURRENT_TIMESTAMP - interval '1 days 23 hours'
+    ),
+    (
+        uuid_generate_v7(),
+        '01951112-0001-7000-bb34-000000000001',
+        'PHOTO',
+        'https://storage.cloud/surveys/budi_interview.jpg',
+        'Foto Wawancara dengan Tetangga',
+        CURRENT_TIMESTAMP - interval '1 days 22 hours 30 minutes'
     );

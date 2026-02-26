@@ -25,12 +25,13 @@ const (
 )
 
 type ApplicationAttribute struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	DataType      string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	AttributeId       string                 `protobuf:"bytes,1,opt,name=attribute_id,json=attributeId,proto3" json:"attribute_id,omitempty"`
+	Value             string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	DataType          string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	AttributeOptionId string                 `protobuf:"bytes,4,opt,name=attribute_option_id,json=attributeOptionId,proto3" json:"attribute_option_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ApplicationAttribute) Reset() {
@@ -63,9 +64,9 @@ func (*ApplicationAttribute) Descriptor() ([]byte, []int) {
 	return file_application_v1_application_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ApplicationAttribute) GetKey() string {
+func (x *ApplicationAttribute) GetAttributeId() string {
 	if x != nil {
-		return x.Key
+		return x.AttributeId
 	}
 	return ""
 }
@@ -80,6 +81,13 @@ func (x *ApplicationAttribute) GetValue() string {
 func (x *ApplicationAttribute) GetDataType() string {
 	if x != nil {
 		return x.DataType
+	}
+	return ""
+}
+
+func (x *ApplicationAttribute) GetAttributeOptionId() string {
+	if x != nil {
+		return x.AttributeOptionId
 	}
 	return ""
 }
@@ -1530,11 +1538,12 @@ var File_application_v1_application_proto protoreflect.FileDescriptor
 
 const file_application_v1_application_proto_rawDesc = "" +
 	"\n" +
-	" application/v1/application.proto\x12\x12api.application.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"[\n" +
-	"\x14ApplicationAttribute\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	" application/v1/application.proto\x12\x12api.application.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x9c\x01\n" +
+	"\x14ApplicationAttribute\x12!\n" +
+	"\fattribute_id\x18\x01 \x01(\tR\vattributeId\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1b\n" +
-	"\tdata_type\x18\x03 \x01(\tR\bdataType\"a\n" +
+	"\tdata_type\x18\x03 \x01(\tR\bdataType\x12.\n" +
+	"\x13attribute_option_id\x18\x04 \x01(\tR\x11attributeOptionId\"a\n" +
 	"\x15ApplicationAttributes\x12H\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\v2(.api.application.v1.ApplicationAttributeR\n" +

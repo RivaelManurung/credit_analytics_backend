@@ -269,15 +269,17 @@ func (s *ReferenceService) ListAttributeRegistryByCategory(ctx context.Context, 
 
 func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	err := s.uc.CreateAttributeRegistry(ctx, &biz.AttributeRegistry{
-		AttrKey:      req.AttributeCode,
-		AppliesTo:    req.AppliesTo,
-		Scope:        req.Scope,
-		DataType:     req.ValueType,
-		CategoryCode: req.CategoryCode,
-		UiLabel:      req.UiLabel,
-		IsRequired:   req.IsRequired,
-		RiskRelevant: req.RiskRelevant,
-		Description:  req.Description,
+		AttributeCode: req.AttributeCode,
+		AppliesTo:     req.AppliesTo,
+		Scope:         req.Scope,
+		DataType:      req.ValueType,
+		CategoryCode:  req.CategoryCode,
+		UiLabel:       req.UiLabel,
+		IsRequired:    req.IsRequired,
+		RiskRelevant:  req.RiskRelevant,
+		IsActive:      req.IsActive,
+		DisplayOrder:  req.DisplayOrder,
+		Description:   req.Description,
 	})
 	if err != nil {
 		return nil, grpcerr.From(err)
@@ -286,16 +288,23 @@ func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.
 }
 
 func (s *ReferenceService) UpdateAttributeRegistry(ctx context.Context, req *pb.UpdateAttributeRegistryRequest) (*emptypb.Empty, error) {
-	err := s.uc.UpdateAttributeRegistry(ctx, &biz.AttributeRegistry{
-		AttrKey:      req.AttributeCode,
-		AppliesTo:    req.AppliesTo,
-		Scope:        req.Scope,
-		DataType:     req.ValueType,
-		CategoryCode: req.CategoryCode,
-		UiLabel:      req.UiLabel,
-		IsRequired:   req.IsRequired,
-		RiskRelevant: req.RiskRelevant,
-		Description:  req.Description,
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, grpcerr.From(&biz.ErrInvalidArgument{Field: "id", Message: "invalid UUID"})
+	}
+	err = s.uc.UpdateAttributeRegistry(ctx, &biz.AttributeRegistry{
+		ID:            id,
+		AttributeCode: req.AttributeCode,
+		AppliesTo:     req.AppliesTo,
+		Scope:         req.Scope,
+		DataType:      req.ValueType,
+		CategoryCode:  req.CategoryCode,
+		UiLabel:       req.UiLabel,
+		IsRequired:    req.IsRequired,
+		RiskRelevant:  req.RiskRelevant,
+		IsActive:      req.IsActive,
+		DisplayOrder:  req.DisplayOrder,
+		Description:   req.Description,
 	})
 	if err != nil {
 		return nil, grpcerr.From(err)
@@ -304,7 +313,11 @@ func (s *ReferenceService) UpdateAttributeRegistry(ctx context.Context, req *pb.
 }
 
 func (s *ReferenceService) DeleteAttributeRegistry(ctx context.Context, req *pb.DeleteAttributeRegistryRequest) (*emptypb.Empty, error) {
-	if err := s.uc.DeleteAttributeRegistry(ctx, req.AttributeCode); err != nil {
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, grpcerr.From(&biz.ErrInvalidArgument{Field: "id", Message: "invalid UUID"})
+	}
+	if err := s.uc.DeleteAttributeRegistry(ctx, id); err != nil {
 		return nil, grpcerr.From(err)
 	}
 	return &emptypb.Empty{}, nil
@@ -341,28 +354,31 @@ func mapAttrToPb(a *biz.AttributeRegistry) *pb.AttributeRegistry {
 	}
 
 	return &pb.AttributeRegistry{
-		AttrKey:      a.AttrKey,
-		AppliesTo:    a.AppliesTo,
-		Scope:        a.Scope,
-		DataType:     a.DataType,
-		CategoryCode: a.CategoryCode,
-		UiLabel:      a.UiLabel,
-		Required:     a.IsRequired,
-		RiskRelevant: a.RiskRelevant,
-		Description:  a.Description,
-		CategoryName: a.CategoryName,
-		CategoryIcon: a.CategoryIcon,
-		Options:      opts,
+		Id:            a.ID.String(),
+		AttributeCode: a.AttributeCode,
+		AppliesTo:     a.AppliesTo,
+		Scope:         a.Scope,
+		DataType:      a.DataType,
+		CategoryCode:  a.CategoryCode,
+		UiLabel:       a.UiLabel,
+		IsRequired:    a.IsRequired,
+		RiskRelevant:  a.RiskRelevant,
+		IsActive:      a.IsActive,
+		DisplayOrder:  a.DisplayOrder,
+		Description:   a.Description,
+		CategoryName:  a.CategoryName,
+		CategoryIcon:  a.CategoryIcon,
+		Options:       opts,
 	}
 }
 
 func mapOptionToPb(o *biz.AttributeOption) *pb.AttributeOption {
 	return &pb.AttributeOption{
-		Id:            o.ID.String(),
-		AttributeCode: o.AttributeCode,
-		OptionValue:   o.OptionValue,
-		OptionLabel:   o.OptionLabel,
-		DisplayOrder:  o.DisplayOrder,
-		IsActive:      o.IsActive,
+		Id:           o.ID.String(),
+		AttributeId:  o.AttributeID.String(),
+		OptionValue:  o.OptionValue,
+		OptionLabel:  o.OptionLabel,
+		DisplayOrder: o.DisplayOrder,
+		IsActive:     o.IsActive,
 	}
 }

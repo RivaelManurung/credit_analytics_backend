@@ -82,7 +82,7 @@ func RegisterReferenceServiceHTTPServer(s *http.Server, srv ReferenceServiceHTTP
 	r.GET("/v1/reference/attribute-registry/by-category/{category_code}", _ReferenceService_ListAttributeRegistryByCategory0_HTTP_Handler(srv))
 	r.POST("/v1/reference/attribute-registry", _ReferenceService_CreateAttributeRegistry0_HTTP_Handler(srv))
 	r.PUT("/v1/reference/attribute-registry/{attribute_code}", _ReferenceService_UpdateAttributeRegistry0_HTTP_Handler(srv))
-	r.DELETE("/v1/reference/attribute-registry/{attribute_code}", _ReferenceService_DeleteAttributeRegistry0_HTTP_Handler(srv))
+	r.DELETE("/v1/reference/attribute-registry/{id}", _ReferenceService_DeleteAttributeRegistry0_HTTP_Handler(srv))
 	r.GET("/v1/reference/survey-templates", _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv))
 }
 
@@ -521,7 +521,7 @@ func (c *ReferenceServiceHTTPClientImpl) DeleteAttributeCategory(ctx context.Con
 
 func (c *ReferenceServiceHTTPClientImpl) DeleteAttributeRegistry(ctx context.Context, in *DeleteAttributeRegistryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
-	pattern := "/v1/reference/attribute-registry/{attribute_code}"
+	pattern := "/v1/reference/attribute-registry/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationReferenceServiceDeleteAttributeRegistry))
 	opts = append(opts, http.PathTemplate(pattern))

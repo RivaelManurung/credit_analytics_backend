@@ -75,13 +75,14 @@ func (r *applicationRepo) Save(ctx context.Context, a *biz.Application) (uuid.UU
 
 		for _, attr := range a.Attributes {
 			_, err = q.UpsertApplicationAttribute(ctx, db.UpsertApplicationAttributeParams{
-				ApplicationID: app.ID,
-				AttrKey:       attr.Key,
-				AttrValue:     sql.NullString{String: attr.Value, Valid: true},
-				DataType:      sql.NullString{String: attr.DataType, Valid: true},
+				ApplicationID:     app.ID,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: uuid.NullUUID{UUID: attr.AttributeOptionID, Valid: attr.AttributeOptionID != uuid.Nil},
+				AttrValue:         sql.NullString{String: attr.Value, Valid: true},
+				DataType:          sql.NullString{String: attr.DataType, Valid: true},
 			})
 			if err != nil {
-				return fmt.Errorf("failed to upsert attribute %s: %w", attr.Key, err)
+				return fmt.Errorf("failed to upsert attribute %s: %w", attr.AttributeID, err)
 			}
 		}
 		return nil
@@ -132,13 +133,14 @@ func (r *applicationRepo) Update(ctx context.Context, a *biz.Application) error 
 
 		for _, attr := range a.Attributes {
 			_, err = q.UpsertApplicationAttribute(ctx, db.UpsertApplicationAttributeParams{
-				ApplicationID: a.ID,
-				AttrKey:       attr.Key,
-				AttrValue:     sql.NullString{String: attr.Value, Valid: true},
-				DataType:      sql.NullString{String: attr.DataType, Valid: true},
+				ApplicationID:     a.ID,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: uuid.NullUUID{UUID: attr.AttributeOptionID, Valid: attr.AttributeOptionID != uuid.Nil},
+				AttrValue:         sql.NullString{String: attr.Value, Valid: true},
+				DataType:          sql.NullString{String: attr.DataType, Valid: true},
 			})
 			if err != nil {
-				return fmt.Errorf("failed to upsert attribute %s: %w", attr.Key, err)
+				return fmt.Errorf("failed to upsert attribute %s: %w", attr.AttributeID, err)
 			}
 		}
 		return nil
@@ -164,9 +166,10 @@ func (r *applicationRepo) FindByID(ctx context.Context, id uuid.UUID) (*biz.Appl
 	} else {
 		for _, attr := range attrs {
 			res.Attributes = append(res.Attributes, biz.ApplicationAttribute{
-				Key:      attr.AttrKey,
-				Value:    attr.AttrValue.String,
-				DataType: attr.DataType.String,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: attr.AttributeOptionID.UUID,
+				Value:             attr.AttrValue.String,
+				DataType:          attr.DataType.String,
 			})
 		}
 	}
@@ -357,9 +360,10 @@ func (r *applicationRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUI
 	res := make(map[uuid.UUID][]biz.ApplicationAttribute)
 	for _, attr := range attrs {
 		res[attr.ApplicationID] = append(res[attr.ApplicationID], biz.ApplicationAttribute{
-			Key:      attr.AttrKey,
-			Value:    attr.AttrValue.String,
-			DataType: attr.DataType.String,
+			AttributeID:       attr.AttributeID,
+			AttributeOptionID: attr.AttributeOptionID.UUID,
+			Value:             attr.AttrValue.String,
+			DataType:          attr.DataType.String,
 		})
 	}
 	return res, nil

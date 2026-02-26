@@ -23,9 +23,10 @@ type Applicant struct {
 }
 
 type ApplicantAttribute struct {
-	Key      string
-	Value    string
-	DataType string
+	AttributeID       uuid.UUID
+	AttributeOptionID uuid.UUID
+	Value             string
+	DataType          string
 }
 
 // ApplicantRepo .

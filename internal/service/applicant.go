@@ -36,10 +36,13 @@ func (s *ApplicantService) CreateApplicant(ctx context.Context, req *pb.CreateAp
 		FullName:       req.FullName,
 	}
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		a.Attributes = append(a.Attributes, biz.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	id, err := s.uc.Create(ctx, a)
@@ -82,10 +85,13 @@ func (s *ApplicantService) UpdateApplicant(ctx context.Context, req *pb.UpdateAp
 		FullName:       req.FullName,
 	}
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		a.Attributes = append(a.Attributes, biz.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	if err := s.uc.Update(ctx, a); err != nil {
@@ -111,9 +117,10 @@ func (s *ApplicantService) GetApplicantAttributes(ctx context.Context, req *pb.G
 	res := &pb.ApplicantAttributes{}
 	for _, attr := range a.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res, nil
@@ -134,10 +141,13 @@ func (s *ApplicantService) UpsertApplicantAttributes(ctx context.Context, req *p
 
 	a.Attributes = nil
 	for _, attr := range req.Attributes {
+		attrID, _ := uuid.Parse(attr.AttributeId)
+		optID, _ := uuid.Parse(attr.AttributeOptionId)
 		a.Attributes = append(a.Attributes, biz.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeID:       attrID,
+			AttributeOptionID: optID,
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	if err := s.uc.Update(ctx, a); err != nil {
@@ -147,9 +157,10 @@ func (s *ApplicantService) UpsertApplicantAttributes(ctx context.Context, req *p
 	res := &pb.ApplicantAttributes{}
 	for _, attr := range a.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res, nil
@@ -193,9 +204,10 @@ func mapBizToProto(a *biz.Applicant) *pb.Applicant {
 	}
 	for _, attr := range a.Attributes {
 		res.Attributes = append(res.Attributes, &pb.ApplicantAttribute{
-			Key:      attr.Key,
-			Value:    attr.Value,
-			DataType: attr.DataType,
+			AttributeId:       attr.AttributeID.String(),
+			AttributeOptionId: attr.AttributeOptionID.String(),
+			Value:             attr.Value,
+			DataType:          attr.DataType,
 		})
 	}
 	return res

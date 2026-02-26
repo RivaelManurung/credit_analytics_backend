@@ -23,12 +23,13 @@ type Applicant struct {
 }
 
 type ApplicantAttribute struct {
-	ID          uuid.UUID      `json:"id"`
-	ApplicantID uuid.UUID      `json:"applicant_id"`
-	AttrKey     string         `json:"attr_key"`
-	AttrValue   sql.NullString `json:"attr_value"`
-	DataType    sql.NullString `json:"data_type"`
-	UpdatedAt   sql.NullTime   `json:"updated_at"`
+	ID                uuid.UUID      `json:"id"`
+	ApplicantID       uuid.UUID      `json:"applicant_id"`
+	AttributeID       uuid.UUID      `json:"attribute_id"`
+	AttributeOptionID uuid.NullUUID  `json:"attribute_option_id"`
+	AttrValue         sql.NullString `json:"attr_value"`
+	DataType          sql.NullString `json:"data_type"`
+	UpdatedAt         sql.NullTime   `json:"updated_at"`
 }
 
 type Application struct {
@@ -64,12 +65,13 @@ type ApplicationAsset struct {
 }
 
 type ApplicationAttribute struct {
-	ID            uuid.UUID      `json:"id"`
-	ApplicationID uuid.UUID      `json:"application_id"`
-	AttrKey       string         `json:"attr_key"`
-	AttrValue     sql.NullString `json:"attr_value"`
-	DataType      sql.NullString `json:"data_type"`
-	UpdatedAt     sql.NullTime   `json:"updated_at"`
+	ID                uuid.UUID      `json:"id"`
+	ApplicationID     uuid.UUID      `json:"application_id"`
+	AttributeID       uuid.UUID      `json:"attribute_id"`
+	AttributeOptionID uuid.NullUUID  `json:"attribute_option_id"`
+	AttrValue         sql.NullString `json:"attr_value"`
+	DataType          sql.NullString `json:"data_type"`
+	UpdatedAt         sql.NullTime   `json:"updated_at"`
 }
 
 type ApplicationCommitteeDecision struct {
@@ -223,12 +225,12 @@ type AttributeCategory struct {
 }
 
 type AttributeOption struct {
-	ID            uuid.UUID     `json:"id"`
-	AttributeCode string        `json:"attribute_code"`
-	OptionValue   string        `json:"option_value"`
-	OptionLabel   string        `json:"option_label"`
-	DisplayOrder  sql.NullInt32 `json:"display_order"`
-	IsActive      sql.NullBool  `json:"is_active"`
+	ID           uuid.UUID     `json:"id"`
+	AttributeID  uuid.UUID     `json:"attribute_id"`
+	OptionValue  string        `json:"option_value"`
+	OptionLabel  string        `json:"option_label"`
+	DisplayOrder sql.NullInt32 `json:"display_order"`
+	IsActive     sql.NullBool  `json:"is_active"`
 }
 
 type Branch struct {
@@ -254,6 +256,7 @@ type CreditCommitteeMember struct {
 }
 
 type CustomColumnAttributeRegistry struct {
+	ID            uuid.UUID      `json:"id"`
 	AttributeCode string         `json:"attribute_code"`
 	AppliesTo     string         `json:"applies_to"`
 	Scope         string         `json:"scope"`
@@ -262,6 +265,8 @@ type CustomColumnAttributeRegistry struct {
 	UiLabel       sql.NullString `json:"ui_label"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
+	IsActive      sql.NullBool   `json:"is_active"`
+	DisplayOrder  sql.NullInt32  `json:"display_order"`
 	Description   sql.NullString `json:"description"`
 }
 

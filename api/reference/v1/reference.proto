@@ -79,7 +79,7 @@ service ReferenceService {
     };
   }
   rpc DeleteAttributeRegistry (DeleteAttributeRegistryRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = { delete: "/v1/reference/attribute-registry/{attribute_code}" };
+    option (google.api.http) = { delete: "/v1/reference/attribute-registry/{id}" };
   }
 
   // ---- Survey Templates ----
@@ -135,7 +135,7 @@ message DeleteAttributeCategoryRequest {
 
 message AttributeOption {
   string id            = 1;
-  string attribute_code= 2;
+  string attribute_id  = 2;
   string option_value  = 3;
   string option_label  = 4;
   int32  display_order = 5;
@@ -143,14 +143,17 @@ message AttributeOption {
 }
 
 message AttributeRegistry {
-  string attr_key      = 1;
+  string id            = 13;
+  string attribute_code= 1;
   string applies_to    = 2;
   string scope         = 3;
   string data_type     = 4;
   string category_code = 5;  // FK ke attribute_categories
   string ui_label      = 6;  // Label per atribut (bisa beda dari description)
-  bool   required      = 7;
+  bool   is_required   = 7;
   bool   risk_relevant = 8;
+  bool   is_active     = 14;
+  int32  display_order = 15;
   string description   = 9;
   // Denormalized dari JOIN (read-only, tidak disimpan di tabel registry)
   string category_name     = 10;
@@ -175,10 +178,13 @@ message CreateAttributeRegistryRequest {
   string ui_label       = 6;
   bool   is_required    = 7;
   bool   risk_relevant  = 8;
+  bool   is_active      = 10;
+  int32  display_order  = 11;
   string description    = 9;
 }
 
 message UpdateAttributeRegistryRequest {
+  string id             = 12;
   string attribute_code = 1;
   string applies_to     = 2;
   string scope          = 3;
@@ -187,11 +193,13 @@ message UpdateAttributeRegistryRequest {
   string ui_label       = 6;
   bool   is_required    = 7;
   bool   risk_relevant  = 8;
+  bool   is_active      = 10;
+  int32  display_order  = 11;
   string description    = 9;
 }
 
 message DeleteAttributeRegistryRequest {
-  string attribute_code = 1;
+  string id = 1;
 }
 
 // ==============================

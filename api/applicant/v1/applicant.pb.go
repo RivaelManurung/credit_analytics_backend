@@ -24,13 +24,14 @@ const (
 )
 
 type ApplicantAttribute struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	DataType      string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	AttributeId       string                 `protobuf:"bytes,1,opt,name=attribute_id,json=attributeId,proto3" json:"attribute_id,omitempty"`
+	Value             string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	DataType          string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	AttributeOptionId string                 `protobuf:"bytes,5,opt,name=attribute_option_id,json=attributeOptionId,proto3" json:"attribute_option_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ApplicantAttribute) Reset() {
@@ -63,9 +64,9 @@ func (*ApplicantAttribute) Descriptor() ([]byte, []int) {
 	return file_applicant_v1_applicant_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ApplicantAttribute) GetKey() string {
+func (x *ApplicantAttribute) GetAttributeId() string {
 	if x != nil {
-		return x.Key
+		return x.AttributeId
 	}
 	return ""
 }
@@ -89,6 +90,13 @@ func (x *ApplicantAttribute) GetUpdatedAt() *timestamppb.Timestamp {
 		return x.UpdatedAt
 	}
 	return nil
+}
+
+func (x *ApplicantAttribute) GetAttributeOptionId() string {
+	if x != nil {
+		return x.AttributeOptionId
+	}
+	return ""
 }
 
 type Applicant struct {
@@ -695,13 +703,14 @@ var File_applicant_v1_applicant_proto protoreflect.FileDescriptor
 
 const file_applicant_v1_applicant_proto_rawDesc = "" +
 	"\n" +
-	"\x1capplicant/v1/applicant.proto\x12\x10api.applicant.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x94\x01\n" +
-	"\x12ApplicantAttribute\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x1capplicant/v1/applicant.proto\x12\x10api.applicant.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd5\x01\n" +
+	"\x12ApplicantAttribute\x12!\n" +
+	"\fattribute_id\x18\x01 \x01(\tR\vattributeId\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1b\n" +
 	"\tdata_type\x18\x03 \x01(\tR\bdataType\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xee\x02\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12.\n" +
+	"\x13attribute_option_id\x18\x05 \x01(\tR\x11attributeOptionId\"\xee\x02\n" +
 	"\tApplicant\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eapplicant_type\x18\x02 \x01(\tR\rapplicantType\x12'\n" +

@@ -198,40 +198,6 @@ func (r *referenceRepo) DeleteAttributeCategory(ctx context.Context, categoryCod
 // ATTRIBUTE REGISTRIES
 // -----------------------------------------------------------------------
 
-func mapListRegistryToBiz(a db.ListAttributeRegistryRow, options []*biz.AttributeOption) *biz.AttributeRegistry {
-	return &biz.AttributeRegistry{
-		AttrKey:      a.AttributeCode,
-		AppliesTo:    a.AppliesTo,
-		Scope:        a.Scope,
-		DataType:     a.ValueType,
-		CategoryCode: a.CategoryCode.String,
-		UiLabel:      a.UiLabel.String,
-		IsRequired:   a.IsRequired.Bool,
-		RiskRelevant: a.RiskRelevant.Bool,
-		Description:  a.Description.String,
-		CategoryName: a.CategoryName.String,
-		CategoryIcon: a.CategoryIcon.String,
-		Options:      options,
-	}
-}
-
-func mapListRegistryByCategoryToBiz(a db.ListAttributeRegistryByCategoryRow, options []*biz.AttributeOption) *biz.AttributeRegistry {
-	return &biz.AttributeRegistry{
-		AttrKey:      a.AttributeCode,
-		AppliesTo:    a.AppliesTo,
-		Scope:        a.Scope,
-		DataType:     a.ValueType,
-		CategoryCode: a.CategoryCode.String,
-		UiLabel:      a.UiLabel.String,
-		IsRequired:   a.IsRequired.Bool,
-		RiskRelevant: a.RiskRelevant.Bool,
-		Description:  a.Description.String,
-		CategoryName: a.CategoryName.String,
-		CategoryIcon: a.CategoryIcon.String,
-		Options:      options,
-	}
-}
-
 func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.AttributeRegistry, error) {
 	attrs, err := r.data.db.ListAttributeRegistry(ctx)
 	if err != nil {
@@ -244,23 +210,40 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 		return nil, err
 	}
 
-	// Group options by attribute_code
-	optMap := make(map[string][]*biz.AttributeOption)
+	// Group options by attribute_id
+	optMap := make(map[uuid.UUID][]*biz.AttributeOption)
 	for _, o := range allOptions {
 		bizOpt := &biz.AttributeOption{
-			ID:            o.ID,
-			AttributeCode: o.AttributeCode,
-			OptionValue:   o.OptionValue,
-			OptionLabel:   o.OptionLabel,
-			DisplayOrder:  o.DisplayOrder.Int32,
-			IsActive:      o.IsActive.Bool,
+			ID:           o.ID,
+			AttributeID:  o.AttributeID,
+			OptionValue:  o.OptionValue,
+			OptionLabel:  o.OptionLabel,
+			DisplayOrder: o.DisplayOrder.Int32,
+			IsActive:     o.IsActive.Bool,
 		}
-		optMap[o.AttributeCode] = append(optMap[o.AttributeCode], bizOpt)
+		optMap[o.AttributeID] = append(optMap[o.AttributeID], bizOpt)
 	}
 
 	var res []*biz.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, mapListRegistryToBiz(a, optMap[a.AttributeCode]))
+		bizAttr := &biz.AttributeRegistry{
+			ID:            a.ID,
+			AttributeCode: a.AttributeCode,
+			AppliesTo:     a.AppliesTo,
+			Scope:         a.Scope,
+			DataType:      a.ValueType,
+			CategoryCode:  a.CategoryCode.String,
+			UiLabel:       a.UiLabel.String,
+			IsRequired:    a.IsRequired.Bool,
+			RiskRelevant:  a.RiskRelevant.Bool,
+			IsActive:      a.IsActive.Bool,
+			DisplayOrder:  a.DisplayOrder.Int32,
+			Description:   a.Description.String,
+			CategoryName:  a.CategoryName.String,
+			CategoryIcon:  a.CategoryIcon.String,
+			Options:       optMap[a.ID],
+		}
+		res = append(res, bizAttr)
 	}
 	return res, nil
 }
@@ -276,29 +259,46 @@ func (r *referenceRepo) ListAttributeRegistryByCategory(ctx context.Context, cat
 		return nil, err
 	}
 
-	optMap := make(map[string][]*biz.AttributeOption)
+	optMap := make(map[uuid.UUID][]*biz.AttributeOption)
 	for _, o := range allOptions {
 		bizOpt := &biz.AttributeOption{
-			ID:            o.ID,
-			AttributeCode: o.AttributeCode,
-			OptionValue:   o.OptionValue,
-			OptionLabel:   o.OptionLabel,
-			DisplayOrder:  o.DisplayOrder.Int32,
-			IsActive:      o.IsActive.Bool,
+			ID:           o.ID,
+			AttributeID:  o.AttributeID,
+			OptionValue:  o.OptionValue,
+			OptionLabel:  o.OptionLabel,
+			DisplayOrder: o.DisplayOrder.Int32,
+			IsActive:     o.IsActive.Bool,
 		}
-		optMap[o.AttributeCode] = append(optMap[o.AttributeCode], bizOpt)
+		optMap[o.AttributeID] = append(optMap[o.AttributeID], bizOpt)
 	}
 
 	var res []*biz.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, mapListRegistryByCategoryToBiz(a, optMap[a.AttributeCode]))
+		bizAttr := &biz.AttributeRegistry{
+			ID:            a.ID,
+			AttributeCode: a.AttributeCode,
+			AppliesTo:     a.AppliesTo,
+			Scope:         a.Scope,
+			DataType:      a.ValueType,
+			CategoryCode:  a.CategoryCode.String,
+			UiLabel:       a.UiLabel.String,
+			IsRequired:    a.IsRequired.Bool,
+			RiskRelevant:  a.RiskRelevant.Bool,
+			IsActive:      a.IsActive.Bool,
+			DisplayOrder:  a.DisplayOrder.Int32,
+			Description:   a.Description.String,
+			CategoryName:  a.CategoryName.String,
+			CategoryIcon:  a.CategoryIcon.String,
+			Options:       optMap[a.ID],
+		}
+		res = append(res, bizAttr)
 	}
 	return res, nil
 }
 
 func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
-	return r.data.db.CreateAttributeRegistry(ctx, db.CreateAttributeRegistryParams{
-		AttributeCode: attr.AttrKey,
+	_, err := r.data.db.CreateAttributeRegistry(ctx, db.CreateAttributeRegistryParams{
+		AttributeCode: attr.AttributeCode,
 		AppliesTo:     attr.AppliesTo,
 		Scope:         attr.Scope,
 		ValueType:     attr.DataType,
@@ -306,24 +306,30 @@ func (r *referenceRepo) CreateAttributeRegistry(ctx context.Context, attr *biz.A
 		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: attr.UiLabel != ""},
 		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
 		RiskRelevant:  sql.NullBool{Bool: attr.RiskRelevant, Valid: true},
+		IsActive:      sql.NullBool{Bool: attr.IsActive, Valid: true},
+		DisplayOrder:  sql.NullInt32{Int32: attr.DisplayOrder, Valid: true},
 		Description:   sql.NullString{String: attr.Description, Valid: attr.Description != ""},
 	})
+	return err
 }
 
 func (r *referenceRepo) UpdateAttributeRegistry(ctx context.Context, attr *biz.AttributeRegistry) error {
-	return r.data.db.UpdateAttributeRegistry(ctx, db.UpdateAttributeRegistryParams{
-		AttributeCode: attr.AttrKey,
-		AppliesTo:     attr.AppliesTo,
-		Scope:         attr.Scope,
-		ValueType:     attr.DataType,
-		CategoryCode:  sql.NullString{String: attr.CategoryCode, Valid: attr.CategoryCode != ""},
-		UiLabel:       sql.NullString{String: attr.UiLabel, Valid: attr.UiLabel != ""},
-		IsRequired:    sql.NullBool{Bool: attr.IsRequired, Valid: true},
-		RiskRelevant:  sql.NullBool{Bool: attr.RiskRelevant, Valid: true},
-		Description:   sql.NullString{String: attr.Description, Valid: attr.Description != ""},
+	_, err := r.data.db.UpdateAttributeRegistry(ctx, db.UpdateAttributeRegistryParams{
+		ID:           attr.ID,
+		AppliesTo:    attr.AppliesTo,
+		Scope:        attr.Scope,
+		ValueType:    attr.DataType,
+		CategoryCode: sql.NullString{String: attr.CategoryCode, Valid: attr.CategoryCode != ""},
+		UiLabel:      sql.NullString{String: attr.UiLabel, Valid: attr.UiLabel != ""},
+		IsRequired:   sql.NullBool{Bool: attr.IsRequired, Valid: true},
+		RiskRelevant: sql.NullBool{Bool: attr.RiskRelevant, Valid: true},
+		IsActive:     sql.NullBool{Bool: attr.IsActive, Valid: true},
+		DisplayOrder: sql.NullInt32{Int32: attr.DisplayOrder, Valid: true},
+		Description:  sql.NullString{String: attr.Description, Valid: attr.Description != ""},
 	})
+	return err
 }
 
-func (r *referenceRepo) DeleteAttributeRegistry(ctx context.Context, attrKey string) error {
-	return r.data.db.DeleteAttributeRegistry(ctx, attrKey)
+func (r *referenceRepo) DeleteAttributeRegistry(ctx context.Context, id uuid.UUID) error {
+	return r.data.db.DeleteAttributeRegistry(ctx, id)
 }

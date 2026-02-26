@@ -26,10 +26,17 @@ SET applicant_type = $2,
 WHERE id = $1
 RETURNING *;
 -- name: UpsertApplicantAttribute :one
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4) ON CONFLICT (applicant_id, attr_key) DO
+INSERT INTO applicant_attributes (
+        applicant_id,
+        attribute_id,
+        attribute_option_id,
+        attr_value,
+        data_type
+    )
+VALUES ($1, $2, $3, $4, $5) ON CONFLICT (applicant_id, attribute_id) DO
 UPDATE
-SET attr_value = EXCLUDED.attr_value,
+SET attribute_option_id = EXCLUDED.attribute_option_id,
+    attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
 RETURNING *;

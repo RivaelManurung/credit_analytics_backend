@@ -69,10 +69,11 @@ func (r *applicantRepo) Save(ctx context.Context, a *biz.Applicant) (uuid.UUID, 
 		a.ID = applicant.ID
 		for _, attr := range a.Attributes {
 			_, err = q.UpsertApplicantAttribute(ctx, db.UpsertApplicantAttributeParams{
-				ApplicantID: applicant.ID,
-				AttrKey:     attr.Key,
-				AttrValue:   sql.NullString{String: attr.Value, Valid: true},
-				DataType:    sql.NullString{String: attr.DataType, Valid: true},
+				ApplicantID:       applicant.ID,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: uuid.NullUUID{UUID: attr.AttributeOptionID, Valid: attr.AttributeOptionID != uuid.Nil},
+				AttrValue:         sql.NullString{String: attr.Value, Valid: true},
+				DataType:          sql.NullString{String: attr.DataType, Valid: true},
 			})
 			if err != nil {
 				return err
@@ -103,10 +104,11 @@ func (r *applicantRepo) Update(ctx context.Context, a *biz.Applicant) error {
 
 		for _, attr := range a.Attributes {
 			_, err = q.UpsertApplicantAttribute(ctx, db.UpsertApplicantAttributeParams{
-				ApplicantID: a.ID,
-				AttrKey:     attr.Key,
-				AttrValue:   sql.NullString{String: attr.Value, Valid: true},
-				DataType:    sql.NullString{String: attr.DataType, Valid: true},
+				ApplicantID:       a.ID,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: uuid.NullUUID{UUID: attr.AttributeOptionID, Valid: attr.AttributeOptionID != uuid.Nil},
+				AttrValue:         sql.NullString{String: attr.Value, Valid: true},
+				DataType:          sql.NullString{String: attr.DataType, Valid: true},
 			})
 			if err != nil {
 				return err
@@ -128,9 +130,10 @@ func (r *applicantRepo) FindByID(ctx context.Context, id uuid.UUID) (*biz.Applic
 	if err == nil {
 		for _, attr := range attrs {
 			res.Attributes = append(res.Attributes, biz.ApplicantAttribute{
-				Key:      attr.AttrKey,
-				Value:    attr.AttrValue.String,
-				DataType: attr.DataType.String,
+				AttributeID:       attr.AttributeID,
+				AttributeOptionID: attr.AttributeOptionID.UUID,
+				Value:             attr.AttrValue.String,
+				DataType:          attr.DataType.String,
 			})
 		}
 	} else if err != sql.ErrNoRows {
@@ -231,9 +234,10 @@ func (r *applicantRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUID)
 	res := make(map[uuid.UUID][]biz.ApplicantAttribute)
 	for _, attr := range attrs {
 		res[attr.ApplicantID] = append(res[attr.ApplicantID], biz.ApplicantAttribute{
-			Key:      attr.AttrKey,
-			Value:    attr.AttrValue.String,
-			DataType: attr.DataType.String,
+			AttributeID:       attr.AttributeID,
+			AttributeOptionID: attr.AttributeOptionID.UUID,
+			Value:             attr.AttrValue.String,
+			DataType:          attr.DataType.String,
 		})
 	}
 	return res, nil

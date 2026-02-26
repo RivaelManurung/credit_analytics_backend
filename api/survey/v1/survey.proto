@@ -4,61 +4,90 @@ package api.survey.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "credit-analytics-backend/api/survey/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.survey.v1";
 
 service SurveyService {
+
+  // ===== ASSIGN & GET =====
   rpc AssignSurvey (AssignSurveyRequest) returns (ApplicationSurvey) {
     option (google.api.http) = {
-      post: "/v1/applications/{application_id}/surveys",
+      post: "/v1/applications/{application_id}/surveys"
       body: "*"
     };
   }
+
   rpc GetSurvey (GetSurveyRequest) returns (ApplicationSurvey) {
     option (google.api.http) = {
       get: "/v1/surveys/{id}"
     };
   }
-  rpc ListSurveysByApplication (ListSurveysByApplicationRequest) returns (ListSurveysResponse) {
+
+  // ===== LIST BY APPLICATION =====
+  rpc ListSurveysByApplication (ListSurveysByApplicationRequest) returns (ListSurveysByApplicationResponse) {
     option (google.api.http) = {
       get: "/v1/applications/{application_id}/surveys"
     };
   }
 
+  // ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+  rpc ListSurveys (ListSurveysRequest) returns (ListSurveysResponse) {
+    option (google.api.http) = {
+      get: "/v1/surveys"
+    };
+  }
+
+  // ===== WORKFLOW =====
   rpc StartSurvey (StartSurveyRequest) returns (ApplicationSurvey) {
     option (google.api.http) = {
-      post: "/v1/surveys/{id}/start",
-      body: "*"
-    };
-  }
-  rpc SubmitSurvey (SubmitSurveyRequest) returns (ApplicationSurvey) {
-    option (google.api.http) = {
-      post: "/v1/surveys/{id}/submit",
-      body: "*"
-    };
-  }
-  rpc VerifySurvey (VerifySurveyRequest) returns (ApplicationSurvey) {
-    option (google.api.http) = {
-      post: "/v1/surveys/{id}/verify",
+      post: "/v1/surveys/{id}/start"
       body: "*"
     };
   }
 
-  rpc SubmitSurveyAnswer (SubmitSurveyAnswerRequest) returns (SurveyAnswer) {
+  rpc SubmitSurvey (SubmitSurveyRequest) returns (ApplicationSurvey) {
     option (google.api.http) = {
-      post: "/v1/surveys/{survey_id}/answers",
+      post: "/v1/surveys/{id}/submit"
       body: "*"
     };
   }
+
+  rpc VerifySurvey (VerifySurveyRequest) returns (ApplicationSurvey) {
+    option (google.api.http) = {
+      post: "/v1/surveys/{id}/verify"
+      body: "*"
+    };
+  }
+
+  // ===== ANSWERS & EVIDENCE =====
+  rpc SubmitSurveyAnswer (SubmitSurveyAnswerRequest) returns (SurveyAnswer) {
+    option (google.api.http) = {
+      post: "/v1/surveys/{survey_id}/answers"
+      body: "*"
+    };
+  }
+
   rpc UploadSurveyEvidence (UploadSurveyEvidenceRequest) returns (SurveyEvidence) {
     option (google.api.http) = {
-      post: "/v1/surveys/{survey_id}/evidences",
+      post: "/v1/surveys/{survey_id}/evidences"
       body: "*"
+    };
+  }
+
+  // ===== TEMPLATES (Optional Admin/Setup) =====
+  rpc ListSurveyTemplates (ListSurveyTemplatesRequest) returns (ListSurveyTemplatesResponse) {
+    option (google.api.http) = {
+      get: "/v1/survey-templates"
     };
   }
 }
+
+//////////////////////////////////////////////////////////
+// MODELS
+//////////////////////////////////////////////////////////
 
 message SurveyTemplate {
   string id = 1;
@@ -74,22 +103,29 @@ message ApplicationSurvey {
   string application_id = 2;
   string template_id = 3;
   string survey_type = 4;
-  string status = 5;
+  string status = 5; // UNASSIGNED | ASSIGNED | IN_PROGRESS | SUBMITTED | VERIFIED
   string assigned_to = 6;
   string survey_purpose = 7;
+
   google.protobuf.Timestamp started_at = 8;
   google.protobuf.Timestamp submitted_at = 9;
   string submitted_by = 10;
+  
+  // Enrichment (Optional): Membantu mobile app menampilkan data list tanpa hit API tambahan
+  string applicant_name = 11; 
+  string application_status = 12;
 }
 
 message SurveyAnswer {
   string id = 1;
   string survey_id = 2;
   string question_id = 3;
+
   string answer_text = 4;
   string answer_number = 5;
   bool answer_boolean = 6;
   string answer_date = 7;
+
   google.protobuf.Timestamp answered_at = 8;
 }
 
@@ -99,15 +135,36 @@ message SurveyEvidence {
   string evidence_type = 3;
   string file_url = 4;
   string description = 5;
+
   google.protobuf.Timestamp captured_at = 6;
 }
+
+//////////////////////////////////////////////////////////
+// REQUEST & RESPONSE
+//////////////////////////////////////////////////////////
 
 message ListSurveysByApplicationRequest {
   string application_id = 1;
 }
 
+message ListSurveysByApplicationResponse {
+  repeated ApplicationSurvey surveys = 1;
+}
+
+message ListSurveysRequest {
+  int32 page_size = 1;
+  string cursor = 2;
+
+  string status = 3;         // Filter: UNASSIGNED, ASSIGNED, dll
+  string application_id = 4; // Filter spesifik aplikasi
+  string assigned_to = 5;    // Filter Surveyor
+  string survey_type = 6;
+}
+
 message ListSurveysResponse {
   repeated ApplicationSurvey surveys = 1;
+  string next_cursor = 2;
+  bool has_next = 3;
 }
 
 message StartSurveyRequest {
@@ -128,6 +185,7 @@ message VerifySurveyRequest {
 message SubmitSurveyAnswerRequest {
   string survey_id = 1;
   string question_id = 2;
+
   string answer_text = 3;
   string answer_number = 4;
   bool answer_boolean = 5;
@@ -151,14 +209,6 @@ message AssignSurveyRequest {
 
 message GetSurveyRequest {
   string id = 1;
-}
-
-message CreateSurveyTemplateRequest {
-  string template_code = 1;
-  string template_name = 2;
-  string applicant_type = 3;
-  string product_id = 4;
-  bool active = 5;
 }
 
 message ListSurveyTemplatesRequest {}

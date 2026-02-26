@@ -21,6 +21,8 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationSurveyServiceAssignSurvey = "/api.survey.v1.SurveyService/AssignSurvey"
 const OperationSurveyServiceGetSurvey = "/api.survey.v1.SurveyService/GetSurvey"
+const OperationSurveyServiceListSurveyTemplates = "/api.survey.v1.SurveyService/ListSurveyTemplates"
+const OperationSurveyServiceListSurveys = "/api.survey.v1.SurveyService/ListSurveys"
 const OperationSurveyServiceListSurveysByApplication = "/api.survey.v1.SurveyService/ListSurveysByApplication"
 const OperationSurveyServiceStartSurvey = "/api.survey.v1.SurveyService/StartSurvey"
 const OperationSurveyServiceSubmitSurvey = "/api.survey.v1.SurveyService/SubmitSurvey"
@@ -29,11 +31,19 @@ const OperationSurveyServiceUploadSurveyEvidence = "/api.survey.v1.SurveyService
 const OperationSurveyServiceVerifySurvey = "/api.survey.v1.SurveyService/VerifySurvey"
 
 type SurveyServiceHTTPServer interface {
+	// AssignSurvey ===== ASSIGN & GET =====
 	AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error)
 	GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error)
-	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysResponse, error)
+	// ListSurveyTemplates ===== TEMPLATES (Optional Admin/Setup) =====
+	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
+	// ListSurveys ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+	ListSurveys(context.Context, *ListSurveysRequest) (*ListSurveysResponse, error)
+	// ListSurveysByApplication ===== LIST BY APPLICATION =====
+	ListSurveysByApplication(context.Context, *ListSurveysByApplicationRequest) (*ListSurveysByApplicationResponse, error)
+	// StartSurvey ===== WORKFLOW =====
 	StartSurvey(context.Context, *StartSurveyRequest) (*ApplicationSurvey, error)
 	SubmitSurvey(context.Context, *SubmitSurveyRequest) (*ApplicationSurvey, error)
+	// SubmitSurveyAnswer ===== ANSWERS & EVIDENCE =====
 	SubmitSurveyAnswer(context.Context, *SubmitSurveyAnswerRequest) (*SurveyAnswer, error)
 	UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error)
 	VerifySurvey(context.Context, *VerifySurveyRequest) (*ApplicationSurvey, error)
@@ -44,11 +54,13 @@ func RegisterSurveyServiceHTTPServer(s *http.Server, srv SurveyServiceHTTPServer
 	r.POST("/v1/applications/{application_id}/surveys", _SurveyService_AssignSurvey0_HTTP_Handler(srv))
 	r.GET("/v1/surveys/{id}", _SurveyService_GetSurvey0_HTTP_Handler(srv))
 	r.GET("/v1/applications/{application_id}/surveys", _SurveyService_ListSurveysByApplication0_HTTP_Handler(srv))
+	r.GET("/v1/surveys", _SurveyService_ListSurveys0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{id}/start", _SurveyService_StartSurvey0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{id}/submit", _SurveyService_SubmitSurvey0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{id}/verify", _SurveyService_VerifySurvey0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/answers", _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/evidences", _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv))
+	r.GET("/v1/survey-templates", _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv))
 }
 
 func _SurveyService_AssignSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
@@ -110,6 +122,25 @@ func _SurveyService_ListSurveysByApplication0_HTTP_Handler(srv SurveyServiceHTTP
 		http.SetOperation(ctx, OperationSurveyServiceListSurveysByApplication)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ListSurveysByApplication(ctx, req.(*ListSurveysByApplicationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListSurveysByApplicationResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SurveyService_ListSurveys0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListSurveysRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceListSurveys)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListSurveys(ctx, req.(*ListSurveysRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -245,12 +276,39 @@ func _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv SurveyServiceHTTPServ
 	}
 }
 
+func _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListSurveyTemplatesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceListSurveyTemplates)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListSurveyTemplatesResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type SurveyServiceHTTPClient interface {
+	// AssignSurvey ===== ASSIGN & GET =====
 	AssignSurvey(ctx context.Context, req *AssignSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
 	GetSurvey(ctx context.Context, req *GetSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
-	ListSurveysByApplication(ctx context.Context, req *ListSurveysByApplicationRequest, opts ...http.CallOption) (rsp *ListSurveysResponse, err error)
+	// ListSurveyTemplates ===== TEMPLATES (Optional Admin/Setup) =====
+	ListSurveyTemplates(ctx context.Context, req *ListSurveyTemplatesRequest, opts ...http.CallOption) (rsp *ListSurveyTemplatesResponse, err error)
+	// ListSurveys ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+	ListSurveys(ctx context.Context, req *ListSurveysRequest, opts ...http.CallOption) (rsp *ListSurveysResponse, err error)
+	// ListSurveysByApplication ===== LIST BY APPLICATION =====
+	ListSurveysByApplication(ctx context.Context, req *ListSurveysByApplicationRequest, opts ...http.CallOption) (rsp *ListSurveysByApplicationResponse, err error)
+	// StartSurvey ===== WORKFLOW =====
 	StartSurvey(ctx context.Context, req *StartSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
 	SubmitSurvey(ctx context.Context, req *SubmitSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
+	// SubmitSurveyAnswer ===== ANSWERS & EVIDENCE =====
 	SubmitSurveyAnswer(ctx context.Context, req *SubmitSurveyAnswerRequest, opts ...http.CallOption) (rsp *SurveyAnswer, err error)
 	UploadSurveyEvidence(ctx context.Context, req *UploadSurveyEvidenceRequest, opts ...http.CallOption) (rsp *SurveyEvidence, err error)
 	VerifySurvey(ctx context.Context, req *VerifySurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
@@ -264,6 +322,7 @@ func NewSurveyServiceHTTPClient(client *http.Client) SurveyServiceHTTPClient {
 	return &SurveyServiceHTTPClientImpl{client}
 }
 
+// AssignSurvey ===== ASSIGN & GET =====
 func (c *SurveyServiceHTTPClientImpl) AssignSurvey(ctx context.Context, in *AssignSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
 	var out ApplicationSurvey
 	pattern := "/v1/applications/{application_id}/surveys"
@@ -290,8 +349,37 @@ func (c *SurveyServiceHTTPClientImpl) GetSurvey(ctx context.Context, in *GetSurv
 	return &out, nil
 }
 
-func (c *SurveyServiceHTTPClientImpl) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...http.CallOption) (*ListSurveysResponse, error) {
+// ListSurveyTemplates ===== TEMPLATES (Optional Admin/Setup) =====
+func (c *SurveyServiceHTTPClientImpl) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...http.CallOption) (*ListSurveyTemplatesResponse, error) {
+	var out ListSurveyTemplatesResponse
+	pattern := "/v1/survey-templates"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationSurveyServiceListSurveyTemplates))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ListSurveys ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+func (c *SurveyServiceHTTPClientImpl) ListSurveys(ctx context.Context, in *ListSurveysRequest, opts ...http.CallOption) (*ListSurveysResponse, error) {
 	var out ListSurveysResponse
+	pattern := "/v1/surveys"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationSurveyServiceListSurveys))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ListSurveysByApplication ===== LIST BY APPLICATION =====
+func (c *SurveyServiceHTTPClientImpl) ListSurveysByApplication(ctx context.Context, in *ListSurveysByApplicationRequest, opts ...http.CallOption) (*ListSurveysByApplicationResponse, error) {
+	var out ListSurveysByApplicationResponse
 	pattern := "/v1/applications/{application_id}/surveys"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationSurveyServiceListSurveysByApplication))
@@ -303,6 +391,7 @@ func (c *SurveyServiceHTTPClientImpl) ListSurveysByApplication(ctx context.Conte
 	return &out, nil
 }
 
+// StartSurvey ===== WORKFLOW =====
 func (c *SurveyServiceHTTPClientImpl) StartSurvey(ctx context.Context, in *StartSurveyRequest, opts ...http.CallOption) (*ApplicationSurvey, error) {
 	var out ApplicationSurvey
 	pattern := "/v1/surveys/{id}/start"
@@ -329,6 +418,7 @@ func (c *SurveyServiceHTTPClientImpl) SubmitSurvey(ctx context.Context, in *Subm
 	return &out, nil
 }
 
+// SubmitSurveyAnswer ===== ANSWERS & EVIDENCE =====
 func (c *SurveyServiceHTTPClientImpl) SubmitSurveyAnswer(ctx context.Context, in *SubmitSurveyAnswerRequest, opts ...http.CallOption) (*SurveyAnswer, error) {
 	var out SurveyAnswer
 	pattern := "/v1/surveys/{survey_id}/answers"
