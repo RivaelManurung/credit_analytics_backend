@@ -197,9 +197,7 @@ INSERT INTO custom_column_attribute_registries (
         ui_label,
         is_required,
         risk_relevant,
-        description,
-        is_active,
-        display_order
+        description
     )
 VALUES (
         'tempat_lahir',
