@@ -43,6 +43,6 @@ func From(err error) error {
 		return status.Errorf(codes.NotFound, "resource not found")
 	}
 
-	// Default: internal error (don't leak details)
-	return status.Errorf(codes.Internal, "internal server error")
+	// Default: internal error (don't leak details for now we will leak it for debugging)
+	return status.Errorf(codes.Internal, "internal server error: %v", err)
 }
