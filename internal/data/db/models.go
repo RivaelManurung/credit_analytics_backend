@@ -214,6 +214,23 @@ type AssetType struct {
 	Description   sql.NullString `json:"description"`
 }
 
+type AttributeCategory struct {
+	CategoryCode string         `json:"category_code"`
+	CategoryName string         `json:"category_name"`
+	UiIcon       sql.NullString `json:"ui_icon"`
+	DisplayOrder sql.NullInt32  `json:"display_order"`
+	Description  sql.NullString `json:"description"`
+}
+
+type AttributeOption struct {
+	ID            uuid.UUID     `json:"id"`
+	AttributeCode string        `json:"attribute_code"`
+	OptionValue   string        `json:"option_value"`
+	OptionLabel   string        `json:"option_label"`
+	DisplayOrder  sql.NullInt32 `json:"display_order"`
+	IsActive      sql.NullBool  `json:"is_active"`
+}
+
 type Branch struct {
 	BranchCode string         `json:"branch_code"`
 	BranchName sql.NullString `json:"branch_name"`
@@ -242,10 +259,10 @@ type CustomColumnAttributeRegistry struct {
 	Scope         string         `json:"scope"`
 	ValueType     string         `json:"value_type"`
 	CategoryCode  sql.NullString `json:"category_code"`
+	UiLabel       sql.NullString `json:"ui_label"`
 	IsRequired    sql.NullBool   `json:"is_required"`
 	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
 	Description   sql.NullString `json:"description"`
-	UiLabel       sql.NullString `json:"ui_label"`
 }
 
 type FinancialGlAccount struct {

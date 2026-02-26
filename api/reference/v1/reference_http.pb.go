@@ -20,26 +20,49 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationReferenceServiceCreateAttributeCategory = "/api.reference.v1.ReferenceService/CreateAttributeCategory"
 const OperationReferenceServiceCreateAttributeRegistry = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
+const OperationReferenceServiceDeleteAttributeCategory = "/api.reference.v1.ReferenceService/DeleteAttributeCategory"
+const OperationReferenceServiceDeleteAttributeRegistry = "/api.reference.v1.ReferenceService/DeleteAttributeRegistry"
+const OperationReferenceServiceGetAttributeCategory = "/api.reference.v1.ReferenceService/GetAttributeCategory"
 const OperationReferenceServiceGetLoanProduct = "/api.reference.v1.ReferenceService/GetLoanProduct"
 const OperationReferenceServiceListApplicationStatuses = "/api.reference.v1.ReferenceService/ListApplicationStatuses"
+const OperationReferenceServiceListAttributeCategories = "/api.reference.v1.ReferenceService/ListAttributeCategories"
 const OperationReferenceServiceListAttributeRegistry = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
+const OperationReferenceServiceListAttributeRegistryByCategory = "/api.reference.v1.ReferenceService/ListAttributeRegistryByCategory"
 const OperationReferenceServiceListBranches = "/api.reference.v1.ReferenceService/ListBranches"
 const OperationReferenceServiceListFinancialGLAccounts = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
 const OperationReferenceServiceListLoanOfficers = "/api.reference.v1.ReferenceService/ListLoanOfficers"
 const OperationReferenceServiceListLoanProducts = "/api.reference.v1.ReferenceService/ListLoanProducts"
 const OperationReferenceServiceListSurveyTemplates = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
+const OperationReferenceServiceUpdateAttributeCategory = "/api.reference.v1.ReferenceService/UpdateAttributeCategory"
+const OperationReferenceServiceUpdateAttributeRegistry = "/api.reference.v1.ReferenceService/UpdateAttributeRegistry"
 
 type ReferenceServiceHTTPServer interface {
+	CreateAttributeCategory(context.Context, *CreateAttributeCategoryRequest) (*AttributeCategory, error)
 	CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error)
+	DeleteAttributeCategory(context.Context, *DeleteAttributeCategoryRequest) (*emptypb.Empty, error)
+	DeleteAttributeRegistry(context.Context, *DeleteAttributeRegistryRequest) (*emptypb.Empty, error)
+	GetAttributeCategory(context.Context, *GetAttributeCategoryRequest) (*AttributeCategory, error)
 	GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error)
+	// ListApplicationStatuses ---- Application Statuses ----
 	ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error)
+	// ListAttributeCategories ---- Attribute Categories (Dinamis — icon disimpan di sini) ----
+	ListAttributeCategories(context.Context, *emptypb.Empty) (*ListAttributeCategoriesResponse, error)
+	// ListAttributeRegistry ---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----
 	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
+	ListAttributeRegistryByCategory(context.Context, *ListAttributeRegistryByCategoryRequest) (*ListAttributeRegistryResponse, error)
+	// ListBranches ---- Branches & Officers ----
 	ListBranches(context.Context, *emptypb.Empty) (*ListBranchesResponse, error)
+	// ListFinancialGLAccounts ---- Financial GL Accounts ----
 	ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error)
 	ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersResponse, error)
+	// ListLoanProducts ---- Loan Products ----
 	ListLoanProducts(context.Context, *emptypb.Empty) (*ListLoanProductsResponse, error)
+	// ListSurveyTemplates ---- Survey Templates ----
 	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
+	UpdateAttributeCategory(context.Context, *UpdateAttributeCategoryRequest) (*AttributeCategory, error)
+	UpdateAttributeRegistry(context.Context, *UpdateAttributeRegistryRequest) (*emptypb.Empty, error)
 }
 
 func RegisterReferenceServiceHTTPServer(s *http.Server, srv ReferenceServiceHTTPServer) {
@@ -49,10 +72,18 @@ func RegisterReferenceServiceHTTPServer(s *http.Server, srv ReferenceServiceHTTP
 	r.GET("/v1/reference/branches", _ReferenceService_ListBranches0_HTTP_Handler(srv))
 	r.GET("/v1/reference/branches/{branch_code}/officers", _ReferenceService_ListLoanOfficers0_HTTP_Handler(srv))
 	r.GET("/v1/reference/application-statuses", _ReferenceService_ListApplicationStatuses0_HTTP_Handler(srv))
-	r.GET("/v1/reference/attribute-registry", _ReferenceService_ListAttributeRegistry0_HTTP_Handler(srv))
-	r.GET("/v1/reference/survey-templates", _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv))
 	r.GET("/v1/reference/gl-accounts", _ReferenceService_ListFinancialGLAccounts0_HTTP_Handler(srv))
+	r.GET("/v1/reference/attribute-categories", _ReferenceService_ListAttributeCategories0_HTTP_Handler(srv))
+	r.GET("/v1/reference/attribute-categories/{category_code}", _ReferenceService_GetAttributeCategory0_HTTP_Handler(srv))
+	r.POST("/v1/reference/attribute-categories", _ReferenceService_CreateAttributeCategory0_HTTP_Handler(srv))
+	r.PUT("/v1/reference/attribute-categories/{category_code}", _ReferenceService_UpdateAttributeCategory0_HTTP_Handler(srv))
+	r.DELETE("/v1/reference/attribute-categories/{category_code}", _ReferenceService_DeleteAttributeCategory0_HTTP_Handler(srv))
+	r.GET("/v1/reference/attribute-registry", _ReferenceService_ListAttributeRegistry0_HTTP_Handler(srv))
+	r.GET("/v1/reference/attribute-registry/by-category/{category_code}", _ReferenceService_ListAttributeRegistryByCategory0_HTTP_Handler(srv))
 	r.POST("/v1/reference/attribute-registry", _ReferenceService_CreateAttributeRegistry0_HTTP_Handler(srv))
+	r.PUT("/v1/reference/attribute-registry/{attribute_code}", _ReferenceService_UpdateAttributeRegistry0_HTTP_Handler(srv))
+	r.DELETE("/v1/reference/attribute-registry/{attribute_code}", _ReferenceService_DeleteAttributeRegistry0_HTTP_Handler(srv))
+	r.GET("/v1/reference/survey-templates", _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv))
 }
 
 func _ReferenceService_ListLoanProducts0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
@@ -156,6 +187,135 @@ func _ReferenceService_ListApplicationStatuses0_HTTP_Handler(srv ReferenceServic
 	}
 }
 
+func _ReferenceService_ListFinancialGLAccounts0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in emptypb.Empty
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceListFinancialGLAccounts)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListFinancialGLAccounts(ctx, req.(*emptypb.Empty))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListFinancialGLAccountsResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_ListAttributeCategories0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in emptypb.Empty
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceListAttributeCategories)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListAttributeCategories(ctx, req.(*emptypb.Empty))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListAttributeCategoriesResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_GetAttributeCategory0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetAttributeCategoryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceGetAttributeCategory)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetAttributeCategory(ctx, req.(*GetAttributeCategoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AttributeCategory)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_CreateAttributeCategory0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateAttributeCategoryRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceCreateAttributeCategory)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateAttributeCategory(ctx, req.(*CreateAttributeCategoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AttributeCategory)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_UpdateAttributeCategory0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateAttributeCategoryRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceUpdateAttributeCategory)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateAttributeCategory(ctx, req.(*UpdateAttributeCategoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AttributeCategory)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_DeleteAttributeCategory0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAttributeCategoryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceDeleteAttributeCategory)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteAttributeCategory(ctx, req.(*DeleteAttributeCategoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _ReferenceService_ListAttributeRegistry0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in emptypb.Empty
@@ -175,40 +335,24 @@ func _ReferenceService_ListAttributeRegistry0_HTTP_Handler(srv ReferenceServiceH
 	}
 }
 
-func _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+func _ReferenceService_ListAttributeRegistryByCategory0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ListSurveyTemplatesRequest
+		var in ListAttributeRegistryByCategoryRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationReferenceServiceListSurveyTemplates)
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceListAttributeRegistryByCategory)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+			return srv.ListAttributeRegistryByCategory(ctx, req.(*ListAttributeRegistryByCategoryRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ListSurveyTemplatesResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _ReferenceService_ListFinancialGLAccounts0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in emptypb.Empty
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationReferenceServiceListFinancialGLAccounts)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListFinancialGLAccounts(ctx, req.(*emptypb.Empty))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ListFinancialGLAccountsResponse)
+		reply := out.(*ListAttributeRegistryResponse)
 		return ctx.Result(200, reply)
 	}
 }
@@ -235,16 +379,97 @@ func _ReferenceService_CreateAttributeRegistry0_HTTP_Handler(srv ReferenceServic
 	}
 }
 
+func _ReferenceService_UpdateAttributeRegistry0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateAttributeRegistryRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceUpdateAttributeRegistry)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateAttributeRegistry(ctx, req.(*UpdateAttributeRegistryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_DeleteAttributeRegistry0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAttributeRegistryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceDeleteAttributeRegistry)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteAttributeRegistry(ctx, req.(*DeleteAttributeRegistryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*emptypb.Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ReferenceService_ListSurveyTemplates0_HTTP_Handler(srv ReferenceServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListSurveyTemplatesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationReferenceServiceListSurveyTemplates)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListSurveyTemplatesResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ReferenceServiceHTTPClient interface {
+	CreateAttributeCategory(ctx context.Context, req *CreateAttributeCategoryRequest, opts ...http.CallOption) (rsp *AttributeCategory, err error)
 	CreateAttributeRegistry(ctx context.Context, req *CreateAttributeRegistryRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	DeleteAttributeCategory(ctx context.Context, req *DeleteAttributeCategoryRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	DeleteAttributeRegistry(ctx context.Context, req *DeleteAttributeRegistryRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	GetAttributeCategory(ctx context.Context, req *GetAttributeCategoryRequest, opts ...http.CallOption) (rsp *AttributeCategory, err error)
 	GetLoanProduct(ctx context.Context, req *GetLoanProductRequest, opts ...http.CallOption) (rsp *LoanProduct, err error)
+	// ListApplicationStatuses ---- Application Statuses ----
 	ListApplicationStatuses(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListApplicationStatusesResponse, err error)
+	// ListAttributeCategories ---- Attribute Categories (Dinamis — icon disimpan di sini) ----
+	ListAttributeCategories(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListAttributeCategoriesResponse, err error)
+	// ListAttributeRegistry ---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----
 	ListAttributeRegistry(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListAttributeRegistryResponse, err error)
+	ListAttributeRegistryByCategory(ctx context.Context, req *ListAttributeRegistryByCategoryRequest, opts ...http.CallOption) (rsp *ListAttributeRegistryResponse, err error)
+	// ListBranches ---- Branches & Officers ----
 	ListBranches(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListBranchesResponse, err error)
+	// ListFinancialGLAccounts ---- Financial GL Accounts ----
 	ListFinancialGLAccounts(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListFinancialGLAccountsResponse, err error)
 	ListLoanOfficers(ctx context.Context, req *ListLoanOfficersRequest, opts ...http.CallOption) (rsp *ListLoanOfficersResponse, err error)
+	// ListLoanProducts ---- Loan Products ----
 	ListLoanProducts(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *ListLoanProductsResponse, err error)
+	// ListSurveyTemplates ---- Survey Templates ----
 	ListSurveyTemplates(ctx context.Context, req *ListSurveyTemplatesRequest, opts ...http.CallOption) (rsp *ListSurveyTemplatesResponse, err error)
+	UpdateAttributeCategory(ctx context.Context, req *UpdateAttributeCategoryRequest, opts ...http.CallOption) (rsp *AttributeCategory, err error)
+	UpdateAttributeRegistry(ctx context.Context, req *UpdateAttributeRegistryRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
 
 type ReferenceServiceHTTPClientImpl struct {
@@ -255,6 +480,19 @@ func NewReferenceServiceHTTPClient(client *http.Client) ReferenceServiceHTTPClie
 	return &ReferenceServiceHTTPClientImpl{client}
 }
 
+func (c *ReferenceServiceHTTPClientImpl) CreateAttributeCategory(ctx context.Context, in *CreateAttributeCategoryRequest, opts ...http.CallOption) (*AttributeCategory, error) {
+	var out AttributeCategory
+	pattern := "/v1/reference/attribute-categories"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationReferenceServiceCreateAttributeCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *ReferenceServiceHTTPClientImpl) CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
 	var out emptypb.Empty
 	pattern := "/v1/reference/attribute-registry"
@@ -262,6 +500,45 @@ func (c *ReferenceServiceHTTPClientImpl) CreateAttributeRegistry(ctx context.Con
 	opts = append(opts, http.Operation(OperationReferenceServiceCreateAttributeRegistry))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ReferenceServiceHTTPClientImpl) DeleteAttributeCategory(ctx context.Context, in *DeleteAttributeCategoryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/v1/reference/attribute-categories/{category_code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationReferenceServiceDeleteAttributeCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ReferenceServiceHTTPClientImpl) DeleteAttributeRegistry(ctx context.Context, in *DeleteAttributeRegistryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/v1/reference/attribute-registry/{attribute_code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationReferenceServiceDeleteAttributeRegistry))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ReferenceServiceHTTPClientImpl) GetAttributeCategory(ctx context.Context, in *GetAttributeCategoryRequest, opts ...http.CallOption) (*AttributeCategory, error) {
+	var out AttributeCategory
+	pattern := "/v1/reference/attribute-categories/{category_code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationReferenceServiceGetAttributeCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -281,6 +558,7 @@ func (c *ReferenceServiceHTTPClientImpl) GetLoanProduct(ctx context.Context, in 
 	return &out, nil
 }
 
+// ListApplicationStatuses ---- Application Statuses ----
 func (c *ReferenceServiceHTTPClientImpl) ListApplicationStatuses(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListApplicationStatusesResponse, error) {
 	var out ListApplicationStatusesResponse
 	pattern := "/v1/reference/application-statuses"
@@ -294,6 +572,21 @@ func (c *ReferenceServiceHTTPClientImpl) ListApplicationStatuses(ctx context.Con
 	return &out, nil
 }
 
+// ListAttributeCategories ---- Attribute Categories (Dinamis — icon disimpan di sini) ----
+func (c *ReferenceServiceHTTPClientImpl) ListAttributeCategories(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListAttributeCategoriesResponse, error) {
+	var out ListAttributeCategoriesResponse
+	pattern := "/v1/reference/attribute-categories"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationReferenceServiceListAttributeCategories))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ListAttributeRegistry ---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----
 func (c *ReferenceServiceHTTPClientImpl) ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListAttributeRegistryResponse, error) {
 	var out ListAttributeRegistryResponse
 	pattern := "/v1/reference/attribute-registry"
@@ -307,6 +600,20 @@ func (c *ReferenceServiceHTTPClientImpl) ListAttributeRegistry(ctx context.Conte
 	return &out, nil
 }
 
+func (c *ReferenceServiceHTTPClientImpl) ListAttributeRegistryByCategory(ctx context.Context, in *ListAttributeRegistryByCategoryRequest, opts ...http.CallOption) (*ListAttributeRegistryResponse, error) {
+	var out ListAttributeRegistryResponse
+	pattern := "/v1/reference/attribute-registry/by-category/{category_code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationReferenceServiceListAttributeRegistryByCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ListBranches ---- Branches & Officers ----
 func (c *ReferenceServiceHTTPClientImpl) ListBranches(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListBranchesResponse, error) {
 	var out ListBranchesResponse
 	pattern := "/v1/reference/branches"
@@ -320,6 +627,7 @@ func (c *ReferenceServiceHTTPClientImpl) ListBranches(ctx context.Context, in *e
 	return &out, nil
 }
 
+// ListFinancialGLAccounts ---- Financial GL Accounts ----
 func (c *ReferenceServiceHTTPClientImpl) ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListFinancialGLAccountsResponse, error) {
 	var out ListFinancialGLAccountsResponse
 	pattern := "/v1/reference/gl-accounts"
@@ -346,6 +654,7 @@ func (c *ReferenceServiceHTTPClientImpl) ListLoanOfficers(ctx context.Context, i
 	return &out, nil
 }
 
+// ListLoanProducts ---- Loan Products ----
 func (c *ReferenceServiceHTTPClientImpl) ListLoanProducts(ctx context.Context, in *emptypb.Empty, opts ...http.CallOption) (*ListLoanProductsResponse, error) {
 	var out ListLoanProductsResponse
 	pattern := "/v1/reference/loan-products"
@@ -359,6 +668,7 @@ func (c *ReferenceServiceHTTPClientImpl) ListLoanProducts(ctx context.Context, i
 	return &out, nil
 }
 
+// ListSurveyTemplates ---- Survey Templates ----
 func (c *ReferenceServiceHTTPClientImpl) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...http.CallOption) (*ListSurveyTemplatesResponse, error) {
 	var out ListSurveyTemplatesResponse
 	pattern := "/v1/reference/survey-templates"
@@ -366,6 +676,32 @@ func (c *ReferenceServiceHTTPClientImpl) ListSurveyTemplates(ctx context.Context
 	opts = append(opts, http.Operation(OperationReferenceServiceListSurveyTemplates))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ReferenceServiceHTTPClientImpl) UpdateAttributeCategory(ctx context.Context, in *UpdateAttributeCategoryRequest, opts ...http.CallOption) (*AttributeCategory, error) {
+	var out AttributeCategory
+	pattern := "/v1/reference/attribute-categories/{category_code}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationReferenceServiceUpdateAttributeCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ReferenceServiceHTTPClientImpl) UpdateAttributeRegistry(ctx context.Context, in *UpdateAttributeRegistryRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
+	pattern := "/v1/reference/attribute-registry/{attribute_code}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationReferenceServiceUpdateAttributeRegistry))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

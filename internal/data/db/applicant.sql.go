@@ -15,10 +15,16 @@ import (
 
 const createApplicant = `-- name: CreateApplicant :one
 INSERT INTO applicants (
-    applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_by
-) VALUES (
-    $1, $2, $3, $4, $5, $6, $7
-) RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
+        applicant_type,
+        identity_number,
+        tax_id,
+        full_name,
+        birth_date,
+        establishment_date,
+        created_by
+    )
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
 `
 
 type CreateApplicantParams struct {
@@ -56,51 +62,9 @@ func (q *Queries) CreateApplicant(ctx context.Context, arg CreateApplicantParams
 	return i, err
 }
 
-const createAttributeRegistryUpsert = `-- name: CreateAttributeRegistryUpsert :exec
-INSERT INTO custom_column_attribute_registries (
-    attribute_code, applies_to, scope, value_type, category_code, is_required, risk_relevant, description, ui_label
-) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
-) ON CONFLICT (attribute_code) DO UPDATE SET
-    applies_to = EXCLUDED.applies_to,
-    scope = EXCLUDED.scope,
-    value_type = EXCLUDED.value_type,
-    category_code = EXCLUDED.category_code,
-    is_required = EXCLUDED.is_required,
-    risk_relevant = EXCLUDED.risk_relevant,
-    description = EXCLUDED.description,
-    ui_label = EXCLUDED.ui_label
-`
-
-type CreateAttributeRegistryUpsertParams struct {
-	AttributeCode string         `json:"attribute_code"`
-	AppliesTo     string         `json:"applies_to"`
-	Scope         string         `json:"scope"`
-	ValueType     string         `json:"value_type"`
-	CategoryCode  sql.NullString `json:"category_code"`
-	IsRequired    sql.NullBool   `json:"is_required"`
-	RiskRelevant  sql.NullBool   `json:"risk_relevant"`
-	Description   sql.NullString `json:"description"`
-	UiLabel       sql.NullString `json:"ui_label"`
-}
-
-func (q *Queries) CreateAttributeRegistryUpsert(ctx context.Context, arg CreateAttributeRegistryUpsertParams) error {
-	_, err := q.db.ExecContext(ctx, createAttributeRegistryUpsert,
-		arg.AttributeCode,
-		arg.AppliesTo,
-		arg.Scope,
-		arg.ValueType,
-		arg.CategoryCode,
-		arg.IsRequired,
-		arg.RiskRelevant,
-		arg.Description,
-		arg.UiLabel,
-	)
-	return err
-}
-
 const deleteApplicantAttributes = `-- name: DeleteApplicantAttributes :exec
-DELETE FROM applicant_attributes WHERE applicant_id = $1
+DELETE FROM applicant_attributes
+WHERE applicant_id = $1
 `
 
 func (q *Queries) DeleteApplicantAttributes(ctx context.Context, applicantID uuid.UUID) error {
@@ -109,7 +73,10 @@ func (q *Queries) DeleteApplicantAttributes(ctx context.Context, applicantID uui
 }
 
 const getApplicant = `-- name: GetApplicant :one
-SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by FROM applicants WHERE id = $1 LIMIT 1
+SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
+FROM applicants
+WHERE id = $1
+LIMIT 1
 `
 
 func (q *Queries) GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, error) {
@@ -130,7 +97,9 @@ func (q *Queries) GetApplicant(ctx context.Context, id uuid.UUID) (Applicant, er
 }
 
 const getApplicantAttributes = `-- name: GetApplicantAttributes :many
-SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at FROM applicant_attributes WHERE applicant_id = $1
+SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at
+FROM applicant_attributes
+WHERE applicant_id = $1
 `
 
 func (q *Queries) GetApplicantAttributes(ctx context.Context, applicantID uuid.UUID) ([]ApplicantAttribute, error) {
@@ -164,7 +133,9 @@ func (q *Queries) GetApplicantAttributes(ctx context.Context, applicantID uuid.U
 }
 
 const listApplicantAttributesByIDs = `-- name: ListApplicantAttributesByIDs :many
-SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at FROM applicant_attributes WHERE applicant_id = ANY($1::uuid[])
+SELECT id, applicant_id, attr_key, attr_value, data_type, updated_at
+FROM applicant_attributes
+WHERE applicant_id = ANY($1::uuid [])
 `
 
 func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicantAttribute, error) {
@@ -198,12 +169,20 @@ func (q *Queries) ListApplicantAttributesByIDs(ctx context.Context, dollar_1 []u
 }
 
 const listApplicants = `-- name: ListApplicants :many
-SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by FROM applicants 
+SELECT id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
+FROM applicants
 WHERE (
-    ($2::timestamp IS NULL AND $3::uuid IS NULL)
-    OR (created_at, id) < ($2::timestamp, $3::uuid)
-  )
-ORDER BY created_at DESC, id DESC
+        (
+            $2::timestamp IS NULL
+            AND $3::uuid IS NULL
+        )
+        OR (created_at, id) < (
+            $2::timestamp,
+            $3::uuid
+        )
+    )
+ORDER BY created_at DESC,
+    id DESC
 LIMIT $1
 `
 
@@ -246,60 +225,16 @@ func (q *Queries) ListApplicants(ctx context.Context, arg ListApplicantsParams) 
 	return items, nil
 }
 
-const listAttributeRegistries = `-- name: ListAttributeRegistries :many
-SELECT attribute_code, applies_to, scope, value_type, category_code, is_required, risk_relevant, description, ui_label FROM custom_column_attribute_registries
-WHERE ($1::text IS NULL OR applies_to = $1 OR applies_to = 'BOTH')
-  AND ($2::text IS NULL OR scope = $2 OR scope = 'BOTH')
-ORDER BY category_code, attribute_code
-`
-
-type ListAttributeRegistriesParams struct {
-	AppliesTo sql.NullString `json:"applies_to"`
-	Scope     sql.NullString `json:"scope"`
-}
-
-func (q *Queries) ListAttributeRegistries(ctx context.Context, arg ListAttributeRegistriesParams) ([]CustomColumnAttributeRegistry, error) {
-	rows, err := q.db.QueryContext(ctx, listAttributeRegistries, arg.AppliesTo, arg.Scope)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []CustomColumnAttributeRegistry
-	for rows.Next() {
-		var i CustomColumnAttributeRegistry
-		if err := rows.Scan(
-			&i.AttributeCode,
-			&i.AppliesTo,
-			&i.Scope,
-			&i.ValueType,
-			&i.CategoryCode,
-			&i.IsRequired,
-			&i.RiskRelevant,
-			&i.Description,
-			&i.UiLabel,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const updateApplicant = `-- name: UpdateApplicant :one
-UPDATE applicants SET 
-    applicant_type = $2,
+UPDATE applicants
+SET applicant_type = $2,
     identity_number = $3,
     tax_id = $4,
     full_name = $5,
     birth_date = $6,
     establishment_date = $7
-WHERE id = $1 RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
+WHERE id = $1
+RETURNING id, applicant_type, identity_number, tax_id, full_name, birth_date, establishment_date, created_at, created_by
 `
 
 type UpdateApplicantParams struct {
@@ -339,9 +274,9 @@ func (q *Queries) UpdateApplicant(ctx context.Context, arg UpdateApplicantParams
 
 const upsertApplicantAttribute = `-- name: UpsertApplicantAttribute :one
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT (applicant_id, attr_key) DO UPDATE SET 
-    attr_value = EXCLUDED.attr_value,
+VALUES ($1, $2, $3, $4) ON CONFLICT (applicant_id, attr_key) DO
+UPDATE
+SET attr_value = EXCLUDED.attr_value,
     data_type = EXCLUDED.data_type,
     updated_at = CURRENT_TIMESTAMP
 RETURNING id, applicant_id, attr_key, attr_value, data_type, updated_at

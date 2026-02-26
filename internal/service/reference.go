@@ -273,7 +273,7 @@ func (s *ReferenceService) CreateAttributeRegistry(ctx context.Context, req *pb.
 		AppliesTo:    req.AppliesTo,
 		Scope:        req.Scope,
 		DataType:     req.ValueType,
-		CategoryCode: req.Category, // pb.go field "Category" maps to category_code FK
+		CategoryCode: req.CategoryCode,
 		UiLabel:      req.UiLabel,
 		IsRequired:   req.IsRequired,
 		RiskRelevant: req.RiskRelevant,
@@ -291,7 +291,7 @@ func (s *ReferenceService) UpdateAttributeRegistry(ctx context.Context, req *pb.
 		AppliesTo:    req.AppliesTo,
 		Scope:        req.Scope,
 		DataType:     req.ValueType,
-		CategoryCode: req.Category, // pb.go field "Category" maps to category_code FK
+		CategoryCode: req.CategoryCode,
 		UiLabel:      req.UiLabel,
 		IsRequired:   req.IsRequired,
 		RiskRelevant: req.RiskRelevant,
@@ -335,13 +335,34 @@ func mapCategoryToPb(c *biz.AttributeCategory) *pb.AttributeCategory {
 //   - AttrName field = CategoryName (from JOIN)
 //   - UiLabel field  = UiLabel (per-attribute label)
 func mapAttrToPb(a *biz.AttributeRegistry) *pb.AttributeRegistry {
+	var opts []*pb.AttributeOption
+	for _, o := range a.Options {
+		opts = append(opts, mapOptionToPb(o))
+	}
+
 	return &pb.AttributeRegistry{
-		AttrKey:  a.AttrKey,
-		AttrName: a.CategoryName, // denormalized category name
-		DataType: a.DataType,
-		Category: a.CategoryCode, // FK code (e.g. "identitas")
-		Required: a.IsRequired,
-		UiIcon:   a.CategoryIcon, // icon from category JOIN
-		UiLabel:  a.UiLabel,      // per-attribute display label
+		AttrKey:      a.AttrKey,
+		AppliesTo:    a.AppliesTo,
+		Scope:        a.Scope,
+		DataType:     a.DataType,
+		CategoryCode: a.CategoryCode,
+		UiLabel:      a.UiLabel,
+		Required:     a.IsRequired,
+		RiskRelevant: a.RiskRelevant,
+		Description:  a.Description,
+		CategoryName: a.CategoryName,
+		CategoryIcon: a.CategoryIcon,
+		Options:      opts,
+	}
+}
+
+func mapOptionToPb(o *biz.AttributeOption) *pb.AttributeOption {
+	return &pb.AttributeOption{
+		Id:            o.ID.String(),
+		AttributeCode: o.AttributeCode,
+		OptionValue:   o.OptionValue,
+		OptionLabel:   o.OptionLabel,
+		DisplayOrder:  o.DisplayOrder,
+		IsActive:      o.IsActive,
 	}
 }

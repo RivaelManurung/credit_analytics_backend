@@ -55,6 +55,15 @@ type AttributeCategory struct {
 	Description  string
 }
 
+type AttributeOption struct {
+	ID            uuid.UUID
+	AttributeCode string
+	OptionValue   string
+	OptionLabel   string
+	DisplayOrder  int32
+	IsActive      bool
+}
+
 // AttributeRegistry adalah definisi sebuah atribut EAV.
 // Tidak membawa icon sendiri — icon diambil dari kategorinya.
 type AttributeRegistry struct {
@@ -70,6 +79,7 @@ type AttributeRegistry struct {
 	// Denormalized dari JOIN (read-only, tidak disimpan di registries)
 	CategoryName string
 	CategoryIcon string
+	Options      []*AttributeOption // Daftar pilihan jika DataType = SELECT
 }
 
 type ReferenceRepo interface {

@@ -1,9 +1,8 @@
 -- ============================================================
--- FULL INTEGRATED SEED DATA (PRODUCTION-LIKE)
--- Includes all 8 Categories and 74 Attributes via EAV
--- attribute_categories: dinamis via API, icon di sini
+-- FULL INTEGRATED SEED DATA (PRODUCTION-LIKE) TEST EDIT 2
+-- Format: COMPACT / MULTI-ROW INSERT (100% Original Data)
 -- ============================================================
--- 1. CLEAN UP (urutan penting karena FK)
+-- 1. CLEAN UP
 TRUNCATE TABLE credit_authority_matrices CASCADE;
 TRUNCATE TABLE application_decision_conditions CASCADE;
 TRUNCATE TABLE application_decisions CASCADE;
@@ -35,6 +34,7 @@ TRUNCATE TABLE applications CASCADE;
 TRUNCATE TABLE loan_officers CASCADE;
 TRUNCATE TABLE loan_products CASCADE;
 TRUNCATE TABLE branches CASCADE;
+TRUNCATE TABLE attribute_options CASCADE;
 TRUNCATE TABLE custom_column_attribute_registries CASCADE;
 TRUNCATE TABLE attribute_categories CASCADE;
 TRUNCATE TABLE applicant_attributes CASCADE;
@@ -124,9 +124,7 @@ VALUES (
         true,
         false
     );
--- 3. ATTRIBUTE CATEGORIES (Dinamis, icon disimpan di sini)
--- category_code = kunci unik (FK dari registries)
--- ui_icon = nama icon Lucide/Heroicons yang dipakai di frontend
+-- 3. ATTRIBUTE CATEGORIES & REGISTRIES
 INSERT INTO attribute_categories (
         category_code,
         category_name,
@@ -190,8 +188,6 @@ VALUES (
         8,
         'Penilaian karakter dan rekam jejak perilaku'
     );
--- 4. LOAD REGISTRY (ui_icon TIDAK di sini lagi — ada di attribute_categories)
--- ui_label = label tampilan khusus per atribut (boleh berbeda dari description)
 INSERT INTO custom_column_attribute_registries (
         attribute_code,
         applies_to,
@@ -203,8 +199,7 @@ INSERT INTO custom_column_attribute_registries (
         risk_relevant,
         description
     )
-VALUES -- 1. Identitas
-    (
+VALUES (
         'tempat_lahir',
         'PERSONAL',
         'APPLICANT',
@@ -219,7 +214,7 @@ VALUES -- 1. Identitas
         'jenis_kelamin',
         'PERSONAL',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'identitas',
         'Jenis Kelamin',
         true,
@@ -241,7 +236,7 @@ VALUES -- 1. Identitas
         'status_perkawinan',
         'PERSONAL',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'identitas',
         'Status Perkawinan',
         true,
@@ -259,7 +254,6 @@ VALUES -- 1. Identitas
         true,
         'Nama Ibu Kandung'
     ),
-    -- 2. Pasangan
     (
         'pasangan_nama_lengkap',
         'BOTH',
@@ -359,7 +353,6 @@ VALUES -- 1. Identitas
         false,
         'Perkawinan Ke'
     ),
-    -- 3. Kontak & Alamat
     (
         'no_hp_utama',
         'BOTH',
@@ -540,7 +533,7 @@ VALUES -- 1. Identitas
         'status_kepemilikan_rumah',
         'BOTH',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'kontak_alamat',
         'Status Kepemilikan Rumah',
         false,
@@ -558,7 +551,6 @@ VALUES -- 1. Identitas
         false,
         'Perkiraan jarak kantor cabang'
     ),
-    -- 4. Profil Rumah Tangga
     (
         'jumlah_tanggungan',
         'PERSONAL',
@@ -647,12 +639,11 @@ VALUES -- 1. Identitas
         true,
         'Total pengeluaran rumah tangga'
     ),
-    -- 5. Pendidikan & Sosial
     (
         'pendidikan_terakhir',
         'PERSONAL',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'pendidikan_sosial',
         'Pendidikan Terakhir',
         false,
@@ -703,12 +694,11 @@ VALUES -- 1. Identitas
         false,
         'Apakah dikenal lingkungan setempat'
     ),
-    -- 6. Pekerjaan
     (
         'pekerjaan_status',
         'PERSONAL',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'pekerjaan',
         'Status Pekerjaan',
         false,
@@ -825,7 +815,6 @@ VALUES -- 1. Identitas
         false,
         'Status verifikasi pekerjaan'
     ),
-    -- 7. Usaha
     (
         'usaha_nama',
         'PERSONAL',
@@ -850,9 +839,9 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_sektor',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'usaha',
         'Sektor Usaha',
         false,
@@ -861,7 +850,7 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_lama_berusaha',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
         'NUMBER',
         'usaha',
@@ -872,7 +861,7 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_alamat',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
         'STRING',
         'usaha',
@@ -883,7 +872,7 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_status_kepemilikan_tempat',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
         'STRING',
         'usaha',
@@ -894,7 +883,7 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_jumlah_karyawan',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
         'NUMBER',
         'usaha',
@@ -905,7 +894,7 @@ VALUES -- 1. Identitas
     ),
     (
         'usaha_penghasilan_bulanan',
-        'PERSONAL',
+        'BOTH',
         'APPLICANT',
         'NUMBER',
         'usaha',
@@ -914,12 +903,44 @@ VALUES -- 1. Identitas
         true,
         'Penghasilan bulanan'
     ),
-    -- 8. Karakter & Perilaku
+    (
+        'bentuk_badan_usaha',
+        'CORPORATE',
+        'APPLICANT',
+        'SELECT',
+        'identitas',
+        'Bentuk Badan Usaha',
+        true,
+        false,
+        'PT, CV, dll'
+    ),
+    (
+        'nib_number',
+        'CORPORATE',
+        'APPLICANT',
+        'STRING',
+        'identitas',
+        'Nomor NIB',
+        true,
+        true,
+        'Nomor Induk Berusaha'
+    ),
+    (
+        'tanggal_pengesahan_menkumham',
+        'CORPORATE',
+        'APPLICANT',
+        'DATE',
+        'identitas',
+        'Tgl Pengesahan Menkumham',
+        false,
+        false,
+        'Tanggal pengesahan legalitas'
+    ),
     (
         'karakter_disiplin_bayar',
         'BOTH',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'karakter',
         'Kedisiplinan Bayar',
         false,
@@ -961,7 +982,7 @@ VALUES -- 1. Identitas
     ),
     (
         'karakter_gaya_hidup_mewah',
-        'BOTH',
+        'PERSONAL',
         'APPLICANT',
         'BOOLEAN',
         'karakter',
@@ -981,7 +1002,152 @@ VALUES -- 1. Identitas
         true,
         'Indikasi fraud'
     );
--- 5. ENTITY: APPLICANTS (CORE fields only)
+INSERT INTO attribute_options (
+        attribute_code,
+        option_value,
+        option_label,
+        display_order
+    )
+VALUES ('jenis_kelamin', 'LAKI-LAKI', 'Laki-laki', 1),
+    ('jenis_kelamin', 'PEREMPUAN', 'Perempuan', 2),
+    (
+        'status_perkawinan',
+        'BELUM_MENIKAH',
+        'Belum Menikah',
+        1
+    ),
+    ('status_perkawinan', 'MENIKAH', 'Menikah', 2),
+    (
+        'status_perkawinan',
+        'DUDA_JANDA',
+        'Duda / Janda',
+        3
+    ),
+    (
+        'status_kepemilikan_rumah',
+        'MILIK_SENDIRI',
+        'Milik Sendiri',
+        1
+    ),
+    (
+        'status_kepemilikan_rumah',
+        'MILIK_KELUARGA',
+        'Milik Keluarga',
+        2
+    ),
+    (
+        'status_kepemilikan_rumah',
+        'SEWA_KONTRAK',
+        'Sewa / Kontrak',
+        3
+    ),
+    (
+        'status_kepemilikan_rumah',
+        'DINAS',
+        'Rumah Dinas',
+        4
+    ),
+    ('pendidikan_terakhir', 'SD', 'SD', 1),
+    ('pendidikan_terakhir', 'SMP', 'SMP', 2),
+    ('pendidikan_terakhir', 'SMA', 'SMA / SMK', 3),
+    ('pendidikan_terakhir', 'D3', 'Diploma (D3)', 4),
+    ('pendidikan_terakhir', 'S1', 'Sarjana (S1)', 5),
+    (
+        'pendidikan_terakhir',
+        'S2_S3',
+        'Pascasarjana (S2/S3)',
+        6
+    ),
+    ('pekerjaan_status', 'TETAP', 'Karyawan Tetap', 1),
+    (
+        'pekerjaan_status',
+        'KONTRAK',
+        'Karyawan Kontrak',
+        2
+    ),
+    (
+        'pekerjaan_status',
+        'OUTSOURCING',
+        'Outsourcing',
+        3
+    ),
+    ('pekerjaan_status', 'HONORER', 'Honorer', 4),
+    (
+        'pekerjaan_status',
+        'PROFESIONAL',
+        'Profesional / Freelance',
+        5
+    ),
+    (
+        'usaha_sektor',
+        'PERDAGANGAN',
+        'Perdagangan / Ritel',
+        1
+    ),
+    ('usaha_sektor', 'JASA', 'Jasa', 2),
+    ('usaha_sektor', 'MANUFAKTUR', 'Manufaktur', 3),
+    (
+        'usaha_sektor',
+        'PERTANIAN',
+        'Pertanian / Peternakan',
+        4
+    ),
+    (
+        'usaha_sektor',
+        'KULINER',
+        'Makanan & Minuman',
+        5
+    ),
+    (
+        'usaha_sektor',
+        'TEKNOLOGI',
+        'Teknologi & Informasi',
+        6
+    ),
+    (
+        'bentuk_badan_usaha',
+        'PT',
+        'Perseroan Terbatas (PT)',
+        1
+    ),
+    (
+        'bentuk_badan_usaha',
+        'CV',
+        'Persekutuan Komanditer (CV)',
+        2
+    ),
+    (
+        'bentuk_badan_usaha',
+        'UD',
+        'Usaha Dagang (UD)',
+        3
+    ),
+    ('bentuk_badan_usaha', 'KOPERASI', 'Koperasi', 4),
+    (
+        'karakter_disiplin_bayar',
+        'SANGAT_DISIPLIN',
+        'Sangat Disiplin',
+        1
+    ),
+    (
+        'karakter_disiplin_bayar',
+        'DISIPLIN',
+        'Disiplin',
+        2
+    ),
+    (
+        'karakter_disiplin_bayar',
+        'KURANG_DISIPLIN',
+        'Kurang Disiplin',
+        3
+    ),
+    (
+        'karakter_disiplin_bayar',
+        'TIDAK_DISIPLIN',
+        'Tidak Disiplin / Macet',
+        4
+    );
+-- 4. ENTITY: APPLICANTS
 INSERT INTO applicants (
         id,
         applicant_type,
@@ -1029,14 +1195,101 @@ VALUES (
         '222333444555666',
         'Bambang Heru',
         '1988-12-12'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'company',
+        '8120101234567',
+        '012345678091000',
+        'PT Maju Bersama',
+        '2015-08-17'
+    ),
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'company',
+        '9120202345678',
+        '023456789092000',
+        'CV Karya Mandiri',
+        '2018-03-10'
+    ),
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'company',
+        '7120303456789',
+        '034567890093000',
+        'PT Teknologi Nusantara',
+        '2020-11-01'
+    );
+-- 5. ENTITY: APPLICATIONS
+INSERT INTO applications (
+        id,
+        applicant_id,
+        product_id,
+        ao_id,
+        loan_amount,
+        tenor_months,
+        status,
+        branch_code,
+        submitted_at
+    )
+VALUES (
+        '0195a1a2-0001-7000-bb34-000000000001',
+        '0195383f-427c-7000-bb34-317101010190',
+        '0195b1b2-0001-7000-bb34-000000000002',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        75000000,
+        36,
+        'ANALYSIS',
+        'JKT01',
+        CURRENT_TIMESTAMP - interval '2 days'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000002',
+        '0195383f-427d-7000-bb34-327301200892',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        25000000,
+        12,
+        'INTAKE',
+        'JKT01',
+        CURRENT_TIMESTAMP
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000003',
+        '0195383f-427e-7000-bb34-317202101285',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        50000000,
+        24,
+        'SURVEY',
+        'JKT01',
+        CURRENT_TIMESTAMP - interval '3 days'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000004',
+        '0195383f-427f-7000-bb34-320101440595',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000002',
+        30000000,
+        18,
+        'SURVEY',
+        'JKT02',
+        CURRENT_TIMESTAMP - interval '1 days'
+    ),
+    (
+        '0195a1a2-0001-7000-bb34-000000000005',
+        '0195383f-4280-7000-bb34-337402121288',
+        '0195b1b2-0001-7000-bb34-000000000001',
+        '0195c1c2-0001-7000-bb34-000000000001',
+        100000000,
+        48,
+        'ANALYSIS',
+        'JKT01',
+        CURRENT_TIMESTAMP - interval '4 days'
     );
 -- 6. VALUE: FULL 8 CATEGORIES ATTRIBUTES (EAV)
 INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES -- Budi Santoso
-    -- =========================
-    -- 1. IDENTITAS
-    -- =========================
-    (
+VALUES (
         '0195383f-427c-7000-bb34-317101010190',
         'tempat_lahir',
         'Jakarta',
@@ -1066,9 +1319,6 @@ VALUES -- Budi Santoso
         'Siti Aminah',
         'STRING'
     ),
-    -- =========================
-    -- 2. PASANGAN
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'pasangan_nama_lengkap',
@@ -1123,9 +1373,6 @@ VALUES -- Budi Santoso
         '1',
         'NUMBER'
     ),
-    -- =========================
-    -- 3. KONTAK & ALAMAT
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'no_hp_utama',
@@ -1225,7 +1472,7 @@ VALUES -- Budi Santoso
     (
         '0195383f-427c-7000-bb34-317101010190',
         'status_kepemilikan_rumah',
-        'MILIK SENDIRI',
+        'MILIK_SENDIRI',
         'STRING'
     ),
     (
@@ -1234,9 +1481,6 @@ VALUES -- Budi Santoso
         '5',
         'NUMBER'
     ),
-    -- =========================
-    -- 4. PROFIL RUMAH TANGGA
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'jumlah_tanggungan',
@@ -1285,9 +1529,6 @@ VALUES -- Budi Santoso
         '7500000',
         'NUMBER'
     ),
-    -- =========================
-    -- 5. PENDIDIKAN & SOSIAL
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'pendidikan_terakhir',
@@ -1318,13 +1559,10 @@ VALUES -- Budi Santoso
         'true',
         'BOOLEAN'
     ),
-    -- =========================
-    -- 6. PEKERJAAN
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'pekerjaan_status',
-        'KARYAWAN TETAP',
+        'TETAP',
         'STRING'
     ),
     (
@@ -1387,9 +1625,6 @@ VALUES -- Budi Santoso
         'TERVERIFIKASI',
         'STRING'
     ),
-    -- =========================
-    -- 7. USAHA
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'usaha_nama',
@@ -1405,7 +1640,7 @@ VALUES -- Budi Santoso
     (
         '0195383f-427c-7000-bb34-317101010190',
         'usaha_sektor',
-        'Retail',
+        'PERDAGANGAN',
         'STRING'
     ),
     (
@@ -1438,13 +1673,10 @@ VALUES -- Budi Santoso
         '3000000',
         'NUMBER'
     ),
-    -- =========================
-    -- 8. KARAKTER & PERILAKU
-    -- =========================
     (
         '0195383f-427c-7000-bb34-317101010190',
         'karakter_disiplin_bayar',
-        'SANGAT DISIPLIN',
+        'SANGAT_DISIPLIN',
         'STRING'
     ),
     (
@@ -1476,10 +1708,8 @@ VALUES -- Budi Santoso
         'karakter_indikasi_fraud',
         'false',
         'BOOLEAN'
-    );
--- Rina Wijaya (0195383f-427d-7000-bb34-327301200892)
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES -- 1 IDENTITAS
+    ),
+    -- RINA WIJAYA (0195383f-427d-7000-bb34-327301200892)
     (
         '0195383f-427d-7000-bb34-327301200892',
         'tempat_lahir',
@@ -1501,7 +1731,7 @@ VALUES -- 1 IDENTITAS
     (
         '0195383f-427d-7000-bb34-327301200892',
         'status_perkawinan',
-        'BELUM MENIKAH',
+        'BELUM_MENIKAH',
         'STRING'
     ),
     (
@@ -1510,7 +1740,6 @@ VALUES -- 1 IDENTITAS
         'Ratna Sari',
         'STRING'
     ),
-    -- 2 PASANGAN
     (
         '0195383f-427d-7000-bb34-327301200892',
         'pasangan_nama_lengkap',
@@ -1565,7 +1794,6 @@ VALUES -- 1 IDENTITAS
         '0',
         'NUMBER'
     ),
-    -- 3 KONTAK & ALAMAT
     (
         '0195383f-427d-7000-bb34-327301200892',
         'no_hp_utama',
@@ -1665,7 +1893,7 @@ VALUES -- 1 IDENTITAS
     (
         '0195383f-427d-7000-bb34-327301200892',
         'status_kepemilikan_rumah',
-        'KONTRAK',
+        'SEWA_KONTRAK',
         'STRING'
     ),
     (
@@ -1674,7 +1902,6 @@ VALUES -- 1 IDENTITAS
         '3',
         'NUMBER'
     ),
-    -- 4 PROFIL RUMAH TANGGA
     (
         '0195383f-427d-7000-bb34-327301200892',
         'jumlah_tanggungan',
@@ -1723,7 +1950,6 @@ VALUES -- 1 IDENTITAS
         '4000000',
         'NUMBER'
     ),
-    -- 5 PENDIDIKAN & SOSIAL
     (
         '0195383f-427d-7000-bb34-327301200892',
         'pendidikan_terakhir',
@@ -1754,11 +1980,10 @@ VALUES -- 1 IDENTITAS
         'true',
         'BOOLEAN'
     ),
-    -- 6 PEKERJAAN
     (
         '0195383f-427d-7000-bb34-327301200892',
         'pekerjaan_status',
-        'KARYAWAN TETAP',
+        'TETAP',
         'STRING'
     ),
     (
@@ -1821,7 +2046,6 @@ VALUES -- 1 IDENTITAS
         'TERVERIFIKASI',
         'STRING'
     ),
-    -- 7 USAHA
     (
         '0195383f-427d-7000-bb34-327301200892',
         'usaha_nama',
@@ -1837,7 +2061,7 @@ VALUES -- 1 IDENTITAS
     (
         '0195383f-427d-7000-bb34-327301200892',
         'usaha_sektor',
-        'Retail',
+        'PERDAGANGAN',
         'STRING'
     ),
     (
@@ -1867,10 +2091,9 @@ VALUES -- 1 IDENTITAS
     (
         '0195383f-427d-7000-bb34-327301200892',
         'usaha_penghasilan_bulanan',
-        '1500000',
+        '2000000',
         'NUMBER'
     ),
-    -- 8 KARAKTER
     (
         '0195383f-427d-7000-bb34-327301200892',
         'karakter_disiplin_bayar',
@@ -1886,13 +2109,13 @@ VALUES -- 1 IDENTITAS
     (
         '0195383f-427d-7000-bb34-327301200892',
         'karakter_frekuensi_pindah_kerja',
-        '1',
+        '0',
         'NUMBER'
     ),
     (
         '0195383f-427d-7000-bb34-327301200892',
         'karakter_frekuensi_pindah_alamat',
-        '1',
+        '0',
         'NUMBER'
     ),
     (
@@ -1906,10 +2129,8 @@ VALUES -- 1 IDENTITAS
         'karakter_indikasi_fraud',
         'false',
         'BOOLEAN'
-    );
--- Agus Prayogo (0195383f-427e-7000-bb34-317202101285)
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES -- 1 IDENTITAS
+    ),
+    -- AGUS PRAYOGO (0195383f-427e-7000-bb34-317202101285)
     (
         '0195383f-427e-7000-bb34-317202101285',
         'tempat_lahir',
@@ -1940,7 +2161,6 @@ VALUES -- 1 IDENTITAS
         'Sulastri',
         'STRING'
     ),
-    -- 2 PASANGAN
     (
         '0195383f-427e-7000-bb34-317202101285',
         'pasangan_nama_lengkap',
@@ -1995,7 +2215,6 @@ VALUES -- 1 IDENTITAS
         '1',
         'NUMBER'
     ),
-    -- 3 KONTAK & ALAMAT
     (
         '0195383f-427e-7000-bb34-317202101285',
         'no_hp_utama',
@@ -2104,7 +2323,6 @@ VALUES -- 1 IDENTITAS
         '7',
         'NUMBER'
     ),
-    -- 4 PROFIL RUMAH TANGGA
     (
         '0195383f-427e-7000-bb34-317202101285',
         'jumlah_tanggungan',
@@ -2153,7 +2371,6 @@ VALUES -- 1 IDENTITAS
         '9000000',
         'NUMBER'
     ),
-    -- 5 PENDIDIKAN & SOSIAL
     (
         '0195383f-427e-7000-bb34-317202101285',
         'pendidikan_terakhir',
@@ -2184,11 +2401,10 @@ VALUES -- 1 IDENTITAS
         'true',
         'BOOLEAN'
     ),
-    -- 6 PEKERJAAN
     (
         '0195383f-427e-7000-bb34-317202101285',
         'pekerjaan_status',
-        'KARYAWAN TETAP',
+        'TETAP',
         'STRING'
     ),
     (
@@ -2251,7 +2467,6 @@ VALUES -- 1 IDENTITAS
         'TERVERIFIKASI',
         'STRING'
     ),
-    -- 7 USAHA
     (
         '0195383f-427e-7000-bb34-317202101285',
         'usaha_nama',
@@ -2300,11 +2515,10 @@ VALUES -- 1 IDENTITAS
         '4000000',
         'NUMBER'
     ),
-    -- 8 KARAKTER
     (
         '0195383f-427e-7000-bb34-317202101285',
         'karakter_disiplin_bayar',
-        'SANGAT DISIPLIN',
+        'SANGAT_DISIPLIN',
         'STRING'
     ),
     (
@@ -2336,10 +2550,8 @@ VALUES -- 1 IDENTITAS
         'karakter_indikasi_fraud',
         'false',
         'BOOLEAN'
-    );
--- Dewi Lestari (0195383f-427f-7000-bb34-320101440595)
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES -- IDENTITAS
+    ),
+    -- DEWI LESTARI (0195383f-427f-7000-bb34-320101440595)
     (
         '0195383f-427f-7000-bb34-320101440595',
         'tempat_lahir',
@@ -2370,7 +2582,6 @@ VALUES -- IDENTITAS
         'Nurhayati',
         'STRING'
     ),
-    -- PASANGAN
     (
         '0195383f-427f-7000-bb34-320101440595',
         'pasangan_nama_lengkap',
@@ -2425,7 +2636,6 @@ VALUES -- IDENTITAS
         '1',
         'NUMBER'
     ),
-    -- KONTAK
     (
         '0195383f-427f-7000-bb34-320101440595',
         'no_hp_utama',
@@ -2534,7 +2744,6 @@ VALUES -- IDENTITAS
         '4',
         'NUMBER'
     ),
-    -- RUMAH TANGGA
     (
         '0195383f-427f-7000-bb34-320101440595',
         'jumlah_tanggungan',
@@ -2583,7 +2792,6 @@ VALUES -- IDENTITAS
         '5000000',
         'NUMBER'
     ),
-    -- PENDIDIKAN
     (
         '0195383f-427f-7000-bb34-320101440595',
         'pendidikan_terakhir',
@@ -2614,7 +2822,6 @@ VALUES -- IDENTITAS
         'true',
         'BOOLEAN'
     ),
-    -- PEKERJAAN
     (
         '0195383f-427f-7000-bb34-320101440595',
         'pekerjaan_status',
@@ -2681,7 +2888,6 @@ VALUES -- IDENTITAS
         'TERVERIFIKASI',
         'STRING'
     ),
-    -- USAHA
     (
         '0195383f-427f-7000-bb34-320101440595',
         'usaha_nama',
@@ -2730,7 +2936,6 @@ VALUES -- IDENTITAS
         '5000000',
         'NUMBER'
     ),
-    -- KARAKTER
     (
         '0195383f-427f-7000-bb34-320101440595',
         'karakter_disiplin_bayar',
@@ -2766,10 +2971,8 @@ VALUES -- IDENTITAS
         'karakter_indikasi_fraud',
         'false',
         'BOOLEAN'
-    );
--- Bambang Heru (0195383f-4280-7000-bb34-337402121288)
-INSERT INTO applicant_attributes (applicant_id, attr_key, attr_value, data_type)
-VALUES -- IDENTITAS
+    ),
+    -- BAMBANG HERU (0195383f-4280-7000-bb34-337402121288)
     (
         '0195383f-4280-7000-bb34-337402121288',
         'tempat_lahir',
@@ -2800,7 +3003,6 @@ VALUES -- IDENTITAS
         'Kartini',
         'STRING'
     ),
-    -- PASANGAN
     (
         '0195383f-4280-7000-bb34-337402121288',
         'pasangan_nama_lengkap',
@@ -2855,7 +3057,6 @@ VALUES -- IDENTITAS
         '1',
         'NUMBER'
     ),
-    -- KONTAK & ALAMAT
     (
         '0195383f-4280-7000-bb34-337402121288',
         'no_hp_utama',
@@ -2964,7 +3165,6 @@ VALUES -- IDENTITAS
         '6',
         'NUMBER'
     ),
-    -- PROFIL RUMAH TANGGA
     (
         '0195383f-4280-7000-bb34-337402121288',
         'jumlah_tanggungan',
@@ -3013,7 +3213,6 @@ VALUES -- IDENTITAS
         '7000000',
         'NUMBER'
     ),
-    -- PENDIDIKAN & SOSIAL
     (
         '0195383f-4280-7000-bb34-337402121288',
         'pendidikan_terakhir',
@@ -3044,7 +3243,6 @@ VALUES -- IDENTITAS
         'true',
         'BOOLEAN'
     ),
-    -- PEKERJAAN
     (
         '0195383f-4280-7000-bb34-337402121288',
         'pekerjaan_status',
@@ -3111,7 +3309,6 @@ VALUES -- IDENTITAS
         'TERVERIFIKASI',
         'STRING'
     ),
-    -- USAHA
     (
         '0195383f-4280-7000-bb34-337402121288',
         'usaha_nama',
@@ -3160,7 +3357,6 @@ VALUES -- IDENTITAS
         '2000000',
         'NUMBER'
     ),
-    -- KARAKTER
     (
         '0195383f-4280-7000-bb34-337402121288',
         'karakter_disiplin_bayar',
@@ -3196,79 +3392,113 @@ VALUES -- IDENTITAS
         'karakter_indikasi_fraud',
         'false',
         'BOOLEAN'
+    ),
+    -- PT MAJU BERSAMA (0195383f-4281-7000-bb34-812010123456)
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'bentuk_badan_usaha',
+        'PT',
+        'STRING'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'nib_number',
+        '8120101234567',
+        'STRING'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'usaha_sektor',
+        'MANUFAKTUR',
+        'STRING'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'usaha_lama_berusaha',
+        '9',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'usaha_jumlah_karyawan',
+        '150',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'no_hp_utama',
+        '0215556677',
+        'STRING'
+    ),
+    (
+        '0195383f-4281-7000-bb34-812010123456',
+        'email_pribadi',
+        'info@majubersama.co.id',
+        'STRING'
+    ),
+    -- CV KARYA MANDIRI (0195383f-4282-7000-bb34-912020234567)
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'bentuk_badan_usaha',
+        'CV',
+        'STRING'
+    ),
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'nib_number',
+        '9120202345678',
+        'STRING'
+    ),
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'usaha_sektor',
+        'PERDAGANGAN',
+        'STRING'
+    ),
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'usaha_lama_berusaha',
+        '6',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4282-7000-bb34-912020234567',
+        'usaha_jumlah_karyawan',
+        '25',
+        'NUMBER'
+    ),
+    -- PT TEKNOLOGI NUSANTARA (0195383f-4283-7000-bb34-712030345678)
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'bentuk_badan_usaha',
+        'PT',
+        'STRING'
+    ),
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'nib_number',
+        '7120303456789',
+        'STRING'
+    ),
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'usaha_sektor',
+        'TEKNOLOGI',
+        'STRING'
+    ),
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'usaha_lama_berusaha',
+        '4',
+        'NUMBER'
+    ),
+    (
+        '0195383f-4283-7000-bb34-712030345678',
+        'usaha_jumlah_karyawan',
+        '40',
+        'NUMBER'
     );
-INSERT INTO applications (
-        id,
-        applicant_id,
-        product_id,
-        ao_id,
-        loan_amount,
-        tenor_months,
-        status,
-        branch_code,
-        submitted_at
-    )
-VALUES -- Budi Santoso (sedang ANALYSIS)
-    (
-        '0195a1a2-0001-7000-bb34-000000000001',
-        '0195383f-427c-7000-bb34-317101010190',
-        '0195b1b2-0001-7000-bb34-000000000002',
-        '0195c1c2-0001-7000-bb34-000000000001',
-        75000000,
-        36,
-        'ANALYSIS',
-        'JKT01',
-        CURRENT_TIMESTAMP - interval '2 days'
-    ),
-    -- Rina Wijaya (baru masuk)
-    (
-        '0195a1a2-0001-7000-bb34-000000000002',
-        '0195383f-427d-7000-bb34-327301200892',
-        '0195b1b2-0001-7000-bb34-000000000001',
-        '0195c1c2-0001-7000-bb34-000000000001',
-        25000000,
-        12,
-        'INTAKE',
-        'JKT01',
-        CURRENT_TIMESTAMP
-    ),
-    -- Agus Prayogo
-    (
-        '0195a1a2-0001-7000-bb34-000000000003',
-        '0195383f-427e-7000-bb34-317202101285',
-        '0195b1b2-0001-7000-bb34-000000000001',
-        '0195c1c2-0001-7000-bb34-000000000001',
-        50000000,
-        24,
-        'SURVEY',
-        'JKT01',
-        CURRENT_TIMESTAMP - interval '3 days'
-    ),
-    -- Dewi Lestari
-    (
-        '0195a1a2-0001-7000-bb34-000000000004',
-        '0195383f-427f-7000-bb34-320101440595',
-        '0195b1b2-0001-7000-bb34-000000000001',
-        '0195c1c2-0001-7000-bb34-000000000002',
-        30000000,
-        18,
-        'SURVEY',
-        'JKT02',
-        CURRENT_TIMESTAMP - interval '1 days'
-    ),
-    -- Bambang Heru
-    (
-        '0195a1a2-0001-7000-bb34-000000000005',
-        '0195383f-4280-7000-bb34-337402121288',
-        '0195b1b2-0001-7000-bb34-000000000001',
-        '0195c1c2-0001-7000-bb34-000000000001',
-        100000000,
-        48,
-        'ANALYSIS',
-        'JKT01',
-        CURRENT_TIMESTAMP - interval '4 days'
-    );
--- 8. FINANCIAL DATA
+-- 7. FINANCIAL DATA
 INSERT INTO application_financial_facts (
         application_id,
         gl_code,
@@ -3277,9 +3507,7 @@ INSERT INTO application_financial_facts (
         amount,
         source
     )
-VALUES -- BUDI
-    -- INCOME
-    (
+VALUES (
         '0195a1a2-0001-7000-bb34-000000000001',
         'INC_SALARY',
         'MONTHLY',
@@ -3295,7 +3523,6 @@ VALUES -- BUDI
         2000000,
         'SURVEY'
     ),
-    -- EXPENSE
     (
         '0195a1a2-0001-7000-bb34-000000000001',
         'EXP_LIVING',
@@ -3312,7 +3539,6 @@ VALUES -- BUDI
         1500000,
         'SURVEY'
     ),
-    -- EXISTING DEBT (SLIK/Bureau)
     (
         '0195a1a2-0001-7000-bb34-000000000001',
         'DEBT_INSTALLMENT',
@@ -3321,8 +3547,6 @@ VALUES -- BUDI
         1000000,
         'BUREAU'
     ),
-    -- RINA WIJAYA
-    -- INCOME
     (
         '0195a1a2-0001-7000-bb34-000000000002',
         'INC_SALARY',
@@ -3339,7 +3563,6 @@ VALUES -- BUDI
         2000000,
         'SURVEY'
     ),
-    -- EXPENSE
     (
         '0195a1a2-0001-7000-bb34-000000000002',
         'EXP_LIVING',
@@ -3356,7 +3579,6 @@ VALUES -- BUDI
         1500000,
         'SURVEY'
     ),
-    -- EXISTING DEBT (SLIK/Bureau)
     (
         '0195a1a2-0001-7000-bb34-000000000002',
         'DEBT_INSTALLMENT',
@@ -3365,8 +3587,6 @@ VALUES -- BUDI
         1000000,
         'BUREAU'
     ),
-    -- AGUS PRAYOGO
-    -- INCOME
     (
         '0195a1a2-0001-7000-bb34-000000000003',
         'INC_SALARY',
@@ -3383,7 +3603,6 @@ VALUES -- BUDI
         2000000,
         'SURVEY'
     ),
-    -- EXPENSE
     (
         '0195a1a2-0001-7000-bb34-000000000003',
         'EXP_LIVING',
@@ -3400,7 +3619,6 @@ VALUES -- BUDI
         1500000,
         'SURVEY'
     ),
-    -- EXISTING DEBT (SLIK/Bureau)
     (
         '0195a1a2-0001-7000-bb34-000000000003',
         'DEBT_INSTALLMENT',
@@ -3409,8 +3627,6 @@ VALUES -- BUDI
         1000000,
         'BUREAU'
     ),
-    -- DEWI LESTARI
-    -- INCOME
     (
         '0195a1a2-0001-7000-bb34-000000000004',
         'INC_SALARY',
@@ -3427,7 +3643,6 @@ VALUES -- BUDI
         2000000,
         'SURVEY'
     ),
-    -- EXPENSE
     (
         '0195a1a2-0001-7000-bb34-000000000004',
         'EXP_LIVING',
@@ -3444,7 +3659,6 @@ VALUES -- BUDI
         1500000,
         'SURVEY'
     ),
-    -- EXISTING DEBT (SLIK/Bureau)
     (
         '0195a1a2-0001-7000-bb34-000000000004',
         'DEBT_INSTALLMENT',
@@ -3453,8 +3667,6 @@ VALUES -- BUDI
         1000000,
         'BUREAU'
     ),
-    -- BAMBANG HERU
-    -- INCOME
     (
         '0195a1a2-0001-7000-bb34-000000000005',
         'INC_SALARY',
@@ -3471,7 +3683,6 @@ VALUES -- BUDI
         2000000,
         'SURVEY'
     ),
-    -- EXPENSE
     (
         '0195a1a2-0001-7000-bb34-000000000005',
         'EXP_LIVING',
@@ -3488,7 +3699,6 @@ VALUES -- BUDI
         1500000,
         'SURVEY'
     ),
-    -- EXISTING DEBT (SLIK/Bureau)
     (
         '0195a1a2-0001-7000-bb34-000000000005',
         'DEBT_INSTALLMENT',
@@ -3497,7 +3707,7 @@ VALUES -- BUDI
         1000000,
         'BUREAU'
     );
--- 9. STATUS LOGS (Realistic history)
+-- 8. STATUS LOGS
 INSERT INTO application_status_logs (
         application_id,
         from_status,
@@ -3505,8 +3715,7 @@ INSERT INTO application_status_logs (
         change_reason,
         changed_at
     )
-VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
-    (
+VALUES (
         '0195a1a2-0001-7000-bb34-000000000001',
         NULL,
         'INTAKE',
@@ -3527,7 +3736,6 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
         'Survey selesai, masuk tahap analisa kredit',
         CURRENT_TIMESTAMP - interval '1 days 20 hours'
     ),
-    -- Rina Wijaya (Baru INTAKE)
     (
         '0195a1a2-0001-7000-bb34-000000000002',
         NULL,
@@ -3535,7 +3743,6 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
         'Pendaftaran baru via Walk-in',
         CURRENT_TIMESTAMP - interval '2 hours'
     ),
-    -- Agus Prayogo (Sampai SURVEY)
     (
         '0195a1a2-0001-7000-bb34-000000000003',
         NULL,
@@ -3550,7 +3757,6 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
         'Verifikasi telepon berhasil, lanjut survey',
         CURRENT_TIMESTAMP - interval '1 days 2 hours'
     ),
-    -- Dewi Lestari (Baru INTAKE)
     (
         '0195a1a2-0001-7000-bb34-000000000004',
         NULL,
@@ -3558,7 +3764,6 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
         'Aplikasi masuk via Website',
         CURRENT_TIMESTAMP - interval '5 hours'
     ),
-    -- Bambang Heru (Sampai ANALYSIS)
     (
         '0195a1a2-0001-7000-bb34-000000000005',
         NULL,
@@ -3573,7 +3778,7 @@ VALUES -- Budi Santoso (History dari INTAKE -> SURVEY -> ANALYSIS)
         'Data finansial sudah lengkap',
         CURRENT_TIMESTAMP - interval '3 days'
     );
--- 10. STATUS REFERENCES & FLOWS
+-- 9. STATUS REFERENCES & FLOWS
 INSERT INTO application_status_refs (
         status_code,
         status_group,
@@ -3644,7 +3849,7 @@ VALUES (
         true,
         'AO'
     );
--- 11. PARTIES (Spouse, Guarantor, etc)
+-- 10. PARTIES (Spouse, Guarantor, etc)
 INSERT INTO parties (id, party_type, identifier, name, date_of_birth)
 VALUES (
         '0195a1a2-0002-7000-bb34-000000000001',
@@ -3674,7 +3879,7 @@ VALUES (
         true,
         true
     );
--- 12. SURVEY TEMPLATES & QUESTIONS
+-- 11. SURVEY TEMPLATES & QUESTIONS
 INSERT INTO survey_templates (
         id,
         template_code,
@@ -3742,7 +3947,6 @@ VALUES (
         true,
         1
     );
--- Budi's Survey
 INSERT INTO application_surveys (
         id,
         application_id,
@@ -3777,7 +3981,7 @@ VALUES (
         NULL,
         5
     );
--- 13. ASSETS & LIABILITIES
+-- 12. ASSETS & LIABILITIES
 INSERT INTO asset_types (asset_type_code, asset_category, description)
 VALUES (
         'LAND_BUILDING',
@@ -3813,8 +4017,7 @@ VALUES (
         50000000,
         2500000
     );
--- 14. COMMITTEE & DECISIONS
--- Budi reached committee stage (for example)
+-- 13. COMMITTEE & DECISIONS
 INSERT INTO application_committee_sessions (
         id,
         application_id,
@@ -3835,13 +4038,11 @@ VALUES (
         '0195a1a2-0005-7000-bb34-000000000001',
         'CHAIR'
     ),
-    -- Head of Credit
     (
         '0195a1a2-0004-7000-bb34-000000000001',
         '0195a1a2-0005-7000-bb34-000000000002',
         'MEMBER'
     );
--- Risk Manager
 INSERT INTO application_committee_votes (committee_session_id, user_id, vote, vote_reason)
 VALUES (
         '0195a1a2-0004-7000-bb34-000000000001',
@@ -3855,7 +4056,7 @@ VALUES (
         'APPROVE',
         'Aset jaminan solid'
     );
--- 15. DOCUMENTS
+-- 14. DOCUMENTS
 INSERT INTO application_documents (
         application_id,
         document_name,

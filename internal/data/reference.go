@@ -145,7 +145,7 @@ func mapCategoryToBiz(c db.AttributeCategory) *biz.AttributeCategory {
 		CategoryCode: c.CategoryCode,
 		CategoryName: c.CategoryName,
 		UiIcon:       c.UiIcon.String,
-		DisplayOrder: c.DisplayOrder,
+		DisplayOrder: c.DisplayOrder.Int32,
 		Description:  c.Description.String,
 	}
 }
@@ -175,7 +175,7 @@ func (r *referenceRepo) CreateAttributeCategory(ctx context.Context, cat *biz.At
 		CategoryCode: cat.CategoryCode,
 		CategoryName: cat.CategoryName,
 		UiIcon:       sql.NullString{String: cat.UiIcon, Valid: cat.UiIcon != ""},
-		DisplayOrder: cat.DisplayOrder,
+		DisplayOrder: sql.NullInt32{Int32: cat.DisplayOrder, Valid: true},
 		Description:  sql.NullString{String: cat.Description, Valid: cat.Description != ""},
 	})
 }
@@ -185,7 +185,7 @@ func (r *referenceRepo) UpdateAttributeCategory(ctx context.Context, cat *biz.At
 		CategoryCode: cat.CategoryCode,
 		CategoryName: cat.CategoryName,
 		UiIcon:       sql.NullString{String: cat.UiIcon, Valid: cat.UiIcon != ""},
-		DisplayOrder: cat.DisplayOrder,
+		DisplayOrder: sql.NullInt32{Int32: cat.DisplayOrder, Valid: true},
 		Description:  sql.NullString{String: cat.Description, Valid: cat.Description != ""},
 	})
 }
@@ -198,7 +198,7 @@ func (r *referenceRepo) DeleteAttributeCategory(ctx context.Context, categoryCod
 // ATTRIBUTE REGISTRIES
 // -----------------------------------------------------------------------
 
-func mapRegistryToBiz(a db.AttributeRegistryRow) *biz.AttributeRegistry {
+func mapListRegistryToBiz(a db.ListAttributeRegistryRow, options []*biz.AttributeOption) *biz.AttributeRegistry {
 	return &biz.AttributeRegistry{
 		AttrKey:      a.AttributeCode,
 		AppliesTo:    a.AppliesTo,
@@ -209,9 +209,26 @@ func mapRegistryToBiz(a db.AttributeRegistryRow) *biz.AttributeRegistry {
 		IsRequired:   a.IsRequired.Bool,
 		RiskRelevant: a.RiskRelevant.Bool,
 		Description:  a.Description.String,
-		// Denormalized from JOIN
 		CategoryName: a.CategoryName.String,
 		CategoryIcon: a.CategoryIcon.String,
+		Options:      options,
+	}
+}
+
+func mapListRegistryByCategoryToBiz(a db.ListAttributeRegistryByCategoryRow, options []*biz.AttributeOption) *biz.AttributeRegistry {
+	return &biz.AttributeRegistry{
+		AttrKey:      a.AttributeCode,
+		AppliesTo:    a.AppliesTo,
+		Scope:        a.Scope,
+		DataType:     a.ValueType,
+		CategoryCode: a.CategoryCode.String,
+		UiLabel:      a.UiLabel.String,
+		IsRequired:   a.IsRequired.Bool,
+		RiskRelevant: a.RiskRelevant.Bool,
+		Description:  a.Description.String,
+		CategoryName: a.CategoryName.String,
+		CategoryIcon: a.CategoryIcon.String,
+		Options:      options,
 	}
 }
 
@@ -220,9 +237,30 @@ func (r *referenceRepo) ListAttributeRegistry(ctx context.Context) ([]*biz.Attri
 	if err != nil {
 		return nil, err
 	}
+
+	// Fetch all options to avoid N+1 queries
+	allOptions, err := r.data.db.ListAttributeOptions(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// Group options by attribute_code
+	optMap := make(map[string][]*biz.AttributeOption)
+	for _, o := range allOptions {
+		bizOpt := &biz.AttributeOption{
+			ID:            o.ID,
+			AttributeCode: o.AttributeCode,
+			OptionValue:   o.OptionValue,
+			OptionLabel:   o.OptionLabel,
+			DisplayOrder:  o.DisplayOrder.Int32,
+			IsActive:      o.IsActive.Bool,
+		}
+		optMap[o.AttributeCode] = append(optMap[o.AttributeCode], bizOpt)
+	}
+
 	var res []*biz.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, mapRegistryToBiz(a))
+		res = append(res, mapListRegistryToBiz(a, optMap[a.AttributeCode]))
 	}
 	return res, nil
 }
@@ -232,9 +270,28 @@ func (r *referenceRepo) ListAttributeRegistryByCategory(ctx context.Context, cat
 	if err != nil {
 		return nil, err
 	}
+
+	allOptions, err := r.data.db.ListAttributeOptions(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	optMap := make(map[string][]*biz.AttributeOption)
+	for _, o := range allOptions {
+		bizOpt := &biz.AttributeOption{
+			ID:            o.ID,
+			AttributeCode: o.AttributeCode,
+			OptionValue:   o.OptionValue,
+			OptionLabel:   o.OptionLabel,
+			DisplayOrder:  o.DisplayOrder.Int32,
+			IsActive:      o.IsActive.Bool,
+		}
+		optMap[o.AttributeCode] = append(optMap[o.AttributeCode], bizOpt)
+	}
+
 	var res []*biz.AttributeRegistry
 	for _, a := range attrs {
-		res = append(res, mapRegistryToBiz(a))
+		res = append(res, mapListRegistryByCategoryToBiz(a, optMap[a.AttributeCode]))
 	}
 	return res, nil
 }

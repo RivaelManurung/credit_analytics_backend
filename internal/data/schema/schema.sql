@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS custom_column_attribute_registries (
         risk_relevant BOOLEAN DEFAULT FALSE,
         description VARCHAR(255)
 );
+
 -- Backward-compat: pastikan kolom baru ada jika tabel sudah terbuat sebelumnya
 ALTER TABLE attribute_categories
 ADD COLUMN IF NOT EXISTS category_code VARCHAR(100);
@@ -100,6 +101,15 @@ ALTER TABLE custom_column_attribute_registries
 ADD COLUMN IF NOT EXISTS risk_relevant BOOLEAN DEFAULT FALSE;
 ALTER TABLE custom_column_attribute_registries
 ADD COLUMN IF NOT EXISTS description VARCHAR(255);
+CREATE TABLE IF NOT EXISTS attribute_options (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    attribute_code VARCHAR(100) NOT NULL REFERENCES custom_column_attribute_registries(attribute_code) ON DELETE CASCADE,
+    option_value VARCHAR(100) NOT NULL,
+    option_label VARCHAR(255) NOT NULL,
+    display_order INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    UNIQUE (attribute_code, option_value)
+);
 CREATE TABLE IF NOT EXISTS branches (
     branch_code VARCHAR(50) PRIMARY KEY,
     branch_name VARCHAR(255),

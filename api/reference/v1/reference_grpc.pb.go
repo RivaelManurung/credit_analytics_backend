@@ -8,7 +8,6 @@ package v1
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,32 +20,53 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ReferenceService_ListLoanProducts_FullMethodName        = "/api.reference.v1.ReferenceService/ListLoanProducts"
-	ReferenceService_GetLoanProduct_FullMethodName          = "/api.reference.v1.ReferenceService/GetLoanProduct"
-	ReferenceService_ListBranches_FullMethodName            = "/api.reference.v1.ReferenceService/ListBranches"
-	ReferenceService_ListLoanOfficers_FullMethodName        = "/api.reference.v1.ReferenceService/ListLoanOfficers"
-	ReferenceService_ListApplicationStatuses_FullMethodName = "/api.reference.v1.ReferenceService/ListApplicationStatuses"
-	ReferenceService_ListAttributeRegistry_FullMethodName   = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
-	ReferenceService_ListSurveyTemplates_FullMethodName     = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
-	ReferenceService_ListFinancialGLAccounts_FullMethodName = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
-	ReferenceService_CreateAttributeRegistry_FullMethodName = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
-	ReferenceService_UpdateAttributeRegistry_FullMethodName = "/api.reference.v1.ReferenceService/UpdateAttributeRegistry"
+	ReferenceService_ListLoanProducts_FullMethodName                = "/api.reference.v1.ReferenceService/ListLoanProducts"
+	ReferenceService_GetLoanProduct_FullMethodName                  = "/api.reference.v1.ReferenceService/GetLoanProduct"
+	ReferenceService_ListBranches_FullMethodName                    = "/api.reference.v1.ReferenceService/ListBranches"
+	ReferenceService_ListLoanOfficers_FullMethodName                = "/api.reference.v1.ReferenceService/ListLoanOfficers"
+	ReferenceService_ListApplicationStatuses_FullMethodName         = "/api.reference.v1.ReferenceService/ListApplicationStatuses"
+	ReferenceService_ListFinancialGLAccounts_FullMethodName         = "/api.reference.v1.ReferenceService/ListFinancialGLAccounts"
+	ReferenceService_ListAttributeCategories_FullMethodName         = "/api.reference.v1.ReferenceService/ListAttributeCategories"
+	ReferenceService_GetAttributeCategory_FullMethodName            = "/api.reference.v1.ReferenceService/GetAttributeCategory"
+	ReferenceService_CreateAttributeCategory_FullMethodName         = "/api.reference.v1.ReferenceService/CreateAttributeCategory"
+	ReferenceService_UpdateAttributeCategory_FullMethodName         = "/api.reference.v1.ReferenceService/UpdateAttributeCategory"
+	ReferenceService_DeleteAttributeCategory_FullMethodName         = "/api.reference.v1.ReferenceService/DeleteAttributeCategory"
+	ReferenceService_ListAttributeRegistry_FullMethodName           = "/api.reference.v1.ReferenceService/ListAttributeRegistry"
+	ReferenceService_ListAttributeRegistryByCategory_FullMethodName = "/api.reference.v1.ReferenceService/ListAttributeRegistryByCategory"
+	ReferenceService_CreateAttributeRegistry_FullMethodName         = "/api.reference.v1.ReferenceService/CreateAttributeRegistry"
+	ReferenceService_UpdateAttributeRegistry_FullMethodName         = "/api.reference.v1.ReferenceService/UpdateAttributeRegistry"
+	ReferenceService_DeleteAttributeRegistry_FullMethodName         = "/api.reference.v1.ReferenceService/DeleteAttributeRegistry"
+	ReferenceService_ListSurveyTemplates_FullMethodName             = "/api.reference.v1.ReferenceService/ListSurveyTemplates"
 )
 
 // ReferenceServiceClient is the client API for ReferenceService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReferenceServiceClient interface {
+	// ---- Loan Products ----
 	ListLoanProducts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListLoanProductsResponse, error)
 	GetLoanProduct(ctx context.Context, in *GetLoanProductRequest, opts ...grpc.CallOption) (*LoanProduct, error)
+	// ---- Branches & Officers ----
 	ListBranches(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBranchesResponse, error)
 	ListLoanOfficers(ctx context.Context, in *ListLoanOfficersRequest, opts ...grpc.CallOption) (*ListLoanOfficersResponse, error)
+	// ---- Application Statuses ----
 	ListApplicationStatuses(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListApplicationStatusesResponse, error)
-	ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error)
-	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
+	// ---- Financial GL Accounts ----
 	ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error)
+	// ---- Attribute Categories (Dinamis — icon disimpan di sini) ----
+	ListAttributeCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeCategoriesResponse, error)
+	GetAttributeCategory(ctx context.Context, in *GetAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error)
+	CreateAttributeCategory(ctx context.Context, in *CreateAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error)
+	UpdateAttributeCategory(ctx context.Context, in *UpdateAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error)
+	DeleteAttributeCategory(ctx context.Context, in *DeleteAttributeCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// ---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----
+	ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error)
+	ListAttributeRegistryByCategory(ctx context.Context, in *ListAttributeRegistryByCategoryRequest, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error)
 	CreateAttributeRegistry(ctx context.Context, in *CreateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateAttributeRegistry(ctx context.Context, in *UpdateAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteAttributeRegistry(ctx context.Context, in *DeleteAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// ---- Survey Templates ----
+	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
 }
 
 type referenceServiceClient struct {
@@ -107,6 +127,66 @@ func (c *referenceServiceClient) ListApplicationStatuses(ctx context.Context, in
 	return out, nil
 }
 
+func (c *referenceServiceClient) ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListFinancialGLAccountsResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListFinancialGLAccounts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) ListAttributeCategories(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeCategoriesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAttributeCategoriesResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListAttributeCategories_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) GetAttributeCategory(ctx context.Context, in *GetAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AttributeCategory)
+	err := c.cc.Invoke(ctx, ReferenceService_GetAttributeCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) CreateAttributeCategory(ctx context.Context, in *CreateAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AttributeCategory)
+	err := c.cc.Invoke(ctx, ReferenceService_CreateAttributeCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) UpdateAttributeCategory(ctx context.Context, in *UpdateAttributeCategoryRequest, opts ...grpc.CallOption) (*AttributeCategory, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AttributeCategory)
+	err := c.cc.Invoke(ctx, ReferenceService_UpdateAttributeCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) DeleteAttributeCategory(ctx context.Context, in *DeleteAttributeCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ReferenceService_DeleteAttributeCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *referenceServiceClient) ListAttributeRegistry(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListAttributeRegistryResponse)
@@ -117,20 +197,10 @@ func (c *referenceServiceClient) ListAttributeRegistry(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *referenceServiceClient) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error) {
+func (c *referenceServiceClient) ListAttributeRegistryByCategory(ctx context.Context, in *ListAttributeRegistryByCategoryRequest, opts ...grpc.CallOption) (*ListAttributeRegistryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListSurveyTemplatesResponse)
-	err := c.cc.Invoke(ctx, ReferenceService_ListSurveyTemplates_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *referenceServiceClient) ListFinancialGLAccounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFinancialGLAccountsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListFinancialGLAccountsResponse)
-	err := c.cc.Invoke(ctx, ReferenceService_ListFinancialGLAccounts_FullMethodName, in, out, cOpts...)
+	out := new(ListAttributeRegistryResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListAttributeRegistryByCategory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,20 +227,54 @@ func (c *referenceServiceClient) UpdateAttributeRegistry(ctx context.Context, in
 	return out, nil
 }
 
+func (c *referenceServiceClient) DeleteAttributeRegistry(ctx context.Context, in *DeleteAttributeRegistryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ReferenceService_DeleteAttributeRegistry_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *referenceServiceClient) ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSurveyTemplatesResponse)
+	err := c.cc.Invoke(ctx, ReferenceService_ListSurveyTemplates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReferenceServiceServer is the server API for ReferenceService service.
 // All implementations must embed UnimplementedReferenceServiceServer
 // for forward compatibility.
 type ReferenceServiceServer interface {
+	// ---- Loan Products ----
 	ListLoanProducts(context.Context, *emptypb.Empty) (*ListLoanProductsResponse, error)
 	GetLoanProduct(context.Context, *GetLoanProductRequest) (*LoanProduct, error)
+	// ---- Branches & Officers ----
 	ListBranches(context.Context, *emptypb.Empty) (*ListBranchesResponse, error)
 	ListLoanOfficers(context.Context, *ListLoanOfficersRequest) (*ListLoanOfficersResponse, error)
+	// ---- Application Statuses ----
 	ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error)
-	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
-	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
+	// ---- Financial GL Accounts ----
 	ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error)
+	// ---- Attribute Categories (Dinamis — icon disimpan di sini) ----
+	ListAttributeCategories(context.Context, *emptypb.Empty) (*ListAttributeCategoriesResponse, error)
+	GetAttributeCategory(context.Context, *GetAttributeCategoryRequest) (*AttributeCategory, error)
+	CreateAttributeCategory(context.Context, *CreateAttributeCategoryRequest) (*AttributeCategory, error)
+	UpdateAttributeCategory(context.Context, *UpdateAttributeCategoryRequest) (*AttributeCategory, error)
+	DeleteAttributeCategory(context.Context, *DeleteAttributeCategoryRequest) (*emptypb.Empty, error)
+	// ---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----
+	ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error)
+	ListAttributeRegistryByCategory(context.Context, *ListAttributeRegistryByCategoryRequest) (*ListAttributeRegistryResponse, error)
 	CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error)
 	UpdateAttributeRegistry(context.Context, *UpdateAttributeRegistryRequest) (*emptypb.Empty, error)
+	DeleteAttributeRegistry(context.Context, *DeleteAttributeRegistryRequest) (*emptypb.Empty, error)
+	// ---- Survey Templates ----
+	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
 	mustEmbedUnimplementedReferenceServiceServer()
 }
 
@@ -196,20 +300,41 @@ func (UnimplementedReferenceServiceServer) ListLoanOfficers(context.Context, *Li
 func (UnimplementedReferenceServiceServer) ListApplicationStatuses(context.Context, *emptypb.Empty) (*ListApplicationStatusesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListApplicationStatuses not implemented")
 }
+func (UnimplementedReferenceServiceServer) ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListFinancialGLAccounts not implemented")
+}
+func (UnimplementedReferenceServiceServer) ListAttributeCategories(context.Context, *emptypb.Empty) (*ListAttributeCategoriesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAttributeCategories not implemented")
+}
+func (UnimplementedReferenceServiceServer) GetAttributeCategory(context.Context, *GetAttributeCategoryRequest) (*AttributeCategory, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAttributeCategory not implemented")
+}
+func (UnimplementedReferenceServiceServer) CreateAttributeCategory(context.Context, *CreateAttributeCategoryRequest) (*AttributeCategory, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateAttributeCategory not implemented")
+}
+func (UnimplementedReferenceServiceServer) UpdateAttributeCategory(context.Context, *UpdateAttributeCategoryRequest) (*AttributeCategory, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateAttributeCategory not implemented")
+}
+func (UnimplementedReferenceServiceServer) DeleteAttributeCategory(context.Context, *DeleteAttributeCategoryRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteAttributeCategory not implemented")
+}
 func (UnimplementedReferenceServiceServer) ListAttributeRegistry(context.Context, *emptypb.Empty) (*ListAttributeRegistryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListAttributeRegistry not implemented")
 }
-func (UnimplementedReferenceServiceServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
-}
-func (UnimplementedReferenceServiceServer) ListFinancialGLAccounts(context.Context, *emptypb.Empty) (*ListFinancialGLAccountsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListFinancialGLAccounts not implemented")
+func (UnimplementedReferenceServiceServer) ListAttributeRegistryByCategory(context.Context, *ListAttributeRegistryByCategoryRequest) (*ListAttributeRegistryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAttributeRegistryByCategory not implemented")
 }
 func (UnimplementedReferenceServiceServer) CreateAttributeRegistry(context.Context, *CreateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateAttributeRegistry not implemented")
 }
 func (UnimplementedReferenceServiceServer) UpdateAttributeRegistry(context.Context, *UpdateAttributeRegistryRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateAttributeRegistry not implemented")
+}
+func (UnimplementedReferenceServiceServer) DeleteAttributeRegistry(context.Context, *DeleteAttributeRegistryRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteAttributeRegistry not implemented")
+}
+func (UnimplementedReferenceServiceServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
 }
 func (UnimplementedReferenceServiceServer) mustEmbedUnimplementedReferenceServiceServer() {}
 func (UnimplementedReferenceServiceServer) testEmbeddedByValue()                          {}
@@ -322,6 +447,114 @@ func _ReferenceService_ListApplicationStatuses_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReferenceService_ListFinancialGLAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_ListFinancialGLAccounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_ListAttributeCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).ListAttributeCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_ListAttributeCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).ListAttributeCategories(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_GetAttributeCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAttributeCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).GetAttributeCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_GetAttributeCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).GetAttributeCategory(ctx, req.(*GetAttributeCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_CreateAttributeCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAttributeCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).CreateAttributeCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_CreateAttributeCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).CreateAttributeCategory(ctx, req.(*CreateAttributeCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_UpdateAttributeCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAttributeCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).UpdateAttributeCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_UpdateAttributeCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).UpdateAttributeCategory(ctx, req.(*UpdateAttributeCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_DeleteAttributeCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAttributeCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).DeleteAttributeCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_DeleteAttributeCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).DeleteAttributeCategory(ctx, req.(*DeleteAttributeCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ReferenceService_ListAttributeRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -340,38 +573,20 @@ func _ReferenceService_ListAttributeRegistry_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ReferenceService_ListSurveyTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListSurveyTemplatesRequest)
+func _ReferenceService_ListAttributeRegistryByCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAttributeRegistryByCategoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, in)
+		return srv.(ReferenceServiceServer).ListAttributeRegistryByCategory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ReferenceService_ListSurveyTemplates_FullMethodName,
+		FullMethod: ReferenceService_ListAttributeRegistryByCategory_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ReferenceService_ListFinancialGLAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ReferenceService_ListFinancialGLAccounts_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReferenceServiceServer).ListFinancialGLAccounts(ctx, req.(*emptypb.Empty))
+		return srv.(ReferenceServiceServer).ListAttributeRegistryByCategory(ctx, req.(*ListAttributeRegistryByCategoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -412,6 +627,42 @@ func _ReferenceService_UpdateAttributeRegistry_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReferenceService_DeleteAttributeRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAttributeRegistryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).DeleteAttributeRegistry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_DeleteAttributeRegistry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).DeleteAttributeRegistry(ctx, req.(*DeleteAttributeRegistryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReferenceService_ListSurveyTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSurveyTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReferenceService_ListSurveyTemplates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReferenceServiceServer).ListSurveyTemplates(ctx, req.(*ListSurveyTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReferenceService_ServiceDesc is the grpc.ServiceDesc for ReferenceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -440,16 +691,36 @@ var ReferenceService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ReferenceService_ListApplicationStatuses_Handler,
 		},
 		{
+			MethodName: "ListFinancialGLAccounts",
+			Handler:    _ReferenceService_ListFinancialGLAccounts_Handler,
+		},
+		{
+			MethodName: "ListAttributeCategories",
+			Handler:    _ReferenceService_ListAttributeCategories_Handler,
+		},
+		{
+			MethodName: "GetAttributeCategory",
+			Handler:    _ReferenceService_GetAttributeCategory_Handler,
+		},
+		{
+			MethodName: "CreateAttributeCategory",
+			Handler:    _ReferenceService_CreateAttributeCategory_Handler,
+		},
+		{
+			MethodName: "UpdateAttributeCategory",
+			Handler:    _ReferenceService_UpdateAttributeCategory_Handler,
+		},
+		{
+			MethodName: "DeleteAttributeCategory",
+			Handler:    _ReferenceService_DeleteAttributeCategory_Handler,
+		},
+		{
 			MethodName: "ListAttributeRegistry",
 			Handler:    _ReferenceService_ListAttributeRegistry_Handler,
 		},
 		{
-			MethodName: "ListSurveyTemplates",
-			Handler:    _ReferenceService_ListSurveyTemplates_Handler,
-		},
-		{
-			MethodName: "ListFinancialGLAccounts",
-			Handler:    _ReferenceService_ListFinancialGLAccounts_Handler,
+			MethodName: "ListAttributeRegistryByCategory",
+			Handler:    _ReferenceService_ListAttributeRegistryByCategory_Handler,
 		},
 		{
 			MethodName: "CreateAttributeRegistry",
@@ -458,6 +729,14 @@ var ReferenceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAttributeRegistry",
 			Handler:    _ReferenceService_UpdateAttributeRegistry_Handler,
+		},
+		{
+			MethodName: "DeleteAttributeRegistry",
+			Handler:    _ReferenceService_DeleteAttributeRegistry_Handler,
+		},
+		{
+			MethodName: "ListSurveyTemplates",
+			Handler:    _ReferenceService_ListSurveyTemplates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

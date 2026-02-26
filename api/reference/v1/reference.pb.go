@@ -23,25 +23,689 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AttributeCategory struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	CategoryName  string                 `protobuf:"bytes,2,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
+	UiIcon        string                 `protobuf:"bytes,3,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"` // Nama icon Lucide/Heroicons, e.g. "id-card"
+	DisplayOrder  int32                  `protobuf:"varint,4,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
+	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AttributeCategory) Reset() {
+	*x = AttributeCategory{}
+	mi := &file_reference_v1_reference_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttributeCategory) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttributeCategory) ProtoMessage() {}
+
+func (x *AttributeCategory) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AttributeCategory.ProtoReflect.Descriptor instead.
+func (*AttributeCategory) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AttributeCategory) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *AttributeCategory) GetCategoryName() string {
+	if x != nil {
+		return x.CategoryName
+	}
+	return ""
+}
+
+func (x *AttributeCategory) GetUiIcon() string {
+	if x != nil {
+		return x.UiIcon
+	}
+	return ""
+}
+
+func (x *AttributeCategory) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
+func (x *AttributeCategory) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type ListAttributeCategoriesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Categories    []*AttributeCategory   `protobuf:"bytes,1,rep,name=categories,proto3" json:"categories,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAttributeCategoriesResponse) Reset() {
+	*x = ListAttributeCategoriesResponse{}
+	mi := &file_reference_v1_reference_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAttributeCategoriesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAttributeCategoriesResponse) ProtoMessage() {}
+
+func (x *ListAttributeCategoriesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAttributeCategoriesResponse.ProtoReflect.Descriptor instead.
+func (*ListAttributeCategoriesResponse) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ListAttributeCategoriesResponse) GetCategories() []*AttributeCategory {
+	if x != nil {
+		return x.Categories
+	}
+	return nil
+}
+
+type GetAttributeCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAttributeCategoryRequest) Reset() {
+	*x = GetAttributeCategoryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAttributeCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAttributeCategoryRequest) ProtoMessage() {}
+
+func (x *GetAttributeCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAttributeCategoryRequest.ProtoReflect.Descriptor instead.
+func (*GetAttributeCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetAttributeCategoryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+type CreateAttributeCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	CategoryName  string                 `protobuf:"bytes,2,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
+	UiIcon        string                 `protobuf:"bytes,3,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,4,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
+	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateAttributeCategoryRequest) Reset() {
+	*x = CreateAttributeCategoryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateAttributeCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateAttributeCategoryRequest) ProtoMessage() {}
+
+func (x *CreateAttributeCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateAttributeCategoryRequest.ProtoReflect.Descriptor instead.
+func (*CreateAttributeCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CreateAttributeCategoryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *CreateAttributeCategoryRequest) GetCategoryName() string {
+	if x != nil {
+		return x.CategoryName
+	}
+	return ""
+}
+
+func (x *CreateAttributeCategoryRequest) GetUiIcon() string {
+	if x != nil {
+		return x.UiIcon
+	}
+	return ""
+}
+
+func (x *CreateAttributeCategoryRequest) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
+func (x *CreateAttributeCategoryRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type UpdateAttributeCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	CategoryName  string                 `protobuf:"bytes,2,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
+	UiIcon        string                 `protobuf:"bytes,3,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,4,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
+	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateAttributeCategoryRequest) Reset() {
+	*x = UpdateAttributeCategoryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateAttributeCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateAttributeCategoryRequest) ProtoMessage() {}
+
+func (x *UpdateAttributeCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateAttributeCategoryRequest.ProtoReflect.Descriptor instead.
+func (*UpdateAttributeCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UpdateAttributeCategoryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *UpdateAttributeCategoryRequest) GetCategoryName() string {
+	if x != nil {
+		return x.CategoryName
+	}
+	return ""
+}
+
+func (x *UpdateAttributeCategoryRequest) GetUiIcon() string {
+	if x != nil {
+		return x.UiIcon
+	}
+	return ""
+}
+
+func (x *UpdateAttributeCategoryRequest) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
+func (x *UpdateAttributeCategoryRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type DeleteAttributeCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteAttributeCategoryRequest) Reset() {
+	*x = DeleteAttributeCategoryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteAttributeCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteAttributeCategoryRequest) ProtoMessage() {}
+
+func (x *DeleteAttributeCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteAttributeCategoryRequest.ProtoReflect.Descriptor instead.
+func (*DeleteAttributeCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteAttributeCategoryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+type AttributeOption struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	AttributeCode string                 `protobuf:"bytes,2,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	OptionValue   string                 `protobuf:"bytes,3,opt,name=option_value,json=optionValue,proto3" json:"option_value,omitempty"`
+	OptionLabel   string                 `protobuf:"bytes,4,opt,name=option_label,json=optionLabel,proto3" json:"option_label,omitempty"`
+	DisplayOrder  int32                  `protobuf:"varint,5,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"`
+	IsActive      bool                   `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AttributeOption) Reset() {
+	*x = AttributeOption{}
+	mi := &file_reference_v1_reference_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttributeOption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttributeOption) ProtoMessage() {}
+
+func (x *AttributeOption) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AttributeOption.ProtoReflect.Descriptor instead.
+func (*AttributeOption) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *AttributeOption) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AttributeOption) GetAttributeCode() string {
+	if x != nil {
+		return x.AttributeCode
+	}
+	return ""
+}
+
+func (x *AttributeOption) GetOptionValue() string {
+	if x != nil {
+		return x.OptionValue
+	}
+	return ""
+}
+
+func (x *AttributeOption) GetOptionLabel() string {
+	if x != nil {
+		return x.OptionLabel
+	}
+	return ""
+}
+
+func (x *AttributeOption) GetDisplayOrder() int32 {
+	if x != nil {
+		return x.DisplayOrder
+	}
+	return 0
+}
+
+func (x *AttributeOption) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+type AttributeRegistry struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	AttrKey      string                 `protobuf:"bytes,1,opt,name=attr_key,json=attrKey,proto3" json:"attr_key,omitempty"`
+	AppliesTo    string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
+	Scope        string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
+	DataType     string                 `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	CategoryCode string                 `protobuf:"bytes,5,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"` // FK ke attribute_categories
+	UiLabel      string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`                // Label per atribut (bisa beda dari description)
+	Required     bool                   `protobuf:"varint,7,opt,name=required,proto3" json:"required,omitempty"`
+	RiskRelevant bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	Description  string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
+	// Denormalized dari JOIN (read-only, tidak disimpan di tabel registry)
+	CategoryName  string             `protobuf:"bytes,10,opt,name=category_name,json=categoryName,proto3" json:"category_name,omitempty"`
+	CategoryIcon  string             `protobuf:"bytes,11,opt,name=category_icon,json=categoryIcon,proto3" json:"category_icon,omitempty"`
+	Options       []*AttributeOption `protobuf:"bytes,12,rep,name=options,proto3" json:"options,omitempty"` // Daftar pilihan jika data_type = SELECT
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AttributeRegistry) Reset() {
+	*x = AttributeRegistry{}
+	mi := &file_reference_v1_reference_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AttributeRegistry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AttributeRegistry) ProtoMessage() {}
+
+func (x *AttributeRegistry) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AttributeRegistry.ProtoReflect.Descriptor instead.
+func (*AttributeRegistry) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *AttributeRegistry) GetAttrKey() string {
+	if x != nil {
+		return x.AttrKey
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetAppliesTo() string {
+	if x != nil {
+		return x.AppliesTo
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetScope() string {
+	if x != nil {
+		return x.Scope
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetDataType() string {
+	if x != nil {
+		return x.DataType
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetUiLabel() string {
+	if x != nil {
+		return x.UiLabel
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetRequired() bool {
+	if x != nil {
+		return x.Required
+	}
+	return false
+}
+
+func (x *AttributeRegistry) GetRiskRelevant() bool {
+	if x != nil {
+		return x.RiskRelevant
+	}
+	return false
+}
+
+func (x *AttributeRegistry) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetCategoryName() string {
+	if x != nil {
+		return x.CategoryName
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetCategoryIcon() string {
+	if x != nil {
+		return x.CategoryIcon
+	}
+	return ""
+}
+
+func (x *AttributeRegistry) GetOptions() []*AttributeOption {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type ListAttributeRegistryResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Attributes    []*AttributeRegistry   `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAttributeRegistryResponse) Reset() {
+	*x = ListAttributeRegistryResponse{}
+	mi := &file_reference_v1_reference_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAttributeRegistryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAttributeRegistryResponse) ProtoMessage() {}
+
+func (x *ListAttributeRegistryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAttributeRegistryResponse.ProtoReflect.Descriptor instead.
+func (*ListAttributeRegistryResponse) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListAttributeRegistryResponse) GetAttributes() []*AttributeRegistry {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
+}
+
+type ListAttributeRegistryByCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryCode  string                 `protobuf:"bytes,1,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAttributeRegistryByCategoryRequest) Reset() {
+	*x = ListAttributeRegistryByCategoryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAttributeRegistryByCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAttributeRegistryByCategoryRequest) ProtoMessage() {}
+
+func (x *ListAttributeRegistryByCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAttributeRegistryByCategoryRequest.ProtoReflect.Descriptor instead.
+func (*ListAttributeRegistryByCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListAttributeRegistryByCategoryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
 type CreateAttributeRegistryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
 	AppliesTo     string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
 	Scope         string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
 	ValueType     string                 `protobuf:"bytes,4,opt,name=value_type,json=valueType,proto3" json:"value_type,omitempty"`
-	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
-	IsRequired    bool                   `protobuf:"varint,6,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
-	RiskRelevant  bool                   `protobuf:"varint,7,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
-	Description   string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
-	UiIcon        string                 `protobuf:"bytes,9,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
-	UiLabel       string                 `protobuf:"bytes,10,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
+	CategoryCode  string                 `protobuf:"bytes,5,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	UiLabel       string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
+	IsRequired    bool                   `protobuf:"varint,7,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
+	RiskRelevant  bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	Description   string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateAttributeRegistryRequest) Reset() {
 	*x = CreateAttributeRegistryRequest{}
-	mi := &file_reference_v1_reference_proto_msgTypes[0]
+	mi := &file_reference_v1_reference_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -53,7 +717,7 @@ func (x *CreateAttributeRegistryRequest) String() string {
 func (*CreateAttributeRegistryRequest) ProtoMessage() {}
 
 func (x *CreateAttributeRegistryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[0]
+	mi := &file_reference_v1_reference_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -66,7 +730,7 @@ func (x *CreateAttributeRegistryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAttributeRegistryRequest.ProtoReflect.Descriptor instead.
 func (*CreateAttributeRegistryRequest) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{0}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateAttributeRegistryRequest) GetAttributeCode() string {
@@ -97,9 +761,16 @@ func (x *CreateAttributeRegistryRequest) GetValueType() string {
 	return ""
 }
 
-func (x *CreateAttributeRegistryRequest) GetCategory() string {
+func (x *CreateAttributeRegistryRequest) GetCategoryCode() string {
 	if x != nil {
-		return x.Category
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *CreateAttributeRegistryRequest) GetUiLabel() string {
+	if x != nil {
+		return x.UiLabel
 	}
 	return ""
 }
@@ -125,16 +796,154 @@ func (x *CreateAttributeRegistryRequest) GetDescription() string {
 	return ""
 }
 
-func (x *CreateAttributeRegistryRequest) GetUiIcon() string {
+type UpdateAttributeRegistryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	AppliesTo     string                 `protobuf:"bytes,2,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
+	Scope         string                 `protobuf:"bytes,3,opt,name=scope,proto3" json:"scope,omitempty"`
+	ValueType     string                 `protobuf:"bytes,4,opt,name=value_type,json=valueType,proto3" json:"value_type,omitempty"`
+	CategoryCode  string                 `protobuf:"bytes,5,opt,name=category_code,json=categoryCode,proto3" json:"category_code,omitempty"`
+	UiLabel       string                 `protobuf:"bytes,6,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
+	IsRequired    bool                   `protobuf:"varint,7,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
+	RiskRelevant  bool                   `protobuf:"varint,8,opt,name=risk_relevant,json=riskRelevant,proto3" json:"risk_relevant,omitempty"`
+	Description   string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateAttributeRegistryRequest) Reset() {
+	*x = UpdateAttributeRegistryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateAttributeRegistryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateAttributeRegistryRequest) ProtoMessage() {}
+
+func (x *UpdateAttributeRegistryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[11]
 	if x != nil {
-		return x.UiIcon
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateAttributeRegistryRequest.ProtoReflect.Descriptor instead.
+func (*UpdateAttributeRegistryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UpdateAttributeRegistryRequest) GetAttributeCode() string {
+	if x != nil {
+		return x.AttributeCode
 	}
 	return ""
 }
 
-func (x *CreateAttributeRegistryRequest) GetUiLabel() string {
+func (x *UpdateAttributeRegistryRequest) GetAppliesTo() string {
+	if x != nil {
+		return x.AppliesTo
+	}
+	return ""
+}
+
+func (x *UpdateAttributeRegistryRequest) GetScope() string {
+	if x != nil {
+		return x.Scope
+	}
+	return ""
+}
+
+func (x *UpdateAttributeRegistryRequest) GetValueType() string {
+	if x != nil {
+		return x.ValueType
+	}
+	return ""
+}
+
+func (x *UpdateAttributeRegistryRequest) GetCategoryCode() string {
+	if x != nil {
+		return x.CategoryCode
+	}
+	return ""
+}
+
+func (x *UpdateAttributeRegistryRequest) GetUiLabel() string {
 	if x != nil {
 		return x.UiLabel
+	}
+	return ""
+}
+
+func (x *UpdateAttributeRegistryRequest) GetIsRequired() bool {
+	if x != nil {
+		return x.IsRequired
+	}
+	return false
+}
+
+func (x *UpdateAttributeRegistryRequest) GetRiskRelevant() bool {
+	if x != nil {
+		return x.RiskRelevant
+	}
+	return false
+}
+
+func (x *UpdateAttributeRegistryRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type DeleteAttributeRegistryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AttributeCode string                 `protobuf:"bytes,1,opt,name=attribute_code,json=attributeCode,proto3" json:"attribute_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteAttributeRegistryRequest) Reset() {
+	*x = DeleteAttributeRegistryRequest{}
+	mi := &file_reference_v1_reference_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteAttributeRegistryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteAttributeRegistryRequest) ProtoMessage() {}
+
+func (x *DeleteAttributeRegistryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteAttributeRegistryRequest.ProtoReflect.Descriptor instead.
+func (*DeleteAttributeRegistryRequest) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeleteAttributeRegistryRequest) GetAttributeCode() string {
+	if x != nil {
+		return x.AttributeCode
 	}
 	return ""
 }
@@ -152,7 +961,7 @@ type LoanProduct struct {
 
 func (x *LoanProduct) Reset() {
 	*x = LoanProduct{}
-	mi := &file_reference_v1_reference_proto_msgTypes[1]
+	mi := &file_reference_v1_reference_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -164,7 +973,7 @@ func (x *LoanProduct) String() string {
 func (*LoanProduct) ProtoMessage() {}
 
 func (x *LoanProduct) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[1]
+	mi := &file_reference_v1_reference_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -177,7 +986,7 @@ func (x *LoanProduct) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoanProduct.ProtoReflect.Descriptor instead.
 func (*LoanProduct) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{1}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *LoanProduct) GetId() string {
@@ -226,7 +1035,7 @@ type Branch struct {
 
 func (x *Branch) Reset() {
 	*x = Branch{}
-	mi := &file_reference_v1_reference_proto_msgTypes[2]
+	mi := &file_reference_v1_reference_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +1047,7 @@ func (x *Branch) String() string {
 func (*Branch) ProtoMessage() {}
 
 func (x *Branch) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[2]
+	mi := &file_reference_v1_reference_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +1060,7 @@ func (x *Branch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Branch.ProtoReflect.Descriptor instead.
 func (*Branch) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{2}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Branch) GetBranchCode() string {
@@ -286,7 +1095,7 @@ type LoanOfficer struct {
 
 func (x *LoanOfficer) Reset() {
 	*x = LoanOfficer{}
-	mi := &file_reference_v1_reference_proto_msgTypes[3]
+	mi := &file_reference_v1_reference_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -298,7 +1107,7 @@ func (x *LoanOfficer) String() string {
 func (*LoanOfficer) ProtoMessage() {}
 
 func (x *LoanOfficer) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[3]
+	mi := &file_reference_v1_reference_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -311,7 +1120,7 @@ func (x *LoanOfficer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoanOfficer.ProtoReflect.Descriptor instead.
 func (*LoanOfficer) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{3}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *LoanOfficer) GetId() string {
@@ -347,7 +1156,7 @@ type ApplicationStatusRef struct {
 
 func (x *ApplicationStatusRef) Reset() {
 	*x = ApplicationStatusRef{}
-	mi := &file_reference_v1_reference_proto_msgTypes[4]
+	mi := &file_reference_v1_reference_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -359,7 +1168,7 @@ func (x *ApplicationStatusRef) String() string {
 func (*ApplicationStatusRef) ProtoMessage() {}
 
 func (x *ApplicationStatusRef) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[4]
+	mi := &file_reference_v1_reference_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +1181,7 @@ func (x *ApplicationStatusRef) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApplicationStatusRef.ProtoReflect.Descriptor instead.
 func (*ApplicationStatusRef) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{4}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ApplicationStatusRef) GetStatusCode() string {
@@ -403,174 +1212,6 @@ func (x *ApplicationStatusRef) GetDescription() string {
 	return ""
 }
 
-type AttributeRegistry struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	AttrKey       string                 `protobuf:"bytes,1,opt,name=attr_key,json=attrKey,proto3" json:"attr_key,omitempty"`
-	AttrName      string                 `protobuf:"bytes,2,opt,name=attr_name,json=attrName,proto3" json:"attr_name,omitempty"`
-	DataType      string                 `protobuf:"bytes,3,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
-	Category      string                 `protobuf:"bytes,4,opt,name=category,proto3" json:"category,omitempty"`
-	Required      bool                   `protobuf:"varint,5,opt,name=required,proto3" json:"required,omitempty"`
-	UiIcon        string                 `protobuf:"bytes,6,opt,name=ui_icon,json=uiIcon,proto3" json:"ui_icon,omitempty"`
-	UiLabel       string                 `protobuf:"bytes,7,opt,name=ui_label,json=uiLabel,proto3" json:"ui_label,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AttributeRegistry) Reset() {
-	*x = AttributeRegistry{}
-	mi := &file_reference_v1_reference_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AttributeRegistry) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AttributeRegistry) ProtoMessage() {}
-
-func (x *AttributeRegistry) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AttributeRegistry.ProtoReflect.Descriptor instead.
-func (*AttributeRegistry) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *AttributeRegistry) GetAttrKey() string {
-	if x != nil {
-		return x.AttrKey
-	}
-	return ""
-}
-
-func (x *AttributeRegistry) GetAttrName() string {
-	if x != nil {
-		return x.AttrName
-	}
-	return ""
-}
-
-func (x *AttributeRegistry) GetDataType() string {
-	if x != nil {
-		return x.DataType
-	}
-	return ""
-}
-
-func (x *AttributeRegistry) GetCategory() string {
-	if x != nil {
-		return x.Category
-	}
-	return ""
-}
-
-func (x *AttributeRegistry) GetRequired() bool {
-	if x != nil {
-		return x.Required
-	}
-	return false
-}
-
-func (x *AttributeRegistry) GetUiIcon() string {
-	if x != nil {
-		return x.UiIcon
-	}
-	return ""
-}
-
-func (x *AttributeRegistry) GetUiLabel() string {
-	if x != nil {
-		return x.UiLabel
-	}
-	return ""
-}
-
-type SurveyTemplate struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	TemplateCode  string                 `protobuf:"bytes,2,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
-	TemplateName  string                 `protobuf:"bytes,3,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
-	ApplicantType string                 `protobuf:"bytes,4,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
-	ProductId     string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SurveyTemplate) Reset() {
-	*x = SurveyTemplate{}
-	mi := &file_reference_v1_reference_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SurveyTemplate) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SurveyTemplate) ProtoMessage() {}
-
-func (x *SurveyTemplate) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SurveyTemplate.ProtoReflect.Descriptor instead.
-func (*SurveyTemplate) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *SurveyTemplate) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *SurveyTemplate) GetTemplateCode() string {
-	if x != nil {
-		return x.TemplateCode
-	}
-	return ""
-}
-
-func (x *SurveyTemplate) GetTemplateName() string {
-	if x != nil {
-		return x.TemplateName
-	}
-	return ""
-}
-
-func (x *SurveyTemplate) GetApplicantType() string {
-	if x != nil {
-		return x.ApplicantType
-	}
-	return ""
-}
-
-func (x *SurveyTemplate) GetProductId() string {
-	if x != nil {
-		return x.ProductId
-	}
-	return ""
-}
-
 type FinancialGLAccount struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GlCode        string                 `protobuf:"bytes,1,opt,name=gl_code,json=glCode,proto3" json:"gl_code,omitempty"`
@@ -587,7 +1228,7 @@ type FinancialGLAccount struct {
 
 func (x *FinancialGLAccount) Reset() {
 	*x = FinancialGLAccount{}
-	mi := &file_reference_v1_reference_proto_msgTypes[7]
+	mi := &file_reference_v1_reference_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -599,7 +1240,7 @@ func (x *FinancialGLAccount) String() string {
 func (*FinancialGLAccount) ProtoMessage() {}
 
 func (x *FinancialGLAccount) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[7]
+	mi := &file_reference_v1_reference_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -612,7 +1253,7 @@ func (x *FinancialGLAccount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FinancialGLAccount.ProtoReflect.Descriptor instead.
 func (*FinancialGLAccount) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{7}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *FinancialGLAccount) GetGlCode() string {
@@ -671,6 +1312,82 @@ func (x *FinancialGLAccount) GetDescription() string {
 	return ""
 }
 
+type SurveyTemplate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	TemplateCode  string                 `protobuf:"bytes,2,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
+	TemplateName  string                 `protobuf:"bytes,3,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
+	ApplicantType string                 `protobuf:"bytes,4,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	ProductId     string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SurveyTemplate) Reset() {
+	*x = SurveyTemplate{}
+	mi := &file_reference_v1_reference_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SurveyTemplate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SurveyTemplate) ProtoMessage() {}
+
+func (x *SurveyTemplate) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SurveyTemplate.ProtoReflect.Descriptor instead.
+func (*SurveyTemplate) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SurveyTemplate) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SurveyTemplate) GetTemplateCode() string {
+	if x != nil {
+		return x.TemplateCode
+	}
+	return ""
+}
+
+func (x *SurveyTemplate) GetTemplateName() string {
+	if x != nil {
+		return x.TemplateName
+	}
+	return ""
+}
+
+func (x *SurveyTemplate) GetApplicantType() string {
+	if x != nil {
+		return x.ApplicantType
+	}
+	return ""
+}
+
+func (x *SurveyTemplate) GetProductId() string {
+	if x != nil {
+		return x.ProductId
+	}
+	return ""
+}
+
 type GetLoanProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -680,7 +1397,7 @@ type GetLoanProductRequest struct {
 
 func (x *GetLoanProductRequest) Reset() {
 	*x = GetLoanProductRequest{}
-	mi := &file_reference_v1_reference_proto_msgTypes[8]
+	mi := &file_reference_v1_reference_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -692,7 +1409,7 @@ func (x *GetLoanProductRequest) String() string {
 func (*GetLoanProductRequest) ProtoMessage() {}
 
 func (x *GetLoanProductRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[8]
+	mi := &file_reference_v1_reference_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -705,7 +1422,7 @@ func (x *GetLoanProductRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLoanProductRequest.ProtoReflect.Descriptor instead.
 func (*GetLoanProductRequest) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{8}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetLoanProductRequest) GetId() string {
@@ -724,7 +1441,7 @@ type ListLoanProductsResponse struct {
 
 func (x *ListLoanProductsResponse) Reset() {
 	*x = ListLoanProductsResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[9]
+	mi := &file_reference_v1_reference_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -736,7 +1453,7 @@ func (x *ListLoanProductsResponse) String() string {
 func (*ListLoanProductsResponse) ProtoMessage() {}
 
 func (x *ListLoanProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[9]
+	mi := &file_reference_v1_reference_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -749,7 +1466,7 @@ func (x *ListLoanProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLoanProductsResponse.ProtoReflect.Descriptor instead.
 func (*ListLoanProductsResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{9}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListLoanProductsResponse) GetProducts() []*LoanProduct {
@@ -768,7 +1485,7 @@ type ListBranchesResponse struct {
 
 func (x *ListBranchesResponse) Reset() {
 	*x = ListBranchesResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[10]
+	mi := &file_reference_v1_reference_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -780,7 +1497,7 @@ func (x *ListBranchesResponse) String() string {
 func (*ListBranchesResponse) ProtoMessage() {}
 
 func (x *ListBranchesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[10]
+	mi := &file_reference_v1_reference_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -793,7 +1510,7 @@ func (x *ListBranchesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBranchesResponse.ProtoReflect.Descriptor instead.
 func (*ListBranchesResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{10}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ListBranchesResponse) GetBranches() []*Branch {
@@ -812,7 +1529,7 @@ type ListLoanOfficersRequest struct {
 
 func (x *ListLoanOfficersRequest) Reset() {
 	*x = ListLoanOfficersRequest{}
-	mi := &file_reference_v1_reference_proto_msgTypes[11]
+	mi := &file_reference_v1_reference_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -824,7 +1541,7 @@ func (x *ListLoanOfficersRequest) String() string {
 func (*ListLoanOfficersRequest) ProtoMessage() {}
 
 func (x *ListLoanOfficersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[11]
+	mi := &file_reference_v1_reference_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -837,7 +1554,7 @@ func (x *ListLoanOfficersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLoanOfficersRequest.ProtoReflect.Descriptor instead.
 func (*ListLoanOfficersRequest) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{11}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListLoanOfficersRequest) GetBranchCode() string {
@@ -856,7 +1573,7 @@ type ListLoanOfficersResponse struct {
 
 func (x *ListLoanOfficersResponse) Reset() {
 	*x = ListLoanOfficersResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[12]
+	mi := &file_reference_v1_reference_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -868,7 +1585,7 @@ func (x *ListLoanOfficersResponse) String() string {
 func (*ListLoanOfficersResponse) ProtoMessage() {}
 
 func (x *ListLoanOfficersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[12]
+	mi := &file_reference_v1_reference_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -881,7 +1598,7 @@ func (x *ListLoanOfficersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLoanOfficersResponse.ProtoReflect.Descriptor instead.
 func (*ListLoanOfficersResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{12}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListLoanOfficersResponse) GetOfficers() []*LoanOfficer {
@@ -900,7 +1617,7 @@ type ListApplicationStatusesResponse struct {
 
 func (x *ListApplicationStatusesResponse) Reset() {
 	*x = ListApplicationStatusesResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[13]
+	mi := &file_reference_v1_reference_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -912,7 +1629,7 @@ func (x *ListApplicationStatusesResponse) String() string {
 func (*ListApplicationStatusesResponse) ProtoMessage() {}
 
 func (x *ListApplicationStatusesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[13]
+	mi := &file_reference_v1_reference_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -925,7 +1642,7 @@ func (x *ListApplicationStatusesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListApplicationStatusesResponse.ProtoReflect.Descriptor instead.
 func (*ListApplicationStatusesResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{13}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *ListApplicationStatusesResponse) GetStatuses() []*ApplicationStatusRef {
@@ -935,28 +1652,28 @@ func (x *ListApplicationStatusesResponse) GetStatuses() []*ApplicationStatusRef 
 	return nil
 }
 
-type ListAttributeRegistryResponse struct {
+type ListFinancialGLAccountsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Attributes    []*AttributeRegistry   `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	Accounts      []*FinancialGLAccount  `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListAttributeRegistryResponse) Reset() {
-	*x = ListAttributeRegistryResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[14]
+func (x *ListFinancialGLAccountsResponse) Reset() {
+	*x = ListFinancialGLAccountsResponse{}
+	mi := &file_reference_v1_reference_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListAttributeRegistryResponse) String() string {
+func (x *ListFinancialGLAccountsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListAttributeRegistryResponse) ProtoMessage() {}
+func (*ListFinancialGLAccountsResponse) ProtoMessage() {}
 
-func (x *ListAttributeRegistryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[14]
+func (x *ListFinancialGLAccountsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_reference_v1_reference_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -967,14 +1684,14 @@ func (x *ListAttributeRegistryResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListAttributeRegistryResponse.ProtoReflect.Descriptor instead.
-func (*ListAttributeRegistryResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{14}
+// Deprecated: Use ListFinancialGLAccountsResponse.ProtoReflect.Descriptor instead.
+func (*ListFinancialGLAccountsResponse) Descriptor() ([]byte, []int) {
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{25}
 }
 
-func (x *ListAttributeRegistryResponse) GetAttributes() []*AttributeRegistry {
+func (x *ListFinancialGLAccountsResponse) GetAccounts() []*FinancialGLAccount {
 	if x != nil {
-		return x.Attributes
+		return x.Accounts
 	}
 	return nil
 }
@@ -989,7 +1706,7 @@ type ListSurveyTemplatesRequest struct {
 
 func (x *ListSurveyTemplatesRequest) Reset() {
 	*x = ListSurveyTemplatesRequest{}
-	mi := &file_reference_v1_reference_proto_msgTypes[15]
+	mi := &file_reference_v1_reference_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1001,7 +1718,7 @@ func (x *ListSurveyTemplatesRequest) String() string {
 func (*ListSurveyTemplatesRequest) ProtoMessage() {}
 
 func (x *ListSurveyTemplatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[15]
+	mi := &file_reference_v1_reference_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1014,7 +1731,7 @@ func (x *ListSurveyTemplatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSurveyTemplatesRequest.ProtoReflect.Descriptor instead.
 func (*ListSurveyTemplatesRequest) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{15}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *ListSurveyTemplatesRequest) GetApplicantType() string {
@@ -1040,7 +1757,7 @@ type ListSurveyTemplatesResponse struct {
 
 func (x *ListSurveyTemplatesResponse) Reset() {
 	*x = ListSurveyTemplatesResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[16]
+	mi := &file_reference_v1_reference_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1052,7 +1769,7 @@ func (x *ListSurveyTemplatesResponse) String() string {
 func (*ListSurveyTemplatesResponse) ProtoMessage() {}
 
 func (x *ListSurveyTemplatesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[16]
+	mi := &file_reference_v1_reference_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1065,7 +1782,7 @@ func (x *ListSurveyTemplatesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSurveyTemplatesResponse.ProtoReflect.Descriptor instead.
 func (*ListSurveyTemplatesResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{16}
+	return file_reference_v1_reference_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ListSurveyTemplatesResponse) GetTemplates() []*SurveyTemplate {
@@ -1075,70 +1792,93 @@ func (x *ListSurveyTemplatesResponse) GetTemplates() []*SurveyTemplate {
 	return nil
 }
 
-type ListFinancialGLAccountsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Accounts      []*FinancialGLAccount  `protobuf:"bytes,1,rep,name=accounts,proto3" json:"accounts,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListFinancialGLAccountsResponse) Reset() {
-	*x = ListFinancialGLAccountsResponse{}
-	mi := &file_reference_v1_reference_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListFinancialGLAccountsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListFinancialGLAccountsResponse) ProtoMessage() {}
-
-func (x *ListFinancialGLAccountsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reference_v1_reference_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListFinancialGLAccountsResponse.ProtoReflect.Descriptor instead.
-func (*ListFinancialGLAccountsResponse) Descriptor() ([]byte, []int) {
-	return file_reference_v1_reference_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *ListFinancialGLAccountsResponse) GetAccounts() []*FinancialGLAccount {
-	if x != nil {
-		return x.Accounts
-	}
-	return nil
-}
-
 var File_reference_v1_reference_proto protoreflect.FileDescriptor
 
 const file_reference_v1_reference_proto_rawDesc = "" +
 	"\n" +
-	"\x1creference/v1/reference.proto\x12\x10api.reference.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xd3\x02\n" +
+	"\x1creference/v1/reference.proto\x12\x10api.reference.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xbd\x01\n" +
+	"\x11AttributeCategory\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\x12#\n" +
+	"\rcategory_name\x18\x02 \x01(\tR\fcategoryName\x12\x17\n" +
+	"\aui_icon\x18\x03 \x01(\tR\x06uiIcon\x12#\n" +
+	"\rdisplay_order\x18\x04 \x01(\x05R\fdisplayOrder\x12 \n" +
+	"\vdescription\x18\x05 \x01(\tR\vdescription\"f\n" +
+	"\x1fListAttributeCategoriesResponse\x12C\n" +
+	"\n" +
+	"categories\x18\x01 \x03(\v2#.api.reference.v1.AttributeCategoryR\n" +
+	"categories\"B\n" +
+	"\x1bGetAttributeCategoryRequest\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xca\x01\n" +
+	"\x1eCreateAttributeCategoryRequest\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\x12#\n" +
+	"\rcategory_name\x18\x02 \x01(\tR\fcategoryName\x12\x17\n" +
+	"\aui_icon\x18\x03 \x01(\tR\x06uiIcon\x12#\n" +
+	"\rdisplay_order\x18\x04 \x01(\x05R\fdisplayOrder\x12 \n" +
+	"\vdescription\x18\x05 \x01(\tR\vdescription\"\xca\x01\n" +
+	"\x1eUpdateAttributeCategoryRequest\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\x12#\n" +
+	"\rcategory_name\x18\x02 \x01(\tR\fcategoryName\x12\x17\n" +
+	"\aui_icon\x18\x03 \x01(\tR\x06uiIcon\x12#\n" +
+	"\rdisplay_order\x18\x04 \x01(\x05R\fdisplayOrder\x12 \n" +
+	"\vdescription\x18\x05 \x01(\tR\vdescription\"E\n" +
+	"\x1eDeleteAttributeCategoryRequest\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xd0\x01\n" +
+	"\x0fAttributeOption\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
+	"\x0eattribute_code\x18\x02 \x01(\tR\rattributeCode\x12!\n" +
+	"\foption_value\x18\x03 \x01(\tR\voptionValue\x12!\n" +
+	"\foption_label\x18\x04 \x01(\tR\voptionLabel\x12#\n" +
+	"\rdisplay_order\x18\x05 \x01(\x05R\fdisplayOrder\x12\x1b\n" +
+	"\tis_active\x18\x06 \x01(\bR\bisActive\"\xaa\x03\n" +
+	"\x11AttributeRegistry\x12\x19\n" +
+	"\battr_key\x18\x01 \x01(\tR\aattrKey\x12\x1d\n" +
+	"\n" +
+	"applies_to\x18\x02 \x01(\tR\tappliesTo\x12\x14\n" +
+	"\x05scope\x18\x03 \x01(\tR\x05scope\x12\x1b\n" +
+	"\tdata_type\x18\x04 \x01(\tR\bdataType\x12#\n" +
+	"\rcategory_code\x18\x05 \x01(\tR\fcategoryCode\x12\x19\n" +
+	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1a\n" +
+	"\brequired\x18\a \x01(\bR\brequired\x12#\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\x12#\n" +
+	"\rcategory_name\x18\n" +
+	" \x01(\tR\fcategoryName\x12#\n" +
+	"\rcategory_icon\x18\v \x01(\tR\fcategoryIcon\x12;\n" +
+	"\aoptions\x18\f \x03(\v2!.api.reference.v1.AttributeOptionR\aoptions\"d\n" +
+	"\x1dListAttributeRegistryResponse\x12C\n" +
+	"\n" +
+	"attributes\x18\x01 \x03(\v2#.api.reference.v1.AttributeRegistryR\n" +
+	"attributes\"M\n" +
+	"&ListAttributeRegistryByCategoryRequest\x12#\n" +
+	"\rcategory_code\x18\x01 \x01(\tR\fcategoryCode\"\xc3\x02\n" +
 	"\x1eCreateAttributeRegistryRequest\x12%\n" +
 	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
 	"\n" +
 	"applies_to\x18\x02 \x01(\tR\tappliesTo\x12\x14\n" +
 	"\x05scope\x18\x03 \x01(\tR\x05scope\x12\x1d\n" +
 	"\n" +
-	"value_type\x18\x04 \x01(\tR\tvalueType\x12\x1a\n" +
-	"\bcategory\x18\x05 \x01(\tR\bcategory\x12\x1f\n" +
-	"\vis_required\x18\x06 \x01(\bR\n" +
+	"value_type\x18\x04 \x01(\tR\tvalueType\x12#\n" +
+	"\rcategory_code\x18\x05 \x01(\tR\fcategoryCode\x12\x19\n" +
+	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1f\n" +
+	"\vis_required\x18\a \x01(\bR\n" +
 	"isRequired\x12#\n" +
-	"\rrisk_relevant\x18\a \x01(\bR\friskRelevant\x12 \n" +
-	"\vdescription\x18\b \x01(\tR\vdescription\x12\x17\n" +
-	"\aui_icon\x18\t \x01(\tR\x06uiIcon\x12\x19\n" +
-	"\bui_label\x18\n" +
-	" \x01(\tR\auiLabel\"\x95\x01\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\"\xc3\x02\n" +
+	"\x1eUpdateAttributeRegistryRequest\x12%\n" +
+	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\x12\x1d\n" +
+	"\n" +
+	"applies_to\x18\x02 \x01(\tR\tappliesTo\x12\x14\n" +
+	"\x05scope\x18\x03 \x01(\tR\x05scope\x12\x1d\n" +
+	"\n" +
+	"value_type\x18\x04 \x01(\tR\tvalueType\x12#\n" +
+	"\rcategory_code\x18\x05 \x01(\tR\fcategoryCode\x12\x19\n" +
+	"\bui_label\x18\x06 \x01(\tR\auiLabel\x12\x1f\n" +
+	"\vis_required\x18\a \x01(\bR\n" +
+	"isRequired\x12#\n" +
+	"\rrisk_relevant\x18\b \x01(\bR\friskRelevant\x12 \n" +
+	"\vdescription\x18\t \x01(\tR\vdescription\"G\n" +
+	"\x1eDeleteAttributeRegistryRequest\x12%\n" +
+	"\x0eattribute_code\x18\x01 \x01(\tR\rattributeCode\"\x95\x01\n" +
 	"\vLoanProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fproduct_code\x18\x02 \x01(\tR\vproductCode\x12!\n" +
@@ -1163,22 +1903,7 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\fstatus_group\x18\x02 \x01(\tR\vstatusGroup\x12\x1f\n" +
 	"\vis_terminal\x18\x03 \x01(\bR\n" +
 	"isTerminal\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\"\xd4\x01\n" +
-	"\x11AttributeRegistry\x12\x19\n" +
-	"\battr_key\x18\x01 \x01(\tR\aattrKey\x12\x1b\n" +
-	"\tattr_name\x18\x02 \x01(\tR\battrName\x12\x1b\n" +
-	"\tdata_type\x18\x03 \x01(\tR\bdataType\x12\x1a\n" +
-	"\bcategory\x18\x04 \x01(\tR\bcategory\x12\x1a\n" +
-	"\brequired\x18\x05 \x01(\bR\brequired\x12\x17\n" +
-	"\aui_icon\x18\x06 \x01(\tR\x06uiIcon\x12\x19\n" +
-	"\bui_label\x18\a \x01(\tR\auiLabel\"\xb0\x01\n" +
-	"\x0eSurveyTemplate\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
-	"\rtemplate_code\x18\x02 \x01(\tR\ftemplateCode\x12#\n" +
-	"\rtemplate_name\x18\x03 \x01(\tR\ftemplateName\x12%\n" +
-	"\x0eapplicant_type\x18\x04 \x01(\tR\rapplicantType\x12\x1d\n" +
-	"\n" +
-	"product_id\x18\x05 \x01(\tR\tproductId\"\x8a\x02\n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\"\x8a\x02\n" +
 	"\x12FinancialGLAccount\x12\x17\n" +
 	"\agl_code\x18\x01 \x01(\tR\x06glCode\x12\x17\n" +
 	"\agl_name\x18\x02 \x01(\tR\x06glName\x12%\n" +
@@ -1187,7 +1912,14 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\x04sign\x18\x05 \x01(\x05R\x04sign\x12&\n" +
 	"\x0fis_debt_service\x18\x06 \x01(\bR\risDebtService\x12!\n" +
 	"\fis_operating\x18\a \x01(\bR\visOperating\x12 \n" +
-	"\vdescription\x18\b \x01(\tR\vdescription\"'\n" +
+	"\vdescription\x18\b \x01(\tR\vdescription\"\xb0\x01\n" +
+	"\x0eSurveyTemplate\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
+	"\rtemplate_code\x18\x02 \x01(\tR\ftemplateCode\x12#\n" +
+	"\rtemplate_name\x18\x03 \x01(\tR\ftemplateName\x12%\n" +
+	"\x0eapplicant_type\x18\x04 \x01(\tR\rapplicantType\x12\x1d\n" +
+	"\n" +
+	"product_id\x18\x05 \x01(\tR\tproductId\"'\n" +
 	"\x15GetLoanProductRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"U\n" +
 	"\x18ListLoanProductsResponse\x129\n" +
@@ -1200,30 +1932,33 @@ const file_reference_v1_reference_proto_rawDesc = "" +
 	"\x18ListLoanOfficersResponse\x129\n" +
 	"\bofficers\x18\x01 \x03(\v2\x1d.api.reference.v1.LoanOfficerR\bofficers\"e\n" +
 	"\x1fListApplicationStatusesResponse\x12B\n" +
-	"\bstatuses\x18\x01 \x03(\v2&.api.reference.v1.ApplicationStatusRefR\bstatuses\"d\n" +
-	"\x1dListAttributeRegistryResponse\x12C\n" +
-	"\n" +
-	"attributes\x18\x01 \x03(\v2#.api.reference.v1.AttributeRegistryR\n" +
-	"attributes\"b\n" +
+	"\bstatuses\x18\x01 \x03(\v2&.api.reference.v1.ApplicationStatusRefR\bstatuses\"c\n" +
+	"\x1fListFinancialGLAccountsResponse\x12@\n" +
+	"\baccounts\x18\x01 \x03(\v2$.api.reference.v1.FinancialGLAccountR\baccounts\"b\n" +
 	"\x1aListSurveyTemplatesRequest\x12%\n" +
 	"\x0eapplicant_type\x18\x01 \x01(\tR\rapplicantType\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x02 \x01(\tR\tproductId\"]\n" +
 	"\x1bListSurveyTemplatesResponse\x12>\n" +
-	"\ttemplates\x18\x01 \x03(\v2 .api.reference.v1.SurveyTemplateR\ttemplates\"c\n" +
-	"\x1fListFinancialGLAccountsResponse\x12@\n" +
-	"\baccounts\x18\x01 \x03(\v2$.api.reference.v1.FinancialGLAccountR\baccounts2\x81\n" +
-	"\n" +
+	"\ttemplates\x18\x01 \x03(\v2 .api.reference.v1.SurveyTemplateR\ttemplates2\xcd\x14\n" +
 	"\x10ReferenceService\x12{\n" +
 	"\x10ListLoanProducts\x12\x16.google.protobuf.Empty\x1a*.api.reference.v1.ListLoanProductsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/reference/loan-products\x12\x82\x01\n" +
 	"\x0eGetLoanProduct\x12'.api.reference.v1.GetLoanProductRequest\x1a\x1d.api.reference.v1.LoanProduct\"(\x82\xd3\xe4\x93\x02\"\x12 /v1/reference/loan-products/{id}\x12n\n" +
 	"\fListBranches\x12\x16.google.protobuf.Empty\x1a&.api.reference.v1.ListBranchesResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/reference/branches\x12\xa0\x01\n" +
 	"\x10ListLoanOfficers\x12).api.reference.v1.ListLoanOfficersRequest\x1a*.api.reference.v1.ListLoanOfficersResponse\"5\x82\xd3\xe4\x93\x02/\x12-/v1/reference/branches/{branch_code}/officers\x12\x90\x01\n" +
-	"\x17ListApplicationStatuses\x12\x16.google.protobuf.Empty\x1a1.api.reference.v1.ListApplicationStatusesResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/v1/reference/application-statuses\x12\x8a\x01\n" +
-	"\x15ListAttributeRegistry\x12\x16.google.protobuf.Empty\x1a/.api.reference.v1.ListAttributeRegistryResponse\"(\x82\xd3\xe4\x93\x02\"\x12 /v1/reference/attribute-registry\x12\x9a\x01\n" +
-	"\x13ListSurveyTemplates\x12,.api.reference.v1.ListSurveyTemplatesRequest\x1a-.api.reference.v1.ListSurveyTemplatesResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/v1/reference/survey-templates\x12\x87\x01\n" +
+	"\x17ListApplicationStatuses\x12\x16.google.protobuf.Empty\x1a1.api.reference.v1.ListApplicationStatusesResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/v1/reference/application-statuses\x12\x87\x01\n" +
 	"\x17ListFinancialGLAccounts\x12\x16.google.protobuf.Empty\x1a1.api.reference.v1.ListFinancialGLAccountsResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/reference/gl-accounts\x12\x90\x01\n" +
-	"\x17CreateAttributeRegistry\x120.api.reference.v1.CreateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/reference/attribute-registryBB\n" +
+	"\x17ListAttributeCategories\x12\x16.google.protobuf.Empty\x1a1.api.reference.v1.ListAttributeCategoriesResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/v1/reference/attribute-categories\x12\xa6\x01\n" +
+	"\x14GetAttributeCategory\x12-.api.reference.v1.GetAttributeCategoryRequest\x1a#.api.reference.v1.AttributeCategory\":\x82\xd3\xe4\x93\x024\x122/v1/reference/attribute-categories/{category_code}\x12\x9f\x01\n" +
+	"\x17CreateAttributeCategory\x120.api.reference.v1.CreateAttributeCategoryRequest\x1a#.api.reference.v1.AttributeCategory\"-\x82\xd3\xe4\x93\x02':\x01*\"\"/v1/reference/attribute-categories\x12\xaf\x01\n" +
+	"\x17UpdateAttributeCategory\x120.api.reference.v1.UpdateAttributeCategoryRequest\x1a#.api.reference.v1.AttributeCategory\"=\x82\xd3\xe4\x93\x027:\x01*\x1a2/v1/reference/attribute-categories/{category_code}\x12\x9f\x01\n" +
+	"\x17DeleteAttributeCategory\x120.api.reference.v1.DeleteAttributeCategoryRequest\x1a\x16.google.protobuf.Empty\":\x82\xd3\xe4\x93\x024*2/v1/reference/attribute-categories/{category_code}\x12\x8a\x01\n" +
+	"\x15ListAttributeRegistry\x12\x16.google.protobuf.Empty\x1a/.api.reference.v1.ListAttributeRegistryResponse\"(\x82\xd3\xe4\x93\x02\"\x12 /v1/reference/attribute-registry\x12\xd2\x01\n" +
+	"\x1fListAttributeRegistryByCategory\x128.api.reference.v1.ListAttributeRegistryByCategoryRequest\x1a/.api.reference.v1.ListAttributeRegistryResponse\"D\x82\xd3\xe4\x93\x02>\x12</v1/reference/attribute-registry/by-category/{category_code}\x12\x90\x01\n" +
+	"\x17CreateAttributeRegistry\x120.api.reference.v1.CreateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/reference/attribute-registry\x12\xa1\x01\n" +
+	"\x17UpdateAttributeRegistry\x120.api.reference.v1.UpdateAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"<\x82\xd3\xe4\x93\x026:\x01*\x1a1/v1/reference/attribute-registry/{attribute_code}\x12\x9e\x01\n" +
+	"\x17DeleteAttributeRegistry\x120.api.reference.v1.DeleteAttributeRegistryRequest\x1a\x16.google.protobuf.Empty\"9\x82\xd3\xe4\x93\x023*1/v1/reference/attribute-registry/{attribute_code}\x12\x9a\x01\n" +
+	"\x13ListSurveyTemplates\x12,.api.reference.v1.ListSurveyTemplatesRequest\x1a-.api.reference.v1.ListSurveyTemplatesResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/v1/reference/survey-templatesBB\n" +
 	"\x10api.reference.v1P\x01Z,credit-analytics-backend/api/reference/v1;v1b\x06proto3"
 
 var (
@@ -1238,59 +1973,87 @@ func file_reference_v1_reference_proto_rawDescGZIP() []byte {
 	return file_reference_v1_reference_proto_rawDescData
 }
 
-var file_reference_v1_reference_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_reference_v1_reference_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_reference_v1_reference_proto_goTypes = []any{
-	(*CreateAttributeRegistryRequest)(nil),  // 0: api.reference.v1.CreateAttributeRegistryRequest
-	(*LoanProduct)(nil),                     // 1: api.reference.v1.LoanProduct
-	(*Branch)(nil),                          // 2: api.reference.v1.Branch
-	(*LoanOfficer)(nil),                     // 3: api.reference.v1.LoanOfficer
-	(*ApplicationStatusRef)(nil),            // 4: api.reference.v1.ApplicationStatusRef
-	(*AttributeRegistry)(nil),               // 5: api.reference.v1.AttributeRegistry
-	(*SurveyTemplate)(nil),                  // 6: api.reference.v1.SurveyTemplate
-	(*FinancialGLAccount)(nil),              // 7: api.reference.v1.FinancialGLAccount
-	(*GetLoanProductRequest)(nil),           // 8: api.reference.v1.GetLoanProductRequest
-	(*ListLoanProductsResponse)(nil),        // 9: api.reference.v1.ListLoanProductsResponse
-	(*ListBranchesResponse)(nil),            // 10: api.reference.v1.ListBranchesResponse
-	(*ListLoanOfficersRequest)(nil),         // 11: api.reference.v1.ListLoanOfficersRequest
-	(*ListLoanOfficersResponse)(nil),        // 12: api.reference.v1.ListLoanOfficersResponse
-	(*ListApplicationStatusesResponse)(nil), // 13: api.reference.v1.ListApplicationStatusesResponse
-	(*ListAttributeRegistryResponse)(nil),   // 14: api.reference.v1.ListAttributeRegistryResponse
-	(*ListSurveyTemplatesRequest)(nil),      // 15: api.reference.v1.ListSurveyTemplatesRequest
-	(*ListSurveyTemplatesResponse)(nil),     // 16: api.reference.v1.ListSurveyTemplatesResponse
-	(*ListFinancialGLAccountsResponse)(nil), // 17: api.reference.v1.ListFinancialGLAccountsResponse
-	(*emptypb.Empty)(nil),                   // 18: google.protobuf.Empty
+	(*AttributeCategory)(nil),                      // 0: api.reference.v1.AttributeCategory
+	(*ListAttributeCategoriesResponse)(nil),        // 1: api.reference.v1.ListAttributeCategoriesResponse
+	(*GetAttributeCategoryRequest)(nil),            // 2: api.reference.v1.GetAttributeCategoryRequest
+	(*CreateAttributeCategoryRequest)(nil),         // 3: api.reference.v1.CreateAttributeCategoryRequest
+	(*UpdateAttributeCategoryRequest)(nil),         // 4: api.reference.v1.UpdateAttributeCategoryRequest
+	(*DeleteAttributeCategoryRequest)(nil),         // 5: api.reference.v1.DeleteAttributeCategoryRequest
+	(*AttributeOption)(nil),                        // 6: api.reference.v1.AttributeOption
+	(*AttributeRegistry)(nil),                      // 7: api.reference.v1.AttributeRegistry
+	(*ListAttributeRegistryResponse)(nil),          // 8: api.reference.v1.ListAttributeRegistryResponse
+	(*ListAttributeRegistryByCategoryRequest)(nil), // 9: api.reference.v1.ListAttributeRegistryByCategoryRequest
+	(*CreateAttributeRegistryRequest)(nil),         // 10: api.reference.v1.CreateAttributeRegistryRequest
+	(*UpdateAttributeRegistryRequest)(nil),         // 11: api.reference.v1.UpdateAttributeRegistryRequest
+	(*DeleteAttributeRegistryRequest)(nil),         // 12: api.reference.v1.DeleteAttributeRegistryRequest
+	(*LoanProduct)(nil),                            // 13: api.reference.v1.LoanProduct
+	(*Branch)(nil),                                 // 14: api.reference.v1.Branch
+	(*LoanOfficer)(nil),                            // 15: api.reference.v1.LoanOfficer
+	(*ApplicationStatusRef)(nil),                   // 16: api.reference.v1.ApplicationStatusRef
+	(*FinancialGLAccount)(nil),                     // 17: api.reference.v1.FinancialGLAccount
+	(*SurveyTemplate)(nil),                         // 18: api.reference.v1.SurveyTemplate
+	(*GetLoanProductRequest)(nil),                  // 19: api.reference.v1.GetLoanProductRequest
+	(*ListLoanProductsResponse)(nil),               // 20: api.reference.v1.ListLoanProductsResponse
+	(*ListBranchesResponse)(nil),                   // 21: api.reference.v1.ListBranchesResponse
+	(*ListLoanOfficersRequest)(nil),                // 22: api.reference.v1.ListLoanOfficersRequest
+	(*ListLoanOfficersResponse)(nil),               // 23: api.reference.v1.ListLoanOfficersResponse
+	(*ListApplicationStatusesResponse)(nil),        // 24: api.reference.v1.ListApplicationStatusesResponse
+	(*ListFinancialGLAccountsResponse)(nil),        // 25: api.reference.v1.ListFinancialGLAccountsResponse
+	(*ListSurveyTemplatesRequest)(nil),             // 26: api.reference.v1.ListSurveyTemplatesRequest
+	(*ListSurveyTemplatesResponse)(nil),            // 27: api.reference.v1.ListSurveyTemplatesResponse
+	(*emptypb.Empty)(nil),                          // 28: google.protobuf.Empty
 }
 var file_reference_v1_reference_proto_depIdxs = []int32{
-	1,  // 0: api.reference.v1.ListLoanProductsResponse.products:type_name -> api.reference.v1.LoanProduct
-	2,  // 1: api.reference.v1.ListBranchesResponse.branches:type_name -> api.reference.v1.Branch
-	3,  // 2: api.reference.v1.ListLoanOfficersResponse.officers:type_name -> api.reference.v1.LoanOfficer
-	4,  // 3: api.reference.v1.ListApplicationStatusesResponse.statuses:type_name -> api.reference.v1.ApplicationStatusRef
-	5,  // 4: api.reference.v1.ListAttributeRegistryResponse.attributes:type_name -> api.reference.v1.AttributeRegistry
-	6,  // 5: api.reference.v1.ListSurveyTemplatesResponse.templates:type_name -> api.reference.v1.SurveyTemplate
-	7,  // 6: api.reference.v1.ListFinancialGLAccountsResponse.accounts:type_name -> api.reference.v1.FinancialGLAccount
-	18, // 7: api.reference.v1.ReferenceService.ListLoanProducts:input_type -> google.protobuf.Empty
-	8,  // 8: api.reference.v1.ReferenceService.GetLoanProduct:input_type -> api.reference.v1.GetLoanProductRequest
-	18, // 9: api.reference.v1.ReferenceService.ListBranches:input_type -> google.protobuf.Empty
-	11, // 10: api.reference.v1.ReferenceService.ListLoanOfficers:input_type -> api.reference.v1.ListLoanOfficersRequest
-	18, // 11: api.reference.v1.ReferenceService.ListApplicationStatuses:input_type -> google.protobuf.Empty
-	18, // 12: api.reference.v1.ReferenceService.ListAttributeRegistry:input_type -> google.protobuf.Empty
-	15, // 13: api.reference.v1.ReferenceService.ListSurveyTemplates:input_type -> api.reference.v1.ListSurveyTemplatesRequest
-	18, // 14: api.reference.v1.ReferenceService.ListFinancialGLAccounts:input_type -> google.protobuf.Empty
-	0,  // 15: api.reference.v1.ReferenceService.CreateAttributeRegistry:input_type -> api.reference.v1.CreateAttributeRegistryRequest
-	9,  // 16: api.reference.v1.ReferenceService.ListLoanProducts:output_type -> api.reference.v1.ListLoanProductsResponse
-	1,  // 17: api.reference.v1.ReferenceService.GetLoanProduct:output_type -> api.reference.v1.LoanProduct
-	10, // 18: api.reference.v1.ReferenceService.ListBranches:output_type -> api.reference.v1.ListBranchesResponse
-	12, // 19: api.reference.v1.ReferenceService.ListLoanOfficers:output_type -> api.reference.v1.ListLoanOfficersResponse
-	13, // 20: api.reference.v1.ReferenceService.ListApplicationStatuses:output_type -> api.reference.v1.ListApplicationStatusesResponse
-	14, // 21: api.reference.v1.ReferenceService.ListAttributeRegistry:output_type -> api.reference.v1.ListAttributeRegistryResponse
-	16, // 22: api.reference.v1.ReferenceService.ListSurveyTemplates:output_type -> api.reference.v1.ListSurveyTemplatesResponse
-	17, // 23: api.reference.v1.ReferenceService.ListFinancialGLAccounts:output_type -> api.reference.v1.ListFinancialGLAccountsResponse
-	18, // 24: api.reference.v1.ReferenceService.CreateAttributeRegistry:output_type -> google.protobuf.Empty
-	16, // [16:25] is the sub-list for method output_type
-	7,  // [7:16] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	0,  // 0: api.reference.v1.ListAttributeCategoriesResponse.categories:type_name -> api.reference.v1.AttributeCategory
+	6,  // 1: api.reference.v1.AttributeRegistry.options:type_name -> api.reference.v1.AttributeOption
+	7,  // 2: api.reference.v1.ListAttributeRegistryResponse.attributes:type_name -> api.reference.v1.AttributeRegistry
+	13, // 3: api.reference.v1.ListLoanProductsResponse.products:type_name -> api.reference.v1.LoanProduct
+	14, // 4: api.reference.v1.ListBranchesResponse.branches:type_name -> api.reference.v1.Branch
+	15, // 5: api.reference.v1.ListLoanOfficersResponse.officers:type_name -> api.reference.v1.LoanOfficer
+	16, // 6: api.reference.v1.ListApplicationStatusesResponse.statuses:type_name -> api.reference.v1.ApplicationStatusRef
+	17, // 7: api.reference.v1.ListFinancialGLAccountsResponse.accounts:type_name -> api.reference.v1.FinancialGLAccount
+	18, // 8: api.reference.v1.ListSurveyTemplatesResponse.templates:type_name -> api.reference.v1.SurveyTemplate
+	28, // 9: api.reference.v1.ReferenceService.ListLoanProducts:input_type -> google.protobuf.Empty
+	19, // 10: api.reference.v1.ReferenceService.GetLoanProduct:input_type -> api.reference.v1.GetLoanProductRequest
+	28, // 11: api.reference.v1.ReferenceService.ListBranches:input_type -> google.protobuf.Empty
+	22, // 12: api.reference.v1.ReferenceService.ListLoanOfficers:input_type -> api.reference.v1.ListLoanOfficersRequest
+	28, // 13: api.reference.v1.ReferenceService.ListApplicationStatuses:input_type -> google.protobuf.Empty
+	28, // 14: api.reference.v1.ReferenceService.ListFinancialGLAccounts:input_type -> google.protobuf.Empty
+	28, // 15: api.reference.v1.ReferenceService.ListAttributeCategories:input_type -> google.protobuf.Empty
+	2,  // 16: api.reference.v1.ReferenceService.GetAttributeCategory:input_type -> api.reference.v1.GetAttributeCategoryRequest
+	3,  // 17: api.reference.v1.ReferenceService.CreateAttributeCategory:input_type -> api.reference.v1.CreateAttributeCategoryRequest
+	4,  // 18: api.reference.v1.ReferenceService.UpdateAttributeCategory:input_type -> api.reference.v1.UpdateAttributeCategoryRequest
+	5,  // 19: api.reference.v1.ReferenceService.DeleteAttributeCategory:input_type -> api.reference.v1.DeleteAttributeCategoryRequest
+	28, // 20: api.reference.v1.ReferenceService.ListAttributeRegistry:input_type -> google.protobuf.Empty
+	9,  // 21: api.reference.v1.ReferenceService.ListAttributeRegistryByCategory:input_type -> api.reference.v1.ListAttributeRegistryByCategoryRequest
+	10, // 22: api.reference.v1.ReferenceService.CreateAttributeRegistry:input_type -> api.reference.v1.CreateAttributeRegistryRequest
+	11, // 23: api.reference.v1.ReferenceService.UpdateAttributeRegistry:input_type -> api.reference.v1.UpdateAttributeRegistryRequest
+	12, // 24: api.reference.v1.ReferenceService.DeleteAttributeRegistry:input_type -> api.reference.v1.DeleteAttributeRegistryRequest
+	26, // 25: api.reference.v1.ReferenceService.ListSurveyTemplates:input_type -> api.reference.v1.ListSurveyTemplatesRequest
+	20, // 26: api.reference.v1.ReferenceService.ListLoanProducts:output_type -> api.reference.v1.ListLoanProductsResponse
+	13, // 27: api.reference.v1.ReferenceService.GetLoanProduct:output_type -> api.reference.v1.LoanProduct
+	21, // 28: api.reference.v1.ReferenceService.ListBranches:output_type -> api.reference.v1.ListBranchesResponse
+	23, // 29: api.reference.v1.ReferenceService.ListLoanOfficers:output_type -> api.reference.v1.ListLoanOfficersResponse
+	24, // 30: api.reference.v1.ReferenceService.ListApplicationStatuses:output_type -> api.reference.v1.ListApplicationStatusesResponse
+	25, // 31: api.reference.v1.ReferenceService.ListFinancialGLAccounts:output_type -> api.reference.v1.ListFinancialGLAccountsResponse
+	1,  // 32: api.reference.v1.ReferenceService.ListAttributeCategories:output_type -> api.reference.v1.ListAttributeCategoriesResponse
+	0,  // 33: api.reference.v1.ReferenceService.GetAttributeCategory:output_type -> api.reference.v1.AttributeCategory
+	0,  // 34: api.reference.v1.ReferenceService.CreateAttributeCategory:output_type -> api.reference.v1.AttributeCategory
+	0,  // 35: api.reference.v1.ReferenceService.UpdateAttributeCategory:output_type -> api.reference.v1.AttributeCategory
+	28, // 36: api.reference.v1.ReferenceService.DeleteAttributeCategory:output_type -> google.protobuf.Empty
+	8,  // 37: api.reference.v1.ReferenceService.ListAttributeRegistry:output_type -> api.reference.v1.ListAttributeRegistryResponse
+	8,  // 38: api.reference.v1.ReferenceService.ListAttributeRegistryByCategory:output_type -> api.reference.v1.ListAttributeRegistryResponse
+	28, // 39: api.reference.v1.ReferenceService.CreateAttributeRegistry:output_type -> google.protobuf.Empty
+	28, // 40: api.reference.v1.ReferenceService.UpdateAttributeRegistry:output_type -> google.protobuf.Empty
+	28, // 41: api.reference.v1.ReferenceService.DeleteAttributeRegistry:output_type -> google.protobuf.Empty
+	27, // 42: api.reference.v1.ReferenceService.ListSurveyTemplates:output_type -> api.reference.v1.ListSurveyTemplatesResponse
+	26, // [26:43] is the sub-list for method output_type
+	9,  // [9:26] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_reference_v1_reference_proto_init() }
@@ -1304,7 +2067,7 @@ func file_reference_v1_reference_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_reference_v1_reference_proto_rawDesc), len(file_reference_v1_reference_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

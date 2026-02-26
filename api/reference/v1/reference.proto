@@ -133,6 +133,15 @@ message DeleteAttributeCategoryRequest {
 // icon TIDAK di sini — diambil dari AttributeCategory via JOIN
 // ==============================
 
+message AttributeOption {
+  string id            = 1;
+  string attribute_code= 2;
+  string option_value  = 3;
+  string option_label  = 4;
+  int32  display_order = 5;
+  bool   is_active     = 6;
+}
+
 message AttributeRegistry {
   string attr_key      = 1;
   string applies_to    = 2;
@@ -144,8 +153,9 @@ message AttributeRegistry {
   bool   risk_relevant = 8;
   string description   = 9;
   // Denormalized dari JOIN (read-only, tidak disimpan di tabel registry)
-  string category_name = 10;
-  string category_icon = 11;
+  string category_name     = 10;
+  string category_icon     = 11;
+  repeated AttributeOption options = 12; // Daftar pilihan jika data_type = SELECT
 }
 
 message ListAttributeRegistryResponse {
