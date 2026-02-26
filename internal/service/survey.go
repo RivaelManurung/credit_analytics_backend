@@ -25,7 +25,7 @@ func NewSurveyService(uc *biz.SurveyUsecase, logger log.Logger) *SurveyService {
 	}
 }
 
-func (s *SurveyService) ListSurveysByApplication(ctx context.Context, req *pb.ListSurveysByApplicationRequest) (*pb.ListSurveysResponse, error) {
+func (s *SurveyService) ListSurveysByApplication(ctx context.Context, req *pb.ListSurveysByApplicationRequest) (*pb.ListSurveysByApplicationResponse, error) {
 	appID, _ := uuid.Parse(req.ApplicationId)
 	surveys, err := s.uc.ListSurveysByApplication(ctx, appID)
 	if err != nil {
@@ -35,10 +35,36 @@ func (s *SurveyService) ListSurveysByApplication(ctx context.Context, req *pb.Li
 	for _, sv := range surveys {
 		res = append(res, mapSurveyToPb(sv))
 	}
-	return &pb.ListSurveysResponse{Surveys: res}, nil
+	return &pb.ListSurveysByApplicationResponse{Surveys: res}, nil
 }
 
-// Keep These but they are not in the gRPC service interface
+func (s *SurveyService) ListSurveys(ctx context.Context, req *pb.ListSurveysRequest) (*pb.ListSurveysResponse, error) {
+	appID, _ := uuid.Parse(req.ApplicationId)
+	assignedTo, _ := uuid.Parse(req.AssignedTo)
+
+	surveys, nextCursor, hasNext, err := s.uc.ListSurveys(ctx, &biz.ListSurveysFilter{
+		PageSize:      req.PageSize,
+		Cursor:        req.Cursor,
+		Status:        req.Status,
+		ApplicationID: appID,
+		AssignedTo:    assignedTo,
+		SurveyType:    req.SurveyType,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var res []*pb.ApplicationSurvey
+	for _, sv := range surveys {
+		res = append(res, mapSurveyToPb(sv))
+	}
+
+	return &pb.ListSurveysResponse{
+		Surveys:    res,
+		NextCursor: nextCursor,
+		HasNext:    hasNext,
+	}, nil
+}
 func (s *SurveyService) CreateSurveyTemplate(ctx context.Context, req *pb.CreateSurveyTemplateRequest) (*pb.SurveyTemplate, error) {
 	productID, _ := uuid.Parse(req.ProductId)
 	t, err := s.uc.CreateSurveyTemplate(ctx, &biz.SurveyTemplate{
@@ -190,15 +216,17 @@ func (s *SurveyService) UploadSurveyEvidence(ctx context.Context, req *pb.Upload
 
 func mapSurveyToPb(s *biz.ApplicationSurvey) *pb.ApplicationSurvey {
 	return &pb.ApplicationSurvey{
-		Id:            s.ID.String(),
-		ApplicationId: s.ApplicationID.String(),
-		TemplateId:    s.TemplateID.String(),
-		SurveyType:    s.SurveyType,
-		Status:        s.Status,
-		AssignedTo:    s.AssignedTo.String(),
-		SurveyPurpose: s.SurveyPurpose,
-		StartedAt:     timestamppb.New(s.StartedAt),
-		SubmittedAt:   timestamppb.New(s.SubmittedAt),
-		SubmittedBy:   s.SubmittedBy.String(),
+		Id:                s.ID.String(),
+		ApplicationId:     s.ApplicationID.String(),
+		TemplateId:        s.TemplateID.String(),
+		SurveyType:        s.SurveyType,
+		Status:            s.Status,
+		AssignedTo:        s.AssignedTo.String(),
+		SurveyPurpose:     s.SurveyPurpose,
+		StartedAt:         timestamppb.New(s.StartedAt),
+		SubmittedAt:       timestamppb.New(s.SubmittedAt),
+		SubmittedBy:       s.SubmittedBy.String(),
+		ApplicantName:     s.ApplicantName,
+		ApplicationStatus: s.ApplicationStatus,
 	}
 }

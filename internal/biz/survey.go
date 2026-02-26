@@ -29,6 +29,12 @@ type ApplicationSurvey struct {
 	StartedAt     time.Time
 	SubmittedAt   time.Time
 	SubmittedBy   uuid.UUID
+	VerifiedBy    uuid.UUID
+	VerifiedAt    time.Time
+
+	// Enrichment
+	ApplicantName     string
+	ApplicationStatus string
 }
 
 type SurveyAnswer struct {
@@ -50,6 +56,15 @@ type SurveyEvidence struct {
 	CapturedAt   time.Time
 }
 
+type ListSurveysFilter struct {
+	PageSize      int32
+	Cursor        string
+	Status        string
+	ApplicationID uuid.UUID
+	AssignedTo    uuid.UUID
+	SurveyType    string
+}
+
 type SurveyRepo interface {
 	CreateSurveyTemplate(context.Context, *SurveyTemplate) (*SurveyTemplate, error)
 	ListSurveyTemplates(context.Context) ([]*SurveyTemplate, error)
@@ -59,6 +74,7 @@ type SurveyRepo interface {
 	UpdateSurveyStatus(ctx context.Context, id uuid.UUID, status string, userID uuid.UUID) (*ApplicationSurvey, error)
 	UpsertSurveyAnswer(context.Context, *SurveyAnswer) (*SurveyAnswer, error)
 	CreateSurveyEvidence(context.Context, *SurveyEvidence) (*SurveyEvidence, error)
+	ListSurveys(ctx context.Context, filter *ListSurveysFilter) ([]*ApplicationSurvey, string, bool, error)
 }
 
 type SurveyUsecase struct {
@@ -111,6 +127,10 @@ func (uc *SurveyUsecase) ListSurveysByApplication(ctx context.Context, appID uui
 
 func (uc *SurveyUsecase) UpdateSurveyStatus(ctx context.Context, id uuid.UUID, status string, userID uuid.UUID) (*ApplicationSurvey, error) {
 	return uc.repo.UpdateSurveyStatus(ctx, id, status, userID)
+}
+
+func (uc *SurveyUsecase) ListSurveys(ctx context.Context, filter *ListSurveysFilter) ([]*ApplicationSurvey, string, bool, error) {
+	return uc.repo.ListSurveys(ctx, filter)
 }
 
 func (uc *SurveyUsecase) UpsertSurveyAnswer(ctx context.Context, a *SurveyAnswer) (*SurveyAnswer, error) {

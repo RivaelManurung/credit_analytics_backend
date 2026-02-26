@@ -29,6 +29,7 @@ const (
 	SurveyService_SubmitSurveyAnswer_FullMethodName       = "/api.survey.v1.SurveyService/SubmitSurveyAnswer"
 	SurveyService_UploadSurveyEvidence_FullMethodName     = "/api.survey.v1.SurveyService/UploadSurveyEvidence"
 	SurveyService_ListSurveyTemplates_FullMethodName      = "/api.survey.v1.SurveyService/ListSurveyTemplates"
+	SurveyService_CreateSurveyTemplate_FullMethodName     = "/api.survey.v1.SurveyService/CreateSurveyTemplate"
 )
 
 // SurveyServiceClient is the client API for SurveyService service.
@@ -51,6 +52,7 @@ type SurveyServiceClient interface {
 	UploadSurveyEvidence(ctx context.Context, in *UploadSurveyEvidenceRequest, opts ...grpc.CallOption) (*SurveyEvidence, error)
 	// ===== TEMPLATES (Optional Admin/Setup) =====
 	ListSurveyTemplates(ctx context.Context, in *ListSurveyTemplatesRequest, opts ...grpc.CallOption) (*ListSurveyTemplatesResponse, error)
+	CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...grpc.CallOption) (*SurveyTemplate, error)
 }
 
 type surveyServiceClient struct {
@@ -161,6 +163,16 @@ func (c *surveyServiceClient) ListSurveyTemplates(ctx context.Context, in *ListS
 	return out, nil
 }
 
+func (c *surveyServiceClient) CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...grpc.CallOption) (*SurveyTemplate, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SurveyTemplate)
+	err := c.cc.Invoke(ctx, SurveyService_CreateSurveyTemplate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SurveyServiceServer is the server API for SurveyService service.
 // All implementations must embed UnimplementedSurveyServiceServer
 // for forward compatibility.
@@ -181,6 +193,7 @@ type SurveyServiceServer interface {
 	UploadSurveyEvidence(context.Context, *UploadSurveyEvidenceRequest) (*SurveyEvidence, error)
 	// ===== TEMPLATES (Optional Admin/Setup) =====
 	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
+	CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error)
 	mustEmbedUnimplementedSurveyServiceServer()
 }
 
@@ -220,6 +233,9 @@ func (UnimplementedSurveyServiceServer) UploadSurveyEvidence(context.Context, *U
 }
 func (UnimplementedSurveyServiceServer) ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSurveyTemplates not implemented")
+}
+func (UnimplementedSurveyServiceServer) CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateSurveyTemplate not implemented")
 }
 func (UnimplementedSurveyServiceServer) mustEmbedUnimplementedSurveyServiceServer() {}
 func (UnimplementedSurveyServiceServer) testEmbeddedByValue()                       {}
@@ -422,6 +438,24 @@ func _SurveyService_ListSurveyTemplates_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SurveyService_CreateSurveyTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSurveyTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SurveyServiceServer).CreateSurveyTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SurveyService_CreateSurveyTemplate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SurveyServiceServer).CreateSurveyTemplate(ctx, req.(*CreateSurveyTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SurveyService_ServiceDesc is the grpc.ServiceDesc for SurveyService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -468,6 +502,10 @@ var SurveyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListSurveyTemplates",
 			Handler:    _SurveyService_ListSurveyTemplates_Handler,
+		},
+		{
+			MethodName: "CreateSurveyTemplate",
+			Handler:    _SurveyService_CreateSurveyTemplate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

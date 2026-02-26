@@ -1165,6 +1165,82 @@ func (x *ListSurveyTemplatesResponse) GetTemplates() []*SurveyTemplate {
 	return nil
 }
 
+type CreateSurveyTemplateRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TemplateCode  string                 `protobuf:"bytes,1,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`
+	TemplateName  string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
+	ApplicantType string                 `protobuf:"bytes,3,opt,name=applicant_type,json=applicantType,proto3" json:"applicant_type,omitempty"`
+	ProductId     string                 `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSurveyTemplateRequest) Reset() {
+	*x = CreateSurveyTemplateRequest{}
+	mi := &file_survey_v1_survey_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSurveyTemplateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSurveyTemplateRequest) ProtoMessage() {}
+
+func (x *CreateSurveyTemplateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_survey_v1_survey_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSurveyTemplateRequest.ProtoReflect.Descriptor instead.
+func (*CreateSurveyTemplateRequest) Descriptor() ([]byte, []int) {
+	return file_survey_v1_survey_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CreateSurveyTemplateRequest) GetTemplateCode() string {
+	if x != nil {
+		return x.TemplateCode
+	}
+	return ""
+}
+
+func (x *CreateSurveyTemplateRequest) GetTemplateName() string {
+	if x != nil {
+		return x.TemplateName
+	}
+	return ""
+}
+
+func (x *CreateSurveyTemplateRequest) GetApplicantType() string {
+	if x != nil {
+		return x.ApplicantType
+	}
+	return ""
+}
+
+func (x *CreateSurveyTemplateRequest) GetProductId() string {
+	if x != nil {
+		return x.ProductId
+	}
+	return ""
+}
+
+func (x *CreateSurveyTemplateRequest) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
 var File_survey_v1_survey_proto protoreflect.FileDescriptor
 
 const file_survey_v1_survey_proto_rawDesc = "" +
@@ -1272,8 +1348,14 @@ const file_survey_v1_survey_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\x1c\n" +
 	"\x1aListSurveyTemplatesRequest\"Z\n" +
 	"\x1bListSurveyTemplatesResponse\x12;\n" +
-	"\ttemplates\x18\x01 \x03(\v2\x1d.api.survey.v1.SurveyTemplateR\ttemplates2\xb6\n" +
+	"\ttemplates\x18\x01 \x03(\v2\x1d.api.survey.v1.SurveyTemplateR\ttemplates\"\xc5\x01\n" +
+	"\x1bCreateSurveyTemplateRequest\x12#\n" +
+	"\rtemplate_code\x18\x01 \x01(\tR\ftemplateCode\x12#\n" +
+	"\rtemplate_name\x18\x02 \x01(\tR\ftemplateName\x12%\n" +
+	"\x0eapplicant_type\x18\x03 \x01(\tR\rapplicantType\x12\x1d\n" +
 	"\n" +
+	"product_id\x18\x04 \x01(\tR\tproductId\x12\x16\n" +
+	"\x06active\x18\x05 \x01(\bR\x06active2\xbb\v\n" +
 	"\rSurveyService\x12\x8a\x01\n" +
 	"\fAssignSurvey\x12\".api.survey.v1.AssignSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"4\x82\xd3\xe4\x93\x02.:\x01*\")/v1/applications/{application_id}/surveys\x12h\n" +
 	"\tGetSurvey\x12\x1f.api.survey.v1.GetSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/surveys/{id}\x12\xae\x01\n" +
@@ -1284,7 +1366,8 @@ const file_survey_v1_survey_proto_rawDesc = "" +
 	"\fVerifySurvey\x12\".api.survey.v1.VerifySurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/surveys/{id}/verify\x12\x87\x01\n" +
 	"\x12SubmitSurveyAnswer\x12(.api.survey.v1.SubmitSurveyAnswerRequest\x1a\x1b.api.survey.v1.SurveyAnswer\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/surveys/{survey_id}/answers\x12\x8f\x01\n" +
 	"\x14UploadSurveyEvidence\x12*.api.survey.v1.UploadSurveyEvidenceRequest\x1a\x1d.api.survey.v1.SurveyEvidence\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/surveys/{survey_id}/evidences\x12\x8a\x01\n" +
-	"\x13ListSurveyTemplates\x12).api.survey.v1.ListSurveyTemplatesRequest\x1a*.api.survey.v1.ListSurveyTemplatesResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/survey-templatesB<\n" +
+	"\x13ListSurveyTemplates\x12).api.survey.v1.ListSurveyTemplatesRequest\x1a*.api.survey.v1.ListSurveyTemplatesResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/survey-templates\x12\x82\x01\n" +
+	"\x14CreateSurveyTemplate\x12*.api.survey.v1.CreateSurveyTemplateRequest\x1a\x1d.api.survey.v1.SurveyTemplate\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/survey-templatesB<\n" +
 	"\rapi.survey.v1P\x01Z)credit-analytics-backend/api/survey/v1;v1b\x06proto3"
 
 var (
@@ -1299,7 +1382,7 @@ func file_survey_v1_survey_proto_rawDescGZIP() []byte {
 	return file_survey_v1_survey_proto_rawDescData
 }
 
-var file_survey_v1_survey_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_survey_v1_survey_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_survey_v1_survey_proto_goTypes = []any{
 	(*SurveyTemplate)(nil),                   // 0: api.survey.v1.SurveyTemplate
 	(*ApplicationSurvey)(nil),                // 1: api.survey.v1.ApplicationSurvey
@@ -1318,13 +1401,14 @@ var file_survey_v1_survey_proto_goTypes = []any{
 	(*GetSurveyRequest)(nil),                 // 14: api.survey.v1.GetSurveyRequest
 	(*ListSurveyTemplatesRequest)(nil),       // 15: api.survey.v1.ListSurveyTemplatesRequest
 	(*ListSurveyTemplatesResponse)(nil),      // 16: api.survey.v1.ListSurveyTemplatesResponse
-	(*timestamppb.Timestamp)(nil),            // 17: google.protobuf.Timestamp
+	(*CreateSurveyTemplateRequest)(nil),      // 17: api.survey.v1.CreateSurveyTemplateRequest
+	(*timestamppb.Timestamp)(nil),            // 18: google.protobuf.Timestamp
 }
 var file_survey_v1_survey_proto_depIdxs = []int32{
-	17, // 0: api.survey.v1.ApplicationSurvey.started_at:type_name -> google.protobuf.Timestamp
-	17, // 1: api.survey.v1.ApplicationSurvey.submitted_at:type_name -> google.protobuf.Timestamp
-	17, // 2: api.survey.v1.SurveyAnswer.answered_at:type_name -> google.protobuf.Timestamp
-	17, // 3: api.survey.v1.SurveyEvidence.captured_at:type_name -> google.protobuf.Timestamp
+	18, // 0: api.survey.v1.ApplicationSurvey.started_at:type_name -> google.protobuf.Timestamp
+	18, // 1: api.survey.v1.ApplicationSurvey.submitted_at:type_name -> google.protobuf.Timestamp
+	18, // 2: api.survey.v1.SurveyAnswer.answered_at:type_name -> google.protobuf.Timestamp
+	18, // 3: api.survey.v1.SurveyEvidence.captured_at:type_name -> google.protobuf.Timestamp
 	1,  // 4: api.survey.v1.ListSurveysByApplicationResponse.surveys:type_name -> api.survey.v1.ApplicationSurvey
 	1,  // 5: api.survey.v1.ListSurveysResponse.surveys:type_name -> api.survey.v1.ApplicationSurvey
 	0,  // 6: api.survey.v1.ListSurveyTemplatesResponse.templates:type_name -> api.survey.v1.SurveyTemplate
@@ -1338,18 +1422,20 @@ var file_survey_v1_survey_proto_depIdxs = []int32{
 	11, // 14: api.survey.v1.SurveyService.SubmitSurveyAnswer:input_type -> api.survey.v1.SubmitSurveyAnswerRequest
 	12, // 15: api.survey.v1.SurveyService.UploadSurveyEvidence:input_type -> api.survey.v1.UploadSurveyEvidenceRequest
 	15, // 16: api.survey.v1.SurveyService.ListSurveyTemplates:input_type -> api.survey.v1.ListSurveyTemplatesRequest
-	1,  // 17: api.survey.v1.SurveyService.AssignSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	1,  // 18: api.survey.v1.SurveyService.GetSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	5,  // 19: api.survey.v1.SurveyService.ListSurveysByApplication:output_type -> api.survey.v1.ListSurveysByApplicationResponse
-	7,  // 20: api.survey.v1.SurveyService.ListSurveys:output_type -> api.survey.v1.ListSurveysResponse
-	1,  // 21: api.survey.v1.SurveyService.StartSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	1,  // 22: api.survey.v1.SurveyService.SubmitSurvey:output_type -> api.survey.v1.ApplicationSurvey
-	1,  // 23: api.survey.v1.SurveyService.VerifySurvey:output_type -> api.survey.v1.ApplicationSurvey
-	2,  // 24: api.survey.v1.SurveyService.SubmitSurveyAnswer:output_type -> api.survey.v1.SurveyAnswer
-	3,  // 25: api.survey.v1.SurveyService.UploadSurveyEvidence:output_type -> api.survey.v1.SurveyEvidence
-	16, // 26: api.survey.v1.SurveyService.ListSurveyTemplates:output_type -> api.survey.v1.ListSurveyTemplatesResponse
-	17, // [17:27] is the sub-list for method output_type
-	7,  // [7:17] is the sub-list for method input_type
+	17, // 17: api.survey.v1.SurveyService.CreateSurveyTemplate:input_type -> api.survey.v1.CreateSurveyTemplateRequest
+	1,  // 18: api.survey.v1.SurveyService.AssignSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 19: api.survey.v1.SurveyService.GetSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	5,  // 20: api.survey.v1.SurveyService.ListSurveysByApplication:output_type -> api.survey.v1.ListSurveysByApplicationResponse
+	7,  // 21: api.survey.v1.SurveyService.ListSurveys:output_type -> api.survey.v1.ListSurveysResponse
+	1,  // 22: api.survey.v1.SurveyService.StartSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 23: api.survey.v1.SurveyService.SubmitSurvey:output_type -> api.survey.v1.ApplicationSurvey
+	1,  // 24: api.survey.v1.SurveyService.VerifySurvey:output_type -> api.survey.v1.ApplicationSurvey
+	2,  // 25: api.survey.v1.SurveyService.SubmitSurveyAnswer:output_type -> api.survey.v1.SurveyAnswer
+	3,  // 26: api.survey.v1.SurveyService.UploadSurveyEvidence:output_type -> api.survey.v1.SurveyEvidence
+	16, // 27: api.survey.v1.SurveyService.ListSurveyTemplates:output_type -> api.survey.v1.ListSurveyTemplatesResponse
+	0,  // 28: api.survey.v1.SurveyService.CreateSurveyTemplate:output_type -> api.survey.v1.SurveyTemplate
+	18, // [18:29] is the sub-list for method output_type
+	7,  // [7:18] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
 	7,  // [7:7] is the sub-list for extension extendee
 	0,  // [0:7] is the sub-list for field type_name
@@ -1366,7 +1452,7 @@ func file_survey_v1_survey_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_survey_v1_survey_proto_rawDesc), len(file_survey_v1_survey_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

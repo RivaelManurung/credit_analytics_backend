@@ -74,6 +74,7 @@ type Querier interface {
 	ListLoanProducts(ctx context.Context) ([]LoanProduct, error)
 	ListStatusLogs(ctx context.Context, applicationID uuid.UUID) ([]ApplicationStatusLog, error)
 	ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, error)
+	ListSurveys(ctx context.Context, arg ListSurveysParams) ([]ListSurveysRow, error)
 	ListSurveysByApplication(ctx context.Context, applicationID uuid.NullUUID) ([]ApplicationSurvey, error)
 	RecordFinalDecision(ctx context.Context, arg RecordFinalDecisionParams) (ApplicationDecision, error)
 	SubmitCommitteeVote(ctx context.Context, arg SubmitCommitteeVoteParams) (ApplicationCommitteeVote, error)

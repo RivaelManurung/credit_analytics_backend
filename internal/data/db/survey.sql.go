@@ -14,8 +14,15 @@ import (
 
 const assignSurvey = `-- name: AssignSurvey :one
 INSERT INTO application_surveys (
-    application_id, template_id, survey_type, status, assigned_to, survey_purpose
-) VALUES ($1, $2, $3, 'ASSIGNED', $4, $5) RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
+        application_id,
+        template_id,
+        survey_type,
+        status,
+        assigned_to,
+        survey_purpose
+    )
+VALUES ($1, $2, $3, 'ASSIGNED', $4, $5)
+RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
 `
 
 type AssignSurveyParams struct {
@@ -54,8 +61,13 @@ func (q *Queries) AssignSurvey(ctx context.Context, arg AssignSurveyParams) (App
 
 const createSurveyEvidence = `-- name: CreateSurveyEvidence :one
 INSERT INTO survey_evidences (
-    survey_id, evidence_type, file_url, description
-) VALUES ($1, $2, $3, $4) RETURNING id, survey_id, evidence_type, file_url, description, captured_at
+        survey_id,
+        evidence_type,
+        file_url,
+        description
+    )
+VALUES ($1, $2, $3, $4)
+RETURNING id, survey_id, evidence_type, file_url, description, captured_at
 `
 
 type CreateSurveyEvidenceParams struct {
@@ -86,8 +98,14 @@ func (q *Queries) CreateSurveyEvidence(ctx context.Context, arg CreateSurveyEvid
 
 const createSurveyTemplate = `-- name: CreateSurveyTemplate :one
 INSERT INTO survey_templates (
-    template_code, template_name, applicant_type, product_id, active
-) VALUES ($1, $2, $3, $4, $5) RETURNING id, template_code, template_name, applicant_type, product_id, active
+        template_code,
+        template_name,
+        applicant_type,
+        product_id,
+        active
+    )
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, template_code, template_name, applicant_type, product_id, active
 `
 
 type CreateSurveyTemplateParams struct {
@@ -119,7 +137,9 @@ func (q *Queries) CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemp
 }
 
 const getSurvey = `-- name: GetSurvey :one
-SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at FROM application_surveys WHERE id = $1
+SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
+FROM application_surveys
+WHERE id = $1
 `
 
 func (q *Queries) GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurvey, error) {
@@ -143,13 +163,16 @@ func (q *Queries) GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurve
 }
 
 const getSurveyTemplateWithSections = `-- name: GetSurveyTemplateWithSections :many
-SELECT 
-    t.template_name, s.section_name, q.question_text, q.answer_type
+SELECT t.template_name,
+    s.section_name,
+    q.question_text,
+    q.answer_type
 FROM survey_templates t
-JOIN survey_sections s ON s.template_id = t.id
-JOIN survey_questions q ON q.section_id = s.id
+    JOIN survey_sections s ON s.template_id = t.id
+    JOIN survey_questions q ON q.section_id = s.id
 WHERE t.id = $1
-ORDER BY s.sequence, q.sequence
+ORDER BY s.sequence,
+    q.sequence
 `
 
 type GetSurveyTemplateWithSectionsRow struct {
@@ -188,7 +211,9 @@ func (q *Queries) GetSurveyTemplateWithSections(ctx context.Context, id uuid.UUI
 }
 
 const listSurveyTemplates = `-- name: ListSurveyTemplates :many
-SELECT id, template_code, template_name, applicant_type, product_id, active FROM survey_templates WHERE active = TRUE
+SELECT id, template_code, template_name, applicant_type, product_id, active
+FROM survey_templates
+WHERE active = TRUE
 `
 
 func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, error) {
@@ -221,8 +246,112 @@ func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, er
 	return items, nil
 }
 
+const listSurveys = `-- name: ListSurveys :many
+SELECT s.id, s.application_id, s.template_id, s.survey_type, s.status, s.submitted_by, s.verified_by, s.verified_at, s.assigned_to, s.survey_purpose, s.started_at, s.submitted_at,
+    a.status AS application_status,
+    app.full_name AS applicant_name
+FROM application_surveys s
+    JOIN applications a ON s.application_id = a.id
+    JOIN applicants app ON a.applicant_id = app.id
+WHERE (
+        $2::text IS NULL
+        OR s.status = $2
+    )
+    AND (
+        $3::uuid IS NULL
+        OR s.application_id = $3
+    )
+    AND (
+        $4::uuid IS NULL
+        OR s.assigned_to = $4
+    )
+    AND (
+        $5::text IS NULL
+        OR s.survey_type = $5
+    )
+    AND (
+        ($6::uuid IS NULL)
+        OR (s.id < $6::uuid)
+    )
+ORDER BY s.id DESC
+LIMIT $1
+`
+
+type ListSurveysParams struct {
+	Limit         int32          `json:"limit"`
+	Status        sql.NullString `json:"status"`
+	ApplicationID uuid.NullUUID  `json:"application_id"`
+	AssignedTo    uuid.NullUUID  `json:"assigned_to"`
+	SurveyType    sql.NullString `json:"survey_type"`
+	CursorID      uuid.NullUUID  `json:"cursor_id"`
+}
+
+type ListSurveysRow struct {
+	ID                uuid.UUID      `json:"id"`
+	ApplicationID     uuid.NullUUID  `json:"application_id"`
+	TemplateID        uuid.NullUUID  `json:"template_id"`
+	SurveyType        sql.NullString `json:"survey_type"`
+	Status            sql.NullString `json:"status"`
+	SubmittedBy       uuid.NullUUID  `json:"submitted_by"`
+	VerifiedBy        uuid.NullUUID  `json:"verified_by"`
+	VerifiedAt        sql.NullTime   `json:"verified_at"`
+	AssignedTo        uuid.NullUUID  `json:"assigned_to"`
+	SurveyPurpose     sql.NullString `json:"survey_purpose"`
+	StartedAt         sql.NullTime   `json:"started_at"`
+	SubmittedAt       sql.NullTime   `json:"submitted_at"`
+	ApplicationStatus string         `json:"application_status"`
+	ApplicantName     sql.NullString `json:"applicant_name"`
+}
+
+func (q *Queries) ListSurveys(ctx context.Context, arg ListSurveysParams) ([]ListSurveysRow, error) {
+	rows, err := q.db.QueryContext(ctx, listSurveys,
+		arg.Limit,
+		arg.Status,
+		arg.ApplicationID,
+		arg.AssignedTo,
+		arg.SurveyType,
+		arg.CursorID,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListSurveysRow
+	for rows.Next() {
+		var i ListSurveysRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ApplicationID,
+			&i.TemplateID,
+			&i.SurveyType,
+			&i.Status,
+			&i.SubmittedBy,
+			&i.VerifiedBy,
+			&i.VerifiedAt,
+			&i.AssignedTo,
+			&i.SurveyPurpose,
+			&i.StartedAt,
+			&i.SubmittedAt,
+			&i.ApplicationStatus,
+			&i.ApplicantName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listSurveysByApplication = `-- name: ListSurveysByApplication :many
-SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at FROM application_surveys WHERE application_id = $1
+SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
+FROM application_surveys
+WHERE application_id = $1
 `
 
 func (q *Queries) ListSurveysByApplication(ctx context.Context, applicationID uuid.NullUUID) ([]ApplicationSurvey, error) {
@@ -262,12 +391,23 @@ func (q *Queries) ListSurveysByApplication(ctx context.Context, applicationID uu
 }
 
 const updateSurveyStatus = `-- name: UpdateSurveyStatus :one
-UPDATE application_surveys SET 
-    status = $2,
-    started_at = CASE WHEN $2 = 'IN_PROGRESS' AND started_at IS NULL THEN CURRENT_TIMESTAMP ELSE started_at END,
-    submitted_at = CASE WHEN $2 = 'SUBMITTED' THEN CURRENT_TIMESTAMP ELSE submitted_at END,
-    submitted_by = CASE WHEN $2 = 'SUBMITTED' THEN $3 ELSE submitted_by END
-WHERE id = $1 RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
+UPDATE application_surveys
+SET status = $2,
+    started_at = CASE
+        WHEN $2 = 'IN_PROGRESS'
+        AND started_at IS NULL THEN CURRENT_TIMESTAMP
+        ELSE started_at
+    END,
+    submitted_at = CASE
+        WHEN $2 = 'SUBMITTED' THEN CURRENT_TIMESTAMP
+        ELSE submitted_at
+    END,
+    submitted_by = CASE
+        WHEN $2 = 'SUBMITTED' THEN $3
+        ELSE submitted_by
+    END
+WHERE id = $1
+RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
 `
 
 type UpdateSurveyStatusParams struct {
@@ -298,10 +438,16 @@ func (q *Queries) UpdateSurveyStatus(ctx context.Context, arg UpdateSurveyStatus
 
 const upsertSurveyAnswer = `-- name: UpsertSurveyAnswer :one
 INSERT INTO survey_answers (
-    survey_id, question_id, answer_text, answer_number, answer_boolean, answer_date
-) VALUES ($1, $2, $3, $4, $5, $6)
-ON CONFLICT (survey_id, question_id) DO UPDATE SET
-    answer_text = EXCLUDED.answer_text,
+        survey_id,
+        question_id,
+        answer_text,
+        answer_number,
+        answer_boolean,
+        answer_date
+    )
+VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (survey_id, question_id) DO
+UPDATE
+SET answer_text = EXCLUDED.answer_text,
     answer_number = EXCLUDED.answer_number,
     answer_boolean = EXCLUDED.answer_boolean,
     answer_date = EXCLUDED.answer_date,

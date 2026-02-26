@@ -20,6 +20,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationSurveyServiceAssignSurvey = "/api.survey.v1.SurveyService/AssignSurvey"
+const OperationSurveyServiceCreateSurveyTemplate = "/api.survey.v1.SurveyService/CreateSurveyTemplate"
 const OperationSurveyServiceGetSurvey = "/api.survey.v1.SurveyService/GetSurvey"
 const OperationSurveyServiceListSurveyTemplates = "/api.survey.v1.SurveyService/ListSurveyTemplates"
 const OperationSurveyServiceListSurveys = "/api.survey.v1.SurveyService/ListSurveys"
@@ -33,6 +34,7 @@ const OperationSurveyServiceVerifySurvey = "/api.survey.v1.SurveyService/VerifyS
 type SurveyServiceHTTPServer interface {
 	// AssignSurvey ===== ASSIGN & GET =====
 	AssignSurvey(context.Context, *AssignSurveyRequest) (*ApplicationSurvey, error)
+	CreateSurveyTemplate(context.Context, *CreateSurveyTemplateRequest) (*SurveyTemplate, error)
 	GetSurvey(context.Context, *GetSurveyRequest) (*ApplicationSurvey, error)
 	// ListSurveyTemplates ===== TEMPLATES (Optional Admin/Setup) =====
 	ListSurveyTemplates(context.Context, *ListSurveyTemplatesRequest) (*ListSurveyTemplatesResponse, error)
@@ -61,6 +63,7 @@ func RegisterSurveyServiceHTTPServer(s *http.Server, srv SurveyServiceHTTPServer
 	r.POST("/v1/surveys/{survey_id}/answers", _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/evidences", _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv))
 	r.GET("/v1/survey-templates", _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv))
+	r.POST("/v1/survey-templates", _SurveyService_CreateSurveyTemplate0_HTTP_Handler(srv))
 }
 
 func _SurveyService_AssignSurvey0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
@@ -295,9 +298,32 @@ func _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv SurveyServiceHTTPServe
 	}
 }
 
+func _SurveyService_CreateSurveyTemplate0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateSurveyTemplateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSurveyServiceCreateSurveyTemplate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateSurveyTemplate(ctx, req.(*CreateSurveyTemplateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SurveyTemplate)
+		return ctx.Result(200, reply)
+	}
+}
+
 type SurveyServiceHTTPClient interface {
 	// AssignSurvey ===== ASSIGN & GET =====
 	AssignSurvey(ctx context.Context, req *AssignSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
+	CreateSurveyTemplate(ctx context.Context, req *CreateSurveyTemplateRequest, opts ...http.CallOption) (rsp *SurveyTemplate, err error)
 	GetSurvey(ctx context.Context, req *GetSurveyRequest, opts ...http.CallOption) (rsp *ApplicationSurvey, err error)
 	// ListSurveyTemplates ===== TEMPLATES (Optional Admin/Setup) =====
 	ListSurveyTemplates(ctx context.Context, req *ListSurveyTemplatesRequest, opts ...http.CallOption) (rsp *ListSurveyTemplatesResponse, err error)
@@ -328,6 +354,19 @@ func (c *SurveyServiceHTTPClientImpl) AssignSurvey(ctx context.Context, in *Assi
 	pattern := "/v1/applications/{application_id}/surveys"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSurveyServiceAssignSurvey))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *SurveyServiceHTTPClientImpl) CreateSurveyTemplate(ctx context.Context, in *CreateSurveyTemplateRequest, opts ...http.CallOption) (*SurveyTemplate, error) {
+	var out SurveyTemplate
+	pattern := "/v1/survey-templates"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSurveyServiceCreateSurveyTemplate))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

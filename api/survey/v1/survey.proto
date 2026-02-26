@@ -83,6 +83,13 @@ service SurveyService {
       get: "/v1/survey-templates"
     };
   }
+
+  rpc CreateSurveyTemplate (CreateSurveyTemplateRequest) returns (SurveyTemplate) {
+    option (google.api.http) = {
+      post: "/v1/survey-templates"
+      body: "*"
+    };
+  }
 }
 
 //////////////////////////////////////////////////////////
@@ -215,4 +222,12 @@ message ListSurveyTemplatesRequest {}
 
 message ListSurveyTemplatesResponse {
   repeated SurveyTemplate templates = 1;
+}
+
+message CreateSurveyTemplateRequest {
+  string template_code = 1;
+  string template_name = 2;
+  string applicant_type = 3;
+  string product_id = 4;
+  bool active = 5;
 }

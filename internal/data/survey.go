@@ -160,6 +160,61 @@ func (r *surveyRepo) CreateSurveyEvidence(ctx context.Context, e *biz.SurveyEvid
 	}, nil
 }
 
+func (r *surveyRepo) ListSurveys(ctx context.Context, filter *biz.ListSurveysFilter) ([]*biz.ApplicationSurvey, string, bool, error) {
+	var cursorID uuid.NullUUID
+	if filter.Cursor != "" {
+		id, err := uuid.Parse(filter.Cursor)
+		if err == nil {
+			cursorID = uuid.NullUUID{UUID: id, Valid: true}
+		}
+	}
+
+	rows, err := r.data.db.ListSurveys(ctx, db.ListSurveysParams{
+		Limit:         filter.PageSize + 1,
+		Status:        sql.NullString{String: filter.Status, Valid: filter.Status != ""},
+		ApplicationID: uuid.NullUUID{UUID: filter.ApplicationID, Valid: filter.ApplicationID != uuid.Nil},
+		AssignedTo:    uuid.NullUUID{UUID: filter.AssignedTo, Valid: filter.AssignedTo != uuid.Nil},
+		SurveyType:    sql.NullString{String: filter.SurveyType, Valid: filter.SurveyType != ""},
+		CursorID:      cursorID,
+	})
+	if err != nil {
+		return nil, "", false, err
+	}
+
+	var res []*biz.ApplicationSurvey
+	hasNext := false
+	if len(rows) > int(filter.PageSize) {
+		hasNext = true
+		rows = rows[:filter.PageSize]
+	}
+
+	for _, row := range rows {
+		res = append(res, &biz.ApplicationSurvey{
+			ID:                row.ID,
+			ApplicationID:     row.ApplicationID.UUID,
+			TemplateID:        row.TemplateID.UUID,
+			SurveyType:        row.SurveyType.String,
+			Status:            row.Status.String,
+			SubmittedBy:       row.SubmittedBy.UUID,
+			VerifiedBy:        row.VerifiedBy.UUID,
+			VerifiedAt:        row.VerifiedAt.Time,
+			AssignedTo:        row.AssignedTo.UUID,
+			SurveyPurpose:     row.SurveyPurpose.String,
+			StartedAt:         row.StartedAt.Time,
+			SubmittedAt:       row.SubmittedAt.Time,
+			ApplicationStatus: row.ApplicationStatus,
+			ApplicantName:     row.ApplicantName.String,
+		})
+	}
+
+	nextCursor := ""
+	if hasNext && len(res) > 0 {
+		nextCursor = res[len(res)-1].ID.String()
+	}
+
+	return res, nextCursor, hasNext, nil
+}
+
 func mapSurveyToBiz(s *db.ApplicationSurvey) *biz.ApplicationSurvey {
 	return &biz.ApplicationSurvey{
 		ID:            s.ID,
@@ -167,10 +222,12 @@ func mapSurveyToBiz(s *db.ApplicationSurvey) *biz.ApplicationSurvey {
 		TemplateID:    s.TemplateID.UUID,
 		SurveyType:    s.SurveyType.String,
 		Status:        s.Status.String,
+		SubmittedBy:   s.SubmittedBy.UUID,
+		VerifiedBy:    s.VerifiedBy.UUID,
+		VerifiedAt:    s.VerifiedAt.Time,
 		AssignedTo:    s.AssignedTo.UUID,
 		SurveyPurpose: s.SurveyPurpose.String,
 		StartedAt:     s.StartedAt.Time,
 		SubmittedAt:   s.SubmittedAt.Time,
-		SubmittedBy:   s.SubmittedBy.UUID,
 	}
 }
