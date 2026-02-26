@@ -42,17 +42,7 @@ CREATE TABLE IF NOT EXISTS applicants (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by UUID
 );
-CREATE TABLE IF NOT EXISTS applicant_attributes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
-    applicant_id UUID NOT NULL REFERENCES applicants(id) ON DELETE CASCADE,
-    attribute_id UUID NOT NULL REFERENCES custom_column_attribute_registries(id) ON DELETE CASCADE,
-    attribute_option_id UUID REFERENCES attribute_options(id) ON DELETE
-    SET NULL,
-        attr_value TEXT,
-        data_type VARCHAR(20),
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE (applicant_id, attribute_id)
-);
+
 -- Tabel kategori atribut yang bisa dikelola secara dinamis via API.
 -- Icon dan label disimpan di sini (satu icon per kategori, bukan per atribut).
 CREATE TABLE IF NOT EXISTS attribute_categories (
@@ -90,6 +80,17 @@ CREATE TABLE IF NOT EXISTS attribute_options (
     display_order INT DEFAULT 0,
     is_active BOOLEAN DEFAULT TRUE,
     UNIQUE (attribute_id, option_value)
+);
+CREATE TABLE IF NOT EXISTS applicant_attributes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    applicant_id UUID NOT NULL REFERENCES applicants(id) ON DELETE CASCADE,
+    attribute_id UUID NOT NULL REFERENCES custom_column_attribute_registries(id) ON DELETE CASCADE,
+    attribute_option_id UUID REFERENCES attribute_options(id) ON DELETE
+    SET NULL,
+        attr_value TEXT,
+        data_type VARCHAR(20),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (applicant_id, attribute_id)
 );
 CREATE TABLE IF NOT EXISTS branches (
     branch_code VARCHAR(50) PRIMARY KEY,
