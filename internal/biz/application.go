@@ -49,12 +49,10 @@ func NewInterestRate(val decimal.Decimal) InterestRate {
 type ApplicationStatus string
 
 const (
-	StatusDraft     ApplicationStatus = "DRAFT"
-	StatusSubmitted ApplicationStatus = "SUBMITTED"
 	StatusIntake    ApplicationStatus = "INTAKE"
-	StatusSlikCheck ApplicationStatus = "SLIK_CHECK"
-	StatusPolicy    ApplicationStatus = "POLICY_GATE"
+	StatusSurvey    ApplicationStatus = "SURVEY"
 	StatusAnalysis  ApplicationStatus = "ANALYSIS"
+	StatusCommittee ApplicationStatus = "COMMITTEE"
 	StatusApproved  ApplicationStatus = "APPROVED"
 	StatusRejected  ApplicationStatus = "REJECTED"
 	StatusCancelled ApplicationStatus = "CANCELLED"
@@ -67,8 +65,8 @@ func (s ApplicationStatus) IsTerminal() bool {
 // IsValidStatus checks whether the status value is one of the defined constants.
 func IsValidStatus(s string) bool {
 	switch ApplicationStatus(s) {
-	case StatusDraft, StatusSubmitted, StatusIntake, StatusSlikCheck,
-		StatusPolicy, StatusAnalysis, StatusApproved, StatusRejected, StatusCancelled:
+	case StatusIntake, StatusSurvey, StatusAnalysis, StatusCommittee,
+		StatusApproved, StatusRejected, StatusCancelled:
 		return true
 	}
 	return false
@@ -143,30 +141,26 @@ func (a *Application) CheckPolicyGate() (bool, string) {
 	return true, "Passed Policy Gate"
 }
 func (a *Application) Submit() error {
-	if a.Status != StatusDraft {
+	if a.Status != StatusIntake {
 		return &ErrConflict{Message: fmt.Sprintf("cannot submit application in %s status", a.Status)}
 	}
 	if a.LoanAmount.IsZero() {
 		return &ErrInvalidArgument{Field: "loan_amount", Message: "cannot be zero"}
 	}
-	a.Status = StatusSubmitted
+	a.Status = StatusSurvey
 	return nil
 }
 
 func (a *Application) TransitionTo(newStatus ApplicationStatus) error {
 	allowed := false
 	switch a.Status {
-	case StatusDraft:
-		allowed = newStatus == StatusSubmitted || newStatus == StatusCancelled
-	case StatusSubmitted:
-		allowed = newStatus == StatusIntake || newStatus == StatusSlikCheck || newStatus == StatusCancelled
 	case StatusIntake:
-		allowed = newStatus == StatusSlikCheck || newStatus == StatusCancelled
-	case StatusSlikCheck:
-		allowed = newStatus == StatusPolicy || newStatus == StatusRejected || newStatus == StatusCancelled
-	case StatusPolicy:
-		allowed = newStatus == StatusAnalysis || newStatus == StatusRejected || newStatus == StatusCancelled
+		allowed = newStatus == StatusSurvey || newStatus == StatusCancelled || newStatus == StatusRejected
+	case StatusSurvey:
+		allowed = newStatus == StatusAnalysis || newStatus == StatusCancelled || newStatus == StatusRejected
 	case StatusAnalysis:
+		allowed = newStatus == StatusCommittee || newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled
+	case StatusCommittee:
 		allowed = newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled
 	}
 
@@ -261,7 +255,7 @@ func (uc *ApplicationUsecase) Create(ctx context.Context, app *Application) (uui
 	if app.ID == uuid.Nil {
 		app.ID, _ = uuid.NewV7()
 	}
-	app.Status = StatusDraft
+	app.Status = StatusIntake
 	return uc.repo.Save(ctx, app)
 }
 
@@ -333,9 +327,8 @@ func (uc *ApplicationUsecase) RunEarlyChecks(ctx context.Context, id uuid.UUID) 
 		return false, msg, nil
 	}
 
-	// If all pass, move to POLICY_GATE status then ANALYSIS
-	app.TransitionTo(StatusPolicy)
-	app.TransitionTo(StatusAnalysis)
+	// If all pass, move to SURVEY status
+	app.TransitionTo(StatusSurvey)
 	uc.repo.Update(ctx, app)
 
 	return true, "Passed all early checks", nil
