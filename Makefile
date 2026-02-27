@@ -72,6 +72,29 @@ all:
 	make config
 	make generate
 
+DB_USER ?= postgres
+DB_PASSWORD ?= password
+DB_HOST ?= localhost
+DB_PORT ?= 5432
+DB_NAME ?= credit_analytics
+DB_SSLMODE ?= disable
+DB_DSN := "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)"
+
+.PHONY: migrate-up
+# Run goose migrations up
+migrate-up:
+	goose -dir internal/data/schema/migrations postgres $(DB_DSN) up
+
+.PHONY: migrate-down
+# Rollback the last goose migration
+migrate-down:
+	goose -dir internal/data/schema/migrations postgres $(DB_DSN) down
+
+.PHONY: migrate-status
+# Show goose migration status
+migrate-status:
+	goose -dir internal/data/schema/migrations postgres $(DB_DSN) status
+
 # show help
 help:
 	@echo ''
