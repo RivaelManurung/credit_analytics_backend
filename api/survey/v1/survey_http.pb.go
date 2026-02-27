@@ -57,9 +57,9 @@ func RegisterSurveyServiceHTTPServer(s *http.Server, srv SurveyServiceHTTPServer
 	r.GET("/v1/surveys/{id}", _SurveyService_GetSurvey0_HTTP_Handler(srv))
 	r.GET("/v1/applications/{application_id}/surveys", _SurveyService_ListSurveysByApplication0_HTTP_Handler(srv))
 	r.GET("/v1/surveys", _SurveyService_ListSurveys0_HTTP_Handler(srv))
-	r.POST("/v1/surveys/{id}/start", _SurveyService_StartSurvey0_HTTP_Handler(srv))
-	r.POST("/v1/surveys/{id}/submit", _SurveyService_SubmitSurvey0_HTTP_Handler(srv))
-	r.POST("/v1/surveys/{id}/verify", _SurveyService_VerifySurvey0_HTTP_Handler(srv))
+	r.PUT("/v1/surveys/{id}/start", _SurveyService_StartSurvey0_HTTP_Handler(srv))
+	r.PUT("/v1/surveys/{id}/submit", _SurveyService_SubmitSurvey0_HTTP_Handler(srv))
+	r.PUT("/v1/surveys/{id}/verify", _SurveyService_VerifySurvey0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/answers", _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/evidences", _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv))
 	r.GET("/v1/survey-templates", _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv))
@@ -437,7 +437,7 @@ func (c *SurveyServiceHTTPClientImpl) StartSurvey(ctx context.Context, in *Start
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSurveyServiceStartSurvey))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -450,7 +450,7 @@ func (c *SurveyServiceHTTPClientImpl) SubmitSurvey(ctx context.Context, in *Subm
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSurveyServiceSubmitSurvey))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -490,7 +490,7 @@ func (c *SurveyServiceHTTPClientImpl) VerifySurvey(ctx context.Context, in *Veri
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSurveyServiceVerifySurvey))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

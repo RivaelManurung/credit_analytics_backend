@@ -47,7 +47,7 @@ service ApplicationService {
   }
   rpc ChangeApplicationStatus (ChangeApplicationStatusRequest) returns (Application) {
     option (google.api.http) = {
-      post: "/v1/applications/{id}/status",
+      put: "/v1/applications/{id}/status",
       body: "*"
     };
   }

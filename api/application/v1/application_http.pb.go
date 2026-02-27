@@ -52,7 +52,7 @@ func RegisterApplicationServiceHTTPServer(s *http.Server, srv ApplicationService
 	r.PUT("/v1/applications/{id}", _ApplicationService_UpdateApplication0_HTTP_Handler(srv))
 	r.GET("/v1/applications/{application_id}/attributes", _ApplicationService_GetApplicationAttributes0_HTTP_Handler(srv))
 	r.POST("/v1/applications/{application_id}/attributes", _ApplicationService_UpsertApplicationAttributes0_HTTP_Handler(srv))
-	r.POST("/v1/applications/{id}/status", _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv))
+	r.PUT("/v1/applications/{id}/status", _ApplicationService_ChangeApplicationStatus0_HTTP_Handler(srv))
 	r.POST("/v1/applications/{application_id}/documents", _ApplicationService_UploadApplicationDocument0_HTTP_Handler(srv))
 	r.GET("/v1/applications/{application_id}/documents", _ApplicationService_ListApplicationDocuments0_HTTP_Handler(srv))
 	r.GET("/v1/applications/documents/presigned-url", _ApplicationService_GetPresignedUrl0_HTTP_Handler(srv))
@@ -311,7 +311,7 @@ func (c *ApplicationServiceHTTPClientImpl) ChangeApplicationStatus(ctx context.C
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationApplicationServiceChangeApplicationStatus))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

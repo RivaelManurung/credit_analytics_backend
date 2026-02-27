@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - remote: buf.build/connectrpc/es:v1.6.0
+    out: ../credit_analytics_mobile/src/gen
+    opt: target=ts,import_extension=none
+  - remote: buf.build/bufbuild/es:v1.10.0
+    out: ../credit_analytics_mobile/src/gen
+    opt: target=ts,import_extension=none

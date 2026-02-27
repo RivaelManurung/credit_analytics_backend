@@ -1361,9 +1361,9 @@ const file_survey_v1_survey_proto_rawDesc = "" +
 	"\tGetSurvey\x12\x1f.api.survey.v1.GetSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/surveys/{id}\x12\xae\x01\n" +
 	"\x18ListSurveysByApplication\x12..api.survey.v1.ListSurveysByApplicationRequest\x1a/.api.survey.v1.ListSurveysByApplicationResponse\"1\x82\xd3\xe4\x93\x02+\x12)/v1/applications/{application_id}/surveys\x12i\n" +
 	"\vListSurveys\x12!.api.survey.v1.ListSurveysRequest\x1a\".api.survey.v1.ListSurveysResponse\"\x13\x82\xd3\xe4\x93\x02\r\x12\v/v1/surveys\x12u\n" +
-	"\vStartSurvey\x12!.api.survey.v1.StartSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/surveys/{id}/start\x12x\n" +
-	"\fSubmitSurvey\x12\".api.survey.v1.SubmitSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/surveys/{id}/submit\x12x\n" +
-	"\fVerifySurvey\x12\".api.survey.v1.VerifySurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/surveys/{id}/verify\x12\x87\x01\n" +
+	"\vStartSurvey\x12!.api.survey.v1.StartSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\x1a\x16/v1/surveys/{id}/start\x12x\n" +
+	"\fSubmitSurvey\x12\".api.survey.v1.SubmitSurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\x1a\x17/v1/surveys/{id}/submit\x12x\n" +
+	"\fVerifySurvey\x12\".api.survey.v1.VerifySurveyRequest\x1a .api.survey.v1.ApplicationSurvey\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\x1a\x17/v1/surveys/{id}/verify\x12\x87\x01\n" +
 	"\x12SubmitSurveyAnswer\x12(.api.survey.v1.SubmitSurveyAnswerRequest\x1a\x1b.api.survey.v1.SurveyAnswer\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/surveys/{survey_id}/answers\x12\x8f\x01\n" +
 	"\x14UploadSurveyEvidence\x12*.api.survey.v1.UploadSurveyEvidenceRequest\x1a\x1d.api.survey.v1.SurveyEvidence\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/surveys/{survey_id}/evidences\x12\x8a\x01\n" +
 	"\x13ListSurveyTemplates\x12).api.survey.v1.ListSurveyTemplatesRequest\x1a*.api.survey.v1.ListSurveyTemplatesResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/survey-templates\x12\x82\x01\n" +
