@@ -62,7 +62,7 @@ func RegisterSurveyServiceHTTPServer(s *http.Server, srv SurveyServiceHTTPServer
 	r.PUT("/v1/surveys/{id}/verify", _SurveyService_VerifySurvey0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/answers", _SurveyService_SubmitSurveyAnswer0_HTTP_Handler(srv))
 	r.POST("/v1/surveys/{survey_id}/evidences", _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv))
-	r.GET("/v1/survey-templates", _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv))
+	r.GET("/v1/survey-templates", _SurveyService_ListSurveyTemplates1_HTTP_Handler(srv))
 	r.POST("/v1/survey-templates", _SurveyService_CreateSurveyTemplate0_HTTP_Handler(srv))
 }
 
@@ -279,7 +279,7 @@ func _SurveyService_UploadSurveyEvidence0_HTTP_Handler(srv SurveyServiceHTTPServ
 	}
 }
 
-func _SurveyService_ListSurveyTemplates0_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
+func _SurveyService_ListSurveyTemplates1_HTTP_Handler(srv SurveyServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListSurveyTemplatesRequest
 		if err := ctx.BindQuery(&in); err != nil {

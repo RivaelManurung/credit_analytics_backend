@@ -754,7 +754,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
     /v1/applications/{id}/status:
-        post:
+        put:
             tags:
                 - ApplicationService
             operationId: ApplicationService_ChangeApplicationStatus
@@ -1225,7 +1225,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
     /v1/surveys/{id}/start:
-        post:
+        put:
             tags:
                 - SurveyService
             description: ===== WORKFLOW =====
@@ -1250,7 +1250,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
     /v1/surveys/{id}/submit:
-        post:
+        put:
             tags:
                 - SurveyService
             operationId: SurveyService_SubmitSurvey
@@ -1274,7 +1274,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
     /v1/surveys/{id}/verify:
-        post:
+        put:
             tags:
                 - SurveyService
             operationId: SurveyService_VerifySurvey
