@@ -32,7 +32,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "configs", "config path, eg: -conf config.yaml")
 }
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
@@ -60,6 +60,15 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+
+	// Check if config directory exists, if not, try fallback
+	if _, err := os.Stat(flagconf); os.IsNotExist(err) {
+		fallback := "../../configs"
+		if _, err := os.Stat(fallback); err == nil {
+			flagconf = fallback
+		}
+	}
+
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),
@@ -79,6 +88,7 @@ func main() {
 
 	// Handle Railway dynamic port
 	if port := os.Getenv("PORT"); port != "" {
+		log.NewHelper(logger).Infof("Railway PORT detected: %s", port)
 		bc.Server.Http.Addr = "0.0.0.0:" + port
 	}
 
@@ -91,11 +101,14 @@ func main() {
 	isCloud := os.Getenv("PORT") != "" || os.Getenv("RAILWAY_ENVIRONMENT") != ""
 
 	if dbSource != "" {
+		// Ensure it uses postgresql:// if needed for lib/pq
+		if strings.HasPrefix(dbSource, "postgres://") {
+			// some drivers prefer postgresql
+		}
 		bc.Data.Database.Source = dbSource
 		log.NewHelper(logger).Infof("Database override detected. Using environment variable.")
 	} else if isCloud {
 		log.NewHelper(logger).Error("CRITICAL ERROR: No database environment variable found (DATA_DATABASE_SOURCE or DATABASE_URL).")
-		log.NewHelper(logger).Error("Please set DATA_DATABASE_SOURCE in Railway Variables to ${{Postgres.DATABASE_URL}}")
 		panic("missing database configuration in cloud environment")
 	} else {
 		log.NewHelper(logger).Warn("No database environment variable found. Falling back to local config (config.yaml).")

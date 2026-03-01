@@ -3,9 +3,8 @@ GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always 2>/dev/null || echo "undefined")
 
 ifeq ($(GOHOSTOS), windows)
-	# Simplest way to find git-bash: look for git.exe and go to bin/bash.exe
-	GIT_EXE := $(firstword $(shell where git.exe))
-	Git_Bash := $(subst \,/,$(subst cmd\git.exe,bin\bash.exe,$(GIT_EXE)))
+	# Find git.exe and convert to bash.exe path using simple string replacement
+	Git_Bash := $(shell powershell -NoProfile -Command "$$p = (Get-Command git.exe -ErrorAction SilentlyContinue | Select-Object -First 1).Source; if ($$p) { $$p.Replace('cmd\git.exe', 'bin\bash.exe').Replace('\', '/') }")
 	
 	INTERNAL_PROTO_FILES=$(shell "$(Git_Bash)" -c "find internal -name *.proto")
 	API_PROTO_FILES=$(shell "$(Git_Bash)" -c "find api -name *.proto")
@@ -84,7 +83,12 @@ DB_PORT ?= 5432
 DB_NAME ?= credit_analytics
 DB_SSLMODE ?= disable
 
-DB_URL := "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)"
+# If DATABASE_URL is set (from Railway or shell), use it as the primary DB_URL
+ifneq ($(DATABASE_URL),)
+    DB_URL ?= $(DATABASE_URL)
+else
+    DB_URL ?= "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)"
+endif
 
 .PHONY: migrate-up
 # Run goose migrations up
