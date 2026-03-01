@@ -12,17 +12,25 @@ RETURNING *;
 SELECT *
 FROM survey_templates
 WHERE active = TRUE;
--- name: GetSurveyTemplateWithSections :many
-SELECT t.template_name,
-    s.section_name,
-    q.question_text,
-    q.answer_type
-FROM survey_templates t
-    JOIN survey_sections s ON s.template_id = t.id
-    JOIN survey_questions q ON q.section_id = s.id
-WHERE t.id = $1
-ORDER BY s.sequence,
-    q.sequence;
+-- name: ListSurveySections :many
+SELECT *
+FROM survey_sections
+WHERE template_id = $1
+ORDER BY sequence;
+-- name: ListSurveyQuestionsBySection :many
+SELECT *
+FROM survey_questions
+WHERE section_id = $1
+ORDER BY sequence;
+-- name: ListSurveyQuestionOptionsByQuestion :many
+SELECT *
+FROM survey_question_options
+WHERE question_id = $1
+ORDER BY id;
+-- name: GetSurveyTemplate :one
+SELECT *
+FROM survey_templates
+WHERE id = $1;
 -- name: AssignSurvey :one
 INSERT INTO application_surveys (
         application_id,

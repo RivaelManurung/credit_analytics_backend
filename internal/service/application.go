@@ -203,21 +203,7 @@ func (s *ApplicationService) ChangeApplicationStatus(ctx context.Context, req *p
 	if err != nil {
 		return nil, grpcerr.From(err)
 	}
-	if !biz.IsValidStatus(req.NewStatus) {
-		return nil, grpcerr.From(&biz.ErrInvalidArgument{
-			Field:   "new_status",
-			Message: "unknown application status: " + req.NewStatus,
-		})
-	}
-
-	app, err := s.uc.Get(ctx, id)
-	if err != nil {
-		return nil, grpcerr.From(err)
-	}
-	if err := app.TransitionTo(biz.ApplicationStatus(req.NewStatus)); err != nil {
-		return nil, grpcerr.From(err)
-	}
-	if err := s.uc.Update(ctx, app); err != nil {
+	if err := s.uc.ChangeStatus(ctx, id, req.NewStatus); err != nil {
 		return nil, grpcerr.From(err)
 	}
 	updated, err := s.uc.Get(ctx, id)

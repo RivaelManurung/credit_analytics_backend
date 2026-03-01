@@ -13,6 +13,7 @@ import (
 
 type Querier interface {
 	AssignSurvey(ctx context.Context, arg AssignSurveyParams) (ApplicationSurvey, error)
+	CheckTransitionAllowed(ctx context.Context, arg CheckTransitionAllowedParams) (bool, error)
 	CreateApplicant(ctx context.Context, arg CreateApplicantParams) (Applicant, error)
 	CreateApplication(ctx context.Context, arg CreateApplicationParams) (Application, error)
 	CreateApplicationDocument(ctx context.Context, arg CreateApplicationDocumentParams) (ApplicationDocument, error)
@@ -40,6 +41,7 @@ type Querier interface {
 	GetApplicationDecision(ctx context.Context, applicationID uuid.UUID) (ApplicationDecision, error)
 	GetAttributeCategory(ctx context.Context, categoryCode string) (AttributeCategory, error)
 	GetAttributeRegistry(ctx context.Context, id uuid.UUID) (GetAttributeRegistryRow, error)
+	GetInitialStatusForProduct(ctx context.Context, productID uuid.UUID) (string, error)
 	GetLoanProduct(ctx context.Context, id uuid.UUID) (LoanProduct, error)
 	GetPartiesByApplication(ctx context.Context, applicationID uuid.UUID) ([]GetPartiesByApplicationRow, error)
 	GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurvey, error)
@@ -49,6 +51,7 @@ type Querier interface {
 	ListApplicationAttributesByIDs(ctx context.Context, dollar_1 []uuid.UUID) ([]ApplicationAttribute, error)
 	ListApplicationDocuments(ctx context.Context, applicationID uuid.UUID) ([]ApplicationDocument, error)
 	ListApplicationStatuses(ctx context.Context) ([]ApplicationStatusRef, error)
+	GetStatusRef(ctx context.Context, statusCode string) (ApplicationStatusRef, error)
 	ListApplications(ctx context.Context, arg ListApplicationsParams) ([]ListApplicationsRow, error)
 	ListAssets(ctx context.Context, applicationID uuid.UUID) ([]ApplicationAsset, error)
 	// ==============================================================

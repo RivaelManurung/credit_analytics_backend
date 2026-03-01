@@ -141,32 +141,16 @@ func (a *Application) CheckPolicyGate() (bool, string) {
 	return true, "Passed Policy Gate"
 }
 func (a *Application) Submit() error {
-	if a.Status != StatusIntake {
-		return &ErrConflict{Message: fmt.Sprintf("cannot submit application in %s status", a.Status)}
-	}
 	if a.LoanAmount.IsZero() {
 		return &ErrInvalidArgument{Field: "loan_amount", Message: "cannot be zero"}
 	}
-	a.Status = StatusSurvey
 	return nil
 }
 
-func (a *Application) TransitionTo(newStatus ApplicationStatus) error {
-	allowed := false
-	switch a.Status {
-	case StatusIntake:
-		allowed = newStatus == StatusSurvey || newStatus == StatusCancelled || newStatus == StatusRejected
-	case StatusSurvey:
-		allowed = newStatus == StatusAnalysis || newStatus == StatusCancelled || newStatus == StatusRejected
-	case StatusAnalysis:
-		allowed = newStatus == StatusCommittee || newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled
-	case StatusCommittee:
-		allowed = newStatus == StatusApproved || newStatus == StatusRejected || newStatus == StatusCancelled
-	}
-
-	if !allowed && a.Status != newStatus {
+func (a *Application) TransitionTo(newStatus ApplicationStatus, isAllowed bool) error {
+	if !isAllowed && a.Status != newStatus {
 		return &ErrConflict{
-			Message: fmt.Sprintf("invalid status transition from %s to %s", a.Status, newStatus),
+			Message: fmt.Sprintf("invalid status transition from %s to %s for this product", a.Status, newStatus),
 		}
 	}
 
@@ -174,10 +158,10 @@ func (a *Application) TransitionTo(newStatus ApplicationStatus) error {
 	return nil
 }
 
-func (a *Application) Archive() error {
-	if !a.Status.IsTerminal() {
+func (a *Application) Archive(isTerminal bool) error {
+	if !isTerminal {
 		return &ErrConflict{
-			Message: "cannot archive application that is not in terminal state (APPROVED/REJECTED/CANCELLED)",
+			Message: "cannot archive application that is not in a terminal state",
 		}
 	}
 	return nil
@@ -229,6 +213,11 @@ type ApplicationRepo interface {
 	// AO Assignment Helpers
 	ListAvailableAOs(ctx context.Context, branchCode string) ([]uuid.UUID, error)
 
+	// Workflow/Status Helpers
+	IsTerminalStatus(ctx context.Context, status string) (bool, error)
+	IsTransitionAllowed(ctx context.Context, productID uuid.UUID, fromStatus, toStatus string) (bool, error)
+	GetInitialStatus(ctx context.Context, productID uuid.UUID) (string, error)
+
 	// Document Related
 	SaveDocument(ctx context.Context, doc *ApplicationDocument) error
 	ListDocuments(ctx context.Context, appID uuid.UUID) ([]ApplicationDocument, error)
@@ -255,8 +244,34 @@ func (uc *ApplicationUsecase) Create(ctx context.Context, app *Application) (uui
 	if app.ID == uuid.Nil {
 		app.ID, _ = uuid.NewV7()
 	}
-	app.Status = StatusIntake
+
+	// Dynamic initial status
+	initialStatus, err := uc.repo.GetInitialStatus(ctx, app.ProductID)
+	if err == nil && initialStatus != "" {
+		app.Status = ApplicationStatus(initialStatus)
+	} else {
+		app.Status = StatusIntake // Fallback
+	}
+
 	return uc.repo.Save(ctx, app)
+}
+
+func (uc *ApplicationUsecase) Submit(ctx context.Context, id uuid.UUID) error {
+	app, err := uc.repo.FindByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if err := app.Submit(); err != nil {
+		return err
+	}
+
+	// Dynamic transition to SURVEY
+	allowed, _ := uc.repo.IsTransitionAllowed(ctx, app.ProductID, string(app.Status), string(StatusSurvey))
+	if err := app.TransitionTo(StatusSurvey, allowed); err != nil {
+		return err
+	}
+
+	return uc.repo.Update(ctx, app)
 }
 
 // CreateLead creates an application and auto-assigns a borrower party and AO.
@@ -298,10 +313,17 @@ func (uc *ApplicationUsecase) CreateLead(ctx context.Context, app *Application, 
 }
 
 // Step 4 & 5: Early Checks (100%)
+// Step 4 & 5: Early Checks (100%)
 func (uc *ApplicationUsecase) RunEarlyChecks(ctx context.Context, id uuid.UUID) (bool, string, error) {
 	app, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		return false, "", err
+	}
+
+	// Check if already locked (terminal)
+	isLocked, _ := uc.repo.IsTerminalStatus(ctx, string(app.Status))
+	if isLocked {
+		return false, "Application is locked in a terminal state", nil
 	}
 
 	// Load parties for SLIK check
@@ -315,33 +337,50 @@ func (uc *ApplicationUsecase) RunEarlyChecks(ctx context.Context, id uuid.UUID) 
 
 	// Step 4: Early SLIK
 	if ok, msg := app.CheckEarlySLIK(); !ok {
-		app.TransitionTo(StatusRejected)
+		allowed, _ := uc.repo.IsTransitionAllowed(ctx, app.ProductID, string(app.Status), string(StatusRejected))
+		app.TransitionTo(StatusRejected, allowed)
 		uc.repo.Update(ctx, app)
 		return false, msg, nil
 	}
 
 	// Step 5: Early Policy Gate
 	if ok, msg := app.CheckPolicyGate(); !ok {
-		app.TransitionTo(StatusRejected)
+		allowed, _ := uc.repo.IsTransitionAllowed(ctx, app.ProductID, string(app.Status), string(StatusRejected))
+		app.TransitionTo(StatusRejected, allowed)
 		uc.repo.Update(ctx, app)
 		return false, msg, nil
 	}
 
 	// If all pass, move to SURVEY status
-	app.TransitionTo(StatusSurvey)
+	allowed, _ := uc.repo.IsTransitionAllowed(ctx, app.ProductID, string(app.Status), string(StatusSurvey))
+	app.TransitionTo(StatusSurvey, allowed)
 	uc.repo.Update(ctx, app)
 
 	return true, "Passed all early checks", nil
 }
 
-func (uc *ApplicationUsecase) Submit(ctx context.Context, id uuid.UUID) error {
+func (uc *ApplicationUsecase) ChangeStatus(ctx context.Context, id uuid.UUID, nextStatus string) error {
 	app, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		return err
 	}
-	if err := app.Submit(); err != nil {
+
+	// Check if already locked (terminal)
+	isLocked, _ := uc.repo.IsTerminalStatus(ctx, string(app.Status))
+	if isLocked {
+		return &ErrLocked{Resource: "application", ID: id.String(), Status: string(app.Status)}
+	}
+
+	// Dynamic transition check
+	allowed, err := uc.repo.IsTransitionAllowed(ctx, app.ProductID, string(app.Status), nextStatus)
+	if err != nil {
 		return err
 	}
+
+	if err := app.TransitionTo(ApplicationStatus(nextStatus), allowed); err != nil {
+		return err
+	}
+
 	return uc.repo.Update(ctx, app)
 }
 
@@ -352,7 +391,10 @@ func (uc *ApplicationUsecase) Update(ctx context.Context, app *Application) erro
 	if err != nil {
 		return err
 	}
-	if existing.IsLocked() {
+
+	// Dynamic lock check
+	isLocked, _ := uc.repo.IsTerminalStatus(ctx, string(existing.Status))
+	if isLocked {
 		return &ErrLocked{Resource: "application", ID: app.ID.String(), Status: string(existing.Status)}
 	}
 

@@ -94,16 +94,61 @@ func (s *SurveyService) ListSurveyTemplates(ctx context.Context, req *pb.ListSur
 	}
 	var res []*pb.SurveyTemplate
 	for _, t := range templates {
-		res = append(res, &pb.SurveyTemplate{
-			Id:            t.ID.String(),
-			TemplateCode:  t.TemplateCode,
-			TemplateName:  t.TemplateName,
-			ApplicantType: t.ApplicantType,
-			ProductId:     t.ProductID.String(),
-			Active:        t.Active,
-		})
+		res = append(res, mapTemplateToPb(t))
 	}
 	return &pb.ListSurveyTemplatesResponse{Templates: res}, nil
+}
+
+func (s *SurveyService) GetSurveyTemplate(ctx context.Context, req *pb.GetSurveyTemplateRequest) (*pb.SurveyTemplate, error) {
+	id, _ := uuid.Parse(req.Id)
+	t, err := s.uc.GetSurveyTemplate(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return mapTemplateToPb(t), nil
+}
+
+func mapTemplateToPb(t *biz.SurveyTemplate) *pb.SurveyTemplate {
+	res := &pb.SurveyTemplate{
+		Id:            t.ID.String(),
+		TemplateCode:  t.TemplateCode,
+		TemplateName:  t.TemplateName,
+		ApplicantType: t.ApplicantType,
+		ProductId:     t.ProductID.String(),
+		Active:        t.Active,
+	}
+
+	for _, sec := range t.Sections {
+		pbSec := &pb.SurveySection{
+			Id:          sec.ID.String(),
+			TemplateId:  sec.TemplateID.String(),
+			SectionName: sec.Name,
+			Sequence:    sec.Sequence,
+		}
+
+		for _, q := range sec.Questions {
+			pbQ := &pb.SurveyQuestion{
+				Id:           q.ID.String(),
+				SectionId:    q.SectionID.String(),
+				QuestionText: q.Text,
+				AnswerType:   q.AnswerType,
+				Sequence:     q.Sequence,
+				IsRequired:   q.IsRequired,
+			}
+
+			for _, o := range q.Options {
+				pbQ.Options = append(pbQ.Options, &pb.SurveyQuestionOption{
+					Id:          o.ID.String(),
+					QuestionId:  o.QuestionID.String(),
+					OptionText:  o.Text,
+					OptionValue: o.Value,
+				})
+			}
+			pbSec.Questions = append(pbSec.Questions, pbQ)
+		}
+		res.Sections = append(res.Sections, pbSec)
+	}
+	return res
 }
 
 func (s *SurveyService) AssignSurvey(ctx context.Context, req *pb.AssignSurveyRequest) (*pb.ApplicationSurvey, error) {

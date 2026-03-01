@@ -63,6 +63,91 @@ func (r *surveyRepo) ListSurveyTemplates(ctx context.Context) ([]*biz.SurveyTemp
 	return res, nil
 }
 
+func (r *surveyRepo) GetSurveyTemplate(ctx context.Context, id uuid.UUID) (*biz.SurveyTemplate, error) {
+	// 1. Get Template
+	var t db.SurveyTemplate
+	err := r.data.sqlDB.QueryRowContext(ctx, "SELECT id, template_code, template_name, applicant_type, product_id, active FROM survey_templates WHERE id = $1", id).Scan(
+		&t.ID, &t.TemplateCode, &t.TemplateName, &t.ApplicantType, &t.ProductID, &t.Active,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &biz.SurveyTemplate{
+		ID:            t.ID,
+		TemplateCode:  t.TemplateCode.String,
+		TemplateName:  t.TemplateName.String,
+		ApplicantType: t.ApplicantType.String,
+		ProductID:     t.ProductID.UUID,
+		Active:        t.Active.Bool,
+	}
+
+	// 2. Get Sections
+	rows, err := r.data.sqlDB.QueryContext(ctx, "SELECT id, template_id, section_name, sequence FROM survey_sections WHERE template_id = $1 ORDER BY sequence", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var s db.SurveySection
+		if err := rows.Scan(&s.ID, &s.TemplateID, &s.SectionName, &s.Sequence); err != nil {
+			return nil, err
+		}
+
+		bizSection := &biz.SurveySection{
+			ID:         s.ID,
+			TemplateID: s.TemplateID.UUID,
+			Name:       s.SectionName.String,
+			Sequence:   s.Sequence.Int32,
+		}
+
+		// 3. Get Questions
+		qRows, err := r.data.sqlDB.QueryContext(ctx, "SELECT id, section_id, question_text, answer_type, is_mandatory, sequence FROM survey_questions WHERE section_id = $1 ORDER BY sequence", s.ID)
+		if err == nil {
+			for qRows.Next() {
+				var q db.SurveyQuestion
+				if err := qRows.Scan(&q.ID, &q.SectionID, &q.QuestionText, &q.AnswerType, &q.IsMandatory, &q.Sequence); err != nil {
+					continue
+				}
+
+				bizQuestion := &biz.SurveyQuestion{
+					ID:         q.ID,
+					SectionID:  q.SectionID.UUID,
+					Text:       q.QuestionText.String,
+					AnswerType: q.AnswerType.String,
+					Sequence:   q.Sequence.Int32,
+					IsRequired: q.IsMandatory.Bool,
+				}
+
+				// 4. Get Options
+				oRows, err := r.data.sqlDB.QueryContext(ctx, "SELECT id, question_id, option_label, option_value FROM survey_question_options WHERE question_id = $1 ORDER BY sequence", q.ID)
+				if err == nil {
+					for oRows.Next() {
+						var o db.SurveyQuestionOption
+						if err := oRows.Scan(&o.ID, &o.QuestionID, &o.OptionLabel, &o.OptionValue); err != nil {
+							continue
+						}
+						bizQuestion.Options = append(bizQuestion.Options, &biz.SurveyQuestionOption{
+							ID:         o.ID,
+							QuestionID: o.QuestionID.UUID,
+							Text:       o.OptionLabel.String,
+							Value:      o.OptionValue.String,
+						})
+					}
+					oRows.Close()
+				}
+				bizSection.Questions = append(bizSection.Questions, bizQuestion)
+			}
+			qRows.Close()
+		}
+
+		res.Sections = append(res.Sections, bizSection)
+	}
+
+	return res, nil
+}
+
 func (r *surveyRepo) AssignSurvey(ctx context.Context, s *biz.ApplicationSurvey) (*biz.ApplicationSurvey, error) {
 	res, err := r.data.db.AssignSurvey(ctx, db.AssignSurveyParams{
 		ApplicationID: uuid.NullUUID{UUID: s.ApplicationID, Valid: s.ApplicationID != uuid.Nil},

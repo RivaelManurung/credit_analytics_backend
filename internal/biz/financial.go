@@ -86,7 +86,8 @@ func (uc *FinancialUsecase) checkLock(ctx context.Context, appID uuid.UUID) erro
 	if err != nil {
 		return err
 	}
-	if app.IsLocked() {
+	isTerminal, _ := uc.appRepo.IsTerminalStatus(ctx, string(app.Status))
+	if isTerminal {
 		return fmt.Errorf("application %s is locked and financial data cannot be modified", appID)
 	}
 	return nil

@@ -351,6 +351,36 @@ func (r *applicationRepo) ListDocuments(ctx context.Context, appID uuid.UUID) ([
 	return res, nil
 }
 
+func (r *applicationRepo) IsTerminalStatus(ctx context.Context, status string) (bool, error) {
+	res, err := r.data.db.GetStatusRef(ctx, status)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+	return res.IsTerminal.Bool, nil
+}
+
+func (r *applicationRepo) IsTransitionAllowed(ctx context.Context, productID uuid.UUID, fromStatus, toStatus string) (bool, error) {
+	return r.data.db.CheckTransitionAllowed(ctx, db.CheckTransitionAllowedParams{
+		ProductID:  productID,
+		FromStatus: fromStatus,
+		ToStatus:   toStatus,
+	})
+}
+
+func (r *applicationRepo) GetInitialStatus(ctx context.Context, productID uuid.UUID) (string, error) {
+	status, err := r.data.db.GetInitialStatusForProduct(ctx, productID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "INTAKE", nil // Default fallback
+		}
+		return "", err
+	}
+	return status, nil
+}
+
 func (r *applicationRepo) batchGetAttributes(ctx context.Context, ids []uuid.UUID) (map[uuid.UUID][]biz.ApplicationAttribute, error) {
 	attrs, err := r.data.db.ListApplicationAttributesByIDs(ctx, ids)
 	if err != nil {

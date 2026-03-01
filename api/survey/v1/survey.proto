@@ -78,6 +78,13 @@ service SurveyService {
   }
 
   // ===== TEMPLATES (Optional Admin/Setup) =====
+  rpc GetSurveyTemplate (GetSurveyTemplateRequest) returns (SurveyTemplate) {
+    option (google.api.http) = {
+      get: "/v1/survey-templates/{id}"
+    };
+  }
+
+  // ===== TEMPLATES (Optional Admin/Setup) =====
   rpc ListSurveyTemplates (ListSurveyTemplatesRequest) returns (ListSurveyTemplatesResponse) {
     option (google.api.http) = {
       get: "/v1/survey-templates"
@@ -103,6 +110,32 @@ message SurveyTemplate {
   string applicant_type = 4;
   string product_id = 5;
   bool active = 6;
+  repeated SurveySection sections = 7;
+}
+
+message SurveySection {
+  string id = 1;
+  string template_id = 2;
+  string section_name = 3;
+  int32 sequence = 4;
+  repeated SurveyQuestion questions = 5;
+}
+
+message SurveyQuestion {
+  string id = 1;
+  string section_id = 2;
+  string question_text = 3;
+  string answer_type = 4; // TEXT | NUMBER | BOOLEAN | DATE | OPTION
+  int32 sequence = 5;
+  bool is_required = 6;
+  repeated SurveyQuestionOption options = 7;
+}
+
+message SurveyQuestionOption {
+  string id = 1;
+  string question_id = 2;
+  string option_text = 3;
+  string option_value = 4;
 }
 
 message ApplicationSurvey {
@@ -215,6 +248,10 @@ message AssignSurveyRequest {
 }
 
 message GetSurveyRequest {
+  string id = 1;
+}
+
+message GetSurveyTemplateRequest {
   string id = 1;
 }
 

@@ -647,3 +647,59 @@ func (q *Queries) UpsertApplicationAttribute(ctx context.Context, arg UpsertAppl
 	)
 	return i, err
 }
+
+const checkTransitionAllowed = `-- name: CheckTransitionAllowed :one
+SELECT EXISTS (
+    SELECT 1
+    FROM product_status_flows
+    WHERE product_id = $1
+    AND from_status = $2
+    AND to_status = $3
+)
+`
+
+type CheckTransitionAllowedParams struct {
+	ProductID  uuid.UUID `json:"product_id"`
+	FromStatus string    `json:"from_status"`
+	ToStatus   string    `json:"to_status"`
+}
+
+func (q *Queries) CheckTransitionAllowed(ctx context.Context, arg CheckTransitionAllowedParams) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkTransitionAllowed, arg.ProductID, arg.FromStatus, arg.ToStatus)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
+const getInitialStatusForProduct = `-- name: GetInitialStatusForProduct :one
+SELECT to_status
+FROM product_status_flows
+WHERE product_id = $1
+AND from_status = 'START'
+LIMIT 1
+`
+
+func (q *Queries) GetInitialStatusForProduct(ctx context.Context, productID uuid.UUID) (string, error) {
+	row := q.db.QueryRowContext(ctx, getInitialStatusForProduct, productID)
+	var to_status string
+	err := row.Scan(&to_status)
+	return to_status, err
+}
+
+const getStatusRef = `-- name: GetStatusRef :one
+SELECT status_code, status_group, is_terminal, description
+FROM application_status_refs
+WHERE status_code = $1
+`
+
+func (q *Queries) GetStatusRef(ctx context.Context, statusCode string) (ApplicationStatusRef, error) {
+	row := q.db.QueryRowContext(ctx, getStatusRef, statusCode)
+	var i ApplicationStatusRef
+	err := row.Scan(
+		&i.StatusCode,
+		&i.StatusGroup,
+		&i.IsTerminal,
+		&i.Description,
+	)
+	return i, err
+}

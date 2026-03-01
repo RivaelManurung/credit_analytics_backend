@@ -142,3 +142,24 @@ SELECT p.*,
 FROM parties p
     JOIN application_parties ap ON p.id = ap.party_id
 WHERE ap.application_id = $1;
+
+-- name: GetStatusRef :one
+SELECT *
+FROM application_status_refs
+WHERE status_code = $1;
+
+-- name: GetInitialStatusForProduct :one
+SELECT to_status
+FROM product_status_flows
+WHERE product_id = $1
+AND from_status = 'START'
+LIMIT 1;
+
+-- name: CheckTransitionAllowed :one
+SELECT EXISTS (
+    SELECT 1
+    FROM product_status_flows
+    WHERE product_id = $1
+    AND from_status = $2
+    AND to_status = $3
+);

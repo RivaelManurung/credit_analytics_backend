@@ -16,6 +16,32 @@ type SurveyTemplate struct {
 	ApplicantType string
 	ProductID     uuid.UUID
 	Active        bool
+	Sections      []*SurveySection
+}
+
+type SurveySection struct {
+	ID         uuid.UUID
+	TemplateID uuid.UUID
+	Name       string
+	Sequence   int32
+	Questions  []*SurveyQuestion
+}
+
+type SurveyQuestion struct {
+	ID         uuid.UUID
+	SectionID  uuid.UUID
+	Text       string
+	AnswerType string
+	Sequence   int32
+	IsRequired bool
+	Options    []*SurveyQuestionOption
+}
+
+type SurveyQuestionOption struct {
+	ID         uuid.UUID
+	QuestionID uuid.UUID
+	Text       string
+	Value      string
 }
 
 type ApplicationSurvey struct {
@@ -67,6 +93,7 @@ type ListSurveysFilter struct {
 
 type SurveyRepo interface {
 	CreateSurveyTemplate(context.Context, *SurveyTemplate) (*SurveyTemplate, error)
+	GetSurveyTemplate(context.Context, uuid.UUID) (*SurveyTemplate, error)
 	ListSurveyTemplates(context.Context) ([]*SurveyTemplate, error)
 	AssignSurvey(context.Context, *ApplicationSurvey) (*ApplicationSurvey, error)
 	GetSurvey(context.Context, uuid.UUID) (*ApplicationSurvey, error)
@@ -96,7 +123,8 @@ func (uc *SurveyUsecase) checkLock(ctx context.Context, appID uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	if app.IsLocked() {
+	isLocked, _ := uc.appRepo.IsTerminalStatus(ctx, string(app.Status))
+	if isLocked {
 		return fmt.Errorf("application %s is locked and survey data cannot be modified", appID)
 	}
 	return nil
@@ -106,7 +134,12 @@ func (uc *SurveyUsecase) CreateSurveyTemplate(ctx context.Context, t *SurveyTemp
 	return uc.repo.CreateSurveyTemplate(ctx, t)
 }
 
+func (uc *SurveyUsecase) GetSurveyTemplate(ctx context.Context, id uuid.UUID) (*SurveyTemplate, error) {
+	return uc.repo.GetSurveyTemplate(ctx, id)
+}
+
 func (uc *SurveyUsecase) ListSurveyTemplates(ctx context.Context) ([]*SurveyTemplate, error) {
+
 	return uc.repo.ListSurveyTemplates(ctx)
 }
 

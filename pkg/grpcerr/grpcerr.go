@@ -20,22 +20,22 @@ func From(err error) error {
 	// Domain-typed errors
 	var notFound *biz.ErrNotFound
 	if errors.As(err, &notFound) {
-		return status.Errorf(codes.NotFound, err.Error())
+		return status.Error(codes.NotFound, err.Error())
 	}
 
 	var invalid *biz.ErrInvalidArgument
 	if errors.As(err, &invalid) {
-		return status.Errorf(codes.InvalidArgument, err.Error())
+		return status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	var conflict *biz.ErrConflict
 	if errors.As(err, &conflict) {
-		return status.Errorf(codes.FailedPrecondition, err.Error())
+		return status.Error(codes.FailedPrecondition, err.Error())
 	}
 
 	var locked *biz.ErrLocked
 	if errors.As(err, &locked) {
-		return status.Errorf(codes.FailedPrecondition, err.Error())
+		return status.Error(codes.FailedPrecondition, err.Error())
 	}
 
 	// sql.ErrNoRows → NotFound

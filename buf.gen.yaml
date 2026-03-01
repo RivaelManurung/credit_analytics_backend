@@ -11,11 +11,11 @@ plugins:
     out: api
     opt: paths=source_relative
   # Generate Kratos HTTP code for Go (Local plugin)
-  - plugin: go-http
+  - local: protoc-gen-go-http
     out: api
     opt: paths=source_relative
   # Generate OpenAPI documentation (Local plugin)
-  - plugin: openapi
+  - local: protoc-gen-openapi
     out: internal/server
     opt: 
       - fq_schema_naming=true
