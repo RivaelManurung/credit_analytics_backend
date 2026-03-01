@@ -273,5 +273,7 @@ func mapSurveyToPb(s *biz.ApplicationSurvey) *pb.ApplicationSurvey {
 		SubmittedBy:       s.SubmittedBy.String(),
 		ApplicantName:     s.ApplicantName,
 		ApplicationStatus: s.ApplicationStatus,
+		TotalQuestions:    s.TotalQuestions,
+		AnsweredQuestions: s.AnsweredQuestions,
 	}
 }

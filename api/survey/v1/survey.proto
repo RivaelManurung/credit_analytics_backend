@@ -154,6 +154,10 @@ message ApplicationSurvey {
   // Enrichment (Optional): Membantu mobile app menampilkan data list tanpa hit API tambahan
   string applicant_name = 11; 
   string application_status = 12;
+  
+  // Progress (e.g., 2/15)
+  int32 total_questions = 13;
+  int32 answered_questions = 14;
 }
 
 message SurveyAnswer {

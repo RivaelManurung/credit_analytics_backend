@@ -289,6 +289,8 @@ func (r *surveyRepo) ListSurveys(ctx context.Context, filter *biz.ListSurveysFil
 			SubmittedAt:       row.SubmittedAt.Time,
 			ApplicationStatus: row.ApplicationStatus,
 			ApplicantName:     row.ApplicantName.String,
+			TotalQuestions:    row.TotalQuestions,
+			AnsweredQuestions: row.AnsweredQuestions,
 		})
 	}
 
@@ -302,17 +304,19 @@ func (r *surveyRepo) ListSurveys(ctx context.Context, filter *biz.ListSurveysFil
 
 func mapSurveyToBiz(s *db.ApplicationSurvey) *biz.ApplicationSurvey {
 	return &biz.ApplicationSurvey{
-		ID:            s.ID,
-		ApplicationID: s.ApplicationID.UUID,
-		TemplateID:    s.TemplateID.UUID,
-		SurveyType:    s.SurveyType.String,
-		Status:        s.Status.String,
-		SubmittedBy:   s.SubmittedBy.UUID,
-		VerifiedBy:    s.VerifiedBy.UUID,
-		VerifiedAt:    s.VerifiedAt.Time,
-		AssignedTo:    s.AssignedTo.UUID,
-		SurveyPurpose: s.SurveyPurpose.String,
-		StartedAt:     s.StartedAt.Time,
-		SubmittedAt:   s.SubmittedAt.Time,
+		ID:                s.ID,
+		ApplicationID:     s.ApplicationID.UUID,
+		TemplateID:        s.TemplateID.UUID,
+		SurveyType:        s.SurveyType.String,
+		Status:            s.Status.String,
+		SubmittedBy:       s.SubmittedBy.UUID,
+		VerifiedBy:        s.VerifiedBy.UUID,
+		VerifiedAt:        s.VerifiedAt.Time,
+		AssignedTo:        s.AssignedTo.UUID,
+		SurveyPurpose:     s.SurveyPurpose.String,
+		StartedAt:         s.StartedAt.Time,
+		SubmittedAt:       s.SubmittedAt.Time,
+		TotalQuestions:    s.TotalQuestions,
+		AnsweredQuestions: s.AnsweredQuestions,
 	}
 }

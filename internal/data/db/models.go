@@ -196,18 +196,20 @@ type ApplicationStatusRef struct {
 }
 
 type ApplicationSurvey struct {
-	ID            uuid.UUID      `json:"id"`
-	ApplicationID uuid.NullUUID  `json:"application_id"`
-	TemplateID    uuid.NullUUID  `json:"template_id"`
-	SurveyType    sql.NullString `json:"survey_type"`
-	Status        sql.NullString `json:"status"`
-	SubmittedBy   uuid.NullUUID  `json:"submitted_by"`
-	VerifiedBy    uuid.NullUUID  `json:"verified_by"`
-	VerifiedAt    sql.NullTime   `json:"verified_at"`
-	AssignedTo    uuid.NullUUID  `json:"assigned_to"`
-	SurveyPurpose sql.NullString `json:"survey_purpose"`
-	StartedAt     sql.NullTime   `json:"started_at"`
-	SubmittedAt   sql.NullTime   `json:"submitted_at"`
+	ID                uuid.UUID      `json:"id"`
+	ApplicationID     uuid.NullUUID  `json:"application_id"`
+	TemplateID        uuid.NullUUID  `json:"template_id"`
+	SurveyType        sql.NullString `json:"survey_type"`
+	Status            sql.NullString `json:"status"`
+	SubmittedBy       uuid.NullUUID  `json:"submitted_by"`
+	VerifiedBy        uuid.NullUUID  `json:"verified_by"`
+	VerifiedAt        sql.NullTime   `json:"verified_at"`
+	AssignedTo        uuid.NullUUID  `json:"assigned_to"`
+	SurveyPurpose     sql.NullString `json:"survey_purpose"`
+	StartedAt         sql.NullTime   `json:"started_at"`
+	SubmittedAt       sql.NullTime   `json:"submitted_at"`
+	TotalQuestions    int32          `json:"total_questions"`
+	AnsweredQuestions int32          `json:"answered_questions"`
 }
 
 type AssetType struct {

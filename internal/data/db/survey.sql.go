@@ -137,9 +137,20 @@ func (q *Queries) CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemp
 }
 
 const getSurvey = `-- name: GetSurvey :one
-SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
-FROM application_surveys
-WHERE id = $1
+SELECT s.id, s.application_id, s.template_id, s.survey_type, s.status, s.submitted_by, s.verified_by, s.verified_at, s.assigned_to, s.survey_purpose, s.started_at, s.submitted_at,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
+FROM application_surveys s
+WHERE s.id = $1
 `
 
 func (q *Queries) GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurvey, error) {
@@ -158,6 +169,8 @@ func (q *Queries) GetSurvey(ctx context.Context, id uuid.UUID) (ApplicationSurve
 		&i.SurveyPurpose,
 		&i.StartedAt,
 		&i.SubmittedAt,
+		&i.TotalQuestions,
+		&i.AnsweredQuestions,
 	)
 	return i, err
 }
@@ -249,7 +262,18 @@ func (q *Queries) ListSurveyTemplates(ctx context.Context) ([]SurveyTemplate, er
 const listSurveys = `-- name: ListSurveys :many
 SELECT s.id, s.application_id, s.template_id, s.survey_type, s.status, s.submitted_by, s.verified_by, s.verified_at, s.assigned_to, s.survey_purpose, s.started_at, s.submitted_at,
     a.status AS application_status,
-    app.full_name AS applicant_name
+    app.full_name AS applicant_name,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
 FROM application_surveys s
     JOIN applications a ON s.application_id = a.id
     JOIN applicants app ON a.applicant_id = app.id
@@ -301,6 +325,8 @@ type ListSurveysRow struct {
 	SubmittedAt       sql.NullTime   `json:"submitted_at"`
 	ApplicationStatus string         `json:"application_status"`
 	ApplicantName     sql.NullString `json:"applicant_name"`
+	TotalQuestions    int32          `json:"total_questions"`
+	AnsweredQuestions int32          `json:"answered_questions"`
 }
 
 func (q *Queries) ListSurveys(ctx context.Context, arg ListSurveysParams) ([]ListSurveysRow, error) {
@@ -334,6 +360,8 @@ func (q *Queries) ListSurveys(ctx context.Context, arg ListSurveysParams) ([]Lis
 			&i.SubmittedAt,
 			&i.ApplicationStatus,
 			&i.ApplicantName,
+			&i.TotalQuestions,
+			&i.AnsweredQuestions,
 		); err != nil {
 			return nil, err
 		}
@@ -349,8 +377,19 @@ func (q *Queries) ListSurveys(ctx context.Context, arg ListSurveysParams) ([]Lis
 }
 
 const listSurveysByApplication = `-- name: ListSurveysByApplication :many
-SELECT id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
-FROM application_surveys
+SELECT s.id, s.application_id, s.template_id, s.survey_type, s.status, s.submitted_by, s.verified_by, s.verified_at, s.assigned_to, s.survey_purpose, s.started_at, s.submitted_at,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
+FROM application_surveys s
 WHERE application_id = $1
 `
 
@@ -376,6 +415,8 @@ func (q *Queries) ListSurveysByApplication(ctx context.Context, applicationID uu
 			&i.SurveyPurpose,
 			&i.StartedAt,
 			&i.SubmittedAt,
+			&i.TotalQuestions,
+			&i.AnsweredQuestions,
 		); err != nil {
 			return nil, err
 		}
@@ -407,7 +448,18 @@ SET status = $2,
         ELSE submitted_by
     END
 WHERE id = $1
-RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at
+RETURNING id, application_id, template_id, survey_type, status, submitted_by, verified_by, verified_at, assigned_to, survey_purpose, started_at, submitted_at,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = application_surveys.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = application_surveys.id
+    )::int AS answered_questions
 `
 
 type UpdateSurveyStatusParams struct {
@@ -432,6 +484,8 @@ func (q *Queries) UpdateSurveyStatus(ctx context.Context, arg UpdateSurveyStatus
 		&i.SurveyPurpose,
 		&i.StartedAt,
 		&i.SubmittedAt,
+		&i.TotalQuestions,
+		&i.AnsweredQuestions,
 	)
 	return i, err
 }

@@ -48,7 +48,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 				}
 				w.Header().Set("Access-Control-Allow-Origin", origin)
 				w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
-				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-User-Agent, X-Grpc-Web, Connect-Protocol-Version, Grpc-Timeout, Custom-Header-1")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-User-Agent, X-Grpc-Web, Connect-Protocol-Version, Grpc-Timeout, grpc-accept-encoding, Custom-Header-1")
 				w.Header().Set("Access-Control-Expose-Headers", "Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin, grpc-status, grpc-message, connect-error-info-bin")
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
 				w.Header().Set("Access-Control-Max-Age", "86400")
@@ -62,8 +62,16 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 				h.Infof("HTTP Request: %s %s (ContentType: %s, UserAgent: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"), r.Header.Get("User-Agent"))
 
 				// 3. Handle gRPC-Web
-				if wrappedGrpc.IsGrpcWebRequest(r) || r.Header.Get("X-Grpc-Web") == "1" {
+				contentType := r.Header.Get("Content-Type")
+				isGrpcWeb := wrappedGrpc.IsGrpcWebRequest(r) ||
+					r.Header.Get("X-Grpc-Web") == "1" ||
+					(contentType != "" && (contentType == "application/grpc-web" ||
+						contentType == "application/grpc-web+proto" ||
+						contentType == "application/grpc-web-text+proto"))
+
+				if isGrpcWeb {
 					h.Infof("Detected gRPC-Web Request: %s %s", r.Method, r.URL.Path)
+					w.Header().Set("Cache-Control", "no-cache") // Disable caching for gRPC-Web
 					wrappedGrpc.ServeHTTP(w, r)
 					return
 				}

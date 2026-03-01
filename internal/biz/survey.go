@@ -61,6 +61,10 @@ type ApplicationSurvey struct {
 	// Enrichment
 	ApplicantName     string
 	ApplicationStatus string
+
+	// Progress
+	TotalQuestions    int32
+	AnsweredQuestions int32
 }
 
 type SurveyAnswer struct {

@@ -43,13 +43,35 @@ INSERT INTO application_surveys (
 VALUES ($1, $2, $3, 'ASSIGNED', $4, $5)
 RETURNING *;
 -- name: GetSurvey :one
-SELECT *
-FROM application_surveys
-WHERE id = $1;
+SELECT s.*,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
+FROM application_surveys s
+WHERE s.id = $1;
 -- name: ListSurveysByApplication :many
-SELECT *
-FROM application_surveys
-WHERE application_id = $1;
+SELECT s.*,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
+FROM application_surveys s
+WHERE s.application_id = $1;
 -- name: UpdateSurveyStatus :one
 UPDATE application_surveys
 SET status = $2,
@@ -97,7 +119,18 @@ RETURNING *;
 -- name: ListSurveys :many
 SELECT s.*,
     a.status AS application_status,
-    app.full_name AS applicant_name
+    app.full_name AS applicant_name,
+    (
+        SELECT COUNT(q.id)
+        FROM survey_questions q
+            JOIN survey_sections sec ON q.section_id = sec.id
+        WHERE sec.template_id = s.template_id
+    )::int AS total_questions,
+    (
+        SELECT COUNT(sa.id)
+        FROM survey_answers sa
+        WHERE sa.survey_id = s.id
+    )::int AS answered_questions
 FROM application_surveys s
     JOIN applications a ON s.application_id = a.id
     JOIN applicants app ON a.applicant_id = app.id
