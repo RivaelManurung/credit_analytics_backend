@@ -608,7 +608,7 @@ VALUES (
         'pekerjaan_metode_pembayaran',
         'PERSONAL',
         'APPLICANT',
-        'STRING',
+        'SELECT',
         'pekerjaan',
         'Metode Pembayaran Gaji',
         false,
@@ -750,7 +750,7 @@ VALUES (
     (
         'karakter_disiplin_bayar',
         'BOTH',
-        'APPLICANT',
+        'APPLICATION',
         'SELECT',
         'karakter',
         'Kedisiplinan Bayar',
@@ -761,7 +761,7 @@ VALUES (
     (
         'karakter_riwayat_gagal_bayar',
         'BOTH',
-        'APPLICANT',
+        'APPLICATION',
         'BOOLEAN',
         'karakter',
         'Riwayat Gagal Bayar',
@@ -772,7 +772,7 @@ VALUES (
     (
         'karakter_frekuensi_pindah_kerja',
         'PERSONAL',
-        'APPLICANT',
+        'APPLICATION',
         'NUMBER',
         'karakter',
         'Frekuensi Pindah Kerja',
@@ -783,7 +783,7 @@ VALUES (
     (
         'karakter_frekuensi_pindah_alamat',
         'BOTH',
-        'APPLICANT',
+        'APPLICATION',
         'NUMBER',
         'karakter',
         'Frekuensi Pindah Alamat',
@@ -794,7 +794,7 @@ VALUES (
     (
         'karakter_gaya_hidup_mewah',
         'PERSONAL',
-        'APPLICANT',
+        'APPLICATION',
         'BOOLEAN',
         'karakter',
         'Gaya Hidup Mewah',
@@ -805,7 +805,7 @@ VALUES (
     (
         'karakter_indikasi_fraud',
         'BOTH',
-        'APPLICANT',
+        'APPLICATION',
         'BOOLEAN',
         'karakter',
         'Indikasi Fraud',

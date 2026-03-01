@@ -1,0 +1,378 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /v1/applications/{applicationId}/committee-sessions:
+        get:
+            tags:
+                - CommitteeService
+            operationId: CommitteeService_ListCommitteeSessionsByApplication
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.ListCommitteeSessionsResponse'
+    /v1/applications/{applicationId}/decision:
+        get:
+            tags:
+                - DecisionService
+            operationId: DecisionService_GetApplicationDecision
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.ApplicationDecision'
+    /v1/applications/{applicationId}/decision-conditions:
+        get:
+            tags:
+                - DecisionService
+            operationId: DecisionService_ListDecisionConditions
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.ListDecisionConditionsResponse'
+        post:
+            tags:
+                - DecisionService
+            operationId: DecisionService_AddDecisionCondition
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.AddDecisionConditionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.DecisionCondition'
+    /v1/applications/{applicationId}/final-decision:
+        post:
+            tags:
+                - DecisionService
+            operationId: DecisionService_RecordFinalDecision
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.RecordFinalDecisionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.ApplicationDecision'
+    /v1/committee/sessions:
+        post:
+            tags:
+                - CommitteeService
+            operationId: CommitteeService_CreateCommitteeSession
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.CreateCommitteeSessionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeSession'
+    /v1/committee/sessions/{committeeSessionId}/finalize:
+        post:
+            tags:
+                - CommitteeService
+            operationId: CommitteeService_FinalizeCommitteeDecision
+            parameters:
+                - name: committeeSessionId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.FinalizeCommitteeDecisionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeDecision'
+    /v1/committee/sessions/{committeeSessionId}/votes:
+        post:
+            tags:
+                - CommitteeService
+            operationId: CommitteeService_SubmitCommitteeVote
+            parameters:
+                - name: committeeSessionId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.decision.v1.SubmitCommitteeVoteRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeVote'
+    /v1/committee/sessions/{id}:
+        get:
+            tags:
+                - CommitteeService
+            operationId: CommitteeService_GetCommitteeSession
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.decision.v1.CommitteeSession'
+components:
+    schemas:
+        api.decision.v1.AddDecisionConditionRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                conditionText:
+                    type: string
+        api.decision.v1.ApplicationDecision:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                decision:
+                    type: string
+                decisionSource:
+                    type: string
+                finalAmount:
+                    type: string
+                finalTenor:
+                    type: integer
+                    format: int32
+                finalInterestRate:
+                    type: string
+                decisionReason:
+                    type: string
+                decidedBy:
+                    type: string
+                decidedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CommitteeDecision:
+            type: object
+            properties:
+                id:
+                    type: string
+                committeeSessionId:
+                    type: string
+                decision:
+                    type: string
+                decisionReason:
+                    type: string
+                approvedAmount:
+                    type: string
+                approvedTenor:
+                    type: integer
+                    format: int32
+                approvedInterestRate:
+                    type: string
+                requiresNextCommittee:
+                    type: boolean
+                decidedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CommitteeSession:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                sessionSequence:
+                    type: integer
+                    format: int32
+                status:
+                    type: string
+                scheduledAt:
+                    type: string
+                    format: date-time
+                startedAt:
+                    type: string
+                    format: date-time
+                completedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CommitteeVote:
+            type: object
+            properties:
+                id:
+                    type: string
+                committeeSessionId:
+                    type: string
+                userId:
+                    type: string
+                vote:
+                    type: string
+                voteReason:
+                    type: string
+                votedAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.CreateCommitteeSessionRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                sessionSequence:
+                    type: integer
+                    format: int32
+                scheduledAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.DecisionCondition:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                conditionText:
+                    type: string
+                isMet:
+                    type: boolean
+                createdAt:
+                    type: string
+                    format: date-time
+        api.decision.v1.FinalizeCommitteeDecisionRequest:
+            type: object
+            properties:
+                committeeSessionId:
+                    type: string
+                decision:
+                    type: string
+                decisionReason:
+                    type: string
+                approvedAmount:
+                    type: string
+                approvedTenor:
+                    type: integer
+                    format: int32
+                approvedInterestRate:
+                    type: string
+                requiresNextCommittee:
+                    type: boolean
+        api.decision.v1.ListCommitteeSessionsResponse:
+            type: object
+            properties:
+                sessions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.decision.v1.CommitteeSession'
+        api.decision.v1.ListDecisionConditionsResponse:
+            type: object
+            properties:
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.decision.v1.DecisionCondition'
+        api.decision.v1.RecordFinalDecisionRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                decision:
+                    type: string
+                decisionSource:
+                    type: string
+                finalAmount:
+                    type: string
+                finalTenor:
+                    type: integer
+                    format: int32
+                finalInterestRate:
+                    type: string
+                decisionReason:
+                    type: string
+                decidedBy:
+                    type: string
+        api.decision.v1.SubmitCommitteeVoteRequest:
+            type: object
+            properties:
+                committeeSessionId:
+                    type: string
+                userId:
+                    type: string
+                vote:
+                    type: string
+                voteReason:
+                    type: string
+tags:
+    - name: CommitteeService
+    - name: DecisionService

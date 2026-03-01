@@ -1,0 +1,242 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ApplicantService API
+    version: 0.0.1
+paths:
+    /v1/applicants:
+        get:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_ListApplicants
+            parameters:
+                - name: cursor
+                  in: query
+                  description: Cursor dari response sebelumnya (opaque token).
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  description: Jumlah data per halaman.
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.ListApplicantsResponse'
+        post:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_CreateApplicant
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.CreateApplicantRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.Applicant'
+    /v1/applicants/{applicantId}/attributes:
+        get:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_GetApplicantAttributes
+            parameters:
+                - name: applicantId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.ApplicantAttributes'
+        post:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_UpsertApplicantAttributes
+            parameters:
+                - name: applicantId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.UpsertApplicantAttributesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.ApplicantAttributes'
+    /v1/applicants/{id}:
+        get:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_GetApplicant
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.Applicant'
+        put:
+            tags:
+                - ApplicantService
+            operationId: ApplicantService_UpdateApplicant
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.applicant.v1.UpdateApplicantRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.applicant.v1.Applicant'
+components:
+    schemas:
+        api.applicant.v1.Applicant:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+                createdAt:
+                    type: string
+                    format: date-time
+        api.applicant.v1.ApplicantAttribute:
+            type: object
+            properties:
+                attributeId:
+                    type: string
+                value:
+                    type: string
+                dataType:
+                    type: string
+                updatedAt:
+                    type: string
+                    format: date-time
+                attributeOptionId:
+                    type: string
+        api.applicant.v1.ApplicantAttributes:
+            type: object
+            properties:
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+        api.applicant.v1.CreateApplicantRequest:
+            type: object
+            properties:
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+        api.applicant.v1.ListApplicantsResponse:
+            type: object
+            properties:
+                applicants:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.Applicant'
+                nextCursor:
+                    type: string
+                    description: Token untuk mengambil halaman berikutnya (opaque token).
+                hasNext:
+                    type: boolean
+                    description: Flag apakah ada halaman berikutnya.
+        api.applicant.v1.UpdateApplicantRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicantType:
+                    type: string
+                identityNumber:
+                    type: string
+                taxId:
+                    type: string
+                fullName:
+                    type: string
+                birthDate:
+                    type: string
+                establishmentDate:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+        api.applicant.v1.UpsertApplicantAttributesRequest:
+            type: object
+            properties:
+                applicantId:
+                    type: string
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.applicant.v1.ApplicantAttribute'
+tags:
+    - name: ApplicantService

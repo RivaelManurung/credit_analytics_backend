@@ -1,0 +1,436 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: FinancialService API
+    version: 0.0.1
+paths:
+    /v1/applications/{applicationId}/assets:
+        get:
+            tags:
+                - FinancialService
+            operationId: FinancialService_ListAssetsByApplication
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListAssetsResponse'
+        post:
+            tags:
+                - FinancialService
+            operationId: FinancialService_AddAsset
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.AddAssetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ApplicationAsset'
+    /v1/applications/{applicationId}/assets/{id}:
+        put:
+            tags:
+                - FinancialService
+            operationId: FinancialService_UpdateAsset
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.UpdateAssetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ApplicationAsset'
+    /v1/applications/{applicationId}/financial-facts:
+        get:
+            tags:
+                - FinancialService
+            operationId: FinancialService_ListFinancialFacts
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListFinancialFactsResponse'
+        post:
+            tags:
+                - FinancialService
+            operationId: FinancialService_UpsertFinancialFact
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.UpsertFinancialFactRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ApplicationFinancialFact'
+    /v1/applications/{applicationId}/financial-ratios/calculate:
+        post:
+            tags:
+                - FinancialService
+            operationId: FinancialService_CalculateFinancialRatios
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.CalculateFinancialRatiosRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListFinancialRatiosResponse'
+    /v1/applications/{applicationId}/liabilities:
+        get:
+            tags:
+                - FinancialService
+            operationId: FinancialService_ListLiabilitiesByApplication
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ListLiabilitiesResponse'
+        post:
+            tags:
+                - FinancialService
+            operationId: FinancialService_AddLiability
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.AddLiabilityRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ApplicationLiability'
+    /v1/applications/{applicationId}/liabilities/{id}:
+        put:
+            tags:
+                - FinancialService
+            operationId: FinancialService_UpdateLiability
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.financial.v1.UpdateLiabilityRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.financial.v1.ApplicationLiability'
+components:
+    schemas:
+        api.financial.v1.AddAssetRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                assetTypeCode:
+                    type: string
+                assetName:
+                    type: string
+                ownershipStatus:
+                    type: string
+                acquisitionYear:
+                    type: integer
+                    format: int32
+                estimatedValue:
+                    type: string
+                valuationMethod:
+                    type: string
+                locationText:
+                    type: string
+                encumbered:
+                    type: boolean
+        api.financial.v1.AddLiabilityRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                creditorName:
+                    type: string
+                liabilityType:
+                    type: string
+                outstandingAmount:
+                    type: string
+                monthlyInstallment:
+                    type: string
+                interestRate:
+                    type: string
+                maturityDate:
+                    type: string
+                source:
+                    type: string
+        api.financial.v1.ApplicationAsset:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                assetTypeCode:
+                    type: string
+                assetName:
+                    type: string
+                ownershipStatus:
+                    type: string
+                acquisitionYear:
+                    type: integer
+                    format: int32
+                estimatedValue:
+                    type: string
+                valuationMethod:
+                    type: string
+                locationText:
+                    type: string
+                encumbered:
+                    type: boolean
+        api.financial.v1.ApplicationFinancialFact:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                glCode:
+                    type: string
+                periodType:
+                    type: string
+                periodLabel:
+                    type: string
+                amount:
+                    type: string
+                source:
+                    type: string
+                confidenceLevel:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+        api.financial.v1.ApplicationLiability:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                creditorName:
+                    type: string
+                liabilityType:
+                    type: string
+                outstandingAmount:
+                    type: string
+                monthlyInstallment:
+                    type: string
+                interestRate:
+                    type: string
+                maturityDate:
+                    type: string
+                source:
+                    type: string
+        api.financial.v1.CalculateFinancialRatiosRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+        api.financial.v1.FinancialRatio:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                ratioCode:
+                    type: string
+                ratioValue:
+                    type: string
+                calculationVersion:
+                    type: string
+                calculatedAt:
+                    type: string
+                    format: date-time
+        api.financial.v1.ListAssetsResponse:
+            type: object
+            properties:
+                assets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.ApplicationAsset'
+        api.financial.v1.ListFinancialFactsResponse:
+            type: object
+            properties:
+                facts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.ApplicationFinancialFact'
+        api.financial.v1.ListFinancialRatiosResponse:
+            type: object
+            properties:
+                ratios:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.FinancialRatio'
+        api.financial.v1.ListLiabilitiesResponse:
+            type: object
+            properties:
+                liabilities:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.financial.v1.ApplicationLiability'
+        api.financial.v1.UpdateAssetRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                assetTypeCode:
+                    type: string
+                assetName:
+                    type: string
+                ownershipStatus:
+                    type: string
+                acquisitionYear:
+                    type: integer
+                    format: int32
+                estimatedValue:
+                    type: string
+                valuationMethod:
+                    type: string
+                locationText:
+                    type: string
+                encumbered:
+                    type: boolean
+        api.financial.v1.UpdateLiabilityRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                creditorName:
+                    type: string
+                liabilityType:
+                    type: string
+                outstandingAmount:
+                    type: string
+                monthlyInstallment:
+                    type: string
+                interestRate:
+                    type: string
+                maturityDate:
+                    type: string
+                source:
+                    type: string
+        api.financial.v1.UpsertFinancialFactRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                glCode:
+                    type: string
+                periodType:
+                    type: string
+                periodLabel:
+                    type: string
+                amount:
+                    type: string
+                source:
+                    type: string
+                confidenceLevel:
+                    type: string
+tags:
+    - name: FinancialService

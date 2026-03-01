@@ -1,0 +1,571 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: SurveyService API
+    version: 0.0.1
+paths:
+    /v1/applications/{applicationId}/surveys:
+        get:
+            tags:
+                - SurveyService
+            description: ===== LIST BY APPLICATION =====
+            operationId: SurveyService_ListSurveysByApplication
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveysByApplicationResponse'
+        post:
+            tags:
+                - SurveyService
+            description: ===== ASSIGN & GET =====
+            operationId: SurveyService_AssignSurvey
+            parameters:
+                - name: applicationId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.AssignSurveyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/sections/{sectionId}/questions:
+        get:
+            tags:
+                - SurveyService
+            operationId: SurveyService_ListSurveyQuestions
+            parameters:
+                - name: sectionId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveyQuestionsResponse'
+    /v1/survey-templates:
+        get:
+            tags:
+                - SurveyService
+            description: ===== TEMPLATES (Optional Admin/Setup) =====
+            operationId: SurveyService_ListSurveyTemplates
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveyTemplatesResponse'
+        post:
+            tags:
+                - SurveyService
+            operationId: SurveyService_CreateSurveyTemplate
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.CreateSurveyTemplateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyTemplate'
+    /v1/survey-templates/{id}:
+        get:
+            tags:
+                - SurveyService
+            description: ===== TEMPLATES (Optional Admin/Setup) =====
+            operationId: SurveyService_GetSurveyTemplate
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyTemplate'
+    /v1/survey-templates/{templateId}/sections:
+        get:
+            tags:
+                - SurveyService
+            description: ===== SECTIONS & QUESTIONS =====
+            operationId: SurveyService_ListSurveySections
+            parameters:
+                - name: templateId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveySectionsResponse'
+    /v1/surveys:
+        get:
+            tags:
+                - SurveyService
+            description: ===== GLOBAL LIST (Mobile App / Backend Filter) =====
+            operationId: SurveyService_ListSurveys
+            parameters:
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cursor
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    type: string
+                - name: applicationId
+                  in: query
+                  schema:
+                    type: string
+                - name: assignedTo
+                  in: query
+                  schema:
+                    type: string
+                - name: surveyType
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ListSurveysResponse'
+    /v1/surveys/{id}:
+        get:
+            tags:
+                - SurveyService
+            operationId: SurveyService_GetSurvey
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{id}/start:
+        put:
+            tags:
+                - SurveyService
+            description: ===== WORKFLOW =====
+            operationId: SurveyService_StartSurvey
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.StartSurveyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{id}/submit:
+        put:
+            tags:
+                - SurveyService
+            operationId: SurveyService_SubmitSurvey
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.SubmitSurveyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{id}/verify:
+        put:
+            tags:
+                - SurveyService
+            operationId: SurveyService_VerifySurvey
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.VerifySurveyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+    /v1/surveys/{surveyId}/answers:
+        post:
+            tags:
+                - SurveyService
+            description: ===== ANSWERS & EVIDENCE =====
+            operationId: SurveyService_SubmitSurveyAnswer
+            parameters:
+                - name: surveyId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.SubmitSurveyAnswerRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyAnswer'
+    /v1/surveys/{surveyId}/evidences:
+        post:
+            tags:
+                - SurveyService
+            operationId: SurveyService_UploadSurveyEvidence
+            parameters:
+                - name: surveyId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.survey.v1.UploadSurveyEvidenceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.survey.v1.SurveyEvidence'
+components:
+    schemas:
+        api.survey.v1.ApplicationSurvey:
+            type: object
+            properties:
+                id:
+                    type: string
+                applicationId:
+                    type: string
+                templateId:
+                    type: string
+                surveyType:
+                    type: string
+                status:
+                    type: string
+                assignedTo:
+                    type: string
+                surveyPurpose:
+                    type: string
+                startedAt:
+                    type: string
+                    format: date-time
+                submittedAt:
+                    type: string
+                    format: date-time
+                submittedBy:
+                    type: string
+                applicantName:
+                    type: string
+                    description: 'Enrichment (Optional): Membantu mobile app menampilkan data list tanpa hit API tambahan'
+                applicationStatus:
+                    type: string
+                totalQuestions:
+                    type: integer
+                    description: Progress (e.g., 2/15)
+                    format: int32
+                answeredQuestions:
+                    type: integer
+                    format: int32
+        api.survey.v1.AssignSurveyRequest:
+            type: object
+            properties:
+                applicationId:
+                    type: string
+                templateId:
+                    type: string
+                surveyType:
+                    type: string
+                assignedTo:
+                    type: string
+                surveyPurpose:
+                    type: string
+        api.survey.v1.CreateSurveyTemplateRequest:
+            type: object
+            properties:
+                templateCode:
+                    type: string
+                templateName:
+                    type: string
+                applicantType:
+                    type: string
+                productId:
+                    type: string
+                active:
+                    type: boolean
+        api.survey.v1.ListSurveyQuestionsResponse:
+            type: object
+            properties:
+                questions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveyQuestion'
+        api.survey.v1.ListSurveySectionsResponse:
+            type: object
+            properties:
+                sections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveySection'
+        api.survey.v1.ListSurveyTemplatesResponse:
+            type: object
+            properties:
+                templates:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveyTemplate'
+        api.survey.v1.ListSurveysByApplicationResponse:
+            type: object
+            properties:
+                surveys:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+        api.survey.v1.ListSurveysResponse:
+            type: object
+            properties:
+                surveys:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.ApplicationSurvey'
+                nextCursor:
+                    type: string
+                hasNext:
+                    type: boolean
+        api.survey.v1.StartSurveyRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                userId:
+                    type: string
+        api.survey.v1.SubmitSurveyAnswerRequest:
+            type: object
+            properties:
+                surveyId:
+                    type: string
+                questionId:
+                    type: string
+                answerText:
+                    type: string
+                answerNumber:
+                    type: string
+                answerBoolean:
+                    type: boolean
+                answerDate:
+                    type: string
+        api.survey.v1.SubmitSurveyRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                userId:
+                    type: string
+        api.survey.v1.SurveyAnswer:
+            type: object
+            properties:
+                id:
+                    type: string
+                surveyId:
+                    type: string
+                questionId:
+                    type: string
+                answerText:
+                    type: string
+                answerNumber:
+                    type: string
+                answerBoolean:
+                    type: boolean
+                answerDate:
+                    type: string
+                answeredAt:
+                    type: string
+                    format: date-time
+        api.survey.v1.SurveyEvidence:
+            type: object
+            properties:
+                id:
+                    type: string
+                surveyId:
+                    type: string
+                evidenceType:
+                    type: string
+                fileUrl:
+                    type: string
+                description:
+                    type: string
+                capturedAt:
+                    type: string
+                    format: date-time
+        api.survey.v1.SurveyQuestion:
+            type: object
+            properties:
+                id:
+                    type: string
+                sectionId:
+                    type: string
+                questionText:
+                    type: string
+                answerType:
+                    type: string
+                sequence:
+                    type: integer
+                    format: int32
+                isRequired:
+                    type: boolean
+                options:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveyQuestionOption'
+        api.survey.v1.SurveyQuestionOption:
+            type: object
+            properties:
+                id:
+                    type: string
+                questionId:
+                    type: string
+                optionText:
+                    type: string
+                optionValue:
+                    type: string
+        api.survey.v1.SurveySection:
+            type: object
+            properties:
+                id:
+                    type: string
+                templateId:
+                    type: string
+                sectionName:
+                    type: string
+                sequence:
+                    type: integer
+                    format: int32
+                questions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveyQuestion'
+        api.survey.v1.SurveyTemplate:
+            type: object
+            properties:
+                id:
+                    type: string
+                templateCode:
+                    type: string
+                templateName:
+                    type: string
+                applicantType:
+                    type: string
+                productId:
+                    type: string
+                active:
+                    type: boolean
+                sections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.survey.v1.SurveySection'
+        api.survey.v1.UploadSurveyEvidenceRequest:
+            type: object
+            properties:
+                surveyId:
+                    type: string
+                evidenceType:
+                    type: string
+                fileUrl:
+                    type: string
+                description:
+                    type: string
+        api.survey.v1.VerifySurveyRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                userId:
+                    type: string
+tags:
+    - name: SurveyService

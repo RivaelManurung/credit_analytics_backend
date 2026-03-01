@@ -1,0 +1,568 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ReferenceService API
+    version: 0.0.1
+paths:
+    /v1/reference/application-statuses:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Application Statuses ----'
+            operationId: ReferenceService_ListApplicationStatuses
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListApplicationStatusesResponse'
+    /v1/reference/attribute-categories:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Attribute Categories (Dinamis — icon disimpan di sini) ----'
+            operationId: ReferenceService_ListAttributeCategories
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListAttributeCategoriesResponse'
+        post:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_CreateAttributeCategory
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.reference.v1.CreateAttributeCategoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.AttributeCategory'
+    /v1/reference/attribute-categories/{categoryCode}:
+        get:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_GetAttributeCategory
+            parameters:
+                - name: categoryCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.AttributeCategory'
+        put:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_UpdateAttributeCategory
+            parameters:
+                - name: categoryCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.reference.v1.UpdateAttributeCategoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.AttributeCategory'
+        delete:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_DeleteAttributeCategory
+            parameters:
+                - name: categoryCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/reference/attribute-registry:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Attribute Registry (icon TIDAK di sini — diambil dari category) ----'
+            operationId: ReferenceService_ListAttributeRegistry
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListAttributeRegistryResponse'
+        post:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_CreateAttributeRegistry
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.reference.v1.CreateAttributeRegistryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/reference/attribute-registry/by-category/{categoryCode}:
+        get:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_ListAttributeRegistryByCategory
+            parameters:
+                - name: categoryCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListAttributeRegistryResponse'
+    /v1/reference/attribute-registry/{attributeCode}:
+        put:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_UpdateAttributeRegistry
+            parameters:
+                - name: attributeCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.reference.v1.UpdateAttributeRegistryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/reference/attribute-registry/{id}:
+        delete:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_DeleteAttributeRegistry
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/reference/branches:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Branches & Officers ----'
+            operationId: ReferenceService_ListBranches
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListBranchesResponse'
+    /v1/reference/branches/{branchCode}/officers:
+        get:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_ListLoanOfficers
+            parameters:
+                - name: branchCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListLoanOfficersResponse'
+    /v1/reference/gl-accounts:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Financial GL Accounts ----'
+            operationId: ReferenceService_ListFinancialGLAccounts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListFinancialGLAccountsResponse'
+    /v1/reference/loan-products:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Loan Products ----'
+            operationId: ReferenceService_ListLoanProducts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListLoanProductsResponse'
+    /v1/reference/loan-products/{id}:
+        get:
+            tags:
+                - ReferenceService
+            operationId: ReferenceService_GetLoanProduct
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.LoanProduct'
+    /v1/reference/survey-templates:
+        get:
+            tags:
+                - ReferenceService
+            description: '---- Survey Templates ----'
+            operationId: ReferenceService_ListSurveyTemplates
+            parameters:
+                - name: applicantType
+                  in: query
+                  schema:
+                    type: string
+                - name: productId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.reference.v1.ListSurveyTemplatesResponse'
+components:
+    schemas:
+        api.reference.v1.ApplicationStatusRef:
+            type: object
+            properties:
+                statusCode:
+                    type: string
+                statusGroup:
+                    type: string
+                isTerminal:
+                    type: boolean
+                description:
+                    type: string
+        api.reference.v1.AttributeCategory:
+            type: object
+            properties:
+                categoryCode:
+                    type: string
+                categoryName:
+                    type: string
+                uiIcon:
+                    type: string
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+        api.reference.v1.AttributeOption:
+            type: object
+            properties:
+                id:
+                    type: string
+                attributeId:
+                    type: string
+                optionValue:
+                    type: string
+                optionLabel:
+                    type: string
+                displayOrder:
+                    type: integer
+                    format: int32
+                isActive:
+                    type: boolean
+        api.reference.v1.AttributeRegistry:
+            type: object
+            properties:
+                id:
+                    type: string
+                attributeCode:
+                    type: string
+                appliesTo:
+                    type: string
+                scope:
+                    type: string
+                dataType:
+                    type: string
+                categoryCode:
+                    type: string
+                uiLabel:
+                    type: string
+                isRequired:
+                    type: boolean
+                riskRelevant:
+                    type: boolean
+                isActive:
+                    type: boolean
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+                categoryName:
+                    type: string
+                    description: Denormalized dari JOIN (read-only, tidak disimpan di tabel registry)
+                categoryIcon:
+                    type: string
+                options:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.AttributeOption'
+        api.reference.v1.Branch:
+            type: object
+            properties:
+                branchCode:
+                    type: string
+                branchName:
+                    type: string
+                regionCode:
+                    type: string
+        api.reference.v1.CreateAttributeCategoryRequest:
+            type: object
+            properties:
+                categoryCode:
+                    type: string
+                categoryName:
+                    type: string
+                uiIcon:
+                    type: string
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+        api.reference.v1.CreateAttributeRegistryRequest:
+            type: object
+            properties:
+                attributeCode:
+                    type: string
+                appliesTo:
+                    type: string
+                scope:
+                    type: string
+                valueType:
+                    type: string
+                categoryCode:
+                    type: string
+                uiLabel:
+                    type: string
+                isRequired:
+                    type: boolean
+                riskRelevant:
+                    type: boolean
+                isActive:
+                    type: boolean
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+        api.reference.v1.FinancialGLAccount:
+            type: object
+            properties:
+                glCode:
+                    type: string
+                glName:
+                    type: string
+                statementType:
+                    type: string
+                category:
+                    type: string
+                sign:
+                    type: integer
+                    format: int32
+                isDebtService:
+                    type: boolean
+                isOperating:
+                    type: boolean
+                description:
+                    type: string
+        api.reference.v1.ListApplicationStatusesResponse:
+            type: object
+            properties:
+                statuses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.ApplicationStatusRef'
+        api.reference.v1.ListAttributeCategoriesResponse:
+            type: object
+            properties:
+                categories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.AttributeCategory'
+        api.reference.v1.ListAttributeRegistryResponse:
+            type: object
+            properties:
+                attributes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.AttributeRegistry'
+        api.reference.v1.ListBranchesResponse:
+            type: object
+            properties:
+                branches:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.Branch'
+        api.reference.v1.ListFinancialGLAccountsResponse:
+            type: object
+            properties:
+                accounts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.FinancialGLAccount'
+        api.reference.v1.ListLoanOfficersResponse:
+            type: object
+            properties:
+                officers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.LoanOfficer'
+        api.reference.v1.ListLoanProductsResponse:
+            type: object
+            properties:
+                products:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.LoanProduct'
+        api.reference.v1.ListSurveyTemplatesResponse:
+            type: object
+            properties:
+                templates:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.reference.v1.SurveyTemplate'
+        api.reference.v1.LoanOfficer:
+            type: object
+            properties:
+                id:
+                    type: string
+                officerCode:
+                    type: string
+                branchCode:
+                    type: string
+        api.reference.v1.LoanProduct:
+            type: object
+            properties:
+                id:
+                    type: string
+                productCode:
+                    type: string
+                productName:
+                    type: string
+                segment:
+                    type: string
+                active:
+                    type: boolean
+        api.reference.v1.SurveyTemplate:
+            type: object
+            properties:
+                id:
+                    type: string
+                templateCode:
+                    type: string
+                templateName:
+                    type: string
+                applicantType:
+                    type: string
+                productId:
+                    type: string
+        api.reference.v1.UpdateAttributeCategoryRequest:
+            type: object
+            properties:
+                categoryCode:
+                    type: string
+                categoryName:
+                    type: string
+                uiIcon:
+                    type: string
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+        api.reference.v1.UpdateAttributeRegistryRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                attributeCode:
+                    type: string
+                appliesTo:
+                    type: string
+                scope:
+                    type: string
+                valueType:
+                    type: string
+                categoryCode:
+                    type: string
+                uiLabel:
+                    type: string
+                isRequired:
+                    type: boolean
+                riskRelevant:
+                    type: boolean
+                isActive:
+                    type: boolean
+                displayOrder:
+                    type: integer
+                    format: int32
+                description:
+                    type: string
+tags:
+    - name: ReferenceService
