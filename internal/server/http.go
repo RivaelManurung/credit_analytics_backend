@@ -38,8 +38,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 		khttp.Filter(func(next http.Handler) http.Handler {
 			wrappedGrpc := grpcweb.WrapServer(grpcServer.Server,
 				grpcweb.WithOriginFunc(func(origin string) bool { return true }),
-				grpcweb.WithWebsockets(true),
-				grpcweb.WithWebsocketOriginFunc(func(req *http.Request) bool { return true }),
 			)
 			h := log.NewHelper(logger)
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -50,8 +48,8 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 				}
 				w.Header().Set("Access-Control-Allow-Origin", origin)
 				w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, PATCH")
-				w.Header().Set("Access-Control-Allow-Headers", "*")
-				w.Header().Set("Access-Control-Expose-Headers", "*")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-User-Agent, X-Grpc-Web, Custom-Header-1")
+				w.Header().Set("Access-Control-Expose-Headers", "Grpc-Status, Grpc-Message, Grpc-Status-Details-Bin")
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
 				w.Header().Set("Access-Control-Max-Age", "86400")
 
@@ -61,10 +59,10 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, application 
 					return
 				}
 
-				h.Infof("HTTP Request: %s %s (ContentType: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"))
+				h.Infof("HTTP Request: %s %s (ContentType: %s, UserAgent: %s)", r.Method, r.URL.Path, r.Header.Get("Content-Type"), r.Header.Get("User-Agent"))
 
 				// 3. Handle gRPC-Web
-				if wrappedGrpc.IsGrpcWebRequest(r) {
+				if wrappedGrpc.IsGrpcWebRequest(r) || r.Header.Get("X-Grpc-Web") == "1" {
 					h.Infof("Detected gRPC-Web Request: %s %s", r.Method, r.URL.Path)
 					wrappedGrpc.ServeHTTP(w, r)
 					return
