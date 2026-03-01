@@ -97,6 +97,18 @@ service SurveyService {
       body: "*"
     };
   }
+  // ===== SECTIONS & QUESTIONS =====
+  rpc ListSurveySections (ListSurveySectionsRequest) returns (ListSurveySectionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/survey-templates/{template_id}/sections"
+    };
+  }
+
+  rpc ListSurveyQuestions (ListSurveyQuestionsRequest) returns (ListSurveyQuestionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/sections/{section_id}/questions"
+    };
+  }
 }
 
 //////////////////////////////////////////////////////////
@@ -260,6 +272,21 @@ message GetSurveyTemplateRequest {
 }
 
 message ListSurveyTemplatesRequest {}
+message ListSurveySectionsRequest {
+  string template_id = 1;
+}
+
+message ListSurveySectionsResponse {
+  repeated SurveySection sections = 1;
+}
+
+message ListSurveyQuestionsRequest {
+  string section_id = 1;
+}
+
+message ListSurveyQuestionsResponse {
+  repeated SurveyQuestion questions = 1;
+}
 
 message ListSurveyTemplatesResponse {
   repeated SurveyTemplate templates = 1;
