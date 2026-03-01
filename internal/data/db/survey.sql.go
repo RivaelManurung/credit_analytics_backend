@@ -135,7 +135,7 @@ func (q *Queries) CreateSurveyTemplate(ctx context.Context, arg CreateSurveyTemp
 	)
 	return i, err
 }
-
+//zc
 const getSurvey = `-- name: GetSurvey :one
 SELECT s.id, s.application_id, s.template_id, s.survey_type, s.status, s.submitted_by, s.verified_by, s.verified_at, s.assigned_to, s.survey_purpose, s.started_at, s.submitted_at,
     (

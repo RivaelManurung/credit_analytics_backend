@@ -3,11 +3,10 @@ GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always 2>/dev/null || echo "undefined")
 
 ifeq ($(GOHOSTOS), windows)
-	#the `find.exe` is different from `find` in bash/shell.
-	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
-	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
-	#Git_Bash= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
-	Git_Bash=$(subst \,/,$(subst cmd\,bin\bash.exe,$(dir $(shell where git))))
+	# Simplest way to find git-bash: look for git.exe and go to bin/bash.exe
+	GIT_EXE := $(firstword $(shell where git.exe))
+	Git_Bash := $(subst \,/,$(subst cmd\git.exe,bin\bash.exe,$(GIT_EXE)))
+	
 	INTERNAL_PROTO_FILES=$(shell "$(Git_Bash)" -c "find internal -name *.proto")
 	API_PROTO_FILES=$(shell "$(Git_Bash)" -c "find api -name *.proto")
 else
@@ -72,28 +71,51 @@ all:
 	make config
 	make generate
 
+# Load environment variables from .env if it exists
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 DB_USER ?= postgres
 DB_PASSWORD ?= password
 DB_HOST ?= localhost
 DB_PORT ?= 5432
 DB_NAME ?= credit_analytics
 DB_SSLMODE ?= disable
-DB_DSN := "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)"
+
+DB_URL := "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)"
 
 .PHONY: migrate-up
 # Run goose migrations up
 migrate-up:
-	goose -dir internal/data/schema/migrations postgres $(DB_DSN) up
+	goose -dir internal/data/schema/migrations postgres $(DB_URL) up
 
 .PHONY: migrate-down
 # Rollback the last goose migration
 migrate-down:
-	goose -dir internal/data/schema/migrations postgres $(DB_DSN) down
+	goose -dir internal/data/schema/migrations postgres $(DB_URL) down
 
 .PHONY: migrate-status
 # Show goose migration status
 migrate-status:
-	goose -dir internal/data/schema/migrations postgres $(DB_DSN) status
+	goose -dir internal/data/schema/migrations postgres $(DB_URL) status
+
+.PHONY: seed-up
+# Run dummy data seeds
+seed-up:
+	goose -dir internal/data/schema/seeds postgres $(DB_URL) up
+
+.PHONY: seed-status
+# Show seed status
+seed-status:
+	goose -dir internal/data/schema/seeds postgres $(DB_URL) status
+
+.PHONY: db-setup
+# Run migrations and seeds sequentially
+db-setup:
+	make migrate-up
+	make seed-up
 
 # show help
 help:
